@@ -22,3 +22,28 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# IntelliJ IDEA
+.idea/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Build files
+/target/
+/build/
+/out/
+
+# Logs
+/logs/
+
+# IntelliJ IDEA module files
+*.iml
+
+# Log files
+*.log
+
+# JAR files
+*.jar
