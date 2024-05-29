@@ -1,10 +1,12 @@
 // src/Login.js
 import React, { useState } from 'react';
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
-const Login = () => {
+const Login = ({setIsLogin}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -12,21 +14,25 @@ const Login = () => {
         console.log('id:', email);
         console.log('password:', password);
 
-        // 로그인 요청 보내기
-        try {
-            const response = await axios.post('/api/auth/login', {
-                id: email,
-                password: password
+        const response = await axios.post('/api/auth/login', {
+            id: email,
+            password: password})
+            .then((response)=>{
+                if(response.data.result){
+                    // 로그인 성공 시 처리
+                    console.log('로그인 성공:', response.data);
+                    sessionStorage.setItem("authToken",response.data.data.token);
+                    sessionStorage.setItem("authExpr",response.data.data.exprTime);
+                    sessionStorage.setItem("userInfo",JSON.stringify(response.data.data.member));
+                    setIsLogin(true);
+                    navigate('/',{replace:true});
+                } else {
+                    console.error('로그인 실패:', response.data);
+                }
+            })
+            .catch((err)=>{
+                console.error('로그인 실패:', err);
             });
-
-            // 로그인 성공 시 처리
-            console.log('로그인 성공:', response.data);
-            // 추가적으로 필요한 작업 수행
-        } catch (error) {
-            // 회원가입 실패 시 처리
-            console.error('로그인 실패:', error);
-            // 추가적으로 필요한 작업 수행
-        }
 
     };
 

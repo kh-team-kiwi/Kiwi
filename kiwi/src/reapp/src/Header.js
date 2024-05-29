@@ -1,14 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({isLogin, setIsLogin}) {
+    const handleLogout = () => {
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('authExpr');
+        sessionStorage.removeItem('userInfo');
+        setIsLogin(false);
+    };
+
     return (
         <nav>
             <ul style={styles.ul}>
                 <li style={styles.li}><Link to="/" style={styles.link}>홈</Link></li>
-                <li style={styles.li}><Link to="/login" style={styles.link}>로그인</Link></li>
-                <li style={styles.li}><Link to="/regist" style={styles.link}>회원가입</Link></li>
-                <li style={styles.li}><Link to="/FileManagement" style={styles.link}>드라이브</Link></li>
+                {isLogin ? (
+                    <>
+                    <li style={styles.li}><a onClick={handleLogout} style={styles.link}>로그아웃</a></li>
+                    <li style={styles.li}><Link to="/FileManagement" style={styles.link}>드라이브</Link></li>
+                    </>
+                    ) : (
+                        <>
+                        <li style={styles.li}><Link to="/login" style={styles.link}>로그인</Link></li>
+                        <li style={styles.li}><Link to="/regist" style={styles.link}>회원가입</Link></li>
+                        </>
+                    )}
             </ul>
         </nav>
     );
