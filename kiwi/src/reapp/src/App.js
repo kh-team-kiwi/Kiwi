@@ -3,6 +3,7 @@ import Regist from './Regist';
 import Login from './Login';
 import Header from './Header';
 import FileManagement from "./components/FileManagement";
+import Main from './Main';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
@@ -20,8 +21,9 @@ function App() {
               {/*element={<Navigate to="/Home" replace />}*/}
               <Route path="/" element={<Home />} />
               <Route path="/regist" element={<Regist/>}></Route>
-              <Route path="/Login" element={<Login setIsLogin={setIsLogin} />}></Route>
+              <Route path="/login" element={<Login setIsLogin={setIsLogin} />}></Route>
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
+              <Route path="/main" element={<Main/>}></Route>
           </Routes>
       </BrowserRouter>
   );

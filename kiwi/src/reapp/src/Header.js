@@ -15,11 +15,12 @@ function Header({isLogin, setIsLogin}) {
                 <li style={styles.li}><Link to="/" style={styles.link}>홈</Link></li>
                 {isLogin ? (
                     <>
-                    <li style={styles.li}><a onClick={handleLogout} style={styles.link}>로그아웃</a></li>
-                    <li style={styles.li}><Link to="/FileManagement" style={styles.link}>드라이브</Link></li>
+                        <li style={styles.li}><Link to="/main" style={styles.link}>메인</Link></li>
+                        <li style={styles.li}><Link to="/FileManagement" style={styles.link}>드라이브</Link></li>
+                        <li style={styles.li}><a onClick={handleLogout} style={styles.link}>로그아웃</a></li>
                     </>
-                    ) : (
-                        <>
+                ) : (
+                    <>
                         <li style={styles.li}><Link to="/login" style={styles.link}>로그인</Link></li>
                         <li style={styles.li}><Link to="/regist" style={styles.link}>회원가입</Link></li>
                         </>

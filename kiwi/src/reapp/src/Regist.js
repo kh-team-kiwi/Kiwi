@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Regist.css';
+import {useNavigate} from "react-router-dom";
 
 const Regist = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         memberId: '',
         memberPw: '',
@@ -27,7 +30,7 @@ const Regist = () => {
             .then((res)=>{
                 if(res.data.result){
                     console.log('회원가입 성공:', res.data);
-                    document.location.replace("/");
+                    navigate('/',{replace:true});
                 } else {
                     console.error('회원가입 실패:', res.data);
                 }

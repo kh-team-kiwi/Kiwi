@@ -25,7 +25,7 @@ const Login = ({setIsLogin}) => {
                     sessionStorage.setItem("authExpr",response.data.data.exprTime);
                     sessionStorage.setItem("userInfo",JSON.stringify(response.data.data.member));
                     setIsLogin(true);
-                    navigate('/',{replace:true});
+                    navigate('/main',{replace:true});
                 } else {
                     console.error('로그인 실패:', response.data);
                 }
