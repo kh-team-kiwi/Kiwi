@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Regist from './Regist';
 import Login from './Login';
 import Header from './Header';
+import FileManagement from "./components/FileManagement";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/regist" element={<Regist/>}></Route>
               <Route path="/Login" element={<Login/>}></Route>
+              <Route path="/FileManagement" element={<FileManagement/>}></Route>
           </Routes>
       </BrowserRouter>
   );

@@ -8,6 +8,7 @@ function Header() {
                 <li style={styles.li}><Link to="/" style={styles.link}>홈</Link></li>
                 <li style={styles.li}><Link to="/login" style={styles.link}>로그인</Link></li>
                 <li style={styles.li}><Link to="/regist" style={styles.link}>회원가입</Link></li>
+                <li style={styles.li}><Link to="/FileManagement" style={styles.link}>드라이브</Link></li>
             </ul>
         </nav>
     );
