@@ -1,4 +1,4 @@
-package documents.entity;
+package com.kh.kiwi.documents.dto;
 
 public class DocApprovalDefaultDto {
     private String docType;

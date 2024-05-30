@@ -1,4 +1,7 @@
-package documents.entity;
+package com.kh.kiwi.documents.dto;
+
+
+import java.time.LocalDate;
 
 public class DocDto {
     private Long docNum;

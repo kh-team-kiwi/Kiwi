@@ -1,4 +1,5 @@
-package documents.entity;
+package com.kh.kiwi.documents.dto;
+
 
 public class DocListDto {
     private String docType;

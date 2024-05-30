@@ -1,11 +1,30 @@
-package documents.entity;
+package com.kh.kiwi.documents.service;
+
+import com.kh.kiwi.documents.dto.DocDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface DocService {
-    List<DocDTO> getAllDocs();
-    DocDTO getDocById(Long id);
-    void addDoc(DocDTO docDTO);
-    void updateDoc(Long id, DocDTO updatedDocDTO);
-    void deleteDoc(Long id);
+@Service
+public class DocService {
+
+    public List<DocDto> getAllDocs() {
+        return null;
+    }
+
+    public DocDto getDocById(Long id) {
+        return null;
+    }
+
+    public String addDoc(DocDto docDto){
+        return "";
+    };
+
+    public void updateDoc(Long id, DocDto updatedDocDto) {
+
+    }
+
+    public void deleteDoc(Long id) {
+
+    }
 }
