@@ -9,22 +9,25 @@ import java.util.List;
 public class DocService {
 
     public List<DocDto> getAllDocs() {
+        //TODO
         return null;
     }
 
     public DocDto getDocById(Long id) {
+        //TODO
         return null;
     }
 
     public String addDoc(DocDto docDto){
+        //TODO
         return "";
     };
 
     public void updateDoc(Long id, DocDto updatedDocDto) {
-
+        //TODO
     }
 
     public void deleteDoc(Long id) {
-
+        //TODO
     }
 }

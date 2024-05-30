@@ -5,6 +5,7 @@ import Header from './Header';
 import FileManagement from "./components/FileManagement";
 import Main from './Main';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Documents from "./components/Documents";
 
 function App() {
     const [isLogin, setIsLogin] = useState(false);
@@ -23,6 +24,7 @@ function App() {
               <Route path="/regist" element={<Regist/>}></Route>
               <Route path="/login" element={<Login setIsLogin={setIsLogin} />}></Route>
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
+              <Route path="/documents" element={<Documents/>}></Route>
               <Route path="/main" element={<Main/>}></Route>
           </Routes>
       </BrowserRouter>

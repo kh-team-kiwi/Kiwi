@@ -2,7 +2,6 @@ package com.kh.kiwi.documents.controller;
 
 import com.kh.kiwi.documents.dto.DocDto;
 import com.kh.kiwi.documents.service.DocService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/docs")
 public class DocController {
-    @Autowired
+
     private final DocService docService;
 
     public DocController(DocService docService) {

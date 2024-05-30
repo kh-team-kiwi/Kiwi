@@ -17,6 +17,4 @@ public class Doc {
     private LocalDate docDate;
     private String docSecurity;
     private String docType;
-
-    // 생성자, getter, setter 등은 생략
 }

@@ -17,6 +17,7 @@ function Header({isLogin, setIsLogin}) {
                     <>
                         <li style={styles.li}><Link to="/main" style={styles.link}>메인</Link></li>
                         <li style={styles.li}><Link to="/FileManagement" style={styles.link}>드라이브</Link></li>
+                        <li style={styles.li}><Link to="/documents" style={styles.link}>전자결재</Link></li>
                         <li style={styles.li}><a onClick={handleLogout} style={styles.link}>로그아웃</a></li>
                     </>
                 ) : (
