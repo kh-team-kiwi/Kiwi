@@ -21,8 +21,8 @@ const Login = ({setIsLogin}) => {
                 if(response.data.result){
                     // 로그인 성공 시 처리
                     console.log('로그인 성공:', response.data);
-                    sessionStorage.setItem("authToken",response.data.data.token);
-                    sessionStorage.setItem("authExpr",response.data.data.exprTime);
+                    sessionStorage.setItem("accessToken",response.data.data.accessToken);
+                    sessionStorage.setItem("refreshToken",response.data.data.refreshToken);
                     sessionStorage.setItem("userInfo",JSON.stringify(response.data.data.member));
                     setIsLogin(true);
                     navigate('/main',{replace:true});
