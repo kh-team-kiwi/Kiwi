@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Filelist from "./Filelist";
 
 const FileManagement = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -128,6 +129,7 @@ const FileManagement = () => {
     return (
 
         <div>
+            <Filelist/>
             <h2>File Management</h2>
             <div>
                 <h3>Multi upload</h3>

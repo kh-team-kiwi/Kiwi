@@ -1,5 +1,6 @@
 package com.kh.kiwi.s3file.controller;
 
+import com.kh.kiwi.s3file.dto.FileDriveDto;
 import com.kh.kiwi.s3file.service.S3Service;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,6 +19,12 @@ public class FileController {
 
     public FileController(S3Service s3Service) {
         this.s3Service = s3Service;
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<FileDriveDto>> listFiles() {
+        List<FileDriveDto> files = s3Service.listFiles();
+        return ResponseEntity.ok(files);
     }
 
     @PostMapping("/multi-upload")

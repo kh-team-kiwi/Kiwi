@@ -1,5 +1,7 @@
 package com.kh.kiwi.s3file.service;
 
+import com.kh.kiwi.s3file.dto.FileDriveDto;
+import com.kh.kiwi.s3file.repository.FileDriveRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +22,25 @@ import java.util.stream.Collectors;
 public class S3Service {
 
     private final S3Client s3Client;
+    private final FileDriveRepository fileDriveRepository;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
 
-    public S3Service(S3Client s3Client) {
+    public S3Service(S3Client s3Client, FileDriveRepository fileDriveRepository) {
         this.s3Client = s3Client;
+        this.fileDriveRepository = fileDriveRepository;
+    }
+    public List<FileDriveDto> listFiles() {
+        return fileDriveRepository.findAll().stream().map(file -> {
+            FileDriveDto fileDTO = new FileDriveDto();
+            fileDTO.setFileCode(file.getFileCode());
+            fileDTO.setTeam(file.getTeam());
+            fileDTO.setFileName(file.getFileName());
+            fileDTO.setFilePath(file.getFilePath());
+            fileDTO.setUploadTime(file.getUploadTime());
+            return fileDTO;
+        }).collect(Collectors.toList());
     }
     public List<String> uploadFiles(List<MultipartFile> files) throws IOException {
         return files.stream()
