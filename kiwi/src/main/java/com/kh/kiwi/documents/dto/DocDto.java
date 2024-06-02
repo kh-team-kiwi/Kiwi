@@ -1,11 +1,12 @@
 package com.kh.kiwi.documents.dto;
 
-import lombok.Data;
 
-@Data
+import java.time.LocalDate;
+
 public class DocDto {
     private Long docNum;
     private String docTitle;
-    private String docDate;
+    private LocalDate docDate;
     private String docType;
+
 }
