@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDto {
-    private String accessToken;
-    private String refreshToken;
+    private String token;
+    private int exprTime; // 토큰만료시간
     private Member member;
 }

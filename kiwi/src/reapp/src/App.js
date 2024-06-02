@@ -32,8 +32,8 @@ function App() {
 }
 
 const Home = () => {
-    const token = sessionStorage.getItem('accessToken');
-    const expiry = sessionStorage.getItem('refreshToken');
+    const token = sessionStorage.getItem('authToken');
+    const expiry = sessionStorage.getItem('authExpr');
     const user = JSON.parse(sessionStorage.getItem('userInfo'));
     console.log(token);
     console.log(expiry);

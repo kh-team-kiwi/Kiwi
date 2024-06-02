@@ -1,24 +1,21 @@
 package com.kh.kiwi.member.service;
 
-import com.kh.kiwi.member.dto.*;
+import com.kh.kiwi.member.dto.LoginDto;
+import com.kh.kiwi.member.dto.LoginResponseDto;
+import com.kh.kiwi.member.dto.ResponseDto;
+import com.kh.kiwi.member.dto.SignUpDto;
 import com.kh.kiwi.member.entity.Member;
 import com.kh.kiwi.member.repository.MemberRepository;
-import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-@RequiredArgsConstructor
 @Service
-@Transactional()
 public class AuthService {
-
-    private final MemberRepository memberRepository;
-    private final TokenHelper tokenHelper;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    TokenProvider tokenProvider;
 
     public ResponseDto<?> signUp(SignUpDto dto){
         String id = dto.getMemberId();
@@ -29,7 +26,6 @@ public class AuthService {
         try {
             // 존재하는 경우 : true / 존재하지 않는 경우 : false
             if(memberRepository.existsById(id)) {
-
                 return ResponseDto.setFailed("중복된 Email 입니다.");
             }
         } catch (Exception e) {
@@ -55,6 +51,7 @@ public class AuthService {
         }
         member.setMemberPw(hashedPassword);
 
+
         // UserRepository를 이용하여 DB에 Entity 저장 (데이터 적재)
         try {
             memberRepository.save(member);
@@ -65,7 +62,6 @@ public class AuthService {
         return ResponseDto.setSuccess("회원 생성에 성공했습니다.");
     }
 
-    @Transactional
     public ResponseDto<LoginResponseDto> login(LoginDto dto) {
         String id = dto.getId();
         String password = dto.getPassword();
@@ -86,30 +82,18 @@ public class AuthService {
             if(!passwordEncoder.matches(password, encodedPassword)) {
                 return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
             }
-
-            if(!member.getMemberStatus().equals("1")) {
-                return ResponseDto.setFailed("비활성된 계정입니다. 관리자에게 문의하세요.");
-            }
         } catch (Exception e) {
             return ResponseDto.setFailed("데이터베이스 연결에 실패하였습니다.");
         }
 
         member.setMemberPw("");
 
-        TokenHelper.PrivateClaims privateClaims = TokenHelper.createPrivateClaims(member.getMemberId(), member.getMemberRole());
-        String accessToken = tokenHelper.createAccessToken(privateClaims);
-        String refreshToken = tokenHelper.createRefreshToken(privateClaims, id);
+        int exprTime = 3600;     // 1h
+        String token = tokenProvider.createJwt(id, exprTime);
 
-        LoginResponseDto loginResponseDto = new LoginResponseDto(accessToken, refreshToken, member);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(token, exprTime, member);
 
         return ResponseDto.setSuccessData("로그인에 성공하였습니다.", loginResponseDto);
-    }
-
-    public ReissueAccessTokenDTO reissueAccessToken(String rToken, String email) throws Exception{
-        TokenHelper.PrivateClaims privateClaims = tokenHelper.parseRefreshToken(rToken, email).orElseThrow();
-        String accessToken = tokenHelper.createAccessToken(privateClaims);
-        String refreshToken = tokenHelper.createRefreshToken(privateClaims, email); //refreshToken도 재발급
-        return new ReissueAccessTokenDTO(accessToken, refreshToken);
     }
 
 }

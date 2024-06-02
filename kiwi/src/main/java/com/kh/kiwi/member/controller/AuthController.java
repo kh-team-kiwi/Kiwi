@@ -32,22 +32,4 @@ public class AuthController {
         return result;
     }
 
-//    @PostMapping("/login")
-//    public String login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
-//        // 로그인 로직 수행
-//
-//        // Access Token과 Refresh Token 생성 및 저장
-//        String accessToken = generateAccessToken();
-//        String refreshToken = generateRefreshToken();
-//
-//        // HTTP-only 쿠키에 Refresh Token 추가
-//        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-//        refreshTokenCookie.setHttpOnly(true);
-//        refreshTokenCookie.setPath("/"); // 쿠키의 유효 경로 설정
-//        response.addCookie(refreshTokenCookie);
-//
-//        // 로그인 성공 시 리다이렉트 또는 다른 응답 처리
-//        return "redirect:/dashboard"; // 대시보드 페이지로 리다이렉트
-//    }
-
 }

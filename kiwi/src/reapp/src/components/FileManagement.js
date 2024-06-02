@@ -1,58 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Filelist from "./Filelist";
 
 const FileManagement = () => {
-    const [selectedFiles, setSelectedFiles] = useState([]);
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
     const [downloadKey, setDownloadKey] = useState('');
     const [deleteKey, setDeleteKey] = useState('');
     const [oldKey, setOldKey] = useState('');
     const [newKey, setNewKey] = useState('');
-    const [folderDeleteName, setFolderDeleteName] = useState('');
-    const [folderCreateName, setFolderCreateName] = useState('');
+    const [folderName, setFolderName] = useState('');
 
-    const handleFileChange = (event) => {
-        setSelectedFiles([...selectedFiles, ...event.target.files]);
-    };
-    const handleRemoveFile = (index) => {
-        const newSelectedFiles = [...selectedFiles];
-        newSelectedFiles.splice(index, 1);
-        setSelectedFiles(newSelectedFiles);
-    };
-    const handleUpload = async () => {
-        const formData = new FormData();
-        for (let i = 0; i < selectedFiles.length; i++) {
-            formData.append('files', selectedFiles[i]);
-        }
-
-        try {
-            await axios.post('http://localhost:8080/api/files/multi-upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            setMessage('Upload successful!');
-        } catch (error) {
-            console.error('Error uploading files: ', error);
-            setMessage('Upload failed!');
-        }
-    };
-
-    const handleDeleteFolder = async () => {
-        try {
-            await axios.delete('http://localhost:8080/api/files/delete-folder', {
-                params: {
-                    folderName: folderDeleteName
-                }
-            });
-            setMessage('Folder deleted successfully!');
-        } catch (error) {
-            console.error('Error deleting folder: ', error);
-            setMessage('Folder deletion failed!');
-        }
-    };
     const onFileChange = (e) => {
         setFile(e.target.files[0]);
     };
@@ -117,7 +74,7 @@ const FileManagement = () => {
         try {
             const response = await axios.post('http://localhost:8080/api/files/create-folder', null, {
                 params: {
-                    folderName: folderCreateName
+                    folderName: folderName
                 }
             });
             setMessage(response.data);
@@ -127,39 +84,11 @@ const FileManagement = () => {
     };
 
     return (
-
         <div>
-            <Filelist/>
             <h2>File Management</h2>
             <div>
-                <h3>Multi upload</h3>
-                <input type="file" multiple onChange={handleFileChange}/>
-                <div>
-                    <p>Files selected: {selectedFiles.length}</p>
-                    <ul>
-                        {selectedFiles && Array.from(selectedFiles).map((file, index) => (
-                            <li key={index}>{file.name}
-                                <button onClick={() => handleRemoveFile(index)}>Remove</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <button onClick={handleUpload}>Upload</button>
-                <div>
-                    <h3>Delete Forder</h3>
-                    <input
-                        type="text"
-                        placeholder="Folder name to delete"
-                        value={folderDeleteName}
-                        onChange={(e) => setFolderDeleteName(e.target.value)}
-                    />
-                    <button onClick={handleDeleteFolder}>Delete Folder</button>
-                </div>
-                <p>{message}</p>
-            </div>
-            <div>
-            <h3>Upload File</h3>
-                <input type="file" onChange={onFileChange}/>
+                <h3>Upload File</h3>
+                <input type="file" onChange={onFileChange} />
                 <button onClick={onFileUpload}>Upload</button>
             </div>
             <div>
@@ -203,8 +132,8 @@ const FileManagement = () => {
                 <input
                     type="text"
                     placeholder="Folder name"
-                    value={folderCreateName}
-                    onChange={(e) => setFolderCreateName(e.target.value)}
+                    value={folderName}
+                    onChange={(e) => setFolderName(e.target.value)}
                 />
                 <button onClick={onCreateFolder}>Create Folder</button>
             </div>

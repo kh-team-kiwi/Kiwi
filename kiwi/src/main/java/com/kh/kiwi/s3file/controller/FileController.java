@@ -1,6 +1,5 @@
 package com.kh.kiwi.s3file.controller;
 
-import com.kh.kiwi.s3file.dto.FileDriveDto;
 import com.kh.kiwi.s3file.service.S3Service;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/files")
@@ -19,33 +17,6 @@ public class FileController {
 
     public FileController(S3Service s3Service) {
         this.s3Service = s3Service;
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity<List<FileDriveDto>> listFiles() {
-        List<FileDriveDto> files = s3Service.listFiles();
-        return ResponseEntity.ok(files);
-    }
-
-    @PostMapping("/multi-upload")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") List<MultipartFile> files) {
-        try {
-            List<String> keys = s3Service.uploadFiles(files);
-            return ResponseEntity.ok(keys);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(null);
-        }
-    }
-    @DeleteMapping("/delete-folder")
-    public ResponseEntity<String> deleteFolder(@RequestParam("folderName") String folderName) {
-        try {
-            s3Service.deleteFolder(folderName);
-            return ResponseEntity.ok("Successfully deleted folder: " + folderName);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Failed to delete folder");
-        }
     }
     @PostMapping("/create-folder")
     public ResponseEntity<String> createFolder(@RequestParam("folderName") String folderName) {
