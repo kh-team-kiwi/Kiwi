@@ -1,6 +1,8 @@
 package com.kh.kiwi.documents.service;
 
 import com.kh.kiwi.documents.dto.DocDto;
+import com.kh.kiwi.documents.dto.DocListDto;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,9 +12,18 @@ import java.util.List;
 public class DocService {
     private List<DocDto> docs = new ArrayList<>();
 
-    public List<DocDto> getAllDocs() {
-        return docs;
+    // select list - all
+    public List<DocListDto> selectAllList() {
+        List<DocListDto> result = null;
+//        SqlSession session = getSqlSession();
+//        result = dao.selectAllList(session);
+//        session.close();
+
+        return result;
     }
+
+
+
 
     public DocDto getDocById(Long id) {
         return docs.stream().filter(doc -> doc.getDocNum() == id).findFirst().orElse(null);

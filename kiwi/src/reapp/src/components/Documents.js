@@ -25,10 +25,11 @@ const Documents = () => {
 
     return (
         <div className="container">
+            {/* 사이드바 */}
             <div className="sidebar">
                 <h2>사이드바</h2>
                 <form>
-                    <button type='button' className="docSubmit" onClick={() => handleMenuClick('new')}>작성하기</button>
+                    <button type='button' className="newDoc" onClick={() => handleMenuClick('new')}>작성하기</button>
                     <hr />
                     <ul className="menu">
                         <li><button type='button' onClick={() => handleMenuClick('all')}>전체</button></li>
@@ -38,9 +39,10 @@ const Documents = () => {
                     </ul>
                 </form>
             </div>
+                {/* 메인 */}
             <div className="main">
                 {view === 'new' ? (
-                    <div className="newDocument">
+                    <div className="newDoc">
                         <h2>기본 설정</h2>
                         <form>
                             <label>
@@ -62,7 +64,7 @@ const Documents = () => {
                                 </select>
                             </label>
                             <label>
-                                작성일: <input type="date" />
+                                작성일: <input type="date"/>
                             </label>
                             <label>
                                 보존 연한:
@@ -79,30 +81,27 @@ const Documents = () => {
                         <table className="approvalTable">
                             <thead>
                             <tr>
-                                <th>팀원</th>
-                                <th>시니어</th>
-                                <th>대표이사</th>
+                                <th>작성자</th>
+                                <th>선임</th>
+                                <th>대표</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>팀원1</td>
-                                <td>시니어1</td>
-                                <td>대표1</td>
-                            </tr>
-                            <tr>
-                                <td>팀원2</td>
-                                <td>시니어2</td>
-                                <td>대표2</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             </tbody>
                         </table>
                         <h2>본문</h2>
                         <textarea className="documentBody">문서를 작성해주세요.</textarea>
+                        <button type='button' className="submitDoc" onClick={() => handleMenuClick('all')}>제출하기</button>
                     </div>
                 ) : (
+
                     <div className="documentList">
-                        <h2>문서 목록</h2>
+                    <h2>문서 목록</h2>
                         <table className="docTable">
                             <thead>
                             <tr>

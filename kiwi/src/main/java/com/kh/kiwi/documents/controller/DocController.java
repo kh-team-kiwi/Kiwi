@@ -1,6 +1,7 @@
 package com.kh.kiwi.documents.controller;
 
 import com.kh.kiwi.documents.dto.DocDto;
+import com.kh.kiwi.documents.dto.DocListDto;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,8 @@ public class DocController {
     }
 
     @GetMapping
-    public List<DocDto> getAllDocs() {
-        return docService.getAllDocs();
+    public List<DocListDto> selectAllList() {
+        return docService.selectAllList();
     }
 
     @GetMapping("/{id}")
