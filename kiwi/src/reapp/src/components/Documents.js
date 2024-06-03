@@ -12,13 +12,14 @@ const Documents = () => {
     }, []);
 
     const fetchDocuments = async () => {
-        try {
-            const response = await axios.get('/docs');
-            setDocuments(response.data);
-        } catch (error) {
+        axios.get('/docs')
+            .then(response => {
+                setDocuments(response.data);
+            })
+            .catch(error => {
             console.error("서버에서 문서를 불러오는데 실패하였습니다.", error);
-        }
-    };
+            });
+    }
 
     const handleMenuClick = (view) => {
         setView(view);

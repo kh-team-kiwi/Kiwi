@@ -7,5 +7,6 @@ public class DocDto {
     private Long docNum;
     private String docTitle;
     private String docDate;
+    private String docCompletion;
     private String docType;
 }

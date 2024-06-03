@@ -2,6 +2,7 @@ package com.kh.kiwi.documents.service;
 
 import com.kh.kiwi.documents.dto.DocDto;
 import com.kh.kiwi.documents.dto.DocListDto;
+import com.kh.kiwi.documents.mapper.DocMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +12,20 @@ import java.util.List;
 @Service
 public class DocService {
     private List<DocDto> docs = new ArrayList<>();
+    private final DocMapper docMapper;
+
+    public DocService(DocMapper docMapper) {
+        this.docMapper = docMapper;
+    }
 
     // select list - all
     public List<DocListDto> selectAllList() {
-        List<DocListDto> result = null;
-//        SqlSession session = getSqlSession();
-//        result = dao.selectAllList(session);
-//        session.close();
-
-        return result;
+        return docMapper.selectAllList();
     }
 
-
-
+    public List<DocDto> selectByUser(String creComEmpNum) {
+        return docMapper.selectByUser(creComEmpNum);
+    }
 
     public DocDto getDocById(Long id) {
         return docs.stream().filter(doc -> doc.getDocNum() == id).findFirst().orElse(null);

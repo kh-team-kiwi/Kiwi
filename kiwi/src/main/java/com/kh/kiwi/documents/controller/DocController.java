@@ -3,12 +3,16 @@ package com.kh.kiwi.documents.controller;
 import com.kh.kiwi.documents.dto.DocDto;
 import com.kh.kiwi.documents.dto.DocListDto;
 import com.kh.kiwi.documents.service.DocService;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/docs")
+@SpringBootApplication
+@MapperScan("com.kh.kiwi.documents.mapper")
 public class DocController {
 
     private final DocService docService;
