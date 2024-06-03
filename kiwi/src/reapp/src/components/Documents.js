@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+<<<<<<< Updated upstream
 import '../css/documents.css';
+=======
+import '../documents.css';
+>>>>>>> Stashed changes
 
 const Documents = () => {
     const [view, setView] = useState('all');
@@ -43,6 +47,7 @@ const Documents = () => {
                     <div className="newDocument">
                         <h2>기본 설정</h2>
                         <form>
+<<<<<<< Updated upstream
                             <label>
                                 문서 종류:
                                 <select>
@@ -74,6 +79,13 @@ const Documents = () => {
                                     <option value="permanent">영구</option>
                                 </select>
                             </label>
+=======
+                            <label>문서 종류: <input type="text" /></label>
+                            <label>문서 서식: <input type="text" /></label>
+                            <label>작성자: <input type="text" /></label>
+                            <label>작성일: <input type="date" /></label>
+                            <label>보존 연한: <input type="number" /></label>
+>>>>>>> Stashed changes
                         </form>
                         <h2>결재선</h2>
                         <table className="approvalTable">
@@ -98,7 +110,11 @@ const Documents = () => {
                             </tbody>
                         </table>
                         <h2>본문</h2>
+<<<<<<< Updated upstream
                         <textarea className="documentBody">문서를 작성해주세요.</textarea>
+=======
+                        <textarea className="documentBody">사업소득 품의서</textarea>
+>>>>>>> Stashed changes
                     </div>
                 ) : (
                     <div className="documentList">
@@ -134,4 +150,8 @@ const Documents = () => {
     );
 }
 
+<<<<<<< Updated upstream
 export default Documents;
+=======
+export default Documents;
+>>>>>>> Stashed changes
