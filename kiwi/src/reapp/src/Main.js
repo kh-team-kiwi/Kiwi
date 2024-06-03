@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import './css/Main.css';
 import {Link} from "react-router-dom"; // 외부 CSS 파일 import
 
 function Main() {

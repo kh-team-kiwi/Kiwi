@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../documents.css';
+import '../css/documents.css';
 
 const Documents = () => {
     const [view, setView] = useState('all');
