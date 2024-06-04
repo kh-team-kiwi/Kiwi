@@ -29,6 +29,7 @@ public class AuthService {
         try {
             // 존재하는 경우 : true / 존재하지 않는 경우 : false
             if(memberRepository.existsById(id)) {
+
                 return ResponseDto.setFailed("중복된 Email 입니다.");
             }
         } catch (Exception e) {

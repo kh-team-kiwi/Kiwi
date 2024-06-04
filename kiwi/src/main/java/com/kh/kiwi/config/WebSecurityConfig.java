@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(tokenHelper), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/signUp","/api/auth/login", "/api/files/multi-upload","/api/team/create"
+                        .requestMatchers("/api/auth/signUp","/api/auth/login", "/api/files/multi-upload"
                                 /*new AntPathRequestMatcher("/api/auth/signin"),
                                 new AntPathRequestMatcher("/api/auth/login")*/
                         ).permitAll()

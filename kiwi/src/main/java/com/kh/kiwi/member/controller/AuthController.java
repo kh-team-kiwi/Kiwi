@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+
 public class AuthController {
     @Autowired
     private AuthService authService;
@@ -27,7 +28,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseDto<?> login(@RequestBody LoginDto requestBody) {
-        System.out.println(requestBody.toString());
         ResponseDto<?> result = authService.login(requestBody);
         return result;
     }

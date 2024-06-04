@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> t = extractToken(request);
         if (!(t.isEmpty())) {
-
             Authentication authentication = tokenHelper.validateToken(request, t.get()); //5. 토큰 검증 - 유효 여부 확인 & 인증된 인증 객체 생성 후 반환
             SecurityContextHolder.getContext().setAuthentication(authentication); // 6. SecurityContextHolder 에 인증 객체 저장
         } else {
@@ -34,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         //다음 filterchain을 실행하며, 마지막 filterchain인 경우 Dispatcher Servlet이 실행된다.
         filterChain.doFilter(request, response);
-
     }
 
     private Optional<String> extractToken(ServletRequest request) {
