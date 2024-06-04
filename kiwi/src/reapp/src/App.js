@@ -2,7 +2,7 @@ import './styles/App.css';
 import React, {useEffect, useState} from 'react';
 import Regist from './Regist';
 import Login from './Login';
-import Header from './Header';
+import Headermenu from './Headermenu';
 import FileManagement from "./components/FileManagement";
 import Main from './Main';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
@@ -23,7 +23,7 @@ function App() {
 
   return (
       <BrowserRouter>
-          <Header isLogin={isLogin} setIsLogin={setIsLogin} />
+          <Headermenu isLogin={isLogin} setIsLogin={setIsLogin} />
           <Routes>
               {/*element={<Navigate to="/Home" replace />}*/}
               <Route path="/" element={<Home />} />
