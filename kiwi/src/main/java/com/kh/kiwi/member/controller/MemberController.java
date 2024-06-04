@@ -21,9 +21,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseDto<?> signup(@RequestBody SignUpDto requestBody) {
-        ResponseDto<?> result = memberService.save(requestBody);
-        return result;
+    public ResponseDto<?> signup(@RequestBody SignUpDto dto) {
+        memberService.save(dto);
+        //ResponseDto<?> result = memberService.save(dto);
+        return null;
     }
 
 //    @PostMapping("/login")
@@ -36,6 +37,6 @@ public class MemberController {
     public ResponseDto<?> login(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         //ResponseDto<?> result = memberService.logout(requestBody);
-        return result;
+        return null;
     }
 }
