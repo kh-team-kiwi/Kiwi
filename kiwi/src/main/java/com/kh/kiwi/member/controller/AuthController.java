@@ -16,7 +16,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public ResponseDto<?> signUp(@RequestBody SignUpDto requestBody) {
 
         System.out.println(requestBody.toString());
