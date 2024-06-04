@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Header({isLogin, setIsLogin}) {
+function Headermenu({isLogin, setIsLogin}) {
     const handleLogout = () => {
         sessionStorage.removeItem('authToken');
         sessionStorage.removeItem('authExpr');
@@ -47,4 +47,4 @@ const styles = {
 };
 
 
-export default Header;
+export default Headermenu;
