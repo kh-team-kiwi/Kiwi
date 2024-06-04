@@ -1,0 +1,15 @@
+@import '../../variables.css';
+
+.member-list {
+    position: fixed;
+    top: 60px; 
+    right: 0;
+    width: 250px;
+    height: calc(100% - 60px); 
+    background-color: var(--white);
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 999;
+    border-left: 1px solid var(--light-gray);
+    border-top: 5px solid transparent;
+}

@@ -1,0 +1,98 @@
+@import '../../variables.css';
+
+.event-container {
+    display: flex;
+}
+
+.event-duration {
+    font-size: 11px;
+}
+
+.event-description {
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+
+}
+
+.event-day-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.day-label {
+    font-size: 16px;
+    font-weight: 700;
+
+}
+
+.date-label {
+    font-size: 14px;
+    margin-left: auto;
+    margin-right: 5px;
+}
+  
+  .sidebar h2 {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin-bottom: 20px;
+    padding: 5px;
+    background-color: #fafbfc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .event-duration div {
+    margin: 0;
+  }
+  
+  .time-difference {
+    font-style: italic;
+    color: #888;
+  }
+  
+  .event-title-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .event-title {
+    font-weight: 510;
+  }
+  
+  .event-color-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  
+
+.event-time-info {
+    display: flex;
+}
+
+.event-start-time {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.time-until-event {
+    margin-left: 10px;
+    font-size: 12px;
+}

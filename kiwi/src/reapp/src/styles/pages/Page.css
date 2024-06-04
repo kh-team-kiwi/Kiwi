@@ -1,0 +1,55 @@
+@import '../variables.css';
+
+.sidebar {
+    position: fixed;
+    top: 60px; 
+    left: 0;
+    width: 250px;
+    height: calc(100% - 60px); 
+    background-color: var(--white);
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 999;
+    border-right: 1px solid var(--light-gray);
+    border-top: 5px solid transparent;
+    overflow-y: auto;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  
+  .sidebar {
+    scrollbar-width: none; 
+  }
+  
+  .sidebar {
+    -ms-overflow-style: none; 
+  }
+  
+  .sidebar::-webkit-scrollbar {
+    display: none; 
+  }
+
+
+.content-container {
+    position: fixed;
+    top: 60px; 
+    left: 250px;
+    width: calc(100% - 250px);
+    height: calc(100% - 60px); 
+    background-color: var(--container-background-color);
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.content-container-chat {
+    position: fixed;
+    top: 60px; 
+    left: 250px;
+    right: 250px;
+    height: calc(100% - 60px); 
+    background-color: var(--container-background-color);
+    z-index: 999;
+}

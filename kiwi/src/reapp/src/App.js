@@ -1,3 +1,4 @@
+import './styles/App.css';
 import React, {useEffect, useState} from 'react';
 import Regist from './Regist';
 import Login from './Login';
@@ -6,6 +7,11 @@ import FileManagement from "./components/FileManagement";
 import Main from './Main';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Documents from "./components/Documents";
+
+import Chat from './pages/Chat';
+import Calendar from './pages/Calendar';
+import Drive from './pages/Drive';
+import Header from './components/common/Header';
 
 function App() {
     const [isLogin, setIsLogin] = useState(false);
@@ -26,6 +32,9 @@ function App() {
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
               <Route path="/documents" element={<Documents/>}></Route>
               <Route path="/main" element={<Main/>}></Route>
+	                  <Route path='/chat' element={<Chat />} />
+            <Route path='/calendar' element={<Calendar />} />
+            <Route path='/drive' element={<Drive />} />
           </Routes>
       </BrowserRouter>
   );

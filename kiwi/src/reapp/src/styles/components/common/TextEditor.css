@@ -1,0 +1,58 @@
+@import '../../variables.css';
+
+
+.quill {
+    width: 100%;
+    height: 101px;
+}
+
+.ql-container {
+    border: none !important;
+}
+
+.ql-editor {
+    border: none !important;
+}
+
+.ql-toolbar {
+    height: 35px; 
+}
+
+.ql-toolbar button {
+    padding: 5px; 
+}
+
+.ql-toolbar button svg {
+    width: 20px; 
+    height: 20px; 
+}
+
+.ql-toolbar.ql-snow {
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 1px solid var(--light-gray);
+    border-left: none;
+    border-right: none;
+    padding: 5px;
+}
+
+.ql-toolbar .ql-stroke {
+    fill: none;
+    stroke: var(--dark-gray);
+}
+
+.ql-toolbar .ql-fill {
+    fill: var(--dark-gray);
+    stroke: none;
+}
+
+.ql-toolbar .ql-picker {
+    color: var(--dark-gray);
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+    display: block;
+    margin-top: -1px;
+    top: -105px;
+    z-index: 1;
+    background-color: var(--white);
+}
