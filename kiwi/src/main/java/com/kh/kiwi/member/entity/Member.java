@@ -8,17 +8,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name="MEMBER")
-public class Member {
+public class Member implements UserDetails {
     @Id
     private String memberId;
     private String memberPw;
@@ -28,6 +32,51 @@ public class Member {
     private String memberNickname;
     private LocalDateTime memberDate; // created at
     private LocalDateTime expireDate; // 개인정보 보관약정 memberDate+1year
+
+    @Builder
+    public Member(String id, String password, String auth){
+        this.memberId = id;
+        this.memberPw = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("MEMBER"));
+    }
+
+    @Override
+    public String getUsername() {
+        return memberId;
+    }
+
+    @Override
+    public String getPassword() {
+        return memberPw;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // todo
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // todo
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // todo
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // todo
+        return true;
+    }
 
     public Member(SignUpDto dto) {
         this.memberId= dto.getMemberId();

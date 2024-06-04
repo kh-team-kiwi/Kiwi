@@ -11,6 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/docs")
+//@SpringBootApplication
+//@MapperScan("com.kh.kiwi.documents.mapper")
 public class DocController {
 
     private final DocService docService;

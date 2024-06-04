@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional()
 public class AuthService {
 
     private final MemberRepository memberRepository;

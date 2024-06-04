@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name="GROUP_List")
+@Table(name="GROUP_LIST")
 @IdClass(GroupId.class)
 public class Group {
     @Id

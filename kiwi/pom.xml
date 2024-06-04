@@ -112,12 +112,12 @@
 <!--            <artifactId>jjwt-jackson</artifactId>-->
 <!--            <version>0.12.5</version>-->
 <!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
+<!--        </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>9.39.1</version>
-        </dependency>
+        </dependency>-->
 
         <!-- aws-java-sdk-s3 -->
         <dependency>
