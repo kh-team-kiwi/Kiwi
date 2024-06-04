@@ -5,7 +5,7 @@ import Login from './Login';
 import Headermenu from './Headermenu';
 import FileManagement from "./components/FileManagement";
 import Main from './Main';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Documents from "./components/Documents";
 
 import Chat from './pages/Chat';
@@ -16,14 +16,19 @@ import Header from './components/common/Header';
 function App() {
     const [isLogin, setIsLogin] = useState(false);
 
+    const location = useLocation();
+    const hideHeaderPaths = ['/chat', '/calendar', '/drive'];
+    const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
+
     useEffect(() => {
         const authToken = sessionStorage.getItem('authToken');
         setIsLogin(authToken !== null);
     }, []);
 
   return (
-      <BrowserRouter>
-          <Headermenu isLogin={isLogin} setIsLogin={setIsLogin} />
+      <>
+          {!shouldHideHeader && <Headermenu isLogin={isLogin} setIsLogin={setIsLogin} />}
+          {shouldHideHeader && <Header />}
           <Routes>
               {/*element={<Navigate to="/Home" replace />}*/}
               <Route path="/" element={<Home />} />
@@ -32,11 +37,11 @@ function App() {
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
               <Route path="/documents" element={<Documents/>}></Route>
               <Route path="/main" element={<Main/>}></Route>
-	                  <Route path='/chat' element={<Chat />} />
+              <Route path='/chat' element={<Chat />} />
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/drive' element={<Drive />} />
           </Routes>
-      </BrowserRouter>
+      </>
   );
 }
 
