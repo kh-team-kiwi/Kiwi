@@ -24,7 +24,7 @@ function Headermenu({isLogin, setIsLogin}) {
                     <>
                         <li style={styles.li}><Link to="/login" style={styles.link}>로그인</Link></li>
                         <li style={styles.li}><Link to="/regist" style={styles.link}>회원가입</Link></li>
-                        <li style={styles.li}><a onClick={openNewWindowChat} style={styles.link}>채팅</a></li>
+                        <li style={styles.li}><Link to="/chat" style={styles.link}>채팅</Link></li>
                         <li style={styles.li}><Link to="/calendar" style={styles.link}>캘린더</Link></li>
                         <li style={styles.li}><Link to="/driver" style={styles.link}>드라이버</Link></li>
                     </>
@@ -49,10 +49,6 @@ const styles = {
     }
 };
 
-const openNewWindowChat = () => {
-    const url = `${window.location.origin}/chat`;
-    window.open(url, '_blank');
-};
 
 
 export default Headermenu;
