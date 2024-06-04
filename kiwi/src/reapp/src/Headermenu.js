@@ -26,7 +26,7 @@ function Headermenu({isLogin, setIsLogin}) {
                         <li style={styles.li}><Link to="/regist" style={styles.link}>회원가입</Link></li>
                         <li style={styles.li}><Link to="/chat" style={styles.link}>채팅</Link></li>
                         <li style={styles.li}><Link to="/calendar" style={styles.link}>캘린더</Link></li>
-                        <li style={styles.li}><Link to="/driver" style={styles.link}>드라이버</Link></li>
+                        <li style={styles.li}><Link to="/drive" style={styles.link}>드라이브</Link></li>
                     </>
                 )}
             </ul>
