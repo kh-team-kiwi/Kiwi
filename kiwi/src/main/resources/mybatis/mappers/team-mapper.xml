@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kh.kiwi.team.mapper.TeamMapper">
+    <select id="getLastTeam" resultType="Integer">
+        select CAST(RIGHT((MAX(team)),6) as unsigned) from (select team as team from team_list where left(team, 8)=(select DATE_FORMAT(NOW(), '%Y%m%d')))as list
+    </select>
+</mapper>
