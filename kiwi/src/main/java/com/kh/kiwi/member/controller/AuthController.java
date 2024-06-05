@@ -2,7 +2,7 @@ package com.kh.kiwi.member.controller;
 
 import com.kh.kiwi.member.dto.LoginDto;
 import com.kh.kiwi.member.dto.ResponseDto;
-import com.kh.kiwi.member.dto.SignUpDto;
+import com.kh.kiwi.member.dto.SignupDto;
 import com.kh.kiwi.member.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +17,11 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseDto<?> signUp(@RequestBody SignUpDto requestBody) {
+    public ResponseDto<?> signup(@RequestBody SignupDto requestBody) {
 
         System.out.println(requestBody.toString());
 
-        ResponseDto<?> result = authService.signUp(requestBody);
+        ResponseDto<?> result = authService.signup(requestBody);
         return result;
     }
 

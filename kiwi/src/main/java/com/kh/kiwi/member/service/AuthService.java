@@ -3,14 +3,10 @@ package com.kh.kiwi.member.service;
 import com.kh.kiwi.member.dto.*;
 import com.kh.kiwi.member.entity.Member;
 import com.kh.kiwi.member.repository.MemberRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +15,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final TokenHelper tokenHelper;
 
-    public ResponseDto<?> signUp(SignUpDto dto){
+    public ResponseDto<?> signup(SignupDto dto){
         String id = dto.getMemberId();
         String password = dto.getMemberPw();
         String confirmPassword = dto.getConfirmPw();

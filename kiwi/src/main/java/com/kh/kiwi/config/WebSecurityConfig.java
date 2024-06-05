@@ -1,7 +1,6 @@
 package com.kh.kiwi.config;
 
 import com.kh.kiwi.filter.JwtAuthenticationFilter;
-import com.kh.kiwi.member.service.MemberDetailService;
 import com.kh.kiwi.member.service.TokenHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +29,7 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig {
 
     private final TokenHelper tokenHelper;
-    private final MemberDetailService memberDetailsService;
+//    private final MemberDetailService memberDetailsService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -49,6 +48,7 @@ public class WebSecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
 //                .logout((logout)->logout
 //                        .logoutSuccessUrl("/login")
+
 //                        .invalidateHttpSession(true))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())  // CORS 설정을 추가
@@ -56,7 +56,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(tokenHelper), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/signUp","/api/auth/login", "/api/files/multi-upload","/api/team/create"
+                        .requestMatchers("/api/auth/signup","/api/auth/login", "/api/files/multi-upload","/api/team/create"
                                 /*new AntPathRequestMatcher("/api/auth/signin"),
                                 new AntPathRequestMatcher("/api/auth/login")*/
                         ).permitAll()
@@ -70,17 +70,17 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public AuthenticationManagerBuilder amBuilder(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(memberDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder());
-        return builder;
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
+//
+//    @Bean
+//    public AuthenticationManagerBuilder amBuilder(AuthenticationManagerBuilder builder) throws Exception {
+//        builder.userDetailsService(memberDetailsService)
+//                .passwordEncoder(bCryptPasswordEncoder());
+//        return builder;
+//    }
 
     @Bean
     public CorsFilter corsFilter() {

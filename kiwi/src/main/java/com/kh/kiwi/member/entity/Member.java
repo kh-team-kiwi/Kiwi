@@ -1,6 +1,6 @@
 package com.kh.kiwi.member.entity;
 
-import com.kh.kiwi.member.dto.SignUpDto;
+import com.kh.kiwi.member.dto.SignupDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -78,7 +78,7 @@ public class Member implements UserDetails {
         return true;
     }
 
-    public Member(SignUpDto dto) {
+    public Member(SignupDto dto) {
         this.memberId= dto.getMemberId();
         this.memberPw = dto.getMemberPw();
         this.memberFilepath = dto.getMemberFilepath();

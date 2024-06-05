@@ -26,7 +26,7 @@ const Regist = () => {
         e.preventDefault(); // 폼 제출 시 기본 동작인 페이지 리로드를 막음
 
         // 회원가입 요청 보내기
-        const response = await axios.post('/api/auth/signUp', formData)
+        const response = await axios.post('/api/auth/signup', formData)
             .then((res)=>{
                 if(res.data.result){
                     console.log('회원가입 성공:', res.data);
