@@ -2,10 +2,17 @@
     display: flex;
 }
 
+.main{
+    position: relative;
+    top:-500px;
+    margin-left: 250px;
+}
+
 .sidebar {
     width: 200px;
     padding: 20px;
     border-right: 1px solid #ccc;
+    margin-top: -15px;
 }
 
 .main {

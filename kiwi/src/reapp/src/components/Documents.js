@@ -124,17 +124,27 @@ const Documents = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {documents.map((doc) => (
-                                <tr key={doc.docNum}>
-                                    <td>{doc.docNum}</td>
-                                    <td>{doc.docType}</td>
-                                    <td>{doc.companyNum}</td>
-                                    <td>{doc.docTitle}</td>
-                                    <td>{doc.memberId}</td>
-                                    <td>{doc.docDate}</td>
-                                    <td>{doc.docCompletion}</td>
+
+                                <tr>
+                                    <td>kiwi-a5125</td>
+                                    <td>기안서</td>
+                                    <td>기안서입니다.</td>
+                                    <td>test@test1</td>
+                                    <td>2024-06-05</td>
+                                    <td>-</td>
                                 </tr>
-                            ))}
+
+                            {/*{documents.map((doc) => (*/}
+                            {/*    <tr key={doc.docNum}>*/}
+                            {/*        <td>{doc.docNum}</td>*/}
+                            {/*        <td>{doc.docType}</td>*/}
+                            {/*        <td>{doc.companyNum}</td>*/}
+                            {/*        <td>{doc.docTitle}</td>*/}
+                            {/*        <td>{doc.memberId}</td>*/}
+                            {/*        <td>{doc.docDate}</td>*/}
+                            {/*        <td>{doc.docCompletion}</td>*/}
+                            {/*    </tr>*/}
+                            {/*))}*/}
                             </tbody>
                         </table>
                     </div>
