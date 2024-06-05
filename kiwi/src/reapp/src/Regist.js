@@ -36,7 +36,7 @@ const Regist = () => {
                 }
 
             }).catch((err)=>{
-                console.error("회원강비 실패:",err)
+                console.error("회원가입 실패:",err)
             });
     };
 

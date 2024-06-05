@@ -5,7 +5,15 @@ import '../css/documents.css';
 
 const Documents = () => {
     const [view, setView] = useState('all');
-    const [documents, setDocuments] = useState([]);
+    const [documents, setDocuments] = useState({
+        docNum: '',
+        docType: '',
+        companyNum: '',
+        docTitle: '',
+        memberId: '',
+        docDate: '',
+        docCompletion: ''
+    });
 
     useEffect(() => {
         fetchDocuments();
@@ -120,10 +128,11 @@ const Documents = () => {
                                 <tr key={doc.docNum}>
                                     <td>{doc.docNum}</td>
                                     <td>{doc.docType}</td>
+                                    <td>{doc.companyNum}</td>
                                     <td>{doc.docTitle}</td>
-                                    <td>{doc.creComEmpNum}</td>
+                                    <td>{doc.memberId}</td>
                                     <td>{doc.docDate}</td>
-                                    <td>{doc.completedDate}</td>
+                                    <td>{doc.docCompletion}</td>
                                 </tr>
                             ))}
                             </tbody>
