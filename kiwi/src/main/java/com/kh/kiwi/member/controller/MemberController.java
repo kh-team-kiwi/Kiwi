@@ -23,6 +23,7 @@
 //    @PostMapping("/signup")
 //    public ResponseDto<?> signup(@RequestBody SignUpDto dto) {
 //        memberService.save(dto);
+//        memberService.login();
 //        //ResponseDto<?> result = memberService.save(dto);
 //        return null;
 //    }

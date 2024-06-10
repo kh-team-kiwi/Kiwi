@@ -9,5 +9,4 @@ public class KiwiApplication {
     public static void main(String[] args) {
         SpringApplication.run(KiwiApplication.class, args);
     }
-
 }

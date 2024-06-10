@@ -129,9 +129,17 @@ const Documents = () => {
                                     <td>kiwi-a5125</td>
                                     <td>기안서</td>
                                     <td>기안서입니다.</td>
-                                    <td>test@test1</td>
+                                    <td>정청원</td>
                                     <td>2024-06-05</td>
                                     <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>kiwi-b5241</td>
+                                    <td>시말서</td>
+                                    <td>시말서...</td>
+                                    <td>정청원</td>
+                                    <td>2024-06-05</td>
+                                    <td>2024-06-05</td>
                                 </tr>
 
                             {/*{documents.map((doc) => (*/}
