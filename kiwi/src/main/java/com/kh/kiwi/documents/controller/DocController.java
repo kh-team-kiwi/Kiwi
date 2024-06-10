@@ -13,6 +13,8 @@ import java.util.List;
 @RequestMapping("/docs")
 //@SpringBootApplication
 //@MapperScan("com.kh.kiwi.documents.mapper")
+
+
 public class DocController {
 
     private final DocService docService;

@@ -4,6 +4,7 @@ import com.kh.kiwi.member.dto.LoginDto;
 import com.kh.kiwi.member.dto.ResponseDto;
 import com.kh.kiwi.member.dto.SignupDto;
 import com.kh.kiwi.member.service.AuthService;
+import com.kh.kiwi.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,10 +17,13 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private MemberService memberService;
+
     @PostMapping("/signup")
     public ResponseDto<?> signup(@RequestBody SignupDto requestBody) {
 
-        System.out.println(requestBody.toString());
+//        System.out.println(requestBody.toString());
 
         ResponseDto<?> result = authService.signup(requestBody);
         return result;
@@ -27,8 +31,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseDto<?> login(@RequestBody LoginDto requestBody) {
-        System.out.println(requestBody.toString());
+//        System.out.println(requestBody.toString());
         ResponseDto<?> result = authService.login(requestBody);
+//        memberService.logMethod();
+        memberService.login(requestBody.getId());
         return result;
     }
 
@@ -49,5 +55,4 @@ public class AuthController {
 //        // 로그인 성공 시 리다이렉트 또는 다른 응답 처리
 //        return "redirect:/dashboard"; // 대시보드 페이지로 리다이렉트
 //    }
-
 }
