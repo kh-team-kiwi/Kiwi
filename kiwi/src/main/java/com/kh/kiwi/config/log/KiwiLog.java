@@ -17,11 +17,13 @@ public class KiwiLog {
 //    @Pointcut("execution(public * com.kh.kiwi..*Dao.*(..))")
 //    public void daoPointcut() {}
 
-    @Pointcut("execution(public * com.kh.kiwi.documents..*Service.*(..))")
-    public void servicePointcut() {}
+//    @Pointcut("execution(public * com.kh.kiwi..*Service.*(..))")
+//    public void servicePointcut() {}
 
     @Pointcut("execution(public * com.kh.kiwi..*Controller.*(..))")
     public void controllerPointcut() {}
+    @Pointcut("execution(public * com.kh.kiwi..*Filter.*(..))")
+    public void filterPointcut() {}
 
 //    @Around("daoPointcut()")
 //    public Object aroundDaoLog(ProceedingJoinPoint pjp) throws Throwable {
@@ -43,25 +45,25 @@ public class KiwiLog {
 //        return returnObj;
 //    }
 
-    @Around("servicePointcut()")
-    public Object aroundDaoLog(ProceedingJoinPoint pjp) throws Throwable {
-        Object returnObj = null;
-        // pjp.getThis() : 클래스명
-        // pjp.getSignature().getName(): 타겟메소드명
-        logger.debug("▷▷▷["+pjp.getThis()+":"+pjp.getSignature().getName()+"]");
-        // pjp.getArgs() : 메소드의 파라메터 값들이 들어있음.
-        Object[] args = pjp.getArgs();
-        for(int i=0; i<args.length; i++) {
-            logger.debug("▷▷▷-args["+i+"] "+args[i]+"");
-        }
-        StopWatch stopwatch = new StopWatch();
-        stopwatch.start();
-        // pjp.proceed() : 타겟메소드 호출함
-        returnObj = pjp.proceed();
-        stopwatch.stop();
-        logger.debug("▷▷▷[Dao ▷ "+stopwatch.getTotalTimeMillis()+"ms]"+returnObj);
-        return returnObj;
-    }
+//    @Around("servicePointcut()")
+//    public Object aroundDaoLog(ProceedingJoinPoint pjp) throws Throwable {
+//        Object returnObj = null;
+//        // pjp.getThis() : 클래스명
+//        // pjp.getSignature().getName(): 타겟메소드명
+//        logger.debug("▷▷▷["+pjp.getThis()+":"+pjp.getSignature().getName()+"]");
+//        // pjp.getArgs() : 메소드의 파라메터 값들이 들어있음.
+//        Object[] args = pjp.getArgs();
+//        for(int i=0; i<args.length; i++) {
+//            logger.debug("▷▷▷-args["+i+"] "+args[i]+"");
+//        }
+//        StopWatch stopwatch = new StopWatch();
+//        stopwatch.start();
+//        // pjp.proceed() : 타겟메소드 호출함
+//        returnObj = pjp.proceed();
+//        stopwatch.stop();
+//        logger.debug("▷▷▷[Dao ▷ "+stopwatch.getTotalTimeMillis()+"ms]"+returnObj);
+//        return returnObj;
+//    }
 
 
     @Around("controllerPointcut()")
@@ -69,18 +71,38 @@ public class KiwiLog {
         Object returnObj = null;
         // pjp.getThis() : 클래스명
         // pjp.getSignature().getName(): 타겟메소드명
-        logger.debug("▷["+pjp.getThis()+":"+pjp.getSignature().getName()+"]");
+        logger.debug("### ["+pjp.getThis()+":"+pjp.getSignature().getName()+"]");
         // pjp.getArgs() : 메소드의 파라메터 값들이 들어있음.
         Object[] args = pjp.getArgs();
         for(int i=0; i<args.length; i++) {
-            logger.debug("▷-args["+i+"] "+args[i]+"");
+            logger.debug("### - args["+i+"] "+args[i]+"");
         }
         StopWatch stopwatch = new StopWatch();
         stopwatch.start();
         // pjp.proceed() : 타겟메소드 호출함
         returnObj = pjp.proceed();
         stopwatch.stop();
-        logger.debug("▷[Ctrl ▷ "+stopwatch.getTotalTimeMillis()+"ms]"+returnObj);
+        logger.debug("### [Ctrl ◁ "+stopwatch.getTotalTimeMillis()+"ms]"+returnObj);
+        return returnObj;
+    }
+
+    @Around("filterPointcut()")
+    public Object aroundFilterLog(ProceedingJoinPoint pjp) throws Throwable {
+        Object returnObj = null;
+        // pjp.getThis() : 클래스명
+        // pjp.getSignature().getName(): 타겟메소드명
+        logger.debug("### ["+pjp.getThis()+":"+pjp.getSignature().getName()+"]");
+        // pjp.getArgs() : 메소드의 파라메터 값들이 들어있음.
+        Object[] args = pjp.getArgs();
+        for(int i=0; i<args.length; i++) {
+            logger.debug("### - args["+i+"] "+args[i]+"");
+        }
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+        // pjp.proceed() : 타겟메소드 호출함
+        returnObj = pjp.proceed();
+        stopwatch.stop();
+        logger.debug("### [filter ◁ "+stopwatch.getTotalTimeMillis()+"ms]"+returnObj);
         return returnObj;
     }
 }

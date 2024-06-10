@@ -22,18 +22,13 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseDto<?> signup(@RequestBody SignupDto requestBody) {
-
-//        System.out.println(requestBody.toString());
-
         ResponseDto<?> result = authService.signup(requestBody);
         return result;
     }
 
     @PostMapping("/login")
     public ResponseDto<?> login(@RequestBody LoginDto requestBody) {
-//        System.out.println(requestBody.toString());
         ResponseDto<?> result = authService.login(requestBody);
-//        memberService.logMethod();
         memberService.login(requestBody.getId());
         return result;
     }

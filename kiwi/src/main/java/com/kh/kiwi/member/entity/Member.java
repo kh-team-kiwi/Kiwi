@@ -4,10 +4,7 @@ import com.kh.kiwi.member.dto.SignupDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +14,12 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name="MEMBER")
 public class Member implements UserDetails {
     @Id
@@ -78,9 +77,9 @@ public class Member implements UserDetails {
         return true;
     }
 
-    public Member(SignupDto dto) {
+    public Member(SignupDto dto, String hash) {
         this.memberId= dto.getMemberId();
-        this.memberPw = dto.getMemberPw();
+        this.memberPw = hash;
         this.memberFilepath = dto.getMemberFilepath();
         this.memberStatus = "1";
         this.memberRole = "MEMBER";
@@ -88,4 +87,16 @@ public class Member implements UserDetails {
         this.memberDate = LocalDateTime.now();
         this.expireDate = LocalDateTime.now().plusYears(1);
     }
+
+    public Member(Member member) {
+        this.memberId= member.getMemberId();
+        this.memberPw = "";
+        this.memberFilepath = member.getMemberFilepath();
+        this.memberStatus = member.getMemberStatus();
+        this.memberRole = member.getMemberRole();
+        this.memberNickname = member.getMemberNickname();
+        this.memberDate = member.getMemberDate();
+        this.expireDate = member.getExpireDate();
+    }
+
 }

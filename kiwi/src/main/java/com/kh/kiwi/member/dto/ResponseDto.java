@@ -1,9 +1,11 @@
 package com.kh.kiwi.member.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@ToString
+@Getter
 @AllArgsConstructor(staticName = "set")
 public class ResponseDto<D> {
     private boolean result;
