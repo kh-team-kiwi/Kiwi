@@ -3,6 +3,7 @@ package com.kh.kiwi.documents.service;
 import com.kh.kiwi.documents.dto.DocDto;
 import com.kh.kiwi.documents.dto.DocListDto;
 import com.kh.kiwi.documents.mapper.DocMapper;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
