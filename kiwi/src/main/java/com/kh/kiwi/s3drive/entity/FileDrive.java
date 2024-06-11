@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "file_drive")
+@Table(name = "file_drive_list")
 public class FileDrive {
 
     @Id

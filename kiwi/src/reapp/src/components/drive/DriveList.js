@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
-const DriveList = ({ refresh }) => {
+const DriveList = ({ onView }) => {
     const [drives, setDrives] = useState([]);
+    const [editDriveCode, setEditDriveCode] = useState(null);
+    const [newName, setNewName] = useState('');
 
     useEffect(() => {
         fetchDrives();
-    }, [refresh]);
+    }, []);
 
     const fetchDrives = async () => {
         try {
@@ -35,12 +36,6 @@ const DriveList = ({ refresh }) => {
             console.error('Failed to update drive', error);
         }
     };
-    const handleView = async () =>{
-
-    };
-
-    const [editDriveCode, setEditDriveCode] = useState(null);
-    const [newName, setNewName] = useState('');
 
     const handleEdit = (driveCode, currentName) => {
         setEditDriveCode(driveCode);
@@ -56,7 +51,6 @@ const DriveList = ({ refresh }) => {
 
     return (
         <div>
-
             <h2>Drive List</h2>
             <ul>
                 {drives.map((drive) => (
@@ -73,17 +67,15 @@ const DriveList = ({ refresh }) => {
                             </form>
                         ) : (
                             <>
-                                {drive.driveName}
+                                {drive.driveName} ({drive.team})
                                 <button onClick={() => handleEdit(drive.driveCode, drive.driveName)}>Edit</button>
                                 <button onClick={() => handleDelete(drive.driveCode)}>Delete</button>
-                                <button onClick={() => handleView(drive.driveCode)}>view</button>
+                                <button onClick={() => onView(drive.driveCode, drive.driveName)}>View Files</button>
                             </>
                         )}
                     </li>
                 ))}
             </ul>
-
-
         </div>
     );
 };

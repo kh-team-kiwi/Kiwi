@@ -1,23 +1,18 @@
 package com.kh.kiwi.s3file.service;
 
-import com.kh.kiwi.s3file.dto.FileDrivefileDto;
+import com.kh.kiwi.s3drive.repository.FileDriveRepository;
+import com.kh.kiwi.s3file.dto.FileDriveFileDTO;
 import com.kh.kiwi.s3file.entity.FileDriveFile;
 import com.kh.kiwi.s3file.repository.FileDriveFileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.*;
-import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,139 +21,56 @@ import java.util.stream.Collectors;
 public class FileDriveFileService {
 
     private final S3Client s3Client;
-    private final FileDriveFileRepository fileDriveRepository;
-
-    public FileDriveFileService(S3Client s3Client, FileDriveFileRepository fileDriveRepository) {
-        this.s3Client = s3Client;
-        this.fileDriveRepository = fileDriveRepository;
-    }
+    private final FileDriveFileRepository fileDriveFileRepository;
+    private final FileDriveRepository fileDriveRepository;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
 
+    @Autowired
+    public FileDriveFileService(S3Client s3Client, FileDriveFileRepository fileDriveFileRepository, FileDriveRepository fileDriveRepository) {
+        this.s3Client = s3Client;
+        this.fileDriveFileRepository = fileDriveFileRepository;
+        this.fileDriveRepository = fileDriveRepository;
+    }
 
-    public FileDrivefileDto uploadFile(MultipartFile file, String team) throws IOException {
-        String key = UUID.randomUUID().toString();
+    public List<FileDriveFileDTO> getFilesByDriveCode(String driveCode) {
+        return fileDriveFileRepository.findByDriveCode(driveCode).stream()
+                .map(file -> new FileDriveFileDTO(file.getFileCode(), file.getDriveCode(), file.getFileName(), file.getFilePath(), file.isFolder(), file.getUploadTime()))
+                .collect(Collectors.toList());
+    }
 
-        File tempFile = File.createTempFile("upload", null);
-        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            fos.write(file.getBytes());
+    public FileDriveFileDTO uploadFile(String driveCode, MultipartFile file) {
+        // 드라이브가 존재하는지 확인
+        if (!fileDriveRepository.existsById(driveCode)) {
+            throw new IllegalArgumentException("Drive does not exist: " + driveCode);
         }
 
+        String fileCode = UUID.randomUUID().toString();
+        String s3Key = driveCode + "/" + fileCode + "/" + file.getOriginalFilename();
+
+        // S3에 파일 업로드
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .key(key)
+                    .key(s3Key)
                     .build();
-            s3Client.putObject(putObjectRequest, RequestBody.fromFile(tempFile));
-            System.out.println("경로"+putObjectRequest);
-        } catch (S3Exception e) {
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new IOException("Failed to upload file to S3", e);
-        } finally {
-            tempFile.delete();
+            throw new RuntimeException("Failed to upload file to S3", e);
         }
 
-        FileDriveFile fileDrive = new FileDriveFile();
-        fileDrive.setFileCode(key);
-        fileDrive.setTeam(team);
-        fileDrive.setFileName(file.getOriginalFilename());
-        fileDrive.setFilePath(key);
-        fileDrive.setUploadTime(LocalDateTime.now());
+        // 드라이브 정보 저장
+        FileDriveFile fileDriveFile = new FileDriveFile();
+        fileDriveFile.setFileCode(fileCode);
+        fileDriveFile.setDriveCode(driveCode);
+        fileDriveFile.setFileName(file.getOriginalFilename());
+        fileDriveFile.setFilePath(s3Key); // S3 경로를 저장
+        fileDriveFile.setUploadTime(LocalDateTime.now());
+        fileDriveFile.setFolder(false);
+        fileDriveFileRepository.save(fileDriveFile);
 
-        fileDriveRepository.save(fileDrive);
-
-        FileDrivefileDto fileDTO = new FileDrivefileDto();
-        fileDTO.setFileCode(key);
-        fileDTO.setTeam(fileDrive.getTeam());
-        fileDTO.setFileName(fileDrive.getFileName());
-        fileDTO.setFilePath(fileDrive.getFilePath());
-        fileDTO.setUploadTime(fileDrive.getUploadTime());
-
-        return fileDTO;
+        return new FileDriveFileDTO(fileDriveFile.getFileCode(), fileDriveFile.getDriveCode(), fileDriveFile.getFileName(), fileDriveFile.getFilePath(), fileDriveFile.isFolder(), fileDriveFile.getUploadTime());
     }
-
-    public List<FileDrivefileDto> listFiles() {
-        return fileDriveRepository.findAll().stream().map(file -> {
-            FileDrivefileDto fileDTO = new FileDrivefileDto();
-            fileDTO.setFileCode(file.getFileCode());
-            fileDTO.setTeam(file.getTeam());
-            fileDTO.setFileName(file.getFileName());
-            fileDTO.setFilePath(file.getFilePath());
-            fileDTO.setUploadTime(file.getUploadTime());
-            return fileDTO;
-        }).collect(Collectors.toList());
-    }
-
-    public byte[] downloadFile(String key) throws IOException {
-        try {
-            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .build();
-            ResponseInputStream<?> s3Object = s3Client.getObject(getObjectRequest);
-
-
-            return s3Object.readAllBytes();
-        } catch (S3Exception e) {
-            e.printStackTrace();
-            throw new IOException("Failed to download file from S3", e);
-        }
-    }
-    public void deleteFile(String key) {
-        try {
-            fileDriveRepository.deleteById(key);
-            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .build();
-            s3Client.deleteObject(deleteObjectRequest);
-
-        } catch (S3Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to delete file from S3", e);
-        }
-    }
-
-    public void createFolder(String folderName) {
-        try {
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(folderName + "/")
-                    .build();
-            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(new byte[0]));
-        } catch (S3Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to create folder in S3", e);
-        }
-    }
-
-    public void deleteFolder(String folderName) {
-        try {
-            ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
-                    .bucket(bucketName)
-                    .prefix(folderName + "/")
-                    .build();
-
-            ListObjectsV2Response listObjectsResponse;
-            List<String> keysToDelete = new ArrayList<>();
-
-            do {
-                listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
-                keysToDelete.addAll(listObjectsResponse.contents().stream()
-                        .map(s3Object -> s3Object.key())
-                        .collect(Collectors.toList()));
-
-                listObjectsRequest = listObjectsRequest.toBuilder()
-                        .continuationToken(listObjectsResponse.nextContinuationToken())
-                        .build();
-            } while (listObjectsResponse.isTruncated());
-
-            keysToDelete.forEach(this::deleteFile);
-        } catch (S3Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to delete folder from S3", e);
-        }
-    }
-
 }
