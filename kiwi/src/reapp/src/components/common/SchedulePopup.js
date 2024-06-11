@@ -139,47 +139,47 @@ const SchedulePopup = ({ onClose, addEvent }) => {
             <div className='popup-title'>Create Event</div>
             <form className="event-form">
               <input
-                type="text"
-                name="title"
-                placeholder="Title"
-                value={newEvent.title}
-                onChange={handleInputChange}
+                  type="text"
+                  name="title"
+                  placeholder="Title"
+                  value={newEvent.title}
+                  onChange={handleInputChange}
               />
               <textarea
-                name="description"
-                placeholder="Description"
-                value={newEvent.description}
-                onChange={handleInputChange}
+                  name="description"
+                  placeholder="Description"
+                  value={newEvent.description}
+                  onChange={handleInputChange}
               />
               <div className="schedule-date-container">
                 <div className="schedule-date-top">
                   <input
-                    type="date"
-                    name="startDate"
-                    value={newEvent.startDate}
-                    onChange={handleInputChange}
+                      type="date"
+                      name="startDate"
+                      value={newEvent.startDate}
+                      onChange={handleInputChange}
                   />
                   <input
-                    type="time"
-                    name="startTime"
-                    value={newEvent.startTime}
-                    onChange={handleInputChange}
+                      type="time"
+                      name="startTime"
+                      value={newEvent.startTime}
+                      onChange={handleInputChange}
                   />
 
                 </div>
 
                 <div className="schedule-date-bottom">
                   <input
-                    type="date"
-                    name="endDate"
-                    value={newEvent.endDate}
-                    onChange={handleInputChange}
+                      type="date"
+                      name="endDate"
+                      value={newEvent.endDate}
+                      onChange={handleInputChange}
                   />
                   <input
-                    type="time"
-                    name="endTime"
-                    value={newEvent.endTime}
-                    onChange={handleInputChange}
+                      type="time"
+                      name="endTime"
+                      value={newEvent.endTime}
+                      onChange={handleInputChange}
                   />
 
                 </div>
@@ -190,56 +190,57 @@ const SchedulePopup = ({ onClose, addEvent }) => {
 
               <div className="color-picker" ref={dropdownRef}>
                 <div className="color-dropdown-container">
-                  <button 
-                    type="button"
-                    className="color-dropdown-button" 
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                  <button
+                      type="button"
+                      className="color-dropdown-button"
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
                   >
                     <div
-                      className="color-circle"
-                      style={{ backgroundColor: selectedColor, width: '20px', height: '20px' }}
+                        className="color-circle"
+                        style={{backgroundColor: selectedColor, width: '20px', height: '20px'}}
                     ></div>
                     <span className="dropdown-arrow">&#x25BC;</span>
                   </button>
                   {dropdownOpen && (
-                    <ul className="color-dropdown-list">
-                      {presetColors.map((color, index) => (
-                        <li
-                          key={index}
-                          className="color-list-item"
-                          onClick={() => handleColorChange(color)}
-                        >
+                      <ul className="color-dropdown-list">
+                        {presetColors.map((color, index) => (
+                            <li
+                                key={index}
+                                className="color-list-item"
+                                onClick={() => handleColorChange(color)}
+                            >
+                              <div
+                                  className="color-circle"
+                                  style={{backgroundColor: color, width: '20px', height: '20px'}}
+                              ></div>
+                              {color}
+                            </li>
+                        ))}
+                        <li className="color-list-item">
                           <div
-                            className="color-circle"
-                            style={{ backgroundColor: color, width: '20px', height: '20px' }}
+                              className="color-circle"
+                              style={{backgroundColor: customColor, width: '20px', height: '20px'}}
                           ></div>
-                          {color}
+                          Custom
+                          {selectedColor === customColor && (
+                              <input
+                                  type="color"
+                                  className="custom-color-input"
+                                  value={customColor}
+                                  onChange={(e) => {
+                                    setCustomColor(e.target.value);
+                                    handleColorChange(e.target.value);
+                                  }}
+                              />
+                          )}
                         </li>
-                      ))}
-                      <li className="color-list-item">
-                        <div
-                          className="color-circle"
-                          style={{ backgroundColor: customColor, width: '20px', height: '20px' }}
-                        ></div>
-                        Custom
-                        {selectedColor === customColor && (
-                          <input
-                            type="color"
-                            className="custom-color-input"
-                            value={customColor}
-                            onChange={(e) => {
-                              setCustomColor(e.target.value);
-                              handleColorChange(e.target.value);
-                            }}
-                          />
-                        )}
-                      </li>
-                    </ul>
+                      </ul>
                   )}
                 </div>
               </div>
 
               <button type="button" className="create-button" onClick={handleAddEvent}>Create</button>
+              <button type="button" className="cancel-button" onClick={closePopup}>Cancel</button>
             </form>
           </div>
         </div>

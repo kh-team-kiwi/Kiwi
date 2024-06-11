@@ -4,7 +4,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class FileDriveDto {
+public class FileDrivefileDto {
     private String fileCode;
     private String team;
     private String fileName;

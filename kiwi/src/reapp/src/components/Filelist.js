@@ -23,36 +23,37 @@ const FileList = forwardRef((props, ref) => {
         fetchFiles();
     }, []);
 
-    const handleDownload = async (filePath) => {
+    const handleDownload = async (fileCode,fileName) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/files/download/${filePath}`, {
+            const response = await axios.get(`http://localhost:8080/api/files/download/${fileCode}`, {
                 responseType: 'blob',
             });
 
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', filePath); // 파일명 설정
+            link.setAttribute('download', fileName); // 파일명 설정
             document.body.appendChild(link);
             link.click();
         } catch (error) {
             console.error('Error downloading file: ', error);
-            setMessage(`File download failed for ${filePath}`);
+            setMessage(`File download failed for ${fileCode}`);
         }
     };
 
-    const handleDelete = async (filePath) => {
+    const handleDelete = async (fileCode) => {
         try {
-            await axios.delete('http://localhost:8080/api/files/delete-multiple', {
-                params: { keys: [filePath] },
-            });
-            setMessage(`File deleted: ${filePath}`);
-            setFiles(files.filter(file => file.filePath !== filePath));
+            await axios.delete(`http://localhost:8080/api/files/delete/${fileCode}`);
+            setMessage('File deletion successful.');
+
+            // 파일 삭제 후 해당 파일을 제외한 새로운 파일 리스트 생성
+            const updatedFiles = files.filter(file => file.fileCode !== fileCode);
+            setFiles(updatedFiles);
         } catch (error) {
-            console.error('Error deleting file: ', error);
-            setMessage('File deletion failed');
+            setMessage('File deletion failed.');
         }
     };
+
 
     return (
         <div>
@@ -66,8 +67,8 @@ const FileList = forwardRef((props, ref) => {
                             <span>{file.uploadTime}</span>
                         </div>
                         <div>
-                            <button onClick={() => handleDownload(file.filePath)}>Download</button>
-                            <button onClick={() => handleDelete(file.filePath)}>Delete</button>
+                            <button onClick={() => handleDownload(file.fileCode,file.fileName)}>Download</button>
+                            <button onClick={() => handleDelete(file.fileCode)}>Delete</button>
                         </div>
                     </li>
                 ))}

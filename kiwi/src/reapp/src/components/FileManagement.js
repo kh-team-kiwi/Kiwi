@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Filelist from "./Filelist";
+import MultiUpload from "./MultiUpload";
+
 
 const FileManagement = () => {
+    const fileListRef = useRef();
+
+    const handleUploadSuccess = () => {
+        if (fileListRef.current) {
+            fileListRef.current.fetchFiles(); // 파일 목록을 갱신
+        }
+    };
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
@@ -129,86 +138,11 @@ const FileManagement = () => {
     return (
 
         <div>
-            <Filelist/>
-            <h2>File Management</h2>
-            <div>
-                <h3>Multi upload</h3>
-                <input type="file" multiple onChange={handleFileChange}/>
-                <div>
-                    <p>Files selected: {selectedFiles.length}</p>
-                    <ul>
-                        {selectedFiles && Array.from(selectedFiles).map((file, index) => (
-                            <li key={index}>{file.name}
-                                <button onClick={() => handleRemoveFile(index)}>Remove</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <button onClick={handleUpload}>Upload</button>
-                <div>
-                    <h3>Delete Forder</h3>
-                    <input
-                        type="text"
-                        placeholder="Folder name to delete"
-                        value={folderDeleteName}
-                        onChange={(e) => setFolderDeleteName(e.target.value)}
-                    />
-                    <button onClick={handleDeleteFolder}>Delete Folder</button>
-                </div>
-                <p>{message}</p>
-            </div>
-            <div>
-            <h3>Upload File</h3>
-                <input type="file" onChange={onFileChange}/>
-                <button onClick={onFileUpload}>Upload</button>
-            </div>
-            <div>
-                <h3>Download File</h3>
-                <input
-                    type="text"
-                    placeholder="File key to download"
-                    value={downloadKey}
-                    onChange={(e) => setDownloadKey(e.target.value)}
-                />
-                <button onClick={onFileDownload}>Download</button>
-            </div>
-            <div>
-                <h3>Delete File</h3>
-                <input
-                    type="text"
-                    placeholder="File key to delete"
-                    value={deleteKey}
-                    onChange={(e) => setDeleteKey(e.target.value)}
-                />
-                <button onClick={onFileDelete}>Delete</button>
-            </div>
-            <div>
-                <h3>Rename File</h3>
-                <input
-                    type="text"
-                    placeholder="Old file key"
-                    value={oldKey}
-                    onChange={(e) => setOldKey(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="New file key"
-                    value={newKey}
-                    onChange={(e) => setNewKey(e.target.value)}
-                />
-                <button onClick={onFileRename}>Rename</button>
-            </div>
-            <div>
-                <h3>Create Folder</h3>
-                <input
-                    type="text"
-                    placeholder="Folder name"
-                    value={folderCreateName}
-                    onChange={(e) => setFolderCreateName(e.target.value)}
-                />
-                <button onClick={onCreateFolder}>Create Folder</button>
-            </div>
-            <p>{message}</p>
+            <h3>filelist</h3>
+            <Filelist ref={fileListRef}/>
+            <h3>fileupload</h3>
+            <MultiUpload onUploadSuccess={handleUploadSuccess}/>
+            <h3>------------</h3>
         </div>
     );
 };
