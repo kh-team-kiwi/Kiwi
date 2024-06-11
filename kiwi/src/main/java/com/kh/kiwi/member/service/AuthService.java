@@ -35,9 +35,6 @@ public class AuthService {
             return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
         }
 
-        // UserEntity 생성
-        Member member = new Member(dto);
-
         // 비밀번호 암호화
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(password);
@@ -47,7 +44,9 @@ public class AuthService {
         if(!isPasswordMatch) {
             return ResponseDto.setFailed("암호화에 실패하였습니다.");
         }
-        member.setMemberPw(hashedPassword);
+
+        // UserEntity 생성
+        Member member = new Member(dto, hashedPassword);
 
         // UserRepository를 이용하여 DB에 Entity 저장 (데이터 적재)
         try {
@@ -88,13 +87,12 @@ public class AuthService {
             return ResponseDto.setFailed("데이터베이스 연결에 실패하였습니다.");
         }
 
-        member.setMemberPw("");
-
         TokenHelper.PrivateClaims privateClaims = TokenHelper.createPrivateClaims(member.getMemberId(), member.getMemberRole());
         String accessToken = tokenHelper.createAccessToken(privateClaims);
         String refreshToken = tokenHelper.createRefreshToken(privateClaims, id);
 
-        LoginResponseDto loginResponseDto = new LoginResponseDto(accessToken, refreshToken, member);
+        Member login = new Member(member);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(accessToken, refreshToken, login);
 
         return ResponseDto.setSuccessData("로그인에 성공하였습니다.", loginResponseDto);
     }

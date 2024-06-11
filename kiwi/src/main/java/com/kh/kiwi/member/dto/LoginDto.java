@@ -2,12 +2,12 @@ package com.kh.kiwi.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@ToString
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class LoginDto {
     @NotBlank
     private String id;

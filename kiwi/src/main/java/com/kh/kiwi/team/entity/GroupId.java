@@ -1,8 +1,6 @@
 package com.kh.kiwi.team.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-
 import java.io.Serializable;
 
 @Getter
