@@ -1,20 +1,13 @@
 package com.kh.kiwi.documents.controller;
 
-import com.kh.kiwi.documents.dto.DocDto;
-import com.kh.kiwi.documents.dto.DocListDto;
+import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.service.DocService;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/docs")
-//@SpringBootApplication
-//@MapperScan("com.kh.kiwi.documents.mapper")
-
-
 public class DocController {
 
     private final DocService docService;
@@ -24,23 +17,23 @@ public class DocController {
     }
 
     @GetMapping
-    public List<DocListDto> selectAllList() {
+    public List<Doc> selectAllList() {
         return docService.selectAllList();
     }
 
     @GetMapping("/{id}")
-    public DocDto getDocById(@PathVariable Long id) {
+    public Doc getDocById(@PathVariable Long id) {
         return docService.getDocById(id);
     }
 
     @PostMapping
-    public void addDoc(@RequestBody DocDto docDTO) {
-        docService.addDoc(docDTO);
+    public void addDoc(@RequestBody Doc doc) {
+        docService.addDoc(doc);
     }
 
     @PutMapping("/{id}")
-    public void updateDoc(@PathVariable Long id, @RequestBody DocDto updatedDocDTO) {
-        docService.updateDoc(id, updatedDocDTO);
+    public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
+        docService.updateDoc(id, updatedDoc);
     }
 
     @DeleteMapping("/{id}")
@@ -48,3 +41,4 @@ public class DocController {
         docService.deleteDoc(id);
     }
 }
+
