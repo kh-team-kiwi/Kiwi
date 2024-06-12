@@ -110,6 +110,11 @@ const Header = () => {
       </div>
         <div onClick={() => changeLanguage('ko')}>한국어</div>
         <div onClick={() => changeLanguage('en')}>English</div>
+        <div onClick={() => changeLanguage('es')}>Español</div>
+        <div onClick={() => changeLanguage('fr')}>Français</div>
+        <div onClick={() => changeLanguage('ja')}>日本語</div>
+        <div onClick={() => changeLanguage('zh')}>中文</div>
+        <div onClick={() => changeLanguage('de')}>Deutsch</div>
       </div>
     )}
 

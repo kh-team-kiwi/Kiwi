@@ -14,22 +14,27 @@
   --light-gray3: rgb(248, 248, 248);
   --shadow: #0000001A;
   --day-clicked: #ddefff;
+  --dark-blue: #2b98ff;
 }
 
 .dark-mode {
-  --header-background-color: #222831;
-  --container-background-color: #313a47;
-  --text-color: #ffffff;
-  --gray: white;
-  --dark-gray: white;
-  --page-icon: #092635;
-  --page-icon-active: #081f2b;
-  --white: #22303c;
-  --white-hover: #1c2731;
+  --header-background-color: #28292e ;
+  --container-background-color:#35363d;
+  --text-color: #dfdfdf;
+  --gray: #c9c9c9;
+  --dark-gray: #c9c9c9;
+  --page-icon: #8ba8c4;
+  --page-icon-active: #3a7bb8;
+  --white: #55575f;
+  --white-hover: #46474d;
   --white2: #405b74;
-  --light-gray: #092635;
-  --light-gray3: #092635;
-  --shadow: #22303c;
+  --light-gray: rgb(116, 116, 116);
+  --light-gray2: rgb(245, 241, 241);
+
+  --light-gray3: #54565f;
+  --shadow: #191a23;
   --day-clicked: #248ff3;
+  --dark-blue: #2276c5;
+
 }
 

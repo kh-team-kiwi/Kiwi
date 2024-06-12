@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './css/Regist.css';
 import {useNavigate} from "react-router-dom";
+import '../styles/pages/Login.css';
 
-const Regist = () => {
+
+const Register = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -75,4 +76,4 @@ const Regist = () => {
     );
 };
 
-export default Regist;
+export default Register;

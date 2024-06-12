@@ -1,7 +1,8 @@
-// src/Login.js
 import React, { useState } from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import '../styles/pages/Login.css';
+
 
 const Login = ({setIsLogin}) => {
     const [email, setEmail] = useState('');
@@ -10,7 +11,6 @@ const Login = ({setIsLogin}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // 여기에 로그인 로직을 추가하면 됩니다.
         console.log('id:', email);
         console.log('password:', password);
 
@@ -19,7 +19,6 @@ const Login = ({setIsLogin}) => {
             password: password})
             .then((response)=>{
                 if(response.data.result){
-                    // 로그인 성공 시 처리
                     console.log('로그인 성공:', response.data);
                     sessionStorage.setItem("accessToken",response.data.data.accessToken);
                     sessionStorage.setItem("refreshToken",response.data.data.refreshToken);
@@ -37,67 +36,34 @@ const Login = ({setIsLogin}) => {
     };
 
     return (
-        <div style={styles.container}>
-            <form onSubmit={handleSubmit} style={styles.form}>
+        <div className="login-container">
+            <form onSubmit={handleSubmit} className="login-form">
                 <h2>Login</h2>
-                <div style={styles.inputGroup}>
+                <div>
                     <label>Email:</label>
-                    <input
+                    <input  
+                        className= "login-email-input"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        style={styles.input}
                     />
                 </div>
-                <div style={styles.inputGroup}>
+                <div>
                     <label>Password:</label>
                     <input
+                        className= "login-password-input"
+
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        style={styles.input}
                     />
                 </div>
-                <button type="submit" style={styles.button}>Login</button>
+                <button type="submit" className="login-button">Login</button>
             </form>
         </div>
     );
 };
 
-const styles = {
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f5f5f5',
-    },
-    form: {
-        padding: '2rem',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        backgroundColor: '#fff',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    },
-    inputGroup: {
-        marginBottom: '1rem',
-    },
-    input: {
-        width: '100%',
-        padding: '0.5rem',
-        marginTop: '0.5rem',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-    },
-    button: {
-        width: '100%',
-        padding: '0.75rem',
-        backgroundColor: '#007BFF',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-    },
-};
+
 
 export default Login;

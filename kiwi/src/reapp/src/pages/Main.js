@@ -1,7 +1,5 @@
 import React from 'react';
-import './css/Main.css';
-import {Link} from "react-router-dom"; // 외부 CSS 파일 import
-
+import {Link} from "react-router-dom"; 
 function Main() {
     // 사용자 정보
     const user = JSON.parse(sessionStorage.getItem('userInfo'));
