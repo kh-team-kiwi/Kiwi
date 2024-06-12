@@ -1,15 +1,18 @@
 package com.kh.kiwi.s3file.service;
 
-import com.kh.kiwi.s3drive.repository.FileDriveRepository;
 import com.kh.kiwi.s3file.dto.FileDriveFileDTO;
 import com.kh.kiwi.s3file.entity.FileDriveFile;
 import com.kh.kiwi.s3file.repository.FileDriveFileRepository;
+import com.kh.kiwi.s3drive.repository.FileDriveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.time.LocalDateTime;
@@ -68,9 +71,131 @@ public class FileDriveFileService {
         fileDriveFile.setFileName(file.getOriginalFilename());
         fileDriveFile.setFilePath(s3Key); // S3 경로를 저장
         fileDriveFile.setUploadTime(LocalDateTime.now());
-        fileDriveFile.setFolder(false);
+        fileDriveFile.setFolder(false); // 파일 업로드 시 폴더가 아님
         fileDriveFileRepository.save(fileDriveFile);
 
         return new FileDriveFileDTO(fileDriveFile.getFileCode(), fileDriveFile.getDriveCode(), fileDriveFile.getFileName(), fileDriveFile.getFilePath(), fileDriveFile.isFolder(), fileDriveFile.getUploadTime());
+    }
+
+    public void deleteFile(String driveCode, String fileCode) {
+        FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
+        String s3Key = file.getFilePath();
+
+        // S3에서 파일 삭제
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(s3Key)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete file from S3", e);
+        }
+
+        // 파일 정보 삭제
+        fileDriveFileRepository.deleteById(fileCode);
+    }
+
+    public void updateFileName(String driveCode, String fileCode, String newFileName) {
+        FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
+        String oldS3Key = file.getFilePath();
+        String newS3Key = driveCode + "/" + fileCode + "/" + newFileName.replace("\"", ""); // 파일 이름 끝의 "" 제거
+
+        // S3에서 파일 이름 변경
+        try {
+            CopyObjectRequest copyObjectRequest = CopyObjectRequest.builder()
+                    .sourceBucket(bucketName)
+                    .sourceKey(oldS3Key)
+                    .destinationBucket(bucketName)
+                    .destinationKey(newS3Key)
+                    .build();
+            s3Client.copyObject(copyObjectRequest);
+
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(oldS3Key)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to rename file in S3", e);
+        }
+
+        // 파일 정보 업데이트
+        file.setFileName(newFileName.replace("\"", "")); // 파일 이름 끝의 "" 제거
+        file.setFilePath(newS3Key);
+        fileDriveFileRepository.save(file);
+    }
+
+    public byte[] downloadFile(String driveCode, String fileCode) {
+        FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
+        String s3Key = file.getFilePath();
+
+        // S3에서 파일 다운로드
+        try {
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(s3Key)
+                    .build();
+            return s3Client.getObject(getObjectRequest).readAllBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to download file from S3", e);
+        }
+    }
+
+    public void createFolder(String driveCode, String folderName) {
+        String folderCode = UUID.randomUUID().toString();
+        String s3Key = driveCode + "/" + folderCode + "/";
+
+        // S3에 폴더 생성
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(s3Key)
+                    .build();
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(new byte[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create folder in S3", e);
+        }
+
+        // 드라이브 정보 저장
+        FileDriveFile folder = new FileDriveFile();
+        folder.setFileCode(folderCode);
+        folder.setDriveCode(driveCode);
+        folder.setFileName(folderName);
+        folder.setFilePath(s3Key); // S3 경로를 저장
+        folder.setUploadTime(LocalDateTime.now());
+        folder.setFolder(true);
+        fileDriveFileRepository.save(folder);
+    }
+
+    public void deleteFolder(String driveCode, String folderCode) {
+        FileDriveFile folder = fileDriveFileRepository.findById(folderCode).orElseThrow(() -> new RuntimeException("Folder not found"));
+        String s3Key = folder.getFilePath();
+
+        // S3에서 폴더 및 폴더 내 파일 삭제
+        List<FileDriveFile> filesInFolder = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, s3Key);
+        for (FileDriveFile file : filesInFolder) {
+            // 파일 삭제
+            deleteFile(driveCode, file.getFileCode());
+        }
+
+        // S3에서 폴더 삭제
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(s3Key)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete folder from S3", e);
+        }
+
+        // 폴더 정보 삭제
+        fileDriveFileRepository.deleteById(folderCode);
     }
 }

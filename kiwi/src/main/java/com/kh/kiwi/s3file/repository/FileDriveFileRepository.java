@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FileDriveFileRepository extends JpaRepository<FileDriveFile, String> {
     List<FileDriveFile> findByDriveCode(String driveCode);
+    List<FileDriveFile> findByDriveCodeAndFilePathStartingWith(String driveCode, String filePath);
 }

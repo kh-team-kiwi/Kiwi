@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const DriveList = ({ onView }) => {
+const DriveList = ({ onView, refresh }) => {
     const [drives, setDrives] = useState([]);
     const [editDriveCode, setEditDriveCode] = useState(null);
     const [newName, setNewName] = useState('');
 
     useEffect(() => {
         fetchDrives();
-    }, []);
+    }, [refresh]);
 
     const fetchDrives = async () => {
         try {
