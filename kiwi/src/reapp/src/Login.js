@@ -1,5 +1,6 @@
 // src/Login.js
 import React, { useState } from 'react';
+import './css/Login.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -36,6 +37,21 @@ const Login = ({setIsLogin}) => {
 
     };
 
+    const naverLogin = () => {
+
+        window.location.href = "http://localhost:8080/oauth2/authorization/naver"
+    }
+
+    const googleLogin = () => {
+
+        window.location.href = "http://localhost:8080/oauth2/authorization/google"
+    }
+
+    const kakaoLogin = () => {
+
+        window.location.href = "http://localhost:8080/oauth2/authorization/kakao"
+    }
+
     return (
         <div style={styles.container}>
             <form onSubmit={handleSubmit} style={styles.form}>
@@ -59,6 +75,9 @@ const Login = ({setIsLogin}) => {
                     />
                 </div>
                 <button type="submit" style={styles.button}>Login</button>
+                <button className="naverBtn" onClick={naverLogin}></button>
+                <button className="googleBtn" onClick={googleLogin}></button>
+                <button className="kakaoBtn" onClick={kakaoLogin}></button>
             </form>
         </div>
     );

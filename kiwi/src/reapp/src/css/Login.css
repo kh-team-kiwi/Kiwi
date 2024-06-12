@@ -1,0 +1,27 @@
+.naverBtn{
+    background-image: url('../image/naver_lgoin_btn_kr.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-radius: 4px;
+    width: 100%;
+    height: 38px;
+    border: none;
+}
+.googleBtn{
+    background-image: url('../image/google_login_btn_en.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-radius: 4px;
+    width: 100%;
+    height: 38px;
+    border: none;
+}
+.kakaoBtn{
+    background-image: url('../image/kakao_login_btn_en.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-radius: 4px;
+    width: 100%;
+    height: 38px;
+    border: none;
+}
