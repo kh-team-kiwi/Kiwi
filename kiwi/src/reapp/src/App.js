@@ -7,11 +7,11 @@ import FileManagement from "./components/FileManagement";
 import Main from './Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Documents from "./components/Documents";
-
 import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
 import Header from './components/common/Header';
+import OAuth2RedirectHandler from './OAuth2RedirectHandler';
 
 function App() {
     const [isLogin, setIsLogin] = useState(false);
@@ -38,8 +38,9 @@ function App() {
               <Route path="/documents" element={<Documents/>}></Route>
               <Route path="/main" element={<Main/>}></Route>
               <Route path='/chat' element={<Chat />} />
-            <Route path='/calendar' element={<Calendar />} />
-            <Route path='/drive' element={<Drive />} />
+              <Route path='/calendar' element={<Calendar />} />
+              <Route path='/drive' element={<Drive />} />
+              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
           </Routes>
       </>
   );

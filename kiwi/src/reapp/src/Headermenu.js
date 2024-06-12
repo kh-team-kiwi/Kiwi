@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import {Cookies} from "react-cookie";
 
 function Headermenu({isLogin, setIsLogin}) {
     const handleLogout = () => {
@@ -7,6 +9,18 @@ function Headermenu({isLogin, setIsLogin}) {
         sessionStorage.removeItem('authExpr');
         sessionStorage.removeItem('userInfo');
         setIsLogin(false);
+    };
+    const cookies = new Cookies();
+    const logout = async () => {
+        console.log(cookies);
+
+        axios.post("/logout")
+            .then((res)=>{
+                alert("logout // "+res);
+            })
+            .catch((err)=>{
+                alert(err);
+            });
     };
 
     return (
@@ -27,6 +41,7 @@ function Headermenu({isLogin, setIsLogin}) {
                         <li style={styles.li}><Link to="/chat" style={styles.link}>채팅</Link></li>
                         <li style={styles.li}><Link to="/calendar" style={styles.link}>캘린더</Link></li>
                         <li style={styles.li}><Link to="/drive" style={styles.link}>드라이브</Link></li>
+                        <li><button onClick={logout}>logout</button></li>
                     </>
                 )}
             </ul>
