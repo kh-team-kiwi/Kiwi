@@ -27,8 +27,7 @@ function App() {
 
   return (
       <>
-          {/* {!shouldHideHeader && <Headermenu isLogin={isLogin} setIsLogin={setIsLogin} />}
-          {shouldHideHeader && <Header />} */}
+          {shouldHideHeader && <Header />}
           <Routes>
               {/*element={<Navigate to="/Home" replace />}*/}
               <Route path="/" element={<Home />} />

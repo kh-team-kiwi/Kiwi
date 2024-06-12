@@ -37,5 +37,17 @@
     "october": "October",
     "november": "November",
     "december": "December"
-  }
+  },
+  "email": "Email", 
+  "password": "Password",
+  "or" : "Or",
+  "forgot": "Forgot <username>username</username> or <password>password</password>?",
+  "new-to-kiwi" : "New to Kiwi?",
+  "login": "Log In",
+  "join-now": "Join Now",
+  "confirm-password": "confirm-password",
+  "username": "Username",
+  "name": "Name",
+  "create-account": "Create Account",
+  "already-have-an-account": "Already have an account?"
 }

@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
-import '../styles/pages/Login.css';
-
+import { useNavigate, Link } from 'react-router-dom';
+import '../styles/pages/Register.css';
 
 const Register = () => {
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [initialLoad, setInitialLoad] = useState(true);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setInitialLoad(true);
+        const timer = setTimeout(() => {
+            setInitialLoad(false);
+        }, 250);
+        return () => clearTimeout(timer);
+    }, []);
+
 
     const [formData, setFormData] = useState({
         memberId: '',
-        memberPw: '',
-        confirmPw: '',
+        memberPwd: '',
+        confirmPwd: '',
         memberFilepath: '',
         memberNickname: ''
     });
@@ -24,9 +35,7 @@ const Register = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // 폼 제출 시 기본 동작인 페이지 리로드를 막음
-
-        // 회원가입 요청 보내기
+        e.preventDefault(); 
         const response = await axios.post('/api/auth/signup', formData)
             .then((res)=>{
                 if(res.data.result){
@@ -41,37 +50,38 @@ const Register = () => {
             });
     };
 
+    const handleLoginClick = () => {
+        setIsAnimating(true);
+        setTimeout(() => {
+            navigate('/login');
+        }, 150); 
+    };
+
     return (
-        <div className="container">
+        <div className={`register-container ${initialLoad ? 'flick-down' : ''} ${isAnimating ? 'flick-up' : ''}`}>
             <form onSubmit={handleSubmit}>
-                <h2>회원가입</h2>
+                <div>Create Account</div>
                 <div>
-                    <label htmlFor="memberId">아이디:</label>
-                    <input type="text" id="memberId" name="memberId" value={formData.memberId} onChange={handleChange}
+                    <input className="register-id-input" type="text" id="memberId" name="memberId" placeholder='User Id' value={formData.memberId} onChange={handleChange}
                            required/>
                 </div>
                 <div>
-                    <label htmlFor="memberPw">비밀번호:</label>
-                    <input type="password" id="memberPw" name="memberPw" value={formData.memberPw}
+                    <input className="register-password-input"  type="password" id="memberPwd" name="memberPwd" placeholder='Password' value={formData.memberPwd}
                            onChange={handleChange} required/>
                 </div>
                 <div>
-                    <label htmlFor="confirmPw">비밀번호 확인:</label>
-                    <input type="password" id="confirmPw" name="confirmPw" value={formData.confirmPw}
+                    <input className="register-id-input" type="password" id="confirmPwd" name="confirmPwd" placeholder='Comfirm Password' value={formData.confirmPwd}
                            onChange={handleChange} required/>
                 </div>
                 <div>
-                    <label htmlFor="memberFilepath">프로필 사진:</label>
-                    <input type="file" id="memberFilepath" name="memberFilepath" accept="image/*"
-                           onChange={handleChange}/>
-                </div>
-                <div>
-                    <label htmlFor="memberNickname">닉네임:</label>
-                    <input type="text" id="memberNickname" name="memberNickname" value={formData.memberNickname}
+                    <input className="register-name-input" type="text" id="memberNickname" name="memberNickname" placeholder='Name' value={formData.memberNickname}
                            onChange={handleChange} required/>
                 </div>
-                <button type="submit">가입하기</button>
+                <button className="register-button" type="submit">가입하기</button>
             </form>
+            <div className="already-have-account">
+                <Link to="#" onClick={handleLoginClick}>Already have an account?</Link>
+            </div>
         </div>
     );
 };

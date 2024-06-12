@@ -21,7 +21,6 @@ const Header = () => {
   
     const handleDropdownClick = () => {
       if (languageOptionsVisible === true) {
-        console.log('test');
         setLanguageOptionsVisible(false);
       } else {
         setDropdownVisible(!dropdownVisible);

@@ -37,6 +37,18 @@
       "october": "10月",
       "november": "11月",
       "december": "12月"
-    }
+    },
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "or": "または",
+    "forgot": "<username>ユーザー名</username>または<password>パスワード</password>をお忘れですか？",
+    "new-to-kiwi": "Kiwiを初めてご利用ですか？",
+    "login": "ログイン",
+    "join-now": "今すぐ参加",
+    "confirm-password": "パスワードを確認する",
+    "username": "ユーザー名",
+    "name": "名前",
+    "create-account": "アカウントを作成",
+    "already-have-an-account": "すでにアカウントをお持ちですか？"
   }
   

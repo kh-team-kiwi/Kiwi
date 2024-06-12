@@ -37,6 +37,18 @@
       "october": "十月",
       "november": "十一月",
       "december": "十二月"
-    }
+    },
+    "email": "电子邮件",
+    "password": "密码",
+    "or": "或",
+    "forgot": "忘记了<username>用户名</username>或<password>密码？",
+    "new-to-kiwi": "刚开始使用Kiwi？",
+    "login": "登录",
+    "join-now": "现在加入",
+    "confirm-password": "确认密码",
+    "username": "用户名",
+    "name": "名字",
+    "create-account": "创建账户",
+    "already-have-an-account": "已经有账户了？"
   }
   

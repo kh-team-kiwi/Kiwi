@@ -37,6 +37,18 @@
       "october": "Octubre",
       "november": "Noviembre",
       "december": "Diciembre"
-    }
+    },
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "or": "O",
+    "forgot": "¿Olvidaste tu <username>nombre de usuario</username> o tu <password>contraseña</password>?",
+    "new-to-kiwi": "¿Nuevo en Kiwi?",
+    "login": "Iniciar sesión",
+    "join-now": "Únete ahora",
+    "confirm-password": "Confirmar contraseña",
+    "username": "Nombre de usuario",
+    "name": "Nombre",
+    "create-account": "Crear cuenta",
+    "already-have-an-account": "¿Ya tienes una cuenta?"
   }
   
