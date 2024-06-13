@@ -112,7 +112,7 @@ const Register = () => {
     )}
         <div className={`register-container ${initialLoad ? 'flick-down' : ''} ${isAnimating ? 'flick-up' : ''}`}>
             <form onSubmit={handleSubmit}>
-                <div>Create Account</div>
+                <div>{t('create-account')}</div>
                 <div>
                     <input className="register-id-input" type="text" id="memberId" name="memberId" placeholder={t('username')} value={formData.memberId} onChange={handleChange}
                            required/>
