@@ -8,7 +8,7 @@
     font-size: 11px;
 }
 
-.event-description {
+.event-description-sidebar {
     font-size: 14px;
     margin-bottom: 10px;
     margin-left: 5px;
@@ -19,6 +19,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
+    color: var(--text-color);
 }
 
 .day-label {
@@ -35,6 +36,7 @@
   
   .sidebar h2 {
     margin-bottom: 20px;
+    color: var(--text-color);
   }
   
   .sidebar h3 {
@@ -80,6 +82,8 @@
     height: 12px;
     border-radius: 50%;
     margin-right: 8px;
+    flex-shrink: 0; 
+
   }
   
 
@@ -93,6 +97,31 @@
 }
 
 .time-until-event {
-    margin-left: 10px;
+    margin-left: auto;
     font-size: 12px;
+}
+
+.event-time-info {
+  margin-bottom: 5px;
+}
+
+.event-location-container-sidebar {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.event-location-icon {
+  color: var(--dark-gray);
+  flex-shrink: 0; 
+
+}
+
+.event-location-sidebar {
+  margin-left: 5px;
+  font-size: 15px;
+
+}
+
+.event-item {
+  color: var(--text-color);
 }
