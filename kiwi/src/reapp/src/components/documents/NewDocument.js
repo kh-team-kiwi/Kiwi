@@ -1,10 +1,35 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const NewDocument = () => {
+    const [tooltipText, setTooltipText] = useState(''); // 도움말 텍스트 상태
+
+    const handleTooltip = (accessLevel) => {
+        // accessLevel에 따라 도움말 텍스트 설정
+        switch (accessLevel) {
+            case 'C':
+                setTooltipText('C 등급: 모든 임직원이 문서를 열람.');
+                break;
+            case 'B':
+                setTooltipText('B 등급: 관련자들과 관리자가 설정한 3등급(팀장,PA)등급 이상인 사람만 열람.');
+                break;
+            case 'A':
+                setTooltipText('A 등급: 관련자들과 관리자가 설정한 2등급(부장, 이사, 사내이사, 본부장)등급 이상인 사람만 열람.');
+                break;
+            case 'S':
+                setTooltipText('S 등급: 관련자들만 문서를 볼 수 있음');
+                break;
+            default:
+                setTooltipText('');
+                break;
+        }
+    };
+
     const [newDocument, setNewDocument] = useState({
         docType: '',
-        retentionPeriod: '1년',
-        accessLevel: '0',
+        retentionPeriod: '',
+        accessLevel: '',
         title: '',
         content: '',
         attachment: null,
@@ -84,6 +109,7 @@ const NewDocument = () => {
             <div className="formGroup">
                 <label>보존 기간</label>
                 <select name="retentionPeriod" onChange={handleInputChange}>
+                    <option value="">보존 기간을 선택해주세요.</option>
                     <option value="1년">1년</option>
                     <option value="2년">2년</option>
                     <option value="3년">3년</option>
@@ -93,22 +119,28 @@ const NewDocument = () => {
             </div>
             <div className="formGroup">
                 <label>열람 권한 등급</label>
-                <select name="accessLevel" onChange={handleInputChange}>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
+                <select
+                    name="accessLevel"
+                    onChange={(e) => {
+                        handleInputChange(e);
+                        handleTooltip(e.target.value); // 선택된 값에 따라 도움말 설정
+                    }}
+                >
+                    <option value="">등급을 선택해주세요.</option>
+                    <option value="C">C</option>
+                    <option value="B">B</option>
+                    <option value="A">A</option>
+                    <option value="S">S</option>
                 </select>
+                {/* ? 아이콘과 Tooltip */}
+                <span className="tooltipIcon">
+                    <FontAwesomeIcon icon={faQuestionCircle} />
+                    <span className="tooltipText">{tooltipText}</span>
+                </span>
             </div>
             <div className="formGroup">
                 <label>제목</label>
-                <input type="text" name="title" onChange={handleInputChange} />
+                <input type="text" name="title" onChange={handleInputChange}/>
             </div>
             <div className="formGroup">
                 <label>내용</label>
