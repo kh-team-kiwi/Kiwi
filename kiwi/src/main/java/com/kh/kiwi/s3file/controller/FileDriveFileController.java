@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -59,7 +60,8 @@ public class FileDriveFileController {
     }
 
     @PostMapping("/{driveCode}/folders/create")
-    public ResponseEntity<Void> createFolder(@PathVariable String driveCode, @RequestBody String folderName) {
+    public ResponseEntity<Void> createFolder(@PathVariable String driveCode, @RequestBody Map<String, String> request) {
+        String folderName = request.get("folderName");
         fileDriveFileService.createFolder(driveCode, folderName);
         return ResponseEntity.ok().build();
     }
