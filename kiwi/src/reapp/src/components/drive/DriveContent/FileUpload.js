@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const FileUpload = ({ driveCode, fetchFiles }) => {
+const FileUpload = ({ driveCode, fetchFiles, parentPath }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const handleFileChange = (event) => {
@@ -30,6 +30,7 @@ const FileUpload = ({ driveCode, fetchFiles }) => {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                params: { parentPath: parentPath ? `${parentPath}/` : `${driveCode}/` }
             });
             setSelectedFiles([]);
             fetchFiles(); // 파일 목록 갱신
@@ -41,7 +42,7 @@ const FileUpload = ({ driveCode, fetchFiles }) => {
     return (
         <div>
             <form onSubmit={handleUpload}>
-                <input type="file" multiple onChange={handleFileChange}/>
+                <input type="file" multiple onChange={handleFileChange} />
                 <div>
                     <p>Files selected: {selectedFiles.length}</p>
                     <ul>
