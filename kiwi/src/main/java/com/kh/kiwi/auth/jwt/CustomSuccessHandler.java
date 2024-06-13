@@ -40,28 +40,21 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String role = auth.getAuthority();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
-        log.info("=======ejkim=====");
-        log.info(access);
-        log.info(refresh);
+        String access = jwtUtil.createJwt("access", username, role, 600000L); // 10분
+        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L); // 24시간
 
-        String url = makeRedirectUrl(access);
-        System.out.println("url : "+url);
+//        log.info("=======ejkim=====");
+//        log.info(access);
+//        log.info(refresh);
+//        String url = makeRedirectUrl(access);
+//        System.out.println("url : "+url);
 
-        //응답 설정
-        response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+        //응답 설정 : 헤더에 저장한 값은 리다이렉트로 전달되지 않아 프론트에서 다시 axios로 요청해야한다.
+        //response.setHeader("access-token", access);
+        response.addCookie(createCookie("refresh-token", refresh));
         response.setStatus(HttpStatus.OK.value());
+
         response.sendRedirect("http://localhost:3000/oauth2/redirect");
-        //response.sendRedirect("http://localhost:3000/oauth2/redirect");
-
-//        response.sendRedirect("http://localhost:3000/oauth2/redirect?accessToken=" + access + "&refreshToken=" + refresh);
-        //response.sendRedirect("http://localhost:3000/main?accessToken=" + access + "&refreshToken=" + refresh);
-
-
-//        getRedirectStrategy().sendRedirect(request, response, url);
-
     }
 
     private String makeRedirectUrl(String token) {

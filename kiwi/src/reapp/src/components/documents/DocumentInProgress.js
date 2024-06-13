@@ -18,8 +18,8 @@ const DocumentInProgress = () => {
     };
 
     return (
-        <div className="documentInprogress">
-            <h2>문서 목록</h2>
+        <div className="documentInProgress">
+            <h2>진행중 목록</h2>
             <table className="docTable">
                 <thead>
                 <tr>

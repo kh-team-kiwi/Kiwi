@@ -59,15 +59,17 @@ public class WebSecurityConfig {
                         return configuration;
                     }
                 }));
+
+//        http
+//                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+
+//        http
+//                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+
         // JWTFilter 추가
         http
                 .addFilterAfter(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-        http
-                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
-        http
-                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
         //oauth2
         http

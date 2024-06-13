@@ -1,8 +1,9 @@
 package com.kh.kiwi.auth.service;
 
 import com.kh.kiwi.auth.dto.*;
+import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.entity.UserEntity;
-import com.kh.kiwi.auth.repository.UserRepository;
+import com.kh.kiwi.auth.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -10,11 +11,13 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -29,8 +32,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
         }
         else if (registrationId.equals("google")) {
-
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
+        }
+        else if (registrationId.equals("kakao")) {
+            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
         }
         else {
 
@@ -38,39 +43,37 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         //리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
-        String username = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        UserEntity existData = userRepository.findByUsername(username);
+        String uid = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
+        String type = uid.split(" ",2)[0];
+       Member existData = memberRepository.findByMemberId(uid);
 
-        if (existData == null) {
+        if (existData==null) {
+            Member member = Member.builder()
+                    .memberId(uid)
+                    .memberNickname(oAuth2Response.getName())
+                    .memberRole("MEMBER")
+                    .memberType(type)
+                    .build();
+            memberRepository.save(member);
 
-            UserEntity userEntity = new UserEntity();
-            userEntity.setUsername(username);
-            userEntity.setEmail(oAuth2Response.getEmail());
-            userEntity.setName(oAuth2Response.getName());
-            userEntity.setRole("ROLE_USER");
+            MemberDto memberDto = new MemberDto();
+            memberDto.setName(oAuth2Response.getName());
+            memberDto.setRole("MEMBER");
+            memberDto.setUsername(uid);
 
-            userRepository.save(userEntity);
-
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(username);
-            userDTO.setName(oAuth2Response.getName());
-            userDTO.setRole("ROLE_USER");
-
-            return new CustomOAuth2User(userDTO);
+            return new CustomOAuth2User(memberDto);
         }
         else {
+            existData.setMemberNickname(oAuth2Response.getName());
 
-            existData.setEmail(oAuth2Response.getEmail());
-            existData.setName(oAuth2Response.getName());
+            memberRepository.save(existData);
 
-            userRepository.save(existData);
+            MemberDto memberDto = new MemberDto();
+            memberDto.setName(oAuth2Response.getName());
+            memberDto.setRole("MEMBER");
+            memberDto.setUsername(uid);
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(existData.getUsername());
-            userDTO.setName(oAuth2Response.getName());
-            userDTO.setRole(existData.getRole());
-
-            return new CustomOAuth2User(userDTO);
+            return new CustomOAuth2User(memberDto);
         }
 
     }

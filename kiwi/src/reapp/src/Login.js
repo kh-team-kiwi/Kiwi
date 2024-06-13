@@ -38,7 +38,6 @@ const Login = ({setIsLogin}) => {
     };
 
     const naverLogin = () => {
-
         window.location.href = "http://localhost:8080/oauth2/authorization/naver"
     }
 

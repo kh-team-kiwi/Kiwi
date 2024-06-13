@@ -23,6 +23,7 @@ const Drive = () => {
         setSelectedFolder(folderCode);
         setSelectedFolderName(folderName);
     };
+
     const handleDriveCreated = () => {
         setRefresh(!refresh);
     };
@@ -43,7 +44,8 @@ const Drive = () => {
                     <div>
                         <h2>{getBreadcrumb()}</h2>
                         <DriveFileList
-                            driveCode={selectedFolder || selectedDrive}
+                            driveCode={selectedDrive}
+                            parentPath={selectedFolder ? `${selectedDrive}/${selectedFolder}` : ''}
                             driveName={selectedFolder ? selectedFolderName : selectedDriveName}
                             onViewFolder={handleViewFolder}
                         />
