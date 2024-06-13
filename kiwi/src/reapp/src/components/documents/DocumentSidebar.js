@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Sidebar = ({ handleMenuClick }) => {
+const DocumentSidebar = ({ handleMenuClick }) => {
     return (
         <div className="sidebar">
             <button type='button' className="newDoc" onClick={() => handleMenuClick('newDocument')}>작성하기</button>
@@ -14,4 +14,4 @@ const Sidebar = ({ handleMenuClick }) => {
     );
 }
 
-export default Sidebar;
+export default DocumentSidebar;

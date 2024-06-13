@@ -6,7 +6,7 @@ import Headermenu from './Headermenu';
 import FileManagement from "./components/drive/FileManagement";
 import Main from './pages/Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
-import Documents from "./components/document/Documents";
+import Documents from "./pages/Documents";
 import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
@@ -17,7 +17,7 @@ function App() {
     const [isLogin, setIsLogin] = useState(false);
 
     const location = useLocation();
-    const hideHeaderPaths = ['/chat', '/calendar', '/drive'];
+    const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
     useEffect(() => {
