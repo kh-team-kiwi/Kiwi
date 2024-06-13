@@ -6,7 +6,7 @@ import Headermenu from './Headermenu';
 import FileManagement from "./components/drive/FileManagement";
 import Main from './pages/Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
-
+import Documents from "./components/document/Documents";
 import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
@@ -39,6 +39,8 @@ function App() {
               <Route path='/calendar' element={<Calendar />} />
               <Route path='/drive' element={<Drive />} />
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+              <Route path="/documents" element={<Documents/>}></Route>
+
           </Routes>
       </>
   );

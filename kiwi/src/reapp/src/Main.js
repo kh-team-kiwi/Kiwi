@@ -48,6 +48,7 @@ function Main() {
     const [access,setAccess] = useState();
 
     useEffect(()=> {
+
         const token = localStorage.getItem('access');
         if(token){
             const decoded = jwtDecode(token);

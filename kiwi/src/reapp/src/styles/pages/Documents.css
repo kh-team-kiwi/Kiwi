@@ -1,11 +1,6 @@
+/*사이드바*/
 .container {
     display: flex;
-}
-
-.main{
-    position: relative;
-    top:-500px;
-    margin-left: 250px;
 }
 
 .sidebar {
@@ -15,7 +10,10 @@
     margin-top: -15px;
 }
 
-.main {
+.main{
+    position: relative;
+    /*top:-500px;*/
+    margin-left: 250px;
     flex: 1;
     padding: 20px;
 }
