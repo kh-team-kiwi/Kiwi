@@ -9,6 +9,7 @@ const DocumentSidebar = ({ handleMenuClick }) => {
                 <li onClick={() => handleMenuClick('inProgress')}>진행</li>
                 <li onClick={() => handleMenuClick('completed')}>완료</li>
                 <li onClick={() => handleMenuClick('rejected')}>거절</li>
+                <li onClick={() => handleMenuClick('memberManagement')}>인사정보 관리</li>
             </ul>
         </div>
     );
