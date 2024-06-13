@@ -29,7 +29,6 @@ const Login = ({ setIsLogin }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // 여기에 로그인 로직을 추가하면 됩니다.
         console.log('id:', email);
         console.log('password:', password);
 
@@ -38,7 +37,6 @@ const Login = ({ setIsLogin }) => {
             password: password})
             .then((response)=>{
                 if(response.data.result){
-                    // 로그인 성공 시 처리
                     console.log('로그인 성공:', response.data);
                     sessionStorage.setItem("accessToken",response.data.data.accessToken);
                     sessionStorage.setItem("refreshToken",response.data.data.refreshToken);
