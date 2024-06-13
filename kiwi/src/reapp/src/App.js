@@ -6,7 +6,6 @@ import Headermenu from './Headermenu';
 import FileManagement from "./components/drive/FileManagement";
 import Main from './pages/Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
-import Documents from "./components/drive/Documents";
 
 import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
@@ -35,7 +34,6 @@ function App() {
               <Route path="/register" element={<Register/>}></Route>
               <Route path="/login" element={<Login setIsLogin={setIsLogin} />}></Route>
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
-              <Route path="/documents" element={<Documents/>}></Route>
               <Route path="/main" element={<Main/>}></Route>
               <Route path='/chat' element={<Chat />} />
               <Route path='/calendar' element={<Calendar />} />
