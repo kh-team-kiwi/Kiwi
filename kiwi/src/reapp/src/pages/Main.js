@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import './css/Main.css';
+import '../styles/pages/Main.css';
 import {Link, useLocation} from "react-router-dom";
 import {jwtDecode} from "jwt-decode"; // 외부 CSS 파일 import
 
@@ -48,7 +48,6 @@ function Main() {
     const [access,setAccess] = useState();
 
     useEffect(()=> {
-
         const token = localStorage.getItem('access');
         if(token){
             const decoded = jwtDecode(token);

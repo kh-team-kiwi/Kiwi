@@ -20,10 +20,6 @@ const OAuth2RedirectHandler = () => {
                 // 쿠키에서 refresh 토큰 추출
                 const refreshToken = getCookie('refresh');
 
-                // const params = new URLSearchParams(window.location.search);
-                // const accessToken = params.get("accessToken");
-                // const refreshToken = params.get("refreshToken");
-
                 // 토큰값을 알람으로 출력
                 alert(`Access Token: ${accessToken}`);
                 alert(`Refresh Token: ${refreshToken}`);

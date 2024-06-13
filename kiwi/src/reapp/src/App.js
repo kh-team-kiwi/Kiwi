@@ -1,10 +1,10 @@
 import './styles/App.css';
 import React, {useEffect, useState} from 'react';
-import Regist from './Regist';
-import Login from './Login';
+import Register from './pages/Register';
+import Login from './pages/Login';
 import Headermenu from './Headermenu';
-import FileManagement from "./components/FileManagement";
-import Main from './Main';
+import FileManagement from "./components/drive/FileManagement";
+import Main from './pages/Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Documents from "./components/document/Documents";
 import Chat from './pages/Chat';
@@ -27,20 +27,20 @@ function App() {
 
   return (
       <>
-          {!shouldHideHeader && <Headermenu isLogin={isLogin} setIsLogin={setIsLogin} />}
           {shouldHideHeader && <Header />}
           <Routes>
               {/*element={<Navigate to="/Home" replace />}*/}
               <Route path="/" element={<Home />} />
-              <Route path="/regist" element={<Regist/>}></Route>
+              <Route path="/register" element={<Register/>}></Route>
               <Route path="/login" element={<Login setIsLogin={setIsLogin} />}></Route>
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
-              <Route path="/documents" element={<Documents/>}></Route>
               <Route path="/main" element={<Main/>}></Route>
               <Route path='/chat' element={<Chat />} />
               <Route path='/calendar' element={<Calendar />} />
               <Route path='/drive' element={<Drive />} />
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+              <Route path="/documents" element={<Documents/>}></Route>
+
           </Routes>
       </>
   );

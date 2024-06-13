@@ -1,0 +1,165 @@
+@import '../variables.css';
+
+
+.login-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 100;
+    transition: all 0.15s;
+    margin-top: 200px;
+}
+
+.login-email-input, .login-password-input {
+    width: 360px;
+    height: 35px;
+    font-size: 20px;
+    margin-top: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.login-button {
+    width: 350px;
+    height: 35px;
+    font-size: 20px;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.login-with-social-media {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-media-container {
+    width: 80px;
+    height: 50px;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+}
+
+.social-media-icon {
+    width: 35px;
+    height: 35px;
+}
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+
+.divider-text {
+    white-space: nowrap; 
+}
+
+.line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: lightgray;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.forgot {
+    margin-top: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.create-account {
+    margin-top: 20px;
+}
+
+.create-account > a {
+    text-decoration: none;
+    color: blue;
+}
+
+.change-language-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 150px;
+    right: 40px;
+    top: 20px;
+    position: absolute;
+    font-size: 18px;
+}
+
+@keyframes flickUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    80% {
+        transform: translateY(-30%); 
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(-25%); 
+        opacity: 0;
+    }
+}
+
+@keyframes flickDown {
+    0% {
+        transform: translateY(-25%);
+        opacity: 0;
+    }
+    80% {
+        transform: translateY(5%); 
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0); 
+        opacity: 1;
+    }
+}
+
+.flick-up {
+    animation: flickUp 0.1s forwards;
+}
+
+.flick-down {
+    animation: flickDown 0.1s forwards;
+  }
+
+
+  .login-language-list {
+    position: absolute;
+    background-color: var(--white);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 120px;
+    top: 65px;
+    right: 50px;
+    border-radius: 10px;
+  }
+  
+  .login-language-list > * {
+    color: var(--text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    font-size: 16px;
+    background-color: var(--white);
+    border-radius: 10px;
+  }
