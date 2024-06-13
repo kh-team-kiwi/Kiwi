@@ -11,7 +11,7 @@ const DriveFolder = ({ driveCode, fetchFiles }) => {
     const handleCreateFolder = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, folderName, {
+            await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, JSON.stringify({ folderName }), {
                 headers: {
                     'Content-Type': 'application/json',
                 },

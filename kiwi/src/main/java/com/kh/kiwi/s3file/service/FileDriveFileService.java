@@ -50,7 +50,7 @@ public class FileDriveFileService {
         }
 
         String fileCode = UUID.randomUUID().toString();
-        String s3Key = driveCode + "/" + fileCode + "/" + file.getOriginalFilename();
+        String s3Key = driveCode + "/" + fileCode;
 
         // S3에 파일 업로드
         try {
@@ -146,6 +146,11 @@ public class FileDriveFileService {
     }
 
     public void createFolder(String driveCode, String folderName) {
+        // 드라이브가 존재하는지 확인
+        if (!fileDriveRepository.existsById(driveCode)) {
+            throw new IllegalArgumentException("Drive does not exist: " + driveCode);
+        }
+
         String folderCode = UUID.randomUUID().toString();
         String s3Key = driveCode + "/" + folderCode + "/";
 
