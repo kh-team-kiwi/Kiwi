@@ -6,7 +6,7 @@ import Headermenu from './Headermenu';
 import FileManagement from "./components/FileManagement";
 import Main from './Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
-import Documents from "./components/Documents";
+import Documents from "./components/document/Documents";
 import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
