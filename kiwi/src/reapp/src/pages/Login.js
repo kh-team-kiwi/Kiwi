@@ -29,28 +29,30 @@ const Login = ({ setIsLogin }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // 여기에 로그인 로직을 추가하면 됩니다.
         console.log('id:', email);
         console.log('password:', password);
 
         const response = await axios.post('/api/auth/login', {
             id: email,
-            password: password
-        })
-            .then((response) => {
-                if (response.data.result) {
+            password: password})
+            .then((response)=>{
+                if(response.data.result){
+                    // 로그인 성공 시 처리
                     console.log('로그인 성공:', response.data);
-                    sessionStorage.setItem("accessToken", response.data.data.accessToken);
-                    sessionStorage.setItem("refreshToken", response.data.data.refreshToken);
-                    sessionStorage.setItem("userInfo", JSON.stringify(response.data.data.member));
+                    sessionStorage.setItem("accessToken",response.data.data.accessToken);
+                    sessionStorage.setItem("refreshToken",response.data.data.refreshToken);
+                    sessionStorage.setItem("userInfo",JSON.stringify(response.data.data.member));
                     setIsLogin(true);
-                    navigate('/main', { replace: true });
+                    navigate('/main',{replace:true});
                 } else {
                     console.error('로그인 실패:', response.data);
                 }
             })
-            .catch((err) => {
+            .catch((err)=>{
                 console.error('로그인 실패:', err);
             });
+
     };
 
     const handleJoinNowClick = () => {
@@ -80,8 +82,23 @@ const Login = ({ setIsLogin }) => {
         setLanguageOptionsVisible(true); 
     };
 
+    const naverLogin = () => {
+
+        window.location.href = "http://localhost:8080/oauth2/authorization/naver"
+    }
+
+    const googleLogin = () => {
+
+        window.location.href = "http://localhost:8080/oauth2/authorization/google"
+    }
+
+    const kakaoLogin = () => {
+
+        window.location.href = "http://localhost:8080/oauth2/authorization/kakao"
+    }
+
     return (
-        <div>
+        <div className="login-background">
             <div onClick={handleDropdownClick} >
                 <div className='change-language-button'>
                     <div>
@@ -152,13 +169,13 @@ const Login = ({ setIsLogin }) => {
             </div>
             <div className="login-with-social-media">
                 <button className='social-media-container'>
-                    <img className='social-media-icon' src={googleImage} />
+                    <img className='social-media-icon' src={googleImage} onClick={googleLogin} />
                 </button>
                 <button className='social-media-container'>
-                    <img className='social-media-icon' src={kakaoImage} />
+                    <img className='social-media-icon' src={kakaoImage} onClick={kakaoLogin} />
                 </button>
                 <button className='social-media-container'>
-                    <img className='social-media-icon' src={naverImage} />
+                    <img className='social-media-icon' src={naverImage} onClick={naverLogin} />
                 </button>
             </div>
             <div className="create-account">
