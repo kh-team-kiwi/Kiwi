@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/documents.css';
+import '../../css/documents.css';
 
 
 const Documents = () => {
@@ -51,8 +51,7 @@ const Documents = () => {
             </div>
                 {/* 메인 */}
             <div className="main">
-                {view === 'new' ? (
-                    <div className="newDoc">
+                <div className="newDoc">
                         <h2>기본 설정</h2>
                         <form>
                             <label>
@@ -108,9 +107,9 @@ const Documents = () => {
                         <textarea className="documentBody">문서를 작성해주세요.</textarea>
                         <button type='button' className="submitDoc" onClick={() => handleMenuClick('all')}>제출하기</button>
                     </div>
-                ) : (
 
-                    <div className="documentList">
+
+                <div className="documentList">
                     <h2>문서 목록</h2>
                         <table className="docTable">
                             <thead>
@@ -156,7 +155,7 @@ const Documents = () => {
                             </tbody>
                         </table>
                     </div>
-                )}
+                )
             </div>
         </div>
     );
