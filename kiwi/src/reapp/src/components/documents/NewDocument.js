@@ -12,10 +12,10 @@ const NewDocument = () => {
                 setTooltipText('C 등급: 모든 임직원이 문서를 열람.');
                 break;
             case 'B':
-                setTooltipText('B 등급: 관련자들과 관리자가 설정한 3등급(팀장,PA)등급 이상인 사람만 열람.');
+                setTooltipText('B 등급: 관련자 및 3등급(팀장,PA) 이상인 사람만 열람.');
                 break;
             case 'A':
-                setTooltipText('A 등급: 관련자들과 관리자가 설정한 2등급(부장, 이사, 사내이사, 본부장)등급 이상인 사람만 열람.');
+                setTooltipText('A 등급: 관련자 및 2등급(부장, 이사, 사내이사, 본부장) 이상인 사람만 열람.');
                 break;
             case 'S':
                 setTooltipText('S 등급: 관련자들만 문서를 볼 수 있음');
