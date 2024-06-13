@@ -15,6 +15,12 @@
   --shadow: #0000001A;
   --day-clicked: #ddefff;
   --dark-blue: #2b98ff;
+  --green: #69a84f;
+  --green-hover: #609648;
+  --light-green: #e9f7e3;
+  --light-green-hover: #cef5bd;
+
+
 }
 
 .dark-mode {

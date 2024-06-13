@@ -26,30 +26,30 @@ public class FileDriveFileController {
     }
 
     @GetMapping("/{driveCode}/files")
-    public List<FileDriveFileDTO> getFiles(@PathVariable String driveCode) {
-        return fileDriveFileService.getFilesByDriveCode(driveCode);
+    public List<FileDriveFileDTO> getFiles(@PathVariable String driveCode, @RequestParam(required = false) String parentPath) {
+        return fileDriveFileService.getFilesByDriveCodeAndPath(driveCode, parentPath);
     }
 
     @PostMapping("/{driveCode}/files/upload")
-    public List<FileDriveFileDTO> uploadFiles(@PathVariable String driveCode, @RequestParam("files") MultipartFile[] files) {
+    public List<FileDriveFileDTO> uploadFiles(@PathVariable String driveCode, @RequestParam("files") MultipartFile[] files, @RequestParam(required = false) String parentPath) {
         return Arrays.stream(files)
-                .map(file -> fileDriveFileService.uploadFile(driveCode, file))
+                .map(file -> fileDriveFileService.uploadFile(driveCode, file, parentPath))
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{driveCode}/files/{fileCode}")
-    public void deleteFile(@PathVariable String driveCode, @PathVariable String fileCode) {
-        fileDriveFileService.deleteFile(driveCode, fileCode);
+    public void deleteFile(@PathVariable String driveCode, @PathVariable String fileCode, @RequestParam(required = false) String parentPath) {
+        fileDriveFileService.deleteFile(driveCode, fileCode, parentPath);
     }
 
     @PutMapping("/{driveCode}/files/{fileCode}")
-    public void updateFileName(@PathVariable String driveCode, @PathVariable String fileCode, @RequestBody String newFileName) {
-        fileDriveFileService.updateFileName(driveCode, fileCode, newFileName.replace("\"", "")); // 파일 이름 끝의 "" 제거
+    public void updateFileName(@PathVariable String driveCode, @PathVariable String fileCode, @RequestBody String newFileName, @RequestParam(required = false) String parentPath) {
+        fileDriveFileService.updateFileName(driveCode, fileCode, newFileName.replace("\"", ""), parentPath);
     }
 
     @GetMapping("/{driveCode}/files/{fileCode}/download")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String driveCode, @PathVariable String fileCode) {
-        byte[] fileData = fileDriveFileService.downloadFile(driveCode, fileCode);
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String driveCode, @PathVariable String fileCode, @RequestParam(required = false) String parentPath) {
+        byte[] fileData = fileDriveFileService.downloadFile(driveCode, fileCode, parentPath);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", fileCode);
@@ -62,13 +62,17 @@ public class FileDriveFileController {
     @PostMapping("/{driveCode}/folders/create")
     public ResponseEntity<Void> createFolder(@PathVariable String driveCode, @RequestBody Map<String, String> request) {
         String folderName = request.get("folderName");
-        fileDriveFileService.createFolder(driveCode, folderName);
+        String parentPath = request.get("parentPath");
+        if (parentPath == null || parentPath.isEmpty()) {
+            parentPath = driveCode + "/";
+        }
+        fileDriveFileService.createFolder(driveCode, folderName, parentPath);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{driveCode}/folders/{folderCode}")
-    public ResponseEntity<Void> deleteFolder(@PathVariable String driveCode, @PathVariable String folderCode) {
-        fileDriveFileService.deleteFolder(driveCode, folderCode);
+    public ResponseEntity<Void> deleteFolder(@PathVariable String driveCode, @PathVariable String folderCode, @RequestParam(required = false) String parentPath) {
+        fileDriveFileService.deleteFolder(driveCode, folderCode, parentPath);
         return ResponseEntity.ok().build();
     }
 }

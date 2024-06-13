@@ -11,7 +11,6 @@ const DriveSidebar = ({ onView }) => {
 
     return (
         <div className='sidebar'>
-            <h2>Create Drive</h2>
             <DriveList  onView={handleViewFiles} />
         </div>
     );

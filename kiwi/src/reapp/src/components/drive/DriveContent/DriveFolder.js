@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const DriveFolder = ({ driveCode, fetchFiles }) => {
+const DriveFolder = ({ driveCode, fetchFiles, parentPath }) => {
     const [folderName, setFolderName] = useState('');
 
     const handleFolderNameChange = (e) => {
@@ -11,7 +11,10 @@ const DriveFolder = ({ driveCode, fetchFiles }) => {
     const handleCreateFolder = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, JSON.stringify({ folderName }), {
+            await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
+                folderName,
+                parentPath: parentPath ? `${parentPath}/` : `${driveCode}/`
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

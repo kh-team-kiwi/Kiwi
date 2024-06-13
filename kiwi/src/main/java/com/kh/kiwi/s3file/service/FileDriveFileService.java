@@ -37,20 +37,20 @@ public class FileDriveFileService {
         this.fileDriveRepository = fileDriveRepository;
     }
 
-    public List<FileDriveFileDTO> getFilesByDriveCode(String driveCode) {
-        return fileDriveFileRepository.findByDriveCode(driveCode).stream()
+    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String path) {
+        String actualPath = path != null ? path : driveCode + "/";
+        return fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, actualPath).stream()
                 .map(file -> new FileDriveFileDTO(file.getFileCode(), file.getDriveCode(), file.getFileName(), file.getFilePath(), file.isFolder(), file.getUploadTime()))
                 .collect(Collectors.toList());
     }
 
-    public FileDriveFileDTO uploadFile(String driveCode, MultipartFile file) {
-        // 드라이브가 존재하는지 확인
+    public FileDriveFileDTO uploadFile(String driveCode, MultipartFile file, String parentPath) {
         if (!fileDriveRepository.existsById(driveCode)) {
             throw new IllegalArgumentException("Drive does not exist: " + driveCode);
         }
 
         String fileCode = UUID.randomUUID().toString();
-        String s3Key = driveCode + "/" + fileCode;
+        String s3Key = (parentPath != null && !parentPath.isEmpty() ? parentPath : driveCode + "/") + fileCode;
 
         // S3에 파일 업로드
         try {
@@ -77,9 +77,10 @@ public class FileDriveFileService {
         return new FileDriveFileDTO(fileDriveFile.getFileCode(), fileDriveFile.getDriveCode(), fileDriveFile.getFileName(), fileDriveFile.getFilePath(), fileDriveFile.isFolder(), fileDriveFile.getUploadTime());
     }
 
-    public void deleteFile(String driveCode, String fileCode) {
+
+    public void deleteFile(String driveCode, String fileCode, String parentPath) {
         FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
-        String s3Key = file.getFilePath();
+        String s3Key = parentPath != null ? parentPath + file.getFilePath() : file.getFilePath();
 
         // S3에서 파일 삭제
         try {
@@ -97,10 +98,10 @@ public class FileDriveFileService {
         fileDriveFileRepository.deleteById(fileCode);
     }
 
-    public void updateFileName(String driveCode, String fileCode, String newFileName) {
+    public void updateFileName(String driveCode, String fileCode, String newFileName, String parentPath) {
         FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
-        String oldS3Key = file.getFilePath();
-        String newS3Key = driveCode + "/" + fileCode + "/" + newFileName.replace("\"", ""); // 파일 이름 끝의 "" 제거
+        String oldS3Key = parentPath != null ? parentPath + file.getFilePath() : file.getFilePath();
+        String newS3Key = (parentPath != null ? parentPath : driveCode + "/") + fileCode + "/" + newFileName.replace("\"", ""); // 파일 이름 끝의 "" 제거
 
         // S3에서 파일 이름 변경
         try {
@@ -128,9 +129,9 @@ public class FileDriveFileService {
         fileDriveFileRepository.save(file);
     }
 
-    public byte[] downloadFile(String driveCode, String fileCode) {
+    public byte[] downloadFile(String driveCode, String fileCode, String parentPath) {
         FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
-        String s3Key = file.getFilePath();
+        String s3Key = parentPath != null ? parentPath + file.getFilePath() : file.getFilePath();
 
         // S3에서 파일 다운로드
         try {
@@ -145,14 +146,13 @@ public class FileDriveFileService {
         }
     }
 
-    public void createFolder(String driveCode, String folderName) {
-        // 드라이브가 존재하는지 확인
+    public void createFolder(String driveCode, String folderName, String parentPath) {
         if (!fileDriveRepository.existsById(driveCode)) {
             throw new IllegalArgumentException("Drive does not exist: " + driveCode);
         }
 
         String folderCode = UUID.randomUUID().toString();
-        String s3Key = driveCode + "/" + folderCode + "/";
+        String s3Key = (parentPath != null && !parentPath.isEmpty() ? parentPath : driveCode + "/") + folderCode + "/";
 
         // S3에 폴더 생성
         try {
@@ -177,15 +177,16 @@ public class FileDriveFileService {
         fileDriveFileRepository.save(folder);
     }
 
-    public void deleteFolder(String driveCode, String folderCode) {
+
+    public void deleteFolder(String driveCode, String folderCode, String parentPath) {
         FileDriveFile folder = fileDriveFileRepository.findById(folderCode).orElseThrow(() -> new RuntimeException("Folder not found"));
-        String s3Key = folder.getFilePath();
+        String s3Key = parentPath != null ? parentPath + folder.getFilePath() : folder.getFilePath();
 
         // S3에서 폴더 및 폴더 내 파일 삭제
         List<FileDriveFile> filesInFolder = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, s3Key);
         for (FileDriveFile file : filesInFolder) {
             // 파일 삭제
-            deleteFile(driveCode, file.getFileCode());
+            deleteFile(driveCode, file.getFileCode(), parentPath);
         }
 
         // S3에서 폴더 삭제
