@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-// import Header from './src/components/Header';
 import Header from '../common/Header';
 import Sidebar from './src/components/Sidebar';
-import Footer from './src/components/Footer';
 import DocumentList from './src/components/DocumentList';
 import NewDocument from './src/components/NewDocument';
+import DocumentInProgress from './src/components/DocumentInProgress';
+import DocumentApproval from './src/components/DocumentApproval';
+import DocumentReject from './src/components/DocumentReject';
 import './src/css/documents.css';
 
 
@@ -23,9 +24,11 @@ const Documents = () => {
                 <div className="mainContent">
                     {view === 'documentList' && <DocumentList />}
                     {view === 'newDocument' && <NewDocument />}
+                    {view === 'documentInProgress' && <DocumentInProgress />}
+                    {view === 'documentApproval' && <DocumentApproval />}
+                    {view === 'documentReject' && <DocumentReject />}
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

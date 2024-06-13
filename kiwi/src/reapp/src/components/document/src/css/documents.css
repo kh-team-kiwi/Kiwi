@@ -29,6 +29,8 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 17px;
+    margin-bottom: 17px;
 }
 
 .sidebar ul.menu {
