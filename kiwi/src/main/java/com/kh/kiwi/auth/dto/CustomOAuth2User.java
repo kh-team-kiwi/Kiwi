@@ -1,5 +1,6 @@
 package com.kh.kiwi.auth.dto;
 
+import com.kh.kiwi.auth.entity.Member;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -7,26 +8,25 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-
 @ToString
 public class CustomOAuth2User implements OAuth2User {
 
-    private final UserDTO userDTO;
+    private final MemberDto memberDto;
 
-    public CustomOAuth2User(UserDTO userDTO) {
-        System.out.println("CustomOAuth2User : "+userDTO );
-        this.userDTO = userDTO;
+    public CustomOAuth2User(MemberDto memberDto) {
+        System.out.println("CustomOAuth2User : "+memberDto );
+        this.memberDto = memberDto;
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        System.out.println("getAttributes : "+userDTO );
+        System.out.println("getAttributes : "+memberDto );
         return null;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println("getAuthorities : "+userDTO );
+        System.out.println("getAuthorities : "+memberDto );
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
         collection.add(new GrantedAuthority() {
@@ -34,7 +34,7 @@ public class CustomOAuth2User implements OAuth2User {
             @Override
             public String getAuthority() {
 
-                return userDTO.getRole();
+                return memberDto.getRole();
             }
         });
 
@@ -43,12 +43,12 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        System.out.println("getName : "+userDTO );
-        return userDTO.getName();
+        System.out.println("getName : "+memberDto );
+        return memberDto.getName();
     }
 
-    public String getUsername() {
-        System.out.println("getUsername : "+userDTO );
-        return userDTO.getUsername();
+    public String getMemberId() {
+        System.out.println("getUsername : "+memberDto );
+        return memberDto.getUsername();
     }
 }

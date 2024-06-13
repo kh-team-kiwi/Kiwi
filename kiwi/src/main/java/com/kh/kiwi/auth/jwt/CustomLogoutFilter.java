@@ -22,12 +22,13 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("doFilter 1 : "+request );
+
+        System.out.println("CustomLogoutFilter > doFilter 1 : "+request );
         doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
     }
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("doFilter 2 : "+request );
+        System.out.println("CustomLogoutFilter > doFilter 2 : "+request );
         //path and method verify
         String requestUri = request.getRequestURI();
         if (!requestUri.matches("^\\/logout$")) {

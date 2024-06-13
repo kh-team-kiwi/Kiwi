@@ -31,7 +31,7 @@ public class Member implements UserDetails {
     private String memberNickname;
     private LocalDateTime memberDate; // created at
     private LocalDateTime expireDate; // 개인정보 보관약정 memberDate+1year
-    private String uid;
+    private String memberType;
 
     @Builder
     public Member(String id, String password, String auth){

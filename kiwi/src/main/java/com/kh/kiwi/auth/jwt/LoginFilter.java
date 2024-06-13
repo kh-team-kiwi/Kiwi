@@ -35,7 +35,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("attemptAuthentication : "+request );
+        System.out.println("LoginFilter > attemptAuthentication : "+request );
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
@@ -48,10 +48,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-        System.out.println("successfulAuthentication : "+request );
+        System.out.println("LoginFilter > successfulAuthentication : "+request );
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
-        String username = customUserDetails.getUsername();
+        //String username = customUserDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -61,18 +61,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
         //make new JWT
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+       // String access = jwtUtil.createJwt("access", username, role, 600000L);
+        //String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
         //response
-        response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+       // response.setHeader("access", access);
+        //response.addCookie(createCookie("refresh", refresh));
 
         response.setStatus(HttpStatus.OK.value());
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
-        System.out.println("addRefreshEntity : "+username );
+        System.out.println("LoginFilter > addRefreshEntity : "+username );
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
         RefreshEntity refreshEntity = new RefreshEntity();
@@ -85,12 +85,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        System.out.println("unsuccessfulAuthentication : "+failed );
+        System.out.println("LoginFilter > unsuccessfulAuthentication : "+failed );
         response.setStatus(401);
     }
 
     private Cookie createCookie(String key, String value) {
-        System.out.println("createCookie : "+key );
+        System.out.println("LoginFilter > createCookie : "+key );
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);

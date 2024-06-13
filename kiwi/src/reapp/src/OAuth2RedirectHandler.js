@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {Cookies} from "react-cookie";
 
@@ -13,6 +13,8 @@ const OAuth2RedirectHandler = () => {
                 const response = await axios.get('http://localhost:8080/oauth2/redirect', {
                     withCredentials: true
                 });
+
+
 
                 // HTTP 헤더에서 access 토큰 추출
                 const accessToken = response.headers['access'];
@@ -51,6 +53,38 @@ const OAuth2RedirectHandler = () => {
     };
 
     return <div>Redirecting...</div>;
+
+
+    // const location = useLocation();
+    // const navigate = useNavigate();
+    //
+    // const handleOAuthNaver = async (code) => {
+    //     try {
+    //         // 카카오로부터 받아온 code를 서버에 전달하여 카카오로 회원가입 & 로그인한다
+    //         const response = await axios.get(`http://localhost:3000/login/oauth2/code/naver?code=${code}`);
+    //         const data = response.data; // 응답 데이터
+    //         alert("로그인 성공: " + data)
+    //         //navigate("/main");
+    //     } catch (error) {
+    //         alert("로그인 실패: " + error)
+    //        // navigate("/fail");
+    //     }
+    // };
+    //
+    // useEffect(() => {
+    //     const searchParams = new URLSearchParams(location.search);
+    //     const code = searchParams.get('code');  // 카카오는 Redirect 시키면서 code를 쿼리 스트링으로 준다.
+    //     if (code) {
+    //         alert("CODE = " + code)
+    //         handleOAuthNaver(code);
+    //     }
+    // }, [location]);
+    //
+    // return (
+    //     <div>
+    //         <div>Processing...</div>
+    //     </div>
+    // );
 };
 
 export default OAuth2RedirectHandler;
