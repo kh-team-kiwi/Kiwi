@@ -78,6 +78,7 @@ public class WebSecurityConfig {
                                                 .userService(customOAuth2UserService)
                                 )
                                 .successHandler(customSuccessHandler)
+                                //.defaultSuccessUrl("http://localhost:3000/main")
                 );
 
         http
