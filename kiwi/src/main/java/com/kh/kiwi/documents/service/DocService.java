@@ -4,11 +4,11 @@ import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.repository.DocRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DocService {
+
     private final DocRepository docRepository;
 
     public DocService(DocRepository docRepository) {
@@ -19,8 +19,8 @@ public class DocService {
         return docRepository.findAll();
     }
 
-    public List<Doc> selectByUser(String creComEmpNum) {
-        return docRepository.findByCreComEmpNum(creComEmpNum);
+    public List<Doc> selectByUser(String employeeNo) {
+        return docRepository.findByEmployeeNo(employeeNo); // 수정된 필드에 맞게 변경
     }
 
     public Doc getDocById(Long id) {
@@ -34,9 +34,15 @@ public class DocService {
     public void updateDoc(Long id, Doc updatedDoc) {
         Doc existingDoc = getDocById(id);
         if (existingDoc != null) {
-            existingDoc.setDocType(updatedDoc.getDocType());
             existingDoc.setDocTitle(updatedDoc.getDocTitle());
+            existingDoc.setDocStatus(updatedDoc.getDocStatus());
             existingDoc.setDocDate(updatedDoc.getDocDate());
+            existingDoc.setDocCompletion(updatedDoc.getDocCompletion());
+            existingDoc.setDocContents(updatedDoc.getDocContents());
+            existingDoc.setName(updatedDoc.getName());
+            existingDoc.setScheduledDeletionDate(updatedDoc.getScheduledDeletionDate());
+            existingDoc.setDocType(updatedDoc.getDocType());
+            existingDoc.setEmployeeNo(updatedDoc.getEmployeeNo());
             docRepository.save(existingDoc);
         }
     }

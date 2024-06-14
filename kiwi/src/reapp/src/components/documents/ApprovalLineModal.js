@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ApprovalLineModal = ({ onSave, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -12,13 +13,19 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     }, []);
 
     const fetchMembers = async () => {
-        const fetchedMembers = [
-            { id: 1, name: "김성식", team: "로그인팀", role: "팀원" },
-            { id: 2, name: "정청원", team: "전자결재", role: "팀원" },
-            { id: 3, name: "이기풍", team: "드라이브", role: "팀원" },
-            { id: 4, name: "구경모", team: "채팅", role: "팀원" },
-        ];
-        setMembers(fetchedMembers);
+        try {
+            // 백엔드 API 호출을 통해 멤버 목록을 가져옵니다.
+            const response = await axios.get('/api/members/details');
+            const fetchedMembers = response.data.map(member => ({
+                id: member.employeeNo, // 유니크한 식별자 사용
+                name: member.name,
+                team: member.deptName, // 부서 이름을 팀으로 사용
+                role: member.position // 직책을 역할로 사용
+            }));
+            setMembers(fetchedMembers);
+        } catch (error) {
+            console.error("멤버 목록을 가져오는데 실패했습니다.", error);
+        }
     };
 
     const handleSearchChange = (event) => {
@@ -30,13 +37,13 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     };
 
     const handleAddApprover = () => {
-        if (selectedMember && !approvers.includes(selectedMember)) {
+        if (selectedMember && !approvers.some(approver => approver.id === selectedMember.id)) {
             setApprovers([...approvers, selectedMember]);
         }
     };
 
     const handleAddReference = () => {
-        if (selectedMember && !references.includes(selectedMember)) {
+        if (selectedMember && !references.some(reference => reference.id === selectedMember.id)) {
             setReferences([...references, selectedMember]);
         }
     };
@@ -79,8 +86,8 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
                             ))}
                     </div>
                     <div className="arrows">
-                        <button onClick={handleAddApprover}>→</button>
-                        <button onClick={handleAddReference}>→</button>
+                        <button onClick={handleAddApprover}>→ 결재자 추가</button>
+                        <button onClick={handleAddReference}>→ 참조자 추가</button>
                     </div>
                     <div className="selectedLists">
                         <div className="approversList">

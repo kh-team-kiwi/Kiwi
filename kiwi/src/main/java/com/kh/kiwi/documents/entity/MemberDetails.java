@@ -1,9 +1,6 @@
 package com.kh.kiwi.documents.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -48,7 +45,7 @@ public class MemberDetails {
     private String position;
 
     @Column(name = "DOC_SECURITY", length = 1, nullable = false)
-    private char docSecurity;
+    private int docSecurity; // TINYINT에 맞게 int로 변경
 
     @Column(name = "DAY_OFF")
     private Integer dayOff;

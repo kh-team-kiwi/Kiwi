@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import ApprovalLineModal from './ApprovalLineModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import ApprovalLineModal from './ApprovalLineModal';
-import '../../styles/pages/Documents.css'
+import axios from 'axios';
 
 const NewDocument = ({ author }) => {
-    const [tooltipVisible, setTooltipVisible] = useState(false);
     const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
     const [approvalLine, setApprovalLine] = useState({ approvers: [], references: [] });
+    const [tooltipVisible, setTooltipVisible] = useState(false);
 
     const [newDocument, setNewDocument] = useState({
         docType: '',
@@ -16,7 +16,9 @@ const NewDocument = ({ author }) => {
         title: '',
         content: '',
         attachment: null,
+        name: author // 사원 이름 추가
     });
+
 
     const handleTooltipMouseEnter = () => {
         setTooltipVisible(true);
@@ -35,9 +37,31 @@ const NewDocument = ({ author }) => {
         setNewDocument({ ...newDocument, attachment: e.target.files[0] });
     };
 
-    const handleSubmit = () => {
-        //TODO
+    const handleSubmit = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('docType', newDocument.docType);
+            formData.append('retentionPeriod', newDocument.retentionPeriod);
+            formData.append('accessLevel', newDocument.accessLevel);
+            formData.append('title', newDocument.title);
+            formData.append('content', newDocument.content);
+            formData.append('attachment', newDocument.attachment);
+            formData.append('name', newDocument.name); // 사원 이름 추가
+
+            await axios.post('/documents', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            alert("문서가 성공적으로 저장되었습니다.");
+            // 문서 저장 후 추가 작업 수행 가능
+        } catch (error) {
+            console.error("문서 저장 중 오류가 발생했습니다.", error);
+        }
     };
+
+
 
     const getExampleContent = (docType) => {
         switch (docType) {
@@ -70,7 +94,6 @@ const NewDocument = ({ author }) => {
                 return '';
         }
     };
-
     const handleDocTypeChange = (e) => {
         const { value } = e.target;
         setNewDocument({ ...newDocument, docType: value, content: getExampleContent(value) });
@@ -159,19 +182,16 @@ const NewDocument = ({ author }) => {
                                     <td className="team name"></td>
                                     <td className="team name"></td>
                                     <td className="team name"></td>
-                                    {/*<td className="team name"></td>*/}
                                 </tr>
                                 <tr>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
-                                    {/*<td className="stamp"></td>*/}
                                 </tr>
                                 <tr>
                                     <td className="name">{author}</td>
                                     <td className="name"></td>
                                     <td className="name"></td>
-                                    {/*<td className="name"></td>*/}
                                 </tr>
                                 </tbody>
                             </table>
