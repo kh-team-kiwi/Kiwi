@@ -201,8 +201,8 @@ const Login = ({ setIsLogin }) => {
                     <Trans
                     i18nKey="forgot"
                     components={{
-                        username: <Link to="#" title="Username" />,
-                        password: <Link to="#" title="Password" />
+                        username: <Link className="forgot-link" to="#" title="Username" />,
+                        password: <Link className="forgot-link" to="#" title="Password" />
                     }}
                     />         
                 </div>

@@ -66,11 +66,12 @@
 .login-title {
     font-size: 24px;
     font-weight: 550;
+    color: var(--dark-brown)
 }
 
 
 .login-button {
-    width: 250px;
+    width: 270px;
     height: 40px;
     font-size: 20px;
     margin-top: 0.5rem;
@@ -163,7 +164,7 @@
 
 .create-account > a {
     text-decoration: none;
-    color: blue;
+    color: var(--blue);
 }
 
 .change-language-button {
@@ -297,3 +298,8 @@
     color: var(--dark-text-color); 
 }
 
+
+.forgot-link {
+    text-decoration: none;
+    color: var(--blue);
+}
