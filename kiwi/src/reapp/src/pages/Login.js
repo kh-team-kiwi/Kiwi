@@ -15,7 +15,7 @@ import naverImage from '../images/naver.png';
 
 const Login = ({ setIsLogin }) => {
     const { t, i18n } = useTranslation();
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
     const [initialLoad, setInitialLoad] = useState(true);
@@ -51,27 +51,27 @@ const Login = ({ setIsLogin }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('id:', email);
+        console.log('id:', username);
         console.log('password:', password);
+        try {
+            const response = await axios.post('api/auth/login', {
+                username: username,
+                password: password}, { withCredentials: true });
 
-        const response = await axios.post('/api/auth/login', {
-            id: email,
-            password: password})
-            .then((response)=>{
-                if(response.data.result){
-                    console.log('로그인 성공:', response.data);
-                    sessionStorage.setItem("accessToken",response.data.data.accessToken);
-                    sessionStorage.setItem("refreshToken",response.data.data.refreshToken);
-                    sessionStorage.setItem("userInfo",JSON.stringify(response.data.data.member));
-                    setIsLogin(true);
-                    navigate('/main',{replace:true});
-                } else {
-                    console.error('로그인 실패:', response.data);
+            if (response.status === 200) {
+                const accessToken = response.headers['access'];
+                if (accessToken) {
+                    // 로컬 스토리지에 저장
+                    localStorage.setItem("accessToken", accessToken);
+                    navigate("/main");
                 }
-            })
-            .catch((err)=>{
-                console.error('로그인 실패:', err);
-            });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+
+
 
     };
 
@@ -176,8 +176,8 @@ const Login = ({ setIsLogin }) => {
                     <input
                         className="login-email-input"
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         placeholder={t('email')}
                     />
                 </div>

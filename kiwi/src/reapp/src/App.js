@@ -11,7 +11,7 @@ import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
 import Header from './components/common/Header';
-import OAuth2RedirectHandler from './OAuth2RedirectHandler';
+import OAuth2RedirectHandler from './jwt/OAuth2RedirectHandler';
 
 function App() {
     const [isLogin, setIsLogin] = useState(false);

@@ -1,7 +1,9 @@
 package com.kh.kiwi.auth.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.kiwi.auth.dto.CustomOAuth2User;
-import com.kh.kiwi.auth.entity.RefreshEntity;
+import com.kh.kiwi.auth.dto.CustomUserDetails;
+import com.kh.kiwi.auth.entity.RefreshToken;
 import com.kh.kiwi.auth.repository.RefreshRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
@@ -16,9 +18,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -31,27 +35,33 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        setFilterProcessesUrl("/api/auth/login");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("LoginFilter > attemptAuthentication : "+request );
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        try {
+            // JSON 요청에서 사용자 이름과 비밀번호를 추출합니다.
+            Map<String, String> credentials = new ObjectMapper().readValue(request.getInputStream(), Map.class);
+            String username = credentials.get("username");
+            String password = credentials.get("password");
 
-        System.out.println(username);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
-
-        return authenticationManager.authenticate(authToken);
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
         System.out.println("LoginFilter > successfulAuthentication : "+request );
-        CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
-        //String username = customUserDetails.getUsername();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        String username = customUserDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -59,14 +69,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-
         //make new JWT
-       // String access = jwtUtil.createJwt("access", username, role, 600000L);
-        //String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+        String access = jwtUtil.createJwt("access", username, role, 600000L);
+        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+
+        addRefreshEntity(username, refresh, 86400000L);
 
         //response
-       // response.setHeader("access", access);
-        //response.addCookie(createCookie("refresh", refresh));
+        response.setHeader("access", access);
+        response.addCookie(createCookie("refresh", refresh));
 
         response.setStatus(HttpStatus.OK.value());
     }
@@ -75,7 +86,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("LoginFilter > addRefreshEntity : "+username );
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshEntity refreshEntity = new RefreshEntity();
+        RefreshToken refreshEntity = new RefreshToken();
         refreshEntity.setUsername(username);
         refreshEntity.setRefresh(refresh);
         refreshEntity.setExpiration(date.toString());

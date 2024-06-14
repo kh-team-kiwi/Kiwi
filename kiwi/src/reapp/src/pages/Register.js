@@ -74,9 +74,11 @@ const Register = () => {
             .then((res) => {
                 if (res.data.result) {
                     console.log('회원가입 성공:', res.data);
-                    navigate('/', { replace: true });
+                    alert(res.data.message);
+                    navigate('/login',{replace:true});
                 } else {
                     console.error('회원가입 실패:', res.data);
+                    alert(res.data.message)
                 }
             }).catch((err) => {
                 console.error("회원가입 실패:", err);

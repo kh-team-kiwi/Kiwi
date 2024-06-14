@@ -26,7 +26,7 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println("getAuthorities : "+memberDto );
+        System.out.println("getAuthorities : "+memberDto.getRole() );
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
         collection.add(new GrantedAuthority() {
@@ -43,12 +43,12 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public String getName() {
-        System.out.println("getName : "+memberDto );
+        System.out.println("getName : "+memberDto.getName() );
         return memberDto.getName();
     }
 
     public String getMemberId() {
-        System.out.println("getUsername : "+memberDto );
+        System.out.println("getUsername : "+memberDto.getUsername() );
         return memberDto.getUsername();
     }
 }

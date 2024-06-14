@@ -87,6 +87,7 @@ public class Member implements UserDetails {
         this.memberNickname = dto.getMemberNickname();
         this.memberDate = LocalDateTime.now();
         this.expireDate = LocalDateTime.now().plusYears(1);
+        this.memberType = "kiwi";
     }
 
     public Member(Member member) {

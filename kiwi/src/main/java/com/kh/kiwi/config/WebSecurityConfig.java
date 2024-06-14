@@ -32,11 +32,17 @@ public class WebSecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, RefreshRepository refreshRepository, AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
-        LoginFilter loginFilter = new LoginFilter(authenticationManager, jwtUtil, refreshRepository);
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         // 여기서 cors 설정은 security의 cors 설정이다. WebConfig의 cors 설정과 다름.
         http
@@ -46,13 +52,11 @@ public class WebSecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
                         CorsConfiguration configuration = new CorsConfiguration();
-
                         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
-
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
                         configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
@@ -60,11 +64,11 @@ public class WebSecurityConfig {
                     }
                 }));
 
-//        http
-//                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
-//        http
-//                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil,refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
         // JWTFilter 추가
         http
@@ -82,7 +86,6 @@ public class WebSecurityConfig {
                                 .successHandler(customSuccessHandler)
                                 //.defaultSuccessUrl("http://localhost:3000/main")
                 );
-
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -97,10 +100,9 @@ public class WebSecurityConfig {
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/signup","/api/auth/login","/api/drive/**","/api/drive/create","/api/team/create").permitAll()
-                        .requestMatchers("/auth").permitAll()
-                        .requestMatchers("/logout").permitAll()
-                        .requestMatchers("/reissue").permitAll()
+                        .requestMatchers("/api/auth/signup","/login","/api/auth/reissue").permitAll()
+                        .requestMatchers("/api/team/create").permitAll()
+                        .requestMatchers("/api/drive/**","/api/drive/create").permitAll() // refresh
                         .requestMatchers(new AntPathRequestMatcher("/api/admin")).hasRole("JADMIN")
                         .anyRequest().authenticated());
         return http.build();
