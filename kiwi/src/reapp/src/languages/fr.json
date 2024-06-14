@@ -49,6 +49,36 @@
     "username": "Nom d'utilisateur",
     "name": "Nom",
     "create-account": "Créer un compte",
-    "already-have-an-account": "Vous avez déjà un compte ?"
+    "already-have-an-account": "Vous avez déjà un compte ?",
+    "terms-and-conditions": "Conditions générales d'utilisation",
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "terms": {
+      "acceptance-of-terms": "En utilisant Kiwi, vous reconnaissez avoir lu, compris et accepté de respecter ces conditions générales d'utilisation.",
+      "user-registration": "Vous devez avoir au moins 13 ans pour créer un compte sur Kiwi. En vous inscrivant, vous acceptez de fournir des informations exactes et complètes. Vous êtes responsable de la confidentialité de vos identifiants de compte et de toutes les activités qui se produisent sous votre compte.",
+      "user-conduct": "Vous acceptez d'utiliser Kiwi conformément à toutes les lois et réglementations applicables. Vous ne vous engagerez pas dans une conduite illégale, harcelante, abusive ou autrement répréhensible lors de l'utilisation de la plateforme.",
+      "content-guidelines": "Vous êtes seul responsable du contenu que vous publiez sur Kiwi. Vous acceptez de ne pas publier de contenu diffamatoire, portant atteinte aux droits d'autrui ou autrement inapproprié. Kiwi se réserve le droit de supprimer tout contenu violant ces directives.",
+      "privacy": "Votre vie privée est importante pour nous. Veuillez consulter notre Politique de confidentialité pour comprendre comment nous collectons, utilisons et divulguons vos informations personnelles.",
+      "intellectual-property": "Kiwi et son contenu, y compris, mais sans s'y limiter, les logos, marques et contenu généré par les utilisateurs, sont protégés par les lois sur la propriété intellectuelle. Vous ne pouvez pas utiliser le contenu de Kiwi sans autorisation écrite préalable de la plateforme.",
+      "termination": "Kiwi se réserve le droit de résilier ou de suspendre votre compte à tout moment et pour quelque raison que ce soit, sans préavis.",
+      "changes-to-terms": "Kiwi peut réviser ces conditions générales d'utilisation à tout moment sans préavis. En continuant à utiliser la plateforme après de tels changements, vous acceptez d'être lié par les conditions révisées.",
+      "disclaimer-of-warranties": "Kiwi est fourni \"tel quel\" et \"selon disponibilité\", sans garanties de quelque nature que ce soit, explicites ou implicites.",
+      "limitation-of-liability": "Kiwi ne sera en aucun cas responsable des dommages directs, indirects, accessoires, spéciaux ou consécutifs découlant de ou en relation avec votre utilisation de la plateforme.",
+      "governing-law": "Ces conditions générales d'utilisation seront régies et interprétées conformément aux lois de [Jurisdiction], sans tenir compte de ses dispositions en matière de conflit de lois.",
+      
+      "acceptance-of-terms-title": "Acceptation des conditions",
+      "user-registration-title": "Inscription de l'utilisateur",
+      "user-conduct-title": "Conduite de l'utilisateur",
+      "privacy-title": "Confidentialité",
+      "content-guidelines-title": "Directives de contenu",
+      "intellectual-property-title": "Propriété intellectuelle",
+      "termination-title": "Résiliation",
+      "changes-to-terms-title": "Modifications des conditions",
+      "disclaimer-of-warranties-title": "Exclusion de garanties",
+      "limitation-of-liability-title": "Limitation de responsabilité",
+      "governing-law-title": "Loi applicable"
+    }
+  
+    
   }
   

@@ -49,6 +49,34 @@
     "username": "用户名",
     "name": "名字",
     "create-account": "创建账户",
-    "already-have-an-account": "已经有账户了？"
+    "already-have-an-account": "已经有账户了？",
+    "terms-and-conditions": "条款和条件",
+    "accept": "接受",
+    "decline": "拒绝",
+    "terms": {
+      "acceptance-of-terms": "使用Kiwi即表示您已阅读、理解并同意遵守这些条款和条件。",
+      "user-registration": "您必须年满13岁才能在Kiwi上创建帐户。注册时，您同意提供准确和完整的信息。您有责任保持帐户凭据的机密性，并对在您的帐户下发生的所有活动负责。",
+      "user-conduct": "您同意以符合所有适用法律和法规的方式使用Kiwi。在使用平台时，您不会从事任何非法、骚扰、辱骂或其他令人反感的行为。",
+      "content-guidelines": "您对在Kiwi上发布的内容负全部责任。您同意不发布诽谤、侵犯他人权利或其他不适当的内容。Kiwi保留删除任何违反这些指南的内容的权利。",
+      "privacy": "您的隐私对我们很重要。请查看我们的隐私政策，以了解我们如何收集、使用和披露您的个人信息。",
+      "intellectual-property": "Kiwi及其内容，包括但不限于徽标、商标和用户生成的内容，受知识产权法保护。未经平台事先书面许可，您不得使用Kiwi的内容。",
+      "termination": "Kiwi保留在任何时候因任何原因未经事先通知终止或暂停您的帐户的权利。",
+      "changes-to-terms": "Kiwi可以随时修改这些条款和条件，恕不另行通知。在此类更改后继续使用平台，即表示您同意受修订条款的约束。",
+      "disclaimer-of-warranties": "Kiwi按“现状”和“可用”基础提供，不提供任何明示或暗示的担保。",
+      "limitation-of-liability": "在任何情况下，Kiwi均不对因使用平台而引起的或以任何方式与之相关的任何直接、间接、附带、特别或后果性损害承担责任。",
+      "governing-law": "这些条款和条件应受[Jurisdiction]法律管辖并依据其解释，不考虑其法律冲突条款。",
+      
+      "acceptance-of-terms-title": "接受条款",
+      "user-registration-title": "用户注册",
+      "user-conduct-title": "用户行为",
+      "privacy-title": "隐私",
+      "content-guidelines-title": "内容指南",
+      "intellectual-property-title": "知识产权",
+      "termination-title": "终止",
+      "changes-to-terms-title": "条款变更",
+      "disclaimer-of-warranties-title": "免责声明",
+      "limitation-of-liability-title": "责任限制",
+      "governing-law-title": "适用法律"
+    }
   }
   

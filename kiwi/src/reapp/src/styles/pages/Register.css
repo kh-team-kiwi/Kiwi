@@ -208,7 +208,7 @@ body {
     background-color: #fff;
     content: '';
     z-index:299;
-    margin-top: 395px;
+    margin-top: 399px;
 }
 
 
@@ -227,10 +227,10 @@ body {
     font-weight: 550;
 }
 
-.tac-top:first-child {
-    margin-left: 120px;
+.tac-header {
+    display: flex;
+    justify-content: space-between;
 }
-
 
 #tac-exit {
     margin-left: auto;
@@ -259,7 +259,7 @@ body {
     height: 40px;
     border-radius: 10px;
     border: none;
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 18px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
@@ -303,8 +303,9 @@ body {
 
 .tac-top {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
+    width: 470px;
 }
 
 .tac-bottom {
@@ -319,4 +320,9 @@ body {
 
 .bold-text {
     font-weight: 600;
+}
+
+.register-button:hover {
+    background-color: var(--green-hover);
+    transition: 0.2s;
 }

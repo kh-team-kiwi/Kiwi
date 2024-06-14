@@ -49,6 +49,34 @@
     "username": "ユーザー名",
     "name": "名前",
     "create-account": "アカウントを作成",
-    "already-have-an-account": "すでにアカウントをお持ちですか？"
+    "already-have-an-account": "すでにアカウントをお持ちですか？",
+    "terms-and-conditions": "利用規約",
+    "accept": "同意する",
+    "decline": "拒否する",
+    "terms": {
+      "acceptance-of-terms": "Kiwiを利用することで、これらの利用規約を読み、理解し、遵守することに同意したことになります。",
+      "user-registration": "Kiwiにアカウントを作成するには、少なくとも13歳である必要があります。登録する際には、正確で完全な情報を提供することに同意します。アカウント資格情報の機密性を維持する責任があり、アカウントで発生するすべての活動について責任を負います。",
+      "user-conduct": "適用されるすべての法律および規制に従ってKiwiを使用することに同意します。プラットフォームを使用する際に、違法な行為、嫌がらせ、虐待、その他不適切な行為を行わないことに同意します。",
+      "content-guidelines": "Kiwiに投稿するコンテンツについては、すべて自己責任となります。誹謗中傷、他人の権利を侵害する、またはその他不適切なコンテンツを投稿しないことに同意します。Kiwiはこれらのガイドラインに違反するコンテンツを削除する権利を有します。",
+      "privacy": "個人情報は当社にとって重要です。個人情報の収集、使用、および開示方法について理解するには、プライバシーポリシーを確認してください。",
+      "intellectual-property": "Kiwiとそのコンテンツは、ロゴ、商標、ユーザー生成コンテンツを含むがこれに限定されない知的財産法によって保護されています。プラットフォームの事前の書面による許可なしにKiwiのコンテンツを使用することはできません。",
+      "termination": "Kiwiは、事前の通知なしに、いつでも、どのような理由でも、アカウントを終了または一時停止する権利を有します。",
+      "changes-to-terms": "Kiwiは、事前の通知なしに、いつでもこれらの利用規約を改訂することができます。これらの変更後もプラットフォームを継続して使用することにより、改訂された利用規約に同意したものとみなされます。",
+      "disclaimer-of-warranties": "Kiwiは、「現状のまま」および「利用可能な状態で」提供され、明示または黙示のいかなる保証も行いません。",
+      "limitation-of-liability": "Kiwiは、プラットフォームの使用に起因または関連するいかなる直接的、間接的、偶発的、特別、または結果的損害についても責任を負いません。",
+      "governing-law": "これらの利用規約は、法の抵触に関する規定にかかわらず、[Jurisdiction]の法律に準拠し、これに従って解釈されます。",
+      
+      "acceptance-of-terms-title": "利用規約の同意",
+      "user-registration-title": "ユーザー登録",
+      "user-conduct-title": "ユーザー行動",
+      "privacy-title": "プライバシー",
+      "content-guidelines-title": "コンテンツガイドライン",
+      "intellectual-property-title": "知的財産",
+      "termination-title": "アカウントの終了",
+      "changes-to-terms-title": "利用規約の変更",
+      "disclaimer-of-warranties-title": "保証の免責事項",
+      "limitation-of-liability-title": "責任の制限",
+      "governing-law-title": "準拠法"
+    }
   }
   

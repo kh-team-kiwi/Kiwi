@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/pages/Main.css';
 import {Link, useLocation} from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; // 외부 CSS 파일 import
+import {jwtDecode} from "jwt-decode"; 
 
 function Main() {
-    // 사용자 정보
     const user = JSON.parse(sessionStorage.getItem('userInfo'));
 
-    // 팀 리스트
     const teams = [
         {
             id: 1,
@@ -16,34 +14,6 @@ function Main() {
             adminEmail: 'admin@example.com',
         }
     ];
-
-    //const location = useLocation();
-
-    // useEffect(() => {
-    //     // URLSearchParams를 사용하여 쿼리 스트링을 파싱
-    //     const params = new URLSearchParams(location.search);
-    //
-    //     // 필요한 데이터 추출
-    //     const accessToken = params.get('access');
-    //     const refreshToken = params.get('refresh');
-    //
-    //
-    //     // 데이터를 알람으로 출력
-    //     if (accessToken) {
-    //         const decoded = jwtDecode(accessToken);
-    //         const info = {
-    //                        username: decoded.username,
-    //                         role: decoded.role
-    //                     };
-    //         alert(`Access Token: ${info.role}`);
-    //
-    //     }
-    //
-    //     if (refreshToken) {
-    //         alert(`Refresh Token: ${refreshToken}`);
-    //
-    //     }
-    // }, [location]);
 
     const [access,setAccess] = useState();
 

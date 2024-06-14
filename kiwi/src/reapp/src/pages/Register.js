@@ -184,24 +184,28 @@ const Register = () => {
 
                     <div className="tac-container">
                     <input type="checkbox" checked={tacChecked} id="tac-checkbox" onChange={() => setTacChecked(!tacChecked)} />
-                    Accept <span className="blue-text" onClick={toggleTac}>Terms and Conditions</span>
+                    &nbsp;{t('accept')} <span className="blue-text" onClick={toggleTac}>{t('terms-and-conditions')}</span>
                     </div>
 
-                    <button className="register-button" type="submit" disabled={!tacChecked}>{t('create-account')}</button>
+                    <button className="register-button" type="submit" >{t('create-account')}</button>
                 </form>
                 <div className="already-have-account">
-                    <Link to="#" onClick={handleLoginClick} className="blue-text">{t('already-have-an-account')}</Link>
+                    <Link to="#" onClick={handleLoginClick} className="tac-text blue-text">{t('already-have-an-account')}</Link>
                 </div>
             </div>
             <div className={`tac-dialogue-box ${showTac ? 'show' : 'hide'}`}>
-                <div className="tac-top">
-                    <b>Terms and Conditions</b>
+                <div className="tac-header">
+                    <div className="tac-top">
+                        <b>{t('terms-and-conditions')}</b>
+                    </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" id="tac-exit" onClick={toggleTac} viewBox="0 0 16 16">
                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
                         </svg>
                     </div>
+
                 </div>
+
 
                 <div className="tac-text">
                 <ol>
@@ -243,8 +247,8 @@ const Register = () => {
                 </div>
 
                 <div className="tac-bottom">
-                    <button className="tac-button decline" onClick={() => tacResponse(false)}>Decline</button>
-                    <button className="tac-button accept" onClick={() => tacResponse(true)}>Accept</button>
+                    <button className="tac-button decline" onClick={() => tacResponse(false)}>{t('decline')}</button>
+                    <button className="tac-button accept" onClick={() => tacResponse(true)}>{t('accept')}</button>
                 </div>
             </div>
         </div>

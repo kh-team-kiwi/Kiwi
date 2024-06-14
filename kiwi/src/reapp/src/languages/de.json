@@ -49,6 +49,36 @@
     "username": "Benutzername",
     "name": "Name",
     "create-account": "Konto erstellen",
-    "already-have-an-account": "Haben Sie bereits ein Konto?"
+    "already-have-an-account": "Haben Sie bereits ein Konto?",
+    "terms-and-conditions": "Allgemeine Geschäftsbedingungen",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen",
+    "terms": {
+      "acceptance-of-terms": "Durch die Nutzung von Kiwi bestätigen Sie, dass Sie diese Allgemeinen Geschäftsbedingungen gelesen, verstanden und akzeptiert haben.",
+      "user-registration": "Sie müssen mindestens 13 Jahre alt sein, um ein Konto bei Kiwi zu erstellen. Bei der Registrierung stimmen Sie zu, genaue und vollständige Informationen bereitzustellen. Sie sind für die Vertraulichkeit Ihrer Kontodaten und für alle Aktivitäten verantwortlich, die unter Ihrem Konto stattfinden.",
+      "user-conduct": "Sie stimmen zu, Kiwi in Übereinstimmung mit allen geltenden Gesetzen und Vorschriften zu verwenden. Sie werden sich bei der Nutzung der Plattform nicht an illegalen, belästigenden, missbräuchlichen oder anderweitig unangemessenen Verhaltensweisen beteiligen.",
+      "content-guidelines": "Sie sind allein verantwortlich für den Inhalt, den Sie auf Kiwi veröffentlichen. Sie stimmen zu, keine diffamierenden, die Rechte anderer verletzenden oder anderweitig unangemessenen Inhalte zu veröffentlichen. Kiwi behält sich das Recht vor, Inhalte zu entfernen, die gegen diese Richtlinien verstoßen.",
+      "privacy": "Ihre Privatsphäre ist uns wichtig. Bitte lesen Sie unsere Datenschutzerklärung, um zu verstehen, wie wir Ihre persönlichen Daten sammeln, verwenden und offenlegen.",
+      "intellectual-property": "Kiwi und seine Inhalte, einschließlich, aber nicht beschränkt auf Logos, Marken und von Nutzern generierte Inhalte, sind durch das Urheberrecht geschützt. Sie dürfen die Inhalte von Kiwi nicht ohne vorherige schriftliche Genehmigung der Plattform verwenden.",
+      "termination": "Kiwi behält sich das Recht vor, Ihr Konto jederzeit und aus beliebigen Gründen ohne Vorankündigung zu kündigen oder zu sperren.",
+      "changes-to-terms": "Kiwi kann diese Allgemeinen Geschäftsbedingungen jederzeit ohne Vorankündigung ändern. Durch die fortgesetzte Nutzung der Plattform nach solchen Änderungen stimmen Sie den geänderten Bedingungen zu.",
+      "disclaimer-of-warranties": "Kiwi wird „wie besehen“ und „je nach Verfügbarkeit“ ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt.",
+      "limitation-of-liability": "Kiwi haftet in keinem Fall für direkte, indirekte, zufällige, besondere oder Folgeschäden, die sich aus oder im Zusammenhang mit Ihrer Nutzung der Plattform ergeben.",
+      "governing-law": "Diese Allgemeinen Geschäftsbedingungen unterliegen den Gesetzen von [Jurisdiction] und werden entsprechend ausgelegt, ohne Rücksicht auf kollisionsrechtliche Bestimmungen.",
+      
+      "acceptance-of-terms-title": "Akzeptanz der Bedingungen",
+      "user-registration-title": "Benutzerregistrierung",
+      "user-conduct-title": "Benutzerverhalten",
+      "privacy-title": "Datenschutz",
+      "content-guidelines-title": "Inhaltsrichtlinien",
+      "intellectual-property-title": "Geistiges Eigentum",
+      "termination-title": "Kündigung",
+      "changes-to-terms-title": "Änderungen der Bedingungen",
+      "disclaimer-of-warranties-title": "Haftungsausschluss",
+      "limitation-of-liability-title": "Haftungsbeschränkung",
+      "governing-law-title": "Anwendbares Recht"
+    }
+    
+    
   }
   
