@@ -72,31 +72,19 @@ const MemberForm = ({ memberId }) => {
 
     return (
         <form className="member-form" onSubmit={handleSubmit}>
-            <label>사번</label>
-            <input type="text" name="employeeNo" value={formData.employeeNo} onChange={handleChange}/>
+            <label>회원아이디</label>
+            <input type="text" name="memberId" value={formData.memberId} onChange={handleChange}/>
 
             <label>이름</label>
             <input type="text" name="name" value={formData.name} onChange={handleChange}/>
 
-            <label>성별</label>
-            <input type="text" name="gender" value={formData.gender} onChange={handleChange}/>
-
-            <label>생년월일</label>
-            <input type="text" name="birthDate" value={formData.birthDate} onChange={handleChange}/>
-
-            <label>입사일</label>
-            <input type="text" name="hireDate" value={formData.hireDate} onChange={handleChange}/>
-
-            <label>퇴사일</label>
-            <input type="text" name="resignDate" value={formData.resignDate} onChange={handleChange}/>
-
             <label>연락처</label>
             <input type="text" name="phone" value={formData.phone} onChange={handleChange}/>
 
-            <label>주소</label>
-            <input type="text" name="address" value={formData.address} onChange={handleChange}/>
+            <label>사번</label>
+            <input type="text" name="employeeNo" value={formData.employeeNo} onChange={handleChange}/>
 
-            <label>부서이름</label>
+            <label>부서</label>
             <input type="text" name="departmentName" value={formData.departmentName} onChange={handleChange}/>
 
             <label>직위</label>
@@ -108,17 +96,29 @@ const MemberForm = ({ memberId }) => {
             <label>보안등급</label>
             <input type="text" name="securityLevel" value={formData.securityLevel} onChange={handleChange}/>
 
-            <label>연차일수</label>
-            <input type="text" name="annualLeaveDays" value={formData.annualLeaveDays} onChange={handleChange}/>
+            <label>입사일</label>
+            <input type="text" name="hireDate" value={formData.hireDate} onChange={handleChange}/>
 
-            <label>사용연차일수</label>
-            <input type="text" name="usedAnnualLeaveDays" value={formData.usedAnnualLeaveDays} onChange={handleChange}/>
+            <label>퇴사일</label>
+            <input type="text" name="resignDate" value={formData.resignDate} onChange={handleChange}/>
 
-            <label>회사번호</label>
-            <input type="text" name="companyNumber" value={formData.companyNumber} onChange={handleChange}/>
+            <label>성별</label>
+            <input type="text" name="gender" value={formData.gender} onChange={handleChange}/>
 
-            <label>회원아이디</label>
-            <input type="text" name="memberId" value={formData.memberId} onChange={handleChange}/>
+            <label>생년월일</label>
+            <input type="text" name="birthDate" value={formData.birthDate} onChange={handleChange}/>
+
+            <label>주소</label>
+            <input type="text" name="address" value={formData.address} onChange={handleChange}/>
+
+            {/*<label>연차일수</label>*/}
+            {/*<input type="text" name="annualLeaveDays" value={formData.annualLeaveDays} onChange={handleChange}/>*/}
+
+            {/*<label>사용연차일수</label>*/}
+            {/*<input type="text" name="usedAnnualLeaveDays" value={formData.usedAnnualLeaveDays} onChange={handleChange}/>*/}
+
+            {/*<label>회사번호</label>*/}
+            {/*<input type="text" name="companyNumber" value={formData.companyNumber} onChange={handleChange}/>*/}
 
             <button type="submit">{memberId ? '수정' : '등록'}</button>
             {memberId && <button type="button" onClick={handleDelete}>삭제</button>}

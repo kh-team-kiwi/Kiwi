@@ -3,13 +3,10 @@ import Sidebar from '../components/documents/DocumentSidebar';
 import DocumentList from '../components/documents/DocumentList';
 import NewDocument from '../components/documents/NewDocument';
 import DocumentInProgress from '../components/documents/DocumentInProgress';
-import DocumentApproval from '../components/documents/DocumentApproval';
-import DocumentReject from '../components/documents/DocumentReject';
-import MemberForm from '../components/documents/MemberForm';
+import DocumentCompleted from '../components/documents/DocumentCompleted';
+import DocumentRejected from '../components/documents/DocumentRejected';
 import MemberManagement from '../components/documents/MemberManagement';
-
 import '../styles/pages/Documents.css';
-import '../styles/pages/Page.css';
 
 const Documents = () => {
     const [view, setView] = useState('documentList');
@@ -22,11 +19,11 @@ const Documents = () => {
         <>
             <Sidebar handleMenuClick={handleMenuClick} />
             <div className="content-container">
-                {view === 'documentList' && <DocumentList/>}
                 {view === 'newDocument' && <NewDocument/>}
+                {view === 'documentList' && <DocumentList/>}
                 {view === 'documentInProgress' && <DocumentInProgress/>}
-                {view === 'documentApproval' && <DocumentApproval/>}
-                {view === 'documentReject' && <DocumentReject/>}
+                {view === 'documentApproval' && <DocumentCompleted/>}
+                {view === 'documentReject' && <DocumentRejected/>}
                 {view === 'memberManagement' && <MemberManagement/>}
             </div>
         </>

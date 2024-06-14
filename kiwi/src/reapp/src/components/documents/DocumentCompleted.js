@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const DocumentApproval = () => {
+const DocumentCompleted = () => {
     const [documents, setDocuments] = useState([]);
 
     useEffect(() => {
@@ -48,4 +48,4 @@ const DocumentApproval = () => {
     );
 }
 
-export default DocumentApproval;
+export default DocumentCompleted;

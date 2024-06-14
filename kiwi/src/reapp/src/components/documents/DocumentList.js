@@ -19,7 +19,6 @@ const DocumentList = () => {
 
     return (
         <div className="documentList">
-            <h2>문서 목록</h2>
             <table className="docTable">
                 <thead>
                 <tr>
