@@ -6,7 +6,7 @@ import '../../styles/pages/Documents.css'
 
 const NewDocument = ({ author }) => {
     const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);  // Modal visibility state
+    const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
     const [approvalLine, setApprovalLine] = useState({ approvers: [], references: [] });
 
     const [newDocument, setNewDocument] = useState({
@@ -36,7 +36,7 @@ const NewDocument = ({ author }) => {
     };
 
     const handleSubmit = () => {
-    //TODO
+        //TODO
     };
 
     const getExampleContent = (docType) => {
@@ -108,13 +108,6 @@ const NewDocument = ({ author }) => {
             </div>
             <div className="formGroup">
                 <label>열람 권한 등급</label>
-                <select name="accessLevel" onChange={handleInputChange}>
-                    <option value="">등급을 선택해주세요.</option>
-                    <option value="C">C</option>
-                    <option value="B">B</option>
-                    <option value="A">A</option>
-                    <option value="S">S</option>
-                </select>
                 <div
                     className="tooltipIcon"
                     onMouseEnter={handleTooltipMouseEnter}
@@ -130,15 +123,22 @@ const NewDocument = ({ author }) => {
                         </span>
                     )}
                 </div>
+                <select name="accessLevel" onChange={handleInputChange}>
+                    <option value="">등급을 선택해주세요.</option>
+                    <option value="C">C</option>
+                    <option value="B">B</option>
+                    <option value="A">A</option>
+                    <option value="S">S</option>
+                </select>
             </div>
             <button type="button" onClick={() => setShowApprovalLineModal(true)}>결재선 설정</button>
             <div id="approvalDocumentLine">
                 <table className="cal_table1 approve-write js-approval-line">
                     <colgroup>
-                        <col style={{width: '12.09%'}}/>
-                        <col style={{width: '37.62%'}}/>
-                        <col style={{width: '12.09%'}}/>
-                        <col style={{width: '38.02%'}}/>
+                        <col style={{width: '10%'}}/>
+                        <col style={{width: '30%'}}/>
+                        <col style={{width: '10%'}}/>
+                        <col style={{width: '50%'}}/>
                     </colgroup>
                     <tbody>
                     <tr>
@@ -158,19 +158,19 @@ const NewDocument = ({ author }) => {
                                     <td className="team name"></td>
                                     <td className="team name"></td>
                                     <td className="team name"></td>
-                                    <td className="team name"></td>
+                                    {/*<td className="team name"></td>*/}
                                 </tr>
                                 <tr>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
-                                    <td className="stamp"></td>
+                                    {/*<td className="stamp"></td>*/}
                                 </tr>
                                 <tr>
                                     <td className="name">{author}</td>
                                     <td className="name"></td>
                                     <td className="name"></td>
-                                    <td className="name"></td>
+                                    {/*<td className="name"></td>*/}
                                 </tr>
                                 </tbody>
                             </table>
@@ -192,8 +192,10 @@ const NewDocument = ({ author }) => {
                                     <td className="team name"></td>
                                     <td className="team name"></td>
                                     <td className="team name"></td>
+                                    <td className="team name"></td>
                                 </tr>
                                 <tr>
+                                    <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
@@ -201,6 +203,7 @@ const NewDocument = ({ author }) => {
                                 </tr>
                                 <tr>
                                     <td className="name">{approvalLine.approvers[0]?.name || ''}</td>
+                                    <td className="name"></td>
                                     <td className="name"></td>
                                     <td className="name"></td>
                                     <td className="name"></td>

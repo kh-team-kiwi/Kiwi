@@ -23,5 +23,4 @@ public class Doc {
     private String companyNum;
     private String docContent;
     private String docCompletion;
-
 }
