@@ -11,9 +11,10 @@ const DriveFolder = ({ driveCode, fetchFiles, parentPath }) => {
     const handleCreateFolder = async (e) => {
         e.preventDefault();
         try {
+            const adjustedParentPath = parentPath && !parentPath.endsWith('/') ? `${parentPath}/` : parentPath;
             await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
                 folderName,
-                parentPath: parentPath ? `${parentPath}/` : `${driveCode}/`
+                parentPath: adjustedParentPath || driveCode + '/'
             }, {
                 headers: {
                     'Content-Type': 'application/json',

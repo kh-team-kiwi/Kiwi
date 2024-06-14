@@ -48,8 +48,8 @@ public class FileDriveFileController {
     }
 
     @GetMapping("/{driveCode}/files/{fileCode}/download")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String driveCode, @PathVariable String fileCode, @RequestParam(required = false) String parentPath) {
-        byte[] fileData = fileDriveFileService.downloadFile(driveCode, fileCode, parentPath);
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String driveCode, @PathVariable String fileCode) {
+        byte[] fileData = fileDriveFileService.downloadFile(driveCode, fileCode);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", fileCode);
@@ -75,4 +75,11 @@ public class FileDriveFileController {
         fileDriveFileService.deleteFolder(driveCode, folderCode, parentPath);
         return ResponseEntity.ok().build();
     }
+
+
+    @PutMapping("/{driveCode}/folders/{folderCode}")
+    public void updateFolderName(@PathVariable String driveCode, @PathVariable String folderCode, @RequestBody String newFolderName, @RequestParam(required = false) String parentPath) {
+        fileDriveFileService.updateFolderName(driveCode, folderCode, newFolderName.replace("\"", ""), parentPath);
+    }
+
 }

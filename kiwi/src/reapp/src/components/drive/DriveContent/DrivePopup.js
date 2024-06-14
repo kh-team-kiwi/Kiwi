@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import '../../styles/components/drive/DrivePopup.css';
+import '../../../styles/components/drive/DrivePopup.css';
 
 const DrivePopup = ({ onClose, onDriveCreated }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +54,7 @@ const DrivePopup = ({ onClose, onDriveCreated }) => {
         <>
             <button className="schedule-button" onClick={openPopup}>
                 {/* Button Icon */}
-                Create
+                Drive Create
             </button>
             {isOpen && (
                 <div className="popup-container">

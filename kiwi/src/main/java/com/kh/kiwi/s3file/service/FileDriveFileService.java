@@ -4,16 +4,15 @@ import com.kh.kiwi.s3file.dto.FileDriveFileDTO;
 import com.kh.kiwi.s3file.entity.FileDriveFile;
 import com.kh.kiwi.s3file.repository.FileDriveFileRepository;
 import com.kh.kiwi.s3drive.repository.FileDriveRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class FileDriveFileService {
 
+    private static final Logger log = LoggerFactory.getLogger(FileDriveFileService.class);
     private final S3Client s3Client;
     private final FileDriveFileRepository fileDriveFileRepository;
     private final FileDriveRepository fileDriveRepository;
@@ -37,12 +37,28 @@ public class FileDriveFileService {
         this.fileDriveRepository = fileDriveRepository;
     }
 
-    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String path) {
-        String actualPath = path != null ? path : driveCode + "/";
-        return fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, actualPath).stream()
-                .map(file -> new FileDriveFileDTO(file.getFileCode(), file.getDriveCode(), file.getFileName(), file.getFilePath(), file.isFolder(), file.getUploadTime()))
+    private List<FileDriveFileDTO> filterFilesByDepth(List<FileDriveFileDTO> files, String path, boolean isRoot) {
+        return files.stream()
+                .filter(file -> {
+                    String relativePath = file.getFilePath().substring(path.length());
+                    int depth = relativePath.split("/").length;
+                    return isRoot ? depth == 2 : depth == 1;
+                })
                 .collect(Collectors.toList());
     }
+
+
+    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String path) {
+        String actualPath = (path != null && !path.isEmpty()) ? path : driveCode;
+        List<FileDriveFileDTO> allFiles = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, actualPath).stream()
+                .filter(file -> file.getFilePath().startsWith(actualPath) && !file.getFilePath().equals(actualPath))
+                .map(file -> new FileDriveFileDTO(file.getFileCode(), file.getDriveCode(), file.getFileName(), file.getFilePath(), file.isFolder(), file.getUploadTime()))
+                .collect(Collectors.toList());
+
+        boolean isRoot = path == null || path.isEmpty() || path.equals(driveCode);
+        return filterFilesByDepth(allFiles, actualPath, isRoot);
+    }
+
 
     public FileDriveFileDTO uploadFile(String driveCode, MultipartFile file, String parentPath) {
         if (!fileDriveRepository.existsById(driveCode)) {
@@ -50,7 +66,13 @@ public class FileDriveFileService {
         }
 
         String fileCode = UUID.randomUUID().toString();
-        String s3Key = (parentPath != null && !parentPath.isEmpty() ? parentPath : driveCode + "/") + fileCode;
+        String s3Key;
+
+        if (parentPath == null || parentPath.isEmpty()) {
+            s3Key = driveCode + "/" + fileCode;
+        } else {
+            s3Key = parentPath.endsWith("/") ? parentPath + fileCode : parentPath + "/" + fileCode;
+        }
 
         // S3에 파일 업로드
         try {
@@ -77,10 +99,9 @@ public class FileDriveFileService {
         return new FileDriveFileDTO(fileDriveFile.getFileCode(), fileDriveFile.getDriveCode(), fileDriveFile.getFileName(), fileDriveFile.getFilePath(), fileDriveFile.isFolder(), fileDriveFile.getUploadTime());
     }
 
-
     public void deleteFile(String driveCode, String fileCode, String parentPath) {
         FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
-        String s3Key = parentPath != null ? parentPath + file.getFilePath() : file.getFilePath();
+        String s3Key = file.getFilePath();
 
         // S3에서 파일 삭제
         try {
@@ -100,38 +121,22 @@ public class FileDriveFileService {
 
     public void updateFileName(String driveCode, String fileCode, String newFileName, String parentPath) {
         FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
-        String oldS3Key = parentPath != null ? parentPath + file.getFilePath() : file.getFilePath();
-        String newS3Key = (parentPath != null ? parentPath : driveCode + "/") + fileCode + "/" + newFileName.replace("\"", ""); // 파일 이름 끝의 "" 제거
-
-        // S3에서 파일 이름 변경
-        try {
-            CopyObjectRequest copyObjectRequest = CopyObjectRequest.builder()
-                    .sourceBucket(bucketName)
-                    .sourceKey(oldS3Key)
-                    .destinationBucket(bucketName)
-                    .destinationKey(newS3Key)
-                    .build();
-            s3Client.copyObject(copyObjectRequest);
-
-            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(oldS3Key)
-                    .build();
-            s3Client.deleteObject(deleteObjectRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to rename file in S3", e);
-        }
-
-        // 파일 정보 업데이트
         file.setFileName(newFileName.replace("\"", "")); // 파일 이름 끝의 "" 제거
-        file.setFilePath(newS3Key);
         fileDriveFileRepository.save(file);
     }
 
-    public byte[] downloadFile(String driveCode, String fileCode, String parentPath) {
+    public void updateFolderName(String driveCode, String folderCode, String newFolderName, String parentPath) {
+        FileDriveFile folder = fileDriveFileRepository.findById(folderCode).orElseThrow(() -> new RuntimeException("Folder not found"));
+        folder.setFileName(newFolderName.replace("\"", "")); // 폴더 이름 끝의 "" 제거
+        fileDriveFileRepository.save(folder);
+    }
+
+    public byte[] downloadFile(String driveCode, String fileCode) {
         FileDriveFile file = fileDriveFileRepository.findById(fileCode).orElseThrow(() -> new RuntimeException("File not found"));
-        String s3Key = parentPath != null ? parentPath + file.getFilePath() : file.getFilePath();
+        String s3Key = file.getFilePath();
+
+        // 파일 경로 로그 출력
+        System.out.println("Downloading file from S3 with key: " + s3Key);
 
         // S3에서 파일 다운로드
         try {
@@ -140,6 +145,9 @@ public class FileDriveFileService {
                     .key(s3Key)
                     .build();
             return s3Client.getObject(getObjectRequest).readAllBytes();
+        } catch (NoSuchKeyException e) {
+            e.printStackTrace();
+            throw new RuntimeException("File not found in S3: " + s3Key, e);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to download file from S3", e);
@@ -152,9 +160,12 @@ public class FileDriveFileService {
         }
 
         String folderCode = UUID.randomUUID().toString();
-        String s3Key = (parentPath != null && !parentPath.isEmpty() ? parentPath : driveCode + "/") + folderCode + "/";
+        String s3Key = buildS3Key(parentPath, folderCode + "/");
 
-        // S3에 폴더 생성
+        // 폴더 경로 로그 출력
+        System.out.println("Creating folder in S3 with key: " + s3Key);
+
+        // S3에 빈 객체 업로드하여 폴더 생성
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
@@ -166,7 +177,6 @@ public class FileDriveFileService {
             throw new RuntimeException("Failed to create folder in S3", e);
         }
 
-        // 드라이브 정보 저장
         FileDriveFile folder = new FileDriveFile();
         folder.setFileCode(folderCode);
         folder.setDriveCode(driveCode);
@@ -177,10 +187,22 @@ public class FileDriveFileService {
         fileDriveFileRepository.save(folder);
     }
 
+    private String buildS3Key(String parentPath, String filePath) {
+        if (parentPath == null || parentPath.isEmpty()) {
+            return filePath;
+        }
+        if (!parentPath.endsWith("/")) {
+            parentPath += "/";
+        }
+        if (filePath.startsWith("/")) {
+            filePath = filePath.substring(1);
+        }
+        return parentPath + filePath;
+    }
 
     public void deleteFolder(String driveCode, String folderCode, String parentPath) {
         FileDriveFile folder = fileDriveFileRepository.findById(folderCode).orElseThrow(() -> new RuntimeException("Folder not found"));
-        String s3Key = parentPath != null ? parentPath + folder.getFilePath() : folder.getFilePath();
+        String s3Key = folder.getFilePath();
 
         // S3에서 폴더 및 폴더 내 파일 삭제
         List<FileDriveFile> filesInFolder = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, s3Key);
