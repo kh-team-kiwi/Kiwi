@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const DocumentReject = () => {
+const DocumentRejected = () => {
     const [documents, setDocuments] = useState([]);
 
     useEffect(() => {
@@ -48,4 +48,4 @@ const DocumentReject = () => {
     );
 }
 
-export default DocumentReject;
+export default DocumentRejected;

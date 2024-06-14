@@ -1,3 +1,71 @@
+/* General Styles */
+#approvalDocumentLine {
+    margin: 20px;
+}
+
+.cal_table1 {
+    width: 80%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.cal_table1 th,
+.cal_table1 td {
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.cal_table1 th {
+    background-color: #f5f5f5;
+}
+
+.cal_table1 .agree,
+.cal_table1 .confer {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.cal_table1 .choice {
+    height: 162px;
+    display: table-cell;
+    width: 122px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cal_table1 .spr-approval {
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.cal_table1 .confer.vt {
+    vertical-align: top;
+}
+
+.cal_table1 .team.name,
+.cal_table1 .name {
+    height: 30px; /* Adjust height as needed */
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cal_table1 .stamp {
+    height: 100px; /* Adjust height as needed */
+    vertical-align: middle;
+    text-align: center;
+}
+
+.refer input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* App Container Styles */
 .appContainer {
     display: flex;
     flex-direction: column;
@@ -51,11 +119,11 @@
     flex: 1;
     padding: 20px;
     position: relative;
-    left:210px;
+    left: 210px;
 }
 
 .documentList .docTable {
-    width: 100%;
+    width: 97%;
     border-collapse: collapse;
 }
 
@@ -70,6 +138,7 @@
     text-align: left;
 }
 
+/* New Document Form Styles */
 .newDocument .formGroup {
     margin-bottom: 20px;
 }
@@ -99,7 +168,39 @@
     cursor: pointer;
 }
 
-/* 인사정보 기입 페이지 */
+.newDocument .tooltipIcon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.newDocument .tooltipText {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.newDocument .tooltipIcon:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
+    width: 550px;
+    text-align: left;
+    margin:0 auto;
+}
+
+/* Member Form Styles */
 .member-form {
     max-width: 600px;
     margin: 0 auto;
@@ -152,7 +253,7 @@
     margin-top: 5px;
 }
 
-/* 인사정보 수정 페이지 */
+/* Member Management Styles */
 .member-management {
     max-width: 800px;
     margin: 20px auto;
@@ -205,5 +306,58 @@
 }
 
 .formGroup > textarea {
-    height: 500px;
+    height: 400px;
+}
+
+/* Approval Line Modal Styles */
+.approvalLineModal {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 500px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.modalSection {
+    margin-bottom: 20px;
+}
+
+.memberList div {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modalActions {
+    text-align: right;
+}
+
+.modalActions button {
+    margin-left: 10px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.approval-line > colgroup > col {
+    width: 12.09%;
+}
+
+tr > td {
+    width: 100px;
+
+}
+
+#approvalDocumentLine > table.cal_table1.approve-write.refer > tbody > tr > th {
+    height: 30px;
+    text-align: center;
+    padding-top: 10px;
 }
