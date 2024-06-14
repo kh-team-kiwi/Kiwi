@@ -198,6 +198,7 @@
     width: 550px;
     text-align: left;
     margin:0 auto;
+    line-height: 25px;
 }
 
 /* Member Form Styles */
@@ -425,7 +426,7 @@ tr > td {
 }
 
 .approversList, .referencesList {
-    margin-top: 10px;
+    margin-top: 35px;
 }
 
 .modalActions {

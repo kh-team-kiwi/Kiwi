@@ -107,7 +107,7 @@ const NewDocument = ({ author }) => {
                 </select>
             </div>
             <div className="formGroup">
-                <label>열람 권한 등급</label>
+                <label>열람 권한 등급
                 <div
                     className="tooltipIcon"
                     onMouseEnter={handleTooltipMouseEnter}
@@ -123,6 +123,7 @@ const NewDocument = ({ author }) => {
                         </span>
                     )}
                 </div>
+                </label>
                 <select name="accessLevel" onChange={handleInputChange}>
                     <option value="">등급을 선택해주세요.</option>
                     <option value="C">C</option>
