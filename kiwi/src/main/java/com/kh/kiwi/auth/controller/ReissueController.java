@@ -1,7 +1,7 @@
 package com.kh.kiwi.auth.controller;
 
 
-import com.kh.kiwi.auth.entity.RefreshEntity;
+import com.kh.kiwi.auth.entity.RefreshToken;
 import com.kh.kiwi.auth.jwt.JWTUtil;
 import com.kh.kiwi.auth.repository.RefreshRepository;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ public class ReissueController {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
 
-    @PostMapping("/reissue")
+    @PostMapping("/api/auth/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
 
         //get refresh token
@@ -38,6 +39,8 @@ public class ReissueController {
                 refresh = cookie.getValue();
             }
         }
+
+        System.out.println("ReissueController >> refresh : " + refresh);
 
         if (refresh == null) {
 
@@ -66,7 +69,6 @@ public class ReissueController {
         //DB에 저장되어 있는지 확인
         Boolean isExist = refreshRepository.existsByRefresh(refresh);
         if (!isExist) {
-
             //response body
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
@@ -104,7 +106,7 @@ public class ReissueController {
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshEntity refreshEntity = new RefreshEntity();
+        RefreshToken refreshEntity = new RefreshToken();
         refreshEntity.setUsername(username);
         refreshEntity.setRefresh(refresh);
         refreshEntity.setExpiration(date.toString());

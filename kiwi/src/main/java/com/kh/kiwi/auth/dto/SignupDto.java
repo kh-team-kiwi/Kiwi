@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignupDto {
     private String memberId;
-    private String memberPw;
-    private String confirmPw;
+    private String memberPwd;
+    private String confirmPwd;
     private String memberFilepath;
     private String memberNickname;
 }
