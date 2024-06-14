@@ -46,7 +46,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         //토큰 생성
         String access = jwtUtil.createJwt("access", username, role, 600000L); // 10분
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L); // 24시간
-        System.out.println(refresh);
+
         addRefreshEntity(username,refresh,86400000L);
 
 //        log.info("=======ejkim=====");
@@ -60,7 +60,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
 
-        //response.sendRedirect("http://localhost:3000/oauth2/redirect");
+        response.sendRedirect("http://localhost:3000/oauth2/redirect");
     }
 
     private String makeRedirectUrl(String token) {
