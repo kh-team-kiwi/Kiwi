@@ -16,9 +16,8 @@ const NewDocument = ({ author }) => {
         title: '',
         content: '',
         attachment: null,
-        name: author // 사원 이름 추가
+        name: author
     });
-
 
     const handleTooltipMouseEnter = () => {
         setTooltipVisible(true);
@@ -46,7 +45,7 @@ const NewDocument = ({ author }) => {
             formData.append('title', newDocument.title);
             formData.append('content', newDocument.content);
             formData.append('attachment', newDocument.attachment);
-            formData.append('name', newDocument.name); // 사원 이름 추가
+            formData.append('name', newDocument.name);
 
             await axios.post('/documents', formData, {
                 headers: {
@@ -55,13 +54,10 @@ const NewDocument = ({ author }) => {
             });
 
             alert("문서가 성공적으로 저장되었습니다.");
-            // 문서 저장 후 추가 작업 수행 가능
         } catch (error) {
             console.error("문서 저장 중 오류가 발생했습니다.", error);
         }
     };
-
-
 
     const getExampleContent = (docType) => {
         switch (docType) {
@@ -131,21 +127,21 @@ const NewDocument = ({ author }) => {
             </div>
             <div className="formGroup">
                 <label>열람 권한 등급
-                <div
-                    className="tooltipIcon"
-                    onMouseEnter={handleTooltipMouseEnter}
-                    onMouseLeave={handleTooltipMouseLeave}
-                >
-                    <FontAwesomeIcon icon={faQuestionCircle}/>
-                    {tooltipVisible && (
-                        <span className="tooltipText">
+                    <div
+                        className="tooltipIcon"
+                        onMouseEnter={handleTooltipMouseEnter}
+                        onMouseLeave={handleTooltipMouseLeave}
+                    >
+                        <FontAwesomeIcon icon={faQuestionCircle}/>
+                        {tooltipVisible && (
+                            <span className="tooltipText">
                             S 등급 : 관련자들만 문서를 열람<br/>
                             A 등급 : 관련자 및 2등급(부장, 이사, 사내이사, 본부장) 이상인 사람만 열람<br/>
                             B 등급 : 관련자 및 3등급(팀장, PA) 이상인 사람만 열람<br/>
                             C 등급 : 모든 임직원이 문서를 열람
                         </span>
-                    )}
-                </div>
+                        )}
+                    </div>
                 </label>
                 <select name="accessLevel" onChange={handleInputChange}>
                     <option value="">등급을 선택해주세요.</option>
@@ -172,7 +168,6 @@ const NewDocument = ({ author }) => {
                         <td className="confer vt" id="approvalFirstLine">
                             <table>
                                 <colgroup>
-                                    <col/>
                                     <col/>
                                     <col/>
                                     <col/>

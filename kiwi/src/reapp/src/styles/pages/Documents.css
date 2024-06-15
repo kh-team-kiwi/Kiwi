@@ -4,7 +4,8 @@
 }
 
 .cal_table1 {
-    width: 1000px;
+    width: 100%;
+    max-width: 1000px; /* Responsive max-width */
     border-collapse: collapse;
     margin-bottom: 20px;
 }
@@ -13,6 +14,7 @@
 .cal_table1 td {
     border: 1px solid #ccc;
     text-align: left;
+    padding: 8px; /* Added padding for better spacing */
 }
 
 .cal_table1 th {
@@ -46,13 +48,13 @@
 
 .cal_table1 .team.name,
 .cal_table1 .name {
-    height: 25px; /* Adjust height as needed */
+    height: 25px;
     vertical-align: middle;
     text-align: center;
 }
 
 .cal_table1 .stamp {
-    height: 75px; /* Adjust height as needed */
+    height: 75px;
     vertical-align: middle;
     text-align: center;
 }
@@ -99,6 +101,11 @@
     font-size: 16px;
     margin-top: 17px;
     margin-bottom: 17px;
+    transition: background-color 0.3s;
+}
+
+.sidebar button.newDoc:hover {
+    background: #0056b3; /* Hover effect */
 }
 
 .sidebar ul.menu {
@@ -109,6 +116,11 @@
 .sidebar ul.menu li {
     padding: 10px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sidebar ul.menu li:hover {
+    background: #eaeaea; /* Hover effect */
 }
 
 .sidebar ul.menu li span {
@@ -119,12 +131,60 @@
     flex: 1;
     padding: 20px;
     position: relative;
-    left: 210px;
+    left: 250px;
+}
+/* DocumentList Table Styles */
+.documentList {
+    padding: 20px;
+    background: #ffffff; /* 테이블의 배경색 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+.documentList h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* 제목 색상 */
 }
 
 .documentList .docTable {
-    width: 97%;
+    width: 100%;
     border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.documentList .docTable th,
+.documentList .docTable td {
+    border: 1px solid #ddd;
+    padding: 12px 8px; /* Padding to make the cells look spacious */
+    text-align: left; /* Center align text in cells */
+}
+
+.documentList .docTable th {
+    background-color: #f2f2f2;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+}
+
+.documentList .docTable tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternating row color for better readability */
+}
+
+.documentList .docTable tr:hover {
+    background-color: #e0e0e0; /* Hover effect for rows */
+}
+
+.documentList .docTable td {
+    color: #555; /* 셀 텍스트 색상 */
+    text-align: left;
+    vertical-align: middle; /* Vertical align to middle for better alignment */
+}
+
+.documentList .docTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
 .documentList .docTable th,
@@ -151,9 +211,10 @@
 .newDocument .formGroup input,
 .newDocument .formGroup select,
 .newDocument .formGroup textarea {
-    width: 1000px;
+    width: calc(100% - 16px); /* Adjusted for padding */
     padding: 8px;
     box-sizing: border-box;
+    margin-bottom: 10px; /* Added spacing between inputs */
 }
 
 .newDocument .formGroup input[type="file"] {
@@ -166,6 +227,11 @@
     color: white;
     border: none;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.newDocument button:hover {
+    background-color: #0056b3; /* Hover effect */
 }
 
 .newDocument .tooltipIcon {
@@ -177,28 +243,25 @@
 
 .newDocument .tooltipText {
     visibility: hidden;
-    width: 200px;
+    width: 550px;
     background-color: #555;
     color: #fff;
-    text-align: center;
+    text-align: left;
     border-radius: 5px;
     padding: 5px;
     position: absolute;
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -100px;
+    transform: translateX(-50%);
     opacity: 0;
     transition: opacity 0.3s;
+    line-height: 25px;
 }
 
 .newDocument .tooltipIcon:hover .tooltipText {
     visibility: visible;
     opacity: 1;
-    width: 550px;
-    text-align: left;
-    margin:0 auto;
-    line-height: 25px;
 }
 
 /* Member Form Styles */
@@ -219,7 +282,7 @@
 }
 
 .member-form input {
-    width: calc(100% - 10px);
+    width: calc(100% - 16px); /* Adjusted for padding */
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -237,6 +300,7 @@
     border-radius: 3px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 .member-form button:hover {
@@ -354,7 +418,6 @@
 
 tr > td {
     width: 100px;
-
 }
 
 #approvalDocumentLine > table.cal_table1.approve-write.refer > tbody > tr > th {
@@ -362,8 +425,6 @@ tr > td {
     text-align: center;
     padding-top: 10px;
 }
-
-/**/
 
 /* ApprovalLineModal.css */
 
@@ -376,7 +437,8 @@ tr > td {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* Background dim effect */
+    z-index: 1000; /* Ensure it is above other content */
 }
 
 .modalContent {
@@ -392,7 +454,7 @@ tr > td {
 
 .searchBox input {
     width: 100%;
-    padding: 5px;
+    padding: 10px; /* Adjusted for better input spacing */
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -400,19 +462,30 @@ tr > td {
 .container {
     display: flex;
     justify-content: space-between;
+    gap: 20px; /* Added gap for better spacing */
 }
 
 .memberList, .selectedLists {
     width: 45%;
+    background: #f9f9f9; /* Light background for better distinction */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    max-height: 300px; /* Limit height for better layout */
 }
 
 .memberItem {
-    padding: 5px;
+    padding: 10px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.memberItem:hover {
+    background-color: #eaeaea; /* Hover effect */
 }
 
 .memberItem.selected {
-    background-color: #efefef;
+    background-color: #d1ecf1; /* Selected item background */
 }
 
 .arrows {
@@ -423,10 +496,31 @@ tr > td {
 
 .arrows button {
     margin: 5px 0;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.arrows button:hover {
+    background-color: #0056b3;
 }
 
 .approversList, .referencesList {
-    margin-top: 35px;
+    margin-top: 20px; /* Adjusted for better spacing */
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.approversList h3, .referencesList h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
 }
 
 .modalActions {
@@ -436,5 +530,19 @@ tr > td {
 }
 
 .modalActions button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modalActions button:hover {
+    background-color: #0056b3;
+}
+
+.modalActions button:last-child {
     margin-left: 10px;
 }

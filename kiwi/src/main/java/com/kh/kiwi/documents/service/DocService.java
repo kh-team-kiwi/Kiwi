@@ -1,7 +1,9 @@
 package com.kh.kiwi.documents.service;
 
 import com.kh.kiwi.documents.entity.Doc;
+import com.kh.kiwi.documents.entity.ApprovalLine;
 import com.kh.kiwi.documents.repository.DocRepository;
+import com.kh.kiwi.documents.repository.ApprovalLineRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
 public class DocService {
 
     private final DocRepository docRepository;
+    private final ApprovalLineRepository approvalLineRepository;
 
-    public DocService(DocRepository docRepository) {
+    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository) {
         this.docRepository = docRepository;
+        this.approvalLineRepository = approvalLineRepository;
     }
 
     public List<Doc> selectAllList() {
@@ -20,7 +24,7 @@ public class DocService {
     }
 
     public List<Doc> selectByUser(String employeeNo) {
-        return docRepository.findByEmployeeNo(employeeNo); // 수정된 필드에 맞게 변경
+        return docRepository.findByEmployeeNo(employeeNo);
     }
 
     public Doc getDocById(Long id) {
@@ -49,5 +53,10 @@ public class DocService {
 
     public void deleteDoc(Long id) {
         docRepository.deleteById(id);
+    }
+
+    // 모든 결재선 정보를 가져오는 메서드
+    public List<ApprovalLine> getAllApprovalLines() {
+        return approvalLineRepository.findAll();
     }
 }
