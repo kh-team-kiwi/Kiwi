@@ -546,3 +546,129 @@ tr > td {
 .modalActions button:last-child {
     margin-left: 10px;
 }
+
+/* DocumentDetails 스타일링 추가 */
+.documentDetails {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.documentDetails h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.documentDetails .details {
+    line-height: 1.6;
+    font-size: 16px;
+    color: #555;
+}
+
+.documentDetails button {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.documentDetails button:hover {
+    background: #0056b3;
+}
+
+.documentDetail {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.documentInfo, .documentContent, .approvalSection {
+    margin-bottom: 20px;
+}
+
+.documentInfo h2, .documentContent h3, .approvalSection h3 {
+    color: #333;
+}
+
+.approvalButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.approvalButtons button, .commentInput button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.approvalButtons button:hover, .commentInput button:hover {
+    background-color: #0056b3;
+}
+
+.commentInput {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.commentInput textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.document-detail {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.document-info {
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.document-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.document-status,
+.document-date,
+.document-completion,
+.document-author {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.document-status strong,
+.document-date strong,
+.document-completion strong,
+.document-author strong {
+    color: #555;
+}
+

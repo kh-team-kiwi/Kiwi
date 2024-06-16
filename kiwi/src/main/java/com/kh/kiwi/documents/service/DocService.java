@@ -23,10 +23,6 @@ public class DocService {
         return docRepository.findAll();
     }
 
-    public List<Doc> selectByUser(String employeeNo) {
-        return docRepository.findByEmployeeNo(employeeNo);
-    }
-
     public Doc getDocById(Long id) {
         return docRepository.findById(id).orElse(null);
     }
@@ -36,17 +32,12 @@ public class DocService {
     }
 
     public void updateDoc(Long id, Doc updatedDoc) {
-        Doc existingDoc = getDocById(id);
+        Doc existingDoc = docRepository.findById(id).orElse(null);
         if (existingDoc != null) {
+            // 업데이트 로직
             existingDoc.setDocTitle(updatedDoc.getDocTitle());
-            existingDoc.setDocStatus(updatedDoc.getDocStatus());
-            existingDoc.setDocDate(updatedDoc.getDocDate());
-            existingDoc.setDocCompletion(updatedDoc.getDocCompletion());
             existingDoc.setDocContents(updatedDoc.getDocContents());
-            existingDoc.setName(updatedDoc.getName());
-            existingDoc.setScheduledDeletionDate(updatedDoc.getScheduledDeletionDate());
-            existingDoc.setDocType(updatedDoc.getDocType());
-            existingDoc.setEmployeeNo(updatedDoc.getEmployeeNo());
+            existingDoc.setDocStatus(updatedDoc.getDocStatus());
             docRepository.save(existingDoc);
         }
     }
@@ -55,8 +46,11 @@ public class DocService {
         docRepository.deleteById(id);
     }
 
-    // 모든 결재선 정보를 가져오는 메서드
     public List<ApprovalLine> getAllApprovalLines() {
         return approvalLineRepository.findAll();
+    }
+
+    public Doc getDocByDocNum(Long docNum) {
+        return docRepository.findByDocNum(docNum);
     }
 }

@@ -12,7 +12,7 @@ public class Doc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long docNum; // 기존 컬럼에 맞게 필드 이름 수정
+    private Long docNum;
 
     @Enumerated(EnumType.STRING)
     private DocStatus docStatus; // Enum 타입으로 수정
@@ -23,11 +23,11 @@ public class Doc {
     }
 
     private String docTitle;
-    private LocalDateTime docDate; // LocalDateTime으로 수정
-    private LocalDateTime docCompletion; // LocalDateTime으로 수정
+    private LocalDateTime docDate;
+    private LocalDateTime docCompletion;
     private String docContents;
-    private String name; // 사원 이름 추가
+    private String name;
     private LocalDateTime scheduledDeletionDate;
     private String docType;
-    private String employeeNo; // 작성자 사원 번호
+    private String employeeNo;
 }

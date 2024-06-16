@@ -1,11 +1,11 @@
+import DocumentDetail from './components/documents/DocumentDetails'; // DocumentDetail 컴포넌트를 import 합니다
 import './styles/App.css';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Headermenu from './Headermenu';
 import FileManagement from "./components/drive/FileManagement";
 import Main from './pages/Main';
-import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Documents from "./pages/Documents";
 import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
@@ -25,25 +25,25 @@ function App() {
         setIsLogin(authToken !== null);
     }, []);
 
-  return (
-      <>
-          {shouldHideHeader && <Header />}
-          <Routes>
-              {/*element={<Navigate to="/Home" replace />}*/}
-              <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Register/>}></Route>
-              <Route path="/login" element={<Login setIsLogin={setIsLogin} />}></Route>
-              <Route path="/FileManagement" element={<FileManagement/>}></Route>
-              <Route path="/main" element={<Main/>}></Route>
-              <Route path='/chat' element={<Chat />} />
-              <Route path='/calendar' element={<Calendar />} />
-              <Route path='/drive' element={<Drive />} />
-              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
-              <Route path="/documents" element={<Documents/>}></Route>
-
-          </Routes>
-      </>
-  );
+    return (
+        <>
+            {shouldHideHeader && <Header />}
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login setIsLogin={setIsLogin} />} />
+                <Route path="/FileManagement" element={<FileManagement />} />
+                <Route path="/main" element={<Main />} />
+                <Route path='/chat' element={<Chat />} />
+                <Route path='/calendar' element={<Calendar />} />
+                <Route path='/drive' element={<Drive />} />
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+                <Route path="/documents" element={<Documents />} />
+                {/* 문서 세부 정보를 위한 라우트 추가 */}
+                <Route path="/documents/details/:docId" component={DocumentDetail} />
+            </Routes>
+        </>
+    );
 }
 
 const Home = () => {
