@@ -62,7 +62,7 @@ const DocumentList = () => {
                         <td>{doc.docTitle}</td>
                         <td>{doc.docStatus}</td>
                         <td>{moment(doc.docDate).format('YYYY-MM-DD HH:mm')}</td>
-                        <td>{doc.docCompletion ? moment(doc.docCompletion).format('YYYY-MM-DD HH:mm') : 'Not completed'}</td>
+                        <td>{doc.docCompletion ? moment(doc.docCompletion).format('YYYY-MM-DD HH:mm') : ''}</td>
                         <td>{doc.name}</td>
                     </tr>
                 ))}

@@ -643,32 +643,4 @@ tr > td {
     margin: 20px auto;
 }
 
-.document-info {
-    padding: 15px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.document-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.document-status,
-.document-date,
-.document-completion,
-.document-author {
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-.document-status strong,
-.document-date strong,
-.document-completion strong,
-.document-author strong {
-    color: #555;
-}
 
