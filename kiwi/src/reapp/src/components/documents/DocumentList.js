@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
 const DocumentList = () => {
     const [documents, setDocuments] = useState([]);
@@ -49,8 +50,8 @@ const DocumentList = () => {
                         <td>{doc.docNum}</td>
                         <td>{doc.docTitle}</td>
                         <td>{doc.docStatus}</td>
-                        <td>{doc.docDate}</td>
-                        <td>{doc.docCompletion || 'N/A'}</td>
+                        <td>{moment(doc.docDate).format('YYYY-MM-DD HH:mm')}</td>
+                        <td>{doc.docCompletion ? moment(doc.docCompletion).format('YYYY-MM-DD HH:mm') : ''}</td>
                         <td>{doc.name}</td>
                     </tr>
                 ))}

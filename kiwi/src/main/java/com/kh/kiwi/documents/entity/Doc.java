@@ -14,8 +14,15 @@ public class Doc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long docNum; // 기존 컬럼에 맞게 필드 이름 수정
 
+    @Enumerated(EnumType.STRING)
+    private DocStatus docStatus; // Enum 타입으로 수정
+
+    // Enum 타입 정의
+    public enum DocStatus {
+        진행중, 완료, 반려
+    }
+
     private String docTitle;
-    private Integer docStatus;
     private LocalDateTime docDate; // LocalDateTime으로 수정
     private LocalDateTime docCompletion; // LocalDateTime으로 수정
     private String docContents;
