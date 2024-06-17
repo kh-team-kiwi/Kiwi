@@ -1,8 +1,10 @@
 package com.kh.kiwi.documents.controller;
 
+import com.kh.kiwi.documents.dto.CommentDto;
 import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
 import com.kh.kiwi.documents.service.DocService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +62,17 @@ public class DocController {
     @GetMapping("/all-approval-lines")
     public List<ApprovalLine> getAllApprovalLines() {
         return docService.getAllApprovalLines();
+    }
+
+    // 댓글 추가 엔드포인트
+    @PostMapping("/{docNum}/comments")
+    public ResponseEntity<?> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
+        try {
+            docService.addComment(docNum, commentDto);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 추가에 실패하였습니다.");
+        }
     }
 
 }

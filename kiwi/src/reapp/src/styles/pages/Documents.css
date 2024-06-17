@@ -643,3 +643,171 @@ tr > td {
     max-width: 600px;
     margin: 20px auto;
 }
+
+/* DocumentDetails.css - This file is specific to the DocumentDetails component */
+.documentDetails {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.documentDetails .title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.documentDetails .docInfo table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.documentDetails .docInfo th,
+.documentDetails .docInfo td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    width: 0;
+}
+
+.documentDetails .docInfo th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+.documentDetails .docTitle {
+    margin: 20px 0;
+    text-align: center;
+    color: #333;
+}
+
+.documentDetails .docContents {
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.documentDetails .attachments h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.documentDetails .attachments ul {
+    list-style: none;
+    padding: 0;
+}
+
+.documentDetails .attachments li {
+    margin-bottom: 5px;
+}
+
+.documentDetails .attachments a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.documentDetails .attachments a:hover {
+    text-decoration: underline;
+}
+
+.documentDetails .approvalLine {
+    margin: 20px 0;
+}
+
+.documentDetails .approvalLine h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.documentDetails .approvalLine .cal_table1 {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.documentDetails .approvalLine th,
+.documentDetails .approvalLine td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.documentDetails .references {
+    margin: 20px 0;
+}
+
+.documentDetails .references h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.documentDetails .commentSection {
+    margin: 20px 0;
+}
+
+.documentDetails .commentSection h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.documentDetails .commentSection .comment {
+    background: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.documentDetails .commentSection .commentInput {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.documentDetails .commentSection textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.documentDetails .commentSection button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.documentDetails .commentSection button:hover {
+    background-color: #0056b3;
+}
+
+.documentDetails .backButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.documentDetails .backButton:hover {
+    background-color: #0056b3;
+}
