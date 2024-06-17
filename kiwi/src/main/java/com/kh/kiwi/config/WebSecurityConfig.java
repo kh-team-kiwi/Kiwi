@@ -102,6 +102,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers("/api/auth/signup","/api/auth/reissue").permitAll()
                         .requestMatchers("/api/drive/**","/api/drive/create").permitAll() // refresh
+                        .requestMatchers("/**").permitAll() // refresh
                         .requestMatchers(new AntPathRequestMatcher("/api/admin")).hasRole("JADMIN")
                         .anyRequest().authenticated());
         return http.build();

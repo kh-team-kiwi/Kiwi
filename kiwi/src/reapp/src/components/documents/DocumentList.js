@@ -10,7 +10,9 @@ const DocumentList = ({ onDocumentClick }) => {
 
     async function fetchDocuments() {
         try {
-            const response = await axiosHandler.get('/documents/all-documents');
+            // TODO 인터셉터
+            // const response = await axiosHandler.get('/documents/all-documents');
+            const response = await axios.get('/documents/all-documents');
             if (response.status === 200) {
                 console.log(response.data);
                 setDocuments(response.data);
@@ -27,9 +29,9 @@ const DocumentList = ({ onDocumentClick }) => {
         fetchDocuments();
     }, []);
 
-    if (loading) {
-        return <p>문서를 불러오는 중...</p>;
-    }
+    // if (loading) {
+    //     return <p>문서를 불러오는 중...</p>;
+    // }
 
     if (error) {
         return <p>{error}</p>;
