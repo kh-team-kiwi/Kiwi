@@ -1,23 +1,14 @@
 package com.kh.kiwi.chat.dto;
 
-public class ChatMessage {
-    private MessageType type;
-    private String content;
-    private String sender;
+import java.time.LocalDateTime;
 
-    public enum MessageType {
-        CHAT, JOIN, LEAVE
-    }
+public class ChatMessage {
+    private String content;
+    private String sender; // Member ID
+    private Integer chatNum;
+    private LocalDateTime chatTime;
 
     // Getters and setters
-    public MessageType getType() {
-        return type;
-    }
-
-    public void setType(MessageType type) {
-        this.type = type;
-    }
-
     public String getContent() {
         return content;
     }
@@ -32,5 +23,21 @@ public class ChatMessage {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public Integer getChatNum() {
+        return chatNum;
+    }
+
+    public void setChatNum(Integer chatNum) {
+        this.chatNum = chatNum;
+    }
+
+    public LocalDateTime getChatTime() {
+        return chatTime;
+    }
+
+    public void setChatTime(LocalDateTime chatTime) {
+        this.chatTime = chatTime;
     }
 }
