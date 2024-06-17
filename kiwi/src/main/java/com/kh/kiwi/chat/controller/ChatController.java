@@ -1,25 +1,41 @@
 package com.kh.kiwi.chat.controller;
 
-import com.kh.kiwi.chat.dto.ChatMessage;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.kh.kiwi.chat.entity.Chat;
+import com.kh.kiwi.chat.service.ChatService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
+    private final ChatService chatService;
 
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(ChatMessage message) {
-        return message;
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
     }
 
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    public ChatMessage addUser(ChatMessage message) {
-        message.setType(ChatMessage.MessageType.JOIN);
-        return message;
+    @GetMapping
+    public List<Chat> getAllChats(@RequestParam(required = false) String team) {
+        if (team != null && !team.isEmpty()) {
+            return chatService.getChatsByTeam(team);
+        } else {
+            return chatService.getAllChats();
+        }
+    }
+
+    @PostMapping
+    public Chat createChat(@RequestBody Chat chat) {
+        return chatService.createChat(chat);
+    }
+
+    @GetMapping("/{chatNum}")
+    public Chat getChatById(@PathVariable Integer chatNum) {
+        return chatService.getChatById(chatNum);
+    }
+
+    @DeleteMapping("/{chatNum}")
+    public void deleteChatById(@PathVariable Integer chatNum) {
+        chatService.deleteChatById(chatNum);
     }
 }
