@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import ApprovalLineModal from './ApprovalLineModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import ApprovalLineModal from './ApprovalLineModal';
-import '../../styles/pages/Documents.css'
+import axios from 'axios';
 
 const NewDocument = ({ author }) => {
-    const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);  // Modal visibility state
+    const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
     const [approvalLine, setApprovalLine] = useState({ approvers: [], references: [] });
+    const [tooltipVisible, setTooltipVisible] = useState(false);
 
     const [newDocument, setNewDocument] = useState({
         docType: '',
@@ -16,6 +16,7 @@ const NewDocument = ({ author }) => {
         title: '',
         content: '',
         attachment: null,
+        name: author
     });
 
     const handleTooltipMouseEnter = () => {
@@ -35,8 +36,27 @@ const NewDocument = ({ author }) => {
         setNewDocument({ ...newDocument, attachment: e.target.files[0] });
     };
 
-    const handleSubmit = () => {
-    //TODO
+    const handleSubmit = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('docType', newDocument.docType);
+            formData.append('retentionPeriod', newDocument.retentionPeriod);
+            formData.append('accessLevel', newDocument.accessLevel);
+            formData.append('title', newDocument.title);
+            formData.append('content', newDocument.content);
+            formData.append('attachment', newDocument.attachment);
+            formData.append('name', newDocument.name);
+
+            await axios.post('/documents', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            alert("문서가 성공적으로 저장되었습니다.");
+        } catch (error) {
+            console.error("문서 저장 중 오류가 발생했습니다.", error);
+        }
     };
 
     const getExampleContent = (docType) => {
@@ -70,7 +90,6 @@ const NewDocument = ({ author }) => {
                 return '';
         }
     };
-
     const handleDocTypeChange = (e) => {
         const { value } = e.target;
         setNewDocument({ ...newDocument, docType: value, content: getExampleContent(value) });
@@ -107,7 +126,23 @@ const NewDocument = ({ author }) => {
                 </select>
             </div>
             <div className="formGroup">
-                <label>열람 권한 등급</label>
+                <label>열람 권한 등급
+                    <div
+                        className="tooltipIcon"
+                        onMouseEnter={handleTooltipMouseEnter}
+                        onMouseLeave={handleTooltipMouseLeave}
+                    >
+                        <FontAwesomeIcon icon={faQuestionCircle}/>
+                        {tooltipVisible && (
+                            <span className="tooltipText">
+                            S 등급 : 관련자들만 문서를 열람<br/>
+                            A 등급 : 관련자 및 2등급(부장, 이사, 사내이사, 본부장) 이상인 사람만 열람<br/>
+                            B 등급 : 관련자 및 3등급(팀장, PA) 이상인 사람만 열람<br/>
+                            C 등급 : 모든 임직원이 문서를 열람
+                        </span>
+                        )}
+                    </div>
+                </label>
                 <select name="accessLevel" onChange={handleInputChange}>
                     <option value="">등급을 선택해주세요.</option>
                     <option value="C">C</option>
@@ -115,30 +150,15 @@ const NewDocument = ({ author }) => {
                     <option value="A">A</option>
                     <option value="S">S</option>
                 </select>
-                <div
-                    className="tooltipIcon"
-                    onMouseEnter={handleTooltipMouseEnter}
-                    onMouseLeave={handleTooltipMouseLeave}
-                >
-                    <FontAwesomeIcon icon={faQuestionCircle}/>
-                    {tooltipVisible && (
-                        <span className="tooltipText">
-                            S 등급 : 관련자들만 문서를 열람<br/>
-                            A 등급 : 관련자 및 2등급(부장, 이사, 사내이사, 본부장) 이상인 사람만 열람<br/>
-                            B 등급 : 관련자 및 3등급(팀장, PA) 이상인 사람만 열람<br/>
-                            C 등급 : 모든 임직원이 문서를 열람
-                        </span>
-                    )}
-                </div>
             </div>
             <button type="button" onClick={() => setShowApprovalLineModal(true)}>결재선 설정</button>
             <div id="approvalDocumentLine">
                 <table className="cal_table1 approve-write js-approval-line">
                     <colgroup>
-                        <col style={{width: '12.09%'}}/>
-                        <col style={{width: '37.62%'}}/>
-                        <col style={{width: '12.09%'}}/>
-                        <col style={{width: '38.02%'}}/>
+                        <col style={{width: '10%'}}/>
+                        <col style={{width: '30%'}}/>
+                        <col style={{width: '10%'}}/>
+                        <col style={{width: '50%'}}/>
                     </colgroup>
                     <tbody>
                     <tr>
@@ -151,24 +171,20 @@ const NewDocument = ({ author }) => {
                                     <col/>
                                     <col/>
                                     <col/>
-                                    <col/>
                                 </colgroup>
                                 <tbody>
                                 <tr>
                                     <td className="team name"></td>
                                     <td className="team name"></td>
                                     <td className="team name"></td>
-                                    <td className="team name"></td>
                                 </tr>
                                 <tr>
-                                    <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
                                 </tr>
                                 <tr>
                                     <td className="name">{author}</td>
-                                    <td className="name"></td>
                                     <td className="name"></td>
                                     <td className="name"></td>
                                 </tr>
@@ -192,8 +208,10 @@ const NewDocument = ({ author }) => {
                                     <td className="team name"></td>
                                     <td className="team name"></td>
                                     <td className="team name"></td>
+                                    <td className="team name"></td>
                                 </tr>
                                 <tr>
+                                    <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
                                     <td className="stamp"></td>
@@ -201,6 +219,7 @@ const NewDocument = ({ author }) => {
                                 </tr>
                                 <tr>
                                     <td className="name">{approvalLine.approvers[0]?.name || ''}</td>
+                                    <td className="name"></td>
                                     <td className="name"></td>
                                     <td className="name"></td>
                                     <td className="name"></td>

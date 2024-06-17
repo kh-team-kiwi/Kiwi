@@ -1,7 +1,6 @@
 package com.kh.kiwi.documents.controller;
 
 import com.kh.kiwi.documents.dto.MemberDetailsDTO;
-import com.kh.kiwi.documents.entity.MemberDetails;
 import com.kh.kiwi.documents.service.MemberDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,10 +50,7 @@ public class MemberDetailsController {
 
     @GetMapping("/details")
     public ResponseEntity<List<MemberDetailsDTO>> getAllMembers() {
-        List<MemberDetailsDTO> memberDetailsList = memberDetailsService.getAllMembers()
-                .stream()
-                .map(MemberDetailsDTO::new) // assuming MemberDetailsDTO constructor accepts MemberDetails entity
-                .collect(Collectors.toList());
+        List<MemberDetailsDTO> memberDetailsList = memberDetailsService.getAllMembers();
         return ResponseEntity.ok(memberDetailsList);
     }
 }

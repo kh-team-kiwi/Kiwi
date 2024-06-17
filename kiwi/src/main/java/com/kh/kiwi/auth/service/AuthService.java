@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberRepository memberRepository;
 
     public ResponseDto<?> signup(SignupDto dto){
@@ -52,6 +53,35 @@ public class AuthService {
         }
 
         return ResponseDto.setSuccess("회원가입을 성공했습니다.\n로그인 페이지로 이동합니다.");
+    }
+
+    public ResponseDto<?> profile(String memberId){
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if(member != null) {
+           MemberDto memberDto = new MemberDto();
+           memberDto.setUsername(member.getUsername());
+           memberDto.setName(member.getMemberNickname());
+           memberDto.setRole(member.getMemberRole());
+           memberDto.setFilepath(member.getMemberFilepath());
+           return ResponseDto.setSuccessData("프로필 이미지 입니다.", memberDto);
+        }
+        return  ResponseDto.setFailed("해당하는 프로필 정보가 없습니다.");
+    }
+
+    public ResponseDto<?> edit(EditMemberDto memberDto){
+
+        if(memberDto != null) {
+
+        }
+        return  ResponseDto.setFailed("생성 불가능한 이메일입니다.");
+    }
+
+    public ResponseDto<?> duplicate(String memberId){
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if(member == null) {
+            return ResponseDto.setSuccess("생성가능한 이메일 입니다.");
+        }
+        return  ResponseDto.setFailed("생성 불가능한 이메일입니다.");
     }
 
 }

@@ -2,14 +2,22 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성
 const axiosHandler = axios.create({
-    baseURL: 'https://localhost:8080'
+    withCredentials: true
 });
 
 // 요청 인터셉터 추가
 axiosHandler.interceptors.request.use(
     config => {
-        // 요청을 보내기 전에 토큰 추가
-        config.headers.Authorization = `Bearer token`;
+        let accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            accessToken = accessToken.replace(/"/g, '');
+        }
+        const jwt = `Bearer ${accessToken}`;
+        console.log(jwt);
+        if (jwt) {
+            // 요청을 보내기 전에 Authorization 헤더에 토큰 추가
+            config.headers.Authorization = jwt;
+        }
         return config;
     },
     error => {

@@ -2,8 +2,12 @@ import React, { useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {Cookies} from "react-cookie";
+import {setLocalItem, setSessionItem} from "./storage";
+
 
 const OAuth2RedirectHandler = () => {
+
+    const navigate = useNavigate();
 
     // axios.interceptors.response.use(
     //     response => response,
@@ -26,19 +30,51 @@ const OAuth2RedirectHandler = () => {
     //     }
     // );
 
-// API 요청 예시
+//API 요청 예시
     useEffect(() => {
 
         axios.post('/api/auth/reissue', { withCredentials: true })
             .then(response => {
-                alert(response.headers['access']);
-                console.log(response.data);
+
+                const accessToken = response.headers['access'];
+                console.log("OAuth2RedirectHandler >> accessToken : "+ accessToken);
+
+                if (accessToken) {
+                    // Access Token을 로컬 스토리지에 저장
+                    setLocalItem('accessToken', accessToken);
+                    getLoginInfo(accessToken);
+                } else {
+                    console.error('Access Token not found in response headers');
+                }
             })
             .catch(error => {
                 console.error(error);
             });
 
     },[]);
+
+    async function getLoginInfo (jwt) {
+
+        if (jwt) {
+            // axios를 사용하여 API 요청 보내기
+            axios.post('/api/auth/loginfo', {}, {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            })
+                .then(response => {
+                    console.log(response.data);
+                    setSessionItem("profile", response.data.data);
+                    navigate("/main");
+                })
+                .catch(error => {
+                    console.error('Error fetching profile:', error);
+                });
+        } else {
+            console.error('No access token found in local storage');
+        }
+
+    }
 };
 
 export default OAuth2RedirectHandler;

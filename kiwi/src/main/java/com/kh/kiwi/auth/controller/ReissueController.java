@@ -51,6 +51,7 @@ public class ReissueController {
         //expired check
         try {
             jwtUtil.isExpired(refresh);
+            System.out.println("ReissueController >> check jwt expired");
         } catch (ExpiredJwtException e) {
 
             //response status code
@@ -61,10 +62,10 @@ public class ReissueController {
         String category = jwtUtil.getCategory(refresh);
 
         if (!category.equals("refresh")) {
-
             //response status code
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
+        System.out.println("ReissueController >> check jwt type");
 
         //DB에 저장되어 있는지 확인
         Boolean isExist = refreshRepository.existsByRefresh(refresh);
@@ -72,6 +73,7 @@ public class ReissueController {
             //response body
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
+        System.out.println("ReissueController >> check jwt isExistDB");
 
         String username = jwtUtil.getUsername(refresh);
         String role = jwtUtil.getRole(refresh);
@@ -88,6 +90,9 @@ public class ReissueController {
         response.setHeader("access", newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
 
+        System.out.println("ReissueController >> return jwt access:" + newAccess);
+        System.out.println("ReissueController >> return jwt refresh:" + newRefresh);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -96,7 +101,8 @@ public class ReissueController {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);
-        //cookie.setPath("/");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
         cookie.setHttpOnly(true);
 
         return cookie;

@@ -24,7 +24,7 @@ public class MemberDetailsService {
     public List<MemberDetailsDTO> getAllMembers() {
         List<MemberDetails> memberDetailsList = memberDetailsRepository.findAll();
         return memberDetailsList.stream()
-                .map(MemberDetailsDTO::new) // Assuming MemberDetailsDTO constructor accepts MemberDetails entity
+                .map(MemberDetailsDTO::new)
                 .collect(Collectors.toList());
     }
 
@@ -35,28 +35,7 @@ public class MemberDetailsService {
 
     public MemberDetailsDTO getMemberDetailsByEmployeeNo(String employeeNo) {
         Optional<MemberDetails> optionalMemberDetails = memberDetailsRepository.findById(employeeNo);
-        return optionalMemberDetails.map(memberDetails -> mapToMemberDetailsDTO(memberDetails)).orElse(null);
-    }
-
-    private MemberDetailsDTO mapToMemberDetailsDTO(MemberDetails memberDetails) {
-        MemberDetailsDTO dto = new MemberDetailsDTO();
-        dto.setEmployeeNo(memberDetails.getEmployeeNo());
-        dto.setName(memberDetails.getName());
-        dto.setGender(memberDetails.getGender());
-        dto.setBirthDate(String.valueOf(memberDetails.getBirthDate()));
-        dto.setEmpDate(String.valueOf(memberDetails.getEmpDate()));
-        dto.setQuitDate(String.valueOf(memberDetails.getQuitDate()));
-        dto.setPhone(memberDetails.getPhone());
-        dto.setAddress(memberDetails.getAddress());
-        dto.setDeptName(memberDetails.getDeptName());
-        dto.setTitle(memberDetails.getTitle());
-        dto.setPosition(memberDetails.getPosition());
-        dto.setDocSecurity(String.valueOf(memberDetails.getDocSecurity()));
-        dto.setDayOff(String.valueOf(memberDetails.getDayOff()));
-        dto.setUsedDayOff(String.valueOf(memberDetails.getUsedDayOff()));
-        dto.setCompanyNum(memberDetails.getCompanyNum());
-        dto.setMemberId(memberDetails.getMemberId());
-        return dto;
+        return optionalMemberDetails.map(MemberDetailsDTO::new).orElse(null);
     }
 
     public void updateMemberDetails(String employeeNo, MemberDetailsDTO memberDetailsDTO) {
@@ -74,7 +53,7 @@ public class MemberDetailsService {
         existingMemberDetails.setDeptName(memberDetailsDTO.getDeptName());
         existingMemberDetails.setTitle(memberDetailsDTO.getTitle());
         existingMemberDetails.setPosition(memberDetailsDTO.getPosition());
-        existingMemberDetails.setDocSecurity(memberDetailsDTO.getDocSecurity().charAt(0));
+        existingMemberDetails.setDocSecurity(Integer.parseInt(String.valueOf(memberDetailsDTO.getDocSecurity())));
         existingMemberDetails.setDayOff(Integer.valueOf(memberDetailsDTO.getDayOff()));
         existingMemberDetails.setUsedDayOff(Double.valueOf(memberDetailsDTO.getUsedDayOff()));
         existingMemberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum());
@@ -100,7 +79,7 @@ public class MemberDetailsService {
         memberDetails.setDeptName(memberDetailsDTO.getDeptName());
         memberDetails.setTitle(memberDetailsDTO.getTitle());
         memberDetails.setPosition(memberDetailsDTO.getPosition());
-        memberDetails.setDocSecurity(memberDetailsDTO.getDocSecurity().charAt(0));
+        memberDetails.setDocSecurity(Integer.parseInt(String.valueOf(memberDetailsDTO.getDocSecurity())));
         memberDetails.setDayOff(Integer.valueOf(memberDetailsDTO.getDayOff()));
         memberDetails.setUsedDayOff(Double.valueOf(memberDetailsDTO.getUsedDayOff()));
         memberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum());

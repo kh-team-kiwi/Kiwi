@@ -17,19 +17,16 @@ public class MemberDetailsDTO {
     private String deptName;
     private String title;
     private String position;
-    private String docSecurity;
-    private String dayOff;
-    private String usedDayOff;
+    private int docSecurity; // TINYINT에 맞게 int로 변경
+    private Integer dayOff;
+    private Double usedDayOff;
     private int companyNum;
     private String memberId;
 
     public MemberDetailsDTO() {
         // 기본 생성자
     }
-    public MemberDetailsDTO(MemberDetailsDTO memberDetailsDTO) {
-    }
 
-    // MemberDetails 엔티티를 받아들이는 생성자
     public MemberDetailsDTO(MemberDetails memberDetails) {
         this.employeeNo = memberDetails.getEmployeeNo();
         this.name = memberDetails.getName();
@@ -42,9 +39,9 @@ public class MemberDetailsDTO {
         this.deptName = memberDetails.getDeptName();
         this.title = memberDetails.getTitle();
         this.position = memberDetails.getPosition();
-        this.docSecurity = String.valueOf(memberDetails.getDocSecurity());
-        this.dayOff = String.valueOf(memberDetails.getDayOff());
-        this.usedDayOff = String.valueOf(memberDetails.getUsedDayOff());
+        this.docSecurity = memberDetails.getDocSecurity();
+        this.dayOff = memberDetails.getDayOff();
+        this.usedDayOff = memberDetails.getUsedDayOff();
         this.companyNum = memberDetails.getCompanyNum();
         this.memberId = memberDetails.getMemberId();
     }

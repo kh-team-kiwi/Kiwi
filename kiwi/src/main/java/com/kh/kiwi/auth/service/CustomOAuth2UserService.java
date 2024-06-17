@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -53,6 +54,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .memberNickname(oAuth2Response.getName())
                     .memberRole("MEMBER")
                     .memberType(type)
+                    .memberDate(LocalDateTime.now())
+                    .expireDate(LocalDateTime.now().plusYears(1))
                     .build();
             memberRepository.save(member);
 

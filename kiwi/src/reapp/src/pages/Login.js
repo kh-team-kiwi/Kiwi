@@ -12,6 +12,8 @@ import '../styles/pages/Login.css';
 import googleImage from '../images/google.png';
 import kakaoImage from '../images/kakao.png';
 import naverImage from '../images/naver.png';
+import axiosHandler from "../jwt/axiosHandler";
+import {setLocalItem, setSessionItem} from "../jwt/storage";
 
 const Login = ({ setIsLogin }) => {
     const { t, i18n } = useTranslation();
@@ -54,26 +56,40 @@ const Login = ({ setIsLogin }) => {
         console.log('id:', username);
         console.log('password:', password);
         try {
-            const response = await axios.post('api/auth/login', {
+            const response = await axiosHandler.post('api/auth/login', {
                 username: username,
-                password: password}, { withCredentials: true });
+                password: password});
 
             if (response.status === 200) {
-                const accessToken = response.headers['access'];
+                const accessToken = response.headers['authorization'];
                 if (accessToken) {
                     // 로컬 스토리지에 저장
-                    localStorage.setItem("accessToken", accessToken);
-                    navigate("/main");
+                    setLocalItem("accessToken",accessToken);
+                    getLoginInfo(accessToken);
                 }
             }
         } catch (error) {
             console.log(error);
         }
 
-
-
-
     };
+
+    function getLoginInfo (jwt) {
+        // axios를 사용하여 API 요청 보내기
+        axios.post('/api/auth/loginfo', {}, {
+            headers: {
+                'authorization': `Bearer ${jwt}`
+            }
+        })
+            .then(response => {
+                console.log(response.data);
+                setSessionItem("profile", response.data.data);
+                navigate("/main");
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+            });
+    }
 
     const handleJoinNowClick = () => {
         setIsAnimating(true);

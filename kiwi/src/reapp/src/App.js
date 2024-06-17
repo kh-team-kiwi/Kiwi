@@ -1,11 +1,10 @@
 import './styles/App.css';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Headermenu from './Headermenu';
 import FileManagement from "./components/drive/FileManagement";
 import Main from './pages/Main';
-import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Documents from "./pages/Documents";
 import Chat from './pages/Chat';
 
@@ -14,9 +13,10 @@ import Drive from './pages/Drive';
 import Home from './pages/Home';
 import Header from './components/common/Header';
 import OAuth2RedirectHandler from './jwt/OAuth2RedirectHandler';
+import ChatTest from "./components/chat/ChatTest";
 
 function App() {
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState({ result:false});
 
     const location = useLocation();
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
@@ -57,7 +57,6 @@ const Temphome = () => {
     console.log(token);
     console.log(expiry);
     console.log(user);
-
     return <h1>홈 페이지입니다.</h1>;
 }
 

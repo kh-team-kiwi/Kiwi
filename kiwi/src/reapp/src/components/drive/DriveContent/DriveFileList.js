@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import FileUpload from './FileUpload';
-import DriveFolder from './DriveFolder';
+import FileUploadWithDropzone from './FileUploadWithDropzone';
+import DriveFolderPopup from "./DriveFolderPopup";
 
-const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder }) => {
+const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack, breadcrumbs = [] }) => {
     const [items, setItems] = useState([]);
-    const [editCode, setEditCode] = useState(null);
-    const [newName, setNewName] = useState('');
+    const [editFileCode, setEditFileCode] = useState(null);
+    const [editFolderCode, setEditFolderCode] = useState(null);
+    const [newFileName, setNewFileName] = useState('');
+    const [newFolderName, setNewFolderName] = useState('');
 
     useEffect(() => {
-        fetchItems();
-    }, [driveCode, parentPath]);
+        fetchItems(parentPath);
+    }, [driveCode, parentPath, breadcrumbs]);
 
-    const fetchItems = async () => {
+    const fetchItems = async (path) => {
         try {
             const response = await axios.get(`http://localhost:8080/api/drive/${driveCode}/files`, {
-                params: { parentPath }
+                params: { parentPath: path }
             });
             setItems(response.data);
         } catch (error) {
@@ -29,34 +31,52 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder }) => {
                 ? `http://localhost:8080/api/drive/${driveCode}/folders/${itemCode}`
                 : `http://localhost:8080/api/drive/${driveCode}/files/${itemCode}`;
             await axios.delete(url, { params: { parentPath } });
-            fetchItems(); // 파일 목록 갱신
+            fetchItems(parentPath); // 파일 목록 갱신
         } catch (error) {
             console.error('Failed to delete item', error);
         }
     };
 
-    const handleUpdateName = async (itemCode, isFolder) => {
+    const handleUpdateFileName = async (itemCode) => {
         try {
-            const url = isFolder
-                ? `http://localhost:8080/api/drive/${driveCode}/folders/${itemCode}`
-                : `http://localhost:8080/api/drive/${driveCode}/files/${itemCode}`;
-            await axios.put(url, JSON.stringify({ newName }), {
+            await axios.put(`http://localhost:8080/api/drive/${driveCode}/files/${itemCode}`, JSON.stringify(newFileName), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 params: { parentPath }
             });
-            setEditCode(null);
-            setNewName('');
-            fetchItems(); // 파일 목록 갱신
+            setEditFileCode(null);
+            setNewFileName('');
+            fetchItems(parentPath); // 파일 목록 갱신
         } catch (error) {
             console.error('Failed to update item name', error);
         }
     };
 
-    const handleEdit = (itemCode, currentName) => {
-        setEditCode(itemCode);
-        setNewName(currentName);
+    const handleUpdateFolderName = async (itemCode) => {
+        try {
+            await axios.put(`http://localhost:8080/api/drive/${driveCode}/folders/${itemCode}`, JSON.stringify(newFolderName), {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                params: { parentPath }
+            });
+            setEditFolderCode(null);
+            setNewFolderName('');
+            fetchItems(parentPath); // 파일 목록 갱신
+        } catch (error) {
+            console.error('Failed to update folder name', error);
+        }
+    };
+
+    const handleEdit = (itemCode, currentName, isFolder) => {
+        if (isFolder) {
+            setEditFolderCode(itemCode);
+            setNewFolderName(currentName);
+        } else {
+            setEditFileCode(itemCode);
+            setNewFileName(currentName);
+        }
     };
 
     const handleDownload = async (itemCode, itemName) => {
@@ -80,21 +100,34 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder }) => {
 
     return (
         <div>
-            <h3>{driveName}</h3>
-            <DriveFolder driveCode={driveCode} fetchFiles={fetchItems} parentPath={parentPath} />
-            <FileUpload driveCode={driveCode} fetchFiles={fetchItems} parentPath={parentPath} />
+            <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath}/>
+            <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} />
+            <h1>{breadcrumbs.map(b => b.name).join(' > ')}</h1>
+            {breadcrumbs.length > 1 && (
+                <button onClick={onBack}>Back</button>
+            )}
             <ul>
                 {items.map((item) => (
                     <li key={item.fileCode}>
-                        {editCode === item.fileCode ? (
-                            <form onSubmit={(e) => { e.preventDefault(); handleUpdateName(item.fileCode, item.folder); }}>
+                        {editFileCode === item.fileCode ? (
+                            <form onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
                                 <input
                                     type="text"
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
+                                    value={newFileName}
+                                    onChange={(e) => setNewFileName(e.target.value)}
                                 />
                                 <button type="submit">Save</button>
-                                <button onClick={() => setEditCode(null)}>Cancel</button>
+                                <button onClick={() => setEditFileCode(null)}>Cancel</button>
+                            </form>
+                        ) : editFolderCode === item.fileCode ? (
+                            <form onSubmit={(e) => { e.preventDefault(); handleUpdateFolderName(item.fileCode); }}>
+                                <input
+                                    type="text"
+                                    value={newFolderName}
+                                    onChange={(e) => setNewFolderName(e.target.value)}
+                                />
+                                <button type="submit">Save</button>
+                                <button onClick={() => setEditFolderCode(null)}>Cancel</button>
                             </form>
                         ) : (
                             <>
@@ -105,15 +138,15 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder }) => {
                                 )}
                                 {item.folder ? (
                                     <>
-                                        <button onClick={() => onViewFolder(item.fileCode, item.fileName)}>View</button>
-                                        <button onClick={() => handleEdit(item.fileCode, item.fileName)}>Rename</button>
-                                        <button onClick={() => handleDelete(item.fileCode, item.isFolder)}>Delete</button>
+                                        <button onClick={() => onViewFolder(item.filePath, item.fileName)}>View</button>
+                                        <button onClick={() => handleEdit(item.fileCode, item.fileName, true)}>Rename</button>
+                                        <button onClick={() => handleDelete(item.fileCode, item.folder)}>Delete</button>
                                     </>
                                 ) : (
                                     <>
-                                        <button onClick={() => handleEdit(item.fileCode, item.fileName)}>Rename</button>
+                                        <button onClick={() => handleEdit(item.fileCode, item.fileName, false)}>Rename</button>
                                         <button onClick={() => handleDownload(item.fileCode, item.fileName)}>Download</button>
-                                        <button onClick={() => handleDelete(item.fileCode, item.isFolder)}>Delete</button>
+                                        <button onClick={() => handleDelete(item.fileCode, item.folder)}>Delete</button>
                                     </>
                                 )}
                             </>

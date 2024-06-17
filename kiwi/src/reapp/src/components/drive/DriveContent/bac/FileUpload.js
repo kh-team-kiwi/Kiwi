@@ -24,13 +24,13 @@ const FileUpload = ({ driveCode, fetchFiles, parentPath }) => {
         for (let i = 0; i < selectedFiles.length; i++) {
             formData.append('files', selectedFiles[i]);
         }
+        formData.append('parentPath', parentPath || driveCode);
 
         try {
             await axios.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-                params: { parentPath: parentPath ? `${parentPath}/` : `${driveCode}/` }
             });
             setSelectedFiles([]);
             fetchFiles(); // 파일 목록 갱신
@@ -42,7 +42,7 @@ const FileUpload = ({ driveCode, fetchFiles, parentPath }) => {
     return (
         <div>
             <form onSubmit={handleUpload}>
-                <input type="file" multiple onChange={handleFileChange} />
+                <input type="file" multiple onChange={handleFileChange}/>
                 <div>
                     <p>Files selected: {selectedFiles.length}</p>
                     <ul>
