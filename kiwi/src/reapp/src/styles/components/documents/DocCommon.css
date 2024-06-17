@@ -1,0 +1,103 @@
+#approvalDocumentLine {
+    margin: 20px;
+}
+
+.cal_table1 {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.cal_table1 th,
+.cal_table1 td {
+    border: 1px solid #ccc;
+    text-align: left;
+    padding: 8px;
+}
+
+.cal_table1 th {
+    background-color: #f5f5f5;
+}
+
+.cal_table1 .agree,
+.cal_table1 .confer {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.cal_table1 .choice {
+    height: 100px;
+    display: table-cell;
+    width: 122px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cal_table1 .spr-approval {
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.cal_table1 .confer.vt {
+    vertical-align: top;
+}
+
+.cal_table1 .team.name,
+.cal_table1 .name {
+    height: 25px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cal_table1 .stamp {
+    height: 75px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.refer input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.appContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.footer {
+    background: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+}
+
+.bodyContainer {
+    display: flex;
+    flex: 1;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.document-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.document-button:hover {
+    background-color: #0056b3;
+}

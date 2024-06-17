@@ -1,41 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import axiosHandler from "../../jwt/axiosHandler";
+import '../../styles/components/documents/DocumentList.css';
 
 const DocumentList = ({ onDocumentClick }) => {
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    async function fetchDocuments() {
-        try {
-            // TODO 인터셉터
-            // const response = await axiosHandler.get('/documents/all-documents');
-            const response = await axios.get('/documents/all-documents');
-            if (response.status === 200) {
-                console.log(response.data);
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            try {
+                const response = await axios.get('/documents/all-documents');
                 setDocuments(response.data);
-            } else {
+            } catch (error) {
+                setError('문서를 불러오는데 실패하였습니다.');
+            } finally {
                 setLoading(false);
             }
-        } catch (error) {
-            setError('서버에서 문서를 불러오는데 실패하였습니다.');
-        }
-    }
+        };
 
-    useEffect(() => {
-        // fetchDocuments 호출을 반환하도록 수정
         fetchDocuments();
     }, []);
 
-    // if (loading) {
-    //     return <p>문서를 불러오는 중...</p>;
-    // }
-
-    if (error) {
-        return <p>{error}</p>;
-    }
+    if (loading) return <p>문서를 불러오는 중...</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <div className="documentList">

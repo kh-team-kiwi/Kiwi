@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../../styles/components/documents/ApprovalLineModal.css';
 
 const ApprovalSection = ({ document, userRole }) => {
     const [comment, setComment] = useState('');
@@ -41,8 +42,8 @@ const ApprovalSection = ({ document, userRole }) => {
             </div>
             {userRole === '결재자' ? (
                 <div className="approvalButtons">
-                    <button onClick={() => handleApproval(true)}>승인</button>
-                    <button onClick={() => handleApproval(false)}>반려</button>
+                    <button className={"document-button"} onClick={() => handleApproval(true)}>승인</button>
+                    <button className={"document-button"} onClick={() => handleApproval(false)}>반려</button>
                 </div>
             ) : (
                 <div className="commentInput">
@@ -51,7 +52,7 @@ const ApprovalSection = ({ document, userRole }) => {
                         onChange={handleCommentChange}
                         placeholder="의견을 남겨주세요."
                     />
-                    <button onClick={handleCommentSubmit}>등록</button>
+                    <button className={"document-button"} onClick={handleCommentSubmit}>등록</button>
                 </div>
             )}
         </div>

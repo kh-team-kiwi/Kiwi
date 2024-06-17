@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MemberForm from './MemberForm';
-import '../../styles/pages/Documents.css';
+import '../../styles/components/documents/MemberManagement.css';
 
 const MemberManagement = () => {
     const [members, setMembers] = useState([]);
@@ -54,7 +54,7 @@ const MemberManagement = () => {
                 {members.map((member) => (
                     <div key={member.employeeNo} className="member-item">
                         <span>{member.name}</span>
-                        <button onClick={() => handleEdit(member)}>수정</button>
+                        <button className={"document-button"} onClick={() => handleEdit(member)}>수정</button>
                     </div>
                 ))}
             </div>

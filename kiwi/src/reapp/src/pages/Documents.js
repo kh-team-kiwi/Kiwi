@@ -7,18 +7,21 @@ import DocumentCompleted from '../components/documents/DocumentCompleted';
 import DocumentRejected from '../components/documents/DocumentRejected';
 import MemberManagement from '../components/documents/MemberManagement';
 import DocumentDetails from '../components/documents/DocumentDetails';
-import '../styles/pages/Documents.css';
+import '../styles/components/documents/DocCommon.css';
+import '../styles/components/documents/Documents.css';
 
 const Documents = () => {
     const [view, setView] = useState('documentList');
     const [selectedDocument, setSelectedDocument] = useState(null);
 
     const handleMenuClick = (view) => {
+        console.log(`Menu clicked: ${view}`);
         setView(view);
         setSelectedDocument(null);  // 메뉴 클릭 시 선택된 문서 초기화
     };
 
     const handleDocumentClick = (document) => {
+        console.log(`Document clicked: ${document.docNum}`);
         setSelectedDocument(document);
         setView('documentDetails');
     };
@@ -29,9 +32,9 @@ const Documents = () => {
             <div className="content-container">
                 {view === 'newDocument' && <NewDocument />}
                 {view === 'documentList' && <DocumentList onDocumentClick={handleDocumentClick} />}
-                {view === 'documentInProgress' && <DocumentInProgress />}
-                {view === 'documentApproval' && <DocumentCompleted />}
-                {view === 'documentReject' && <DocumentRejected />}
+                {view === 'documentInProgress' && <DocumentInProgress onDocumentClick={handleDocumentClick} />}
+                {view === 'documentCompleted' && <DocumentCompleted onDocumentClick={handleDocumentClick} />}
+                {view === 'documentRejected' && <DocumentRejected onDocumentClick={handleDocumentClick} />}
                 {view === 'memberManagement' && <MemberManagement />}
                 {view === 'documentDetails' && selectedDocument && (
                     <DocumentDetails

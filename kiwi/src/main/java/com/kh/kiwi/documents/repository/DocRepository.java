@@ -13,5 +13,8 @@ public interface DocRepository extends JpaRepository<Doc, Long> {
     // 문서 번호로 문서를 찾는 메서드
     Doc findByDocNum(Long docNum);
 
-}
+    // 문서 상태로 문서를 찾는 메서드 추가
+    List<Doc> findByDocStatus(Doc.DocStatus docStatus);
 
+    long countByDocStatus(Doc.DocStatus docStatus);
+}
