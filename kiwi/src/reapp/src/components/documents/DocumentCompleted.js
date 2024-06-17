@@ -28,7 +28,7 @@ const DocumentCompleted = ({ onDocumentClick }) => {
 
     return (
         <div className="documentList">
-            <h1>Completed Documents</h1>
+            <h1>완료된 문서 목록</h1>
             <table className="docTable">
                 <thead>
                 <tr>

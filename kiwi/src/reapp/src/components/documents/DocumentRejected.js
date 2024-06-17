@@ -28,7 +28,7 @@ const DocumentRejected = ({ onDocumentClick }) => {
 
     return (
         <div className="documentList">
-            <h1>Rejected Documents</h1>
+            <h1>거절된 문서 목록</h1>
             <table className="docTable">
                 <thead>
                 <tr>

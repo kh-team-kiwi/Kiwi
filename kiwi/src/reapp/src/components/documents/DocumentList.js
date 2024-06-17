@@ -28,7 +28,7 @@ const DocumentList = ({ onDocumentClick }) => {
 
     return (
         <div className="documentList">
-            <h1>Document List</h1>
+            <h1>전체 문서함</h1>
             <table className="docTable">
                 <thead>
                 <tr>

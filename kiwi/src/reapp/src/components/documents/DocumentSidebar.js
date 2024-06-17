@@ -9,6 +9,9 @@ const DocumentSidebar = ({ handleMenuClick }) => {
         완료: 0,
         반려: 0
     });
+    const [searchTerm, setSearchTerm] = useState('');
+    const [members, setMembers] = useState([]);
+    const [filteredMembers, setFilteredMembers] = useState([]);
 
     useEffect(() => {
         const fetchCounts = async () => {
@@ -20,8 +23,33 @@ const DocumentSidebar = ({ handleMenuClick }) => {
             }
         };
 
+        const fetchMembers = async () => {
+            try {
+                const response = await axios.get('/api/members/details');
+                setMembers(response.data);
+                setFilteredMembers(response.data);
+            } catch (error) {
+                console.error("회원 정보를 불러오는데 실패하였습니다.", error);
+            }
+        };
+
         fetchCounts();
+        fetchMembers();
     }, []);
+
+    const handleSearchChange = (e) => {
+        const term = e.target.value;
+        setSearchTerm(term);
+        if (term) {
+            const filtered = members.filter(member =>
+                member.name.includes(term) || member.deptName.includes(term)
+            );
+            setFilteredMembers(filtered);
+        } else {
+            setFilteredMembers(members);
+        }
+    };
+
     return (
         <div className="sidebar">
             <button type='button' className="newDoc document-btn" onClick={() => handleMenuClick('newDocument')}>작성하기</button>
@@ -31,7 +59,6 @@ const DocumentSidebar = ({ handleMenuClick }) => {
                 <li onClick={() => handleMenuClick('documentCompleted')}>완료 <span className="count">{counts.완료}</span></li>
                 <li onClick={() => handleMenuClick('documentRejected')}>거절 <span className="count">{counts.반려}</span></li>
                 <li onClick={() => handleMenuClick('memberManagement')}>인사정보 관리</li>
-
             </ul>
         </div>
     );
