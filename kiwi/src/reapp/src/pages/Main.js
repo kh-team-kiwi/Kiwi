@@ -76,6 +76,7 @@ function Main() {
         if (response.status === 200) {
             removeLocalItem("accessToken");
             removeSessionItem("profile");
+            localStorage.getItem("")
             navigate('/login');
         }
     }
