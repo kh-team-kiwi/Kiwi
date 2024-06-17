@@ -27,7 +27,9 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println("JWTFilter > doFilterInternal : "+request );
         // 헤더에서 access키에 담긴 토큰을 꺼냄
-        String accessToken = request.getHeader("access");
+        String accessToken = request.getHeader("Authorization");
+
+        System.out.println("JWTFilter > access : "+accessToken );
 
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {
@@ -35,6 +37,11 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
             return;
+        }
+
+        // Authorization 헤더에서 Bearer 토큰 추출
+        if (accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7);
         }
 
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음

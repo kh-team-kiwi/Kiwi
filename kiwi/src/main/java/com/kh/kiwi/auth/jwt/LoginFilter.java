@@ -76,7 +76,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         addRefreshEntity(username, refresh, 86400000L);
 
         //response
-        response.setHeader("access", access);
+        response.setHeader("Authorization", access);
         response.addCookie(createCookie("refresh", refresh));
 
         response.setStatus(HttpStatus.OK.value());
@@ -105,7 +105,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);
-        //cookie.setPath("/");
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
 
         return cookie;

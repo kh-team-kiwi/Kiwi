@@ -14,7 +14,7 @@ import Header from './components/common/Header';
 import OAuth2RedirectHandler from './jwt/OAuth2RedirectHandler';
 
 function App() {
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState({ result:false});
 
     const location = useLocation();
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];

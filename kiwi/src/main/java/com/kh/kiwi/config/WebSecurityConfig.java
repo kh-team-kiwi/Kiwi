@@ -59,7 +59,7 @@ public class WebSecurityConfig {
                         configuration.setMaxAge(3600L);
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
                         configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
+                        configuration.setExposedHeaders(Collections.singletonList("refresh"));
                         return configuration;
                     }
                 }));
@@ -100,8 +100,7 @@ public class WebSecurityConfig {
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/signup","/login","/api/auth/reissue").permitAll()
-                        .requestMatchers("/api/team/create").permitAll()
+                        .requestMatchers("/api/auth/signup","/api/auth/reissue").permitAll()
                         .requestMatchers("/api/drive/**","/api/drive/create").permitAll() // refresh
                         .requestMatchers(new AntPathRequestMatcher("/api/admin")).hasRole("JADMIN")
                         .anyRequest().authenticated());

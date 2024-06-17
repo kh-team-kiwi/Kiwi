@@ -62,6 +62,7 @@ public class AuthService {
            memberDto.setUsername(member.getUsername());
            memberDto.setName(member.getMemberNickname());
            memberDto.setRole(member.getMemberRole());
+           memberDto.setFilepath(member.getMemberFilepath());
            return ResponseDto.setSuccessData("프로필 이미지 입니다.", memberDto);
         }
         return  ResponseDto.setFailed("해당하는 프로필 정보가 없습니다.");

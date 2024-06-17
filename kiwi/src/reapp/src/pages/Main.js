@@ -1,10 +1,51 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/pages/Main.css';
-import {Link, useLocation} from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; 
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+import {getSessionItem, removeLocalItem, removeSessionItem} from "../jwt/storage";
+import axios from "axios";
+import axiosHandler from "../jwt/axiosHandler";
+
+
+// CreateTeam 모달 컴포넌트
+const CreateTeam = ({show, handleClose, handleSubmit, inputValue, setInputValue}) => {
+    return (
+        <div className={`create-team-modal ${show ? 'create-team-display-block' : 'create-team-display-none'}`}>
+            <div className='create-team-modal-inner'>
+            <div className="create-team-modal-main">
+                <h2>Create Team</h2>
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="Enter text"
+                />
+                <button onClick={handleSubmit}>Send</button>
+                <button onClick={handleClose}>Close</button>
+                <div><span className='main-create-team-duplicate'></span></div>
+            </div>
+            </div>
+        </div>
+    );
+}
 
 function Main() {
-    const user = JSON.parse(sessionStorage.getItem('userInfo'));
+
+    const navigate = useNavigate();
+
+    const [show, setShow] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
+    const handleSubmit = () => {
+        alert(`Submitted: ${inputValue}`);
+        setInputValue('');
+        handleClose();
+    };
+
+    const user = getSessionItem("profile");
 
     const teams = [
         {
@@ -15,32 +56,45 @@ function Main() {
         }
     ];
 
-    const [access,setAccess] = useState();
+    // useEffect(() => {
+    //     if (inputValue !== '') {
+    //         const fetchData = async () => {
+    //             try {
+    //                 const response = await axios.get(`/api/your-endpoint?query=${inputValue}`);
+    //                 console.log(response.data);
+    //             } catch (error) {
+    //                 console.error('Error fetching data:', error);
+    //             }
+    //         };
+    //         fetchData();
+    //     }
+    // }, [inputValue]);
 
-    useEffect(()=> {
-        const token = localStorage.getItem('access');
-        if(token){
-            const decoded = jwtDecode(token);
-            setAccess({
-                username: decoded.username,
-                role: decoded.role
-            });
+    async function logoutBtn(){
+
+        const response = await axiosHandler.post("/api/auth/logout");
+        if (response.status === 200) {
+            removeLocalItem("accessToken");
+            removeSessionItem("profile");
+            navigate('/login');
         }
-
-        console.log(access);
-    }, []);
+    }
 
     return (
         <div className="mainpage">
             <div className="inner">
 
             <div className="profile">
-                {/*<img src={user.profileImage} />*/}
-                {/*<div>*/}
-                {/*    <p>{user.memberNickname}</p>*/}
-                {/*    <p>{user.memberId}</p>*/}
-                {/*</div>*/}
-                <Link to="/regist">계정설정</Link>
+                <img src={user.filepath ? user.filepath : ''} />
+                <div>
+                    <p>{user.role}</p>
+                    <p>{user.name}</p>
+                </div>
+                <div className="mainpage-profile-box3">
+                    <Link to="/regist">계정설정</Link>
+                    <button onClick={logoutBtn}>logout</button>
+                </div>
+
             </div>
 
             {/* 팀 리스트 구역 */}
@@ -66,10 +120,17 @@ function Main() {
 
                 {/* 팀 생성하기 버튼 */}
                 <li>
-                    <button className="create-team">+ 팀 생성하기</button>
+                    <button className="create-team" onClick={handleShow}>+ 팀 생성하기</button>
                 </li>
             </ul>
             </div>
+            <CreateTeam
+                show={show}
+                handleClose={handleClose}
+                handleSubmit={handleSubmit}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+            />
         </div>
     );
 }
