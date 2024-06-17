@@ -1,52 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import '../styles/pages/Main.css';
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
 import {getSessionItem, removeLocalItem, removeSessionItem} from "../jwt/storage";
-import axios from "axios";
 import axiosHandler from "../jwt/axiosHandler";
-
-
-// CreateTeam 모달 컴포넌트
-const CreateTeam = ({show, handleClose, handleSubmit, inputValue, setInputValue}) => {
-    return (
-        <div className={`create-team-modal ${show ? 'create-team-display-block' : 'create-team-display-none'}`}>
-            <div className='create-team-modal-inner'>
-            <div className="create-team-modal-main">
-                <h2>Create Team</h2>
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Enter text"
-                />
-                <button onClick={handleSubmit}>Send</button>
-                <button onClick={handleClose}>Close</button>
-                <div><span className='main-create-team-duplicate'></span></div>
-            </div>
-            </div>
-        </div>
-    );
-}
+import CreateTeam from "../components/main/CreateTeam";
 
 function Main() {
 
+
     const navigate = useNavigate();
-
-    const [show, setShow] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
-
-    const handleSubmit = () => {
-        alert(`Submitted: ${inputValue}`);
-        setInputValue('');
-        handleClose();
-    };
-
-    const user = getSessionItem("profile");
-
     const teams = [
         {
             id: 1,
@@ -69,6 +30,8 @@ function Main() {
     //         fetchData();
     //     }
     // }, [inputValue]);
+
+    const user = getSessionItem("profile");
 
     async function logoutBtn(){
 
@@ -121,17 +84,11 @@ function Main() {
 
                 {/* 팀 생성하기 버튼 */}
                 <li>
-                    <button className="create-team" onClick={handleShow}>+ 팀 생성하기</button>
+                    {/*<button className="create-team" onClick={handleShow}>+ 팀 생성하기</button>*/}
                 </li>
             </ul>
             </div>
-            <CreateTeam
-                show={show}
-                handleClose={handleClose}
-                handleSubmit={handleSubmit}
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-            />
+            <CreateTeam  />
         </div>
     );
 }
