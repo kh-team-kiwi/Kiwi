@@ -12,4 +12,6 @@ public class MemberDto {
     private String name;
     // memberId
     private String username;
+
+    private String filepath;
 }
