@@ -8,8 +8,10 @@ import Main from './pages/Main';
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import Documents from "./pages/Documents";
 import Chat from './pages/Chat';
+
 import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
+import Home from './pages/Home';
 import Header from './components/common/Header';
 import OAuth2RedirectHandler from './jwt/OAuth2RedirectHandler';
 
@@ -30,7 +32,7 @@ function App() {
           {shouldHideHeader && <Header />}
           <Routes>
               {/*element={<Navigate to="/Home" replace />}*/}
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Temphome />} />
               <Route path="/register" element={<Register/>}></Route>
               <Route path="/login" element={<Login setIsLogin={setIsLogin} />}></Route>
               <Route path="/FileManagement" element={<FileManagement/>}></Route>
@@ -40,16 +42,18 @@ function App() {
               <Route path='/drive' element={<Drive />} />
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
               <Route path="/documents" element={<Documents/>}></Route>
-
+              <Route path="/home" element={<Home/>}></Route>
           </Routes>
       </>
   );
 }
 
-const Home = () => {
+const Temphome = () => {
     const token = sessionStorage.getItem('accessToken');
     const expiry = sessionStorage.getItem('refreshToken');
     const user = JSON.parse(sessionStorage.getItem('userInfo'));
+
+
     console.log(token);
     console.log(expiry);
     console.log(user);
