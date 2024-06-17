@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import moment from "moment";
 
 const DocumentDetails = ({ document, onClose }) => {
     const [docDetails, setDocDetails] = useState(null);
@@ -26,7 +27,7 @@ const DocumentDetails = ({ document, onClose }) => {
         }
     }, [document.docNum]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <p>로딩중...</p>;
     if (error) return <p>{error}</p>;
     if (!docDetails) return null;
 
@@ -34,11 +35,11 @@ const DocumentDetails = ({ document, onClose }) => {
         <div className="documentDetails">
             <button onClick={onClose}>닫기</button>
             <h2>{docDetails.docTitle}</h2>
-            <p>Status: {docDetails.docStatus}</p>
-            <p>Date: {docDetails.docDate}</p>
-            <p>Completion: {docDetails.docCompletion || 'Not completed'}</p>
-            <p>Author: {docDetails.name}</p>
-            <p>Contents: {docDetails.docContents}</p>
+            <p>상태: {docDetails.docStatus}</p>
+            <p>작성일: {moment(docDetails.docDate).format('YYYY-MM-DD HH:mm')}</p>
+            <p>완료일: {docDetails.docCompletion ? moment(docDetails.docCompletion).format('YYYY-MM-DD HH:mm') : ''}</p>
+            <p>작성자: {docDetails.name}</p>
+            <p>내용: {docDetails.docContents}</p>
         </div>
     );
 };
