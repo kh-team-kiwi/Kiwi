@@ -142,7 +142,7 @@ const Home = ({ setIshome }) => {
                     </svg>
                 </div>
                 <div className='welcome-text'>
-                    Welcome Back, Username
+                    {t('welcome-back')}, Username
 
                 </div>
 
@@ -157,7 +157,7 @@ const Home = ({ setIshome }) => {
                             <img className='team-image' src={team.image} />
                             <div className='team-info'>
                                 <div className='team-name'>{team.name}</div>
-                                <div className='team-members' >{team.members} Members</div>
+                                <div className='team-members' >{team.members} {t('members')}</div>
                             </div>
                             <div className='team-buttons'>
                                 <button className='team-settings' >
@@ -166,7 +166,7 @@ const Home = ({ setIshome }) => {
                                     </svg> 
 
                                 </button>
-                                <button className='team-launch' >Launch </button>
+                                <button className='team-launch' >{t('launch')} </button>
 
                             </div>
 
@@ -174,8 +174,6 @@ const Home = ({ setIshome }) => {
                     ))}
 
                 </ul>
-                {/* <button className="create-team">+ create team</button> */}
-
 
 
 
@@ -187,7 +185,7 @@ const Home = ({ setIshome }) => {
                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                     </svg>
                     <div>
-                        Create Team
+                        {t('create-team')}
                     </div>
                 </button>
             </div>

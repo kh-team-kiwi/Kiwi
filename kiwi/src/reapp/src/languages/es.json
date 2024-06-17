@@ -53,6 +53,10 @@
     "terms-and-conditions": "Términos y condiciones",
     "accept": "Aceptar",
     "decline": "Rechazar",
+    "launch": "Lanzar",
+    "welcome-back": "Bienvenido de nuevo",
+    "create-team": "Crear equipo",
+    "members": "Miembros",
     "terms": {
       "acceptance-of-terms": "Al usar Kiwi, usted reconoce que ha leído, entendido y aceptado cumplir con estos términos y condiciones.",
       "user-registration": "Debe tener al menos 13 años para crear una cuenta en Kiwi. Al registrarse, usted acepta proporcionar información precisa y completa. Usted es responsable de mantener la confidencialidad de las credenciales de su cuenta y de todas las actividades que ocurran bajo su cuenta.",

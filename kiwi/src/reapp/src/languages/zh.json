@@ -53,6 +53,10 @@
     "terms-and-conditions": "条款和条件",
     "accept": "接受",
     "decline": "拒绝",
+    "launch": "启动",
+    "welcome-back": "欢迎回来",
+    "create-team": "创建团队",
+    "members": "成员",
     "terms": {
       "acceptance-of-terms": "使用Kiwi即表示您已阅读、理解并同意遵守这些条款和条件。",
       "user-registration": "您必须年满13岁才能在Kiwi上创建帐户。注册时，您同意提供准确和完整的信息。您有责任保持帐户凭据的机密性，并对在您的帐户下发生的所有活动负责。",
