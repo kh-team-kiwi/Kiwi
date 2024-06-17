@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import axiosHandler from "../../jwt/axiosHandler";
 
 const DocumentList = ({ onDocumentClick }) => {
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchDocuments = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/documents/all-documents');
+    async function fetchDocuments() {
+        try {
+            const response = await axiosHandler.get('/documents/all-documents');
+            if (response.status === 200) {
+                console.log(response.data);
                 setDocuments(response.data);
-                setLoading(false);
-            } catch (error) {
-                setError('서버에서 문서를 불러오는데 실패하였습니다.');
+            } else {
                 setLoading(false);
             }
-        };
+        } catch (error) {
+            setError('서버에서 문서를 불러오는데 실패하였습니다.');
+        }
+    }
+
+    useEffect(() => {
+        // fetchDocuments 호출을 반환하도록 수정
         fetchDocuments();
     }, []);
 
