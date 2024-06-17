@@ -11,6 +11,7 @@ import Calendar from './pages/Calendar';
 import Drive from './pages/Drive';
 import Header from './components/common/Header';
 import OAuth2RedirectHandler from './jwt/OAuth2RedirectHandler';
+import ChatTest from "./components/chat/ChatTest";
 
 function App() {
     const [isLogin, setIsLogin] = useState({ result:false});
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/FileManagement" element={<FileManagement />} />
                 <Route path="/main" element={<Main />} />
                 <Route path='/chat' element={<Chat />} />
+                <Route path='/chattest' element={<ChatTest />} />
                 <Route path='/calendar' element={<Calendar />} />
                 <Route path='/drive' element={<Drive />} />
                 <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
