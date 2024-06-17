@@ -252,7 +252,7 @@ const NewDocument = ({ author }) => {
             </div>
             <div className="formGroup">
                 <label>내용</label>
-                <textarea name="content" value={newDocument.content} onChange={handleInputChange}></textarea>
+                <textarea name="content" className={"content"} value={newDocument.content} onChange={handleInputChange}></textarea>
             </div>
             <div className="formGroup">
                 <label>파일 첨부</label>
