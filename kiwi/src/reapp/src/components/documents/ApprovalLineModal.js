@@ -74,7 +74,7 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
                         type="text"
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        placeholder="이름, 아이디 또는 조직 검색"
+                        placeholder="이름 또는 부서 검색"
                     />
                 </div>
                 <div className="container">

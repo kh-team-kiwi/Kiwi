@@ -23,7 +23,7 @@
 }
 
 .searchBox input {
-    width: 100%;
+    width: 35%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -73,6 +73,7 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s;
+    border-radius: 5px;
 }
 
 .arrows button:hover {
@@ -80,12 +81,12 @@
 }
 
 .approversList, .referencesList {
-    margin-top: 20px;
     padding: 10px;
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+
 
 .approversList h3, .referencesList h3 {
     margin-top: 0;
