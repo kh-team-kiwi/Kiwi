@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import DocumentDetails from './DocumentDetails';
 
-const DocumentList = () => {
+const DocumentList = ({ onDocumentClick }) => {
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedDocument, setSelectedDocument] = useState(null);
 
     useEffect(() => {
         const fetchDocuments = async () => {
@@ -20,18 +18,8 @@ const DocumentList = () => {
                 setLoading(false);
             }
         };
-
         fetchDocuments();
     }, []);
-
-    const handleRowClick = async (docNum) => {
-        try {
-            const response = await axios.get(`http://localhost:8080/documents/details/${docNum}`);
-            setSelectedDocument(response.data);
-        } catch (error) {
-            setError('문서 세부 정보를 불러오는데 실패하였습니다.');
-        }
-    };
 
     if (loading) {
         return <p>문서를 불러오는 중...</p>;
@@ -57,7 +45,7 @@ const DocumentList = () => {
                 </thead>
                 <tbody>
                 {documents.map(doc => (
-                    <tr key={doc.docNum} onClick={() => handleRowClick(doc.docNum)}>
+                    <tr key={doc.docNum} onClick={() => onDocumentClick(doc)}>
                         <td>{doc.docNum}</td>
                         <td>{doc.docTitle}</td>
                         <td>{doc.docStatus}</td>
@@ -68,7 +56,6 @@ const DocumentList = () => {
                 ))}
                 </tbody>
             </table>
-            {selectedDocument && <DocumentDetails document={selectedDocument} onClose={() => setSelectedDocument(null)} />}
         </div>
     );
 };

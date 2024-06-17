@@ -1,4 +1,3 @@
-import DocumentDetail from './components/documents/DocumentDetails'; // DocumentDetail 컴포넌트를 import 합니다
 import './styles/App.css';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
@@ -39,8 +38,6 @@ function App() {
                 <Route path='/drive' element={<Drive />} />
                 <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
                 <Route path="/documents" element={<Documents />} />
-                {/* 문서 세부 정보를 위한 라우트 추가 */}
-                <Route path="/documents/details/:docId" component={DocumentDetail} />
             </Routes>
         </>
     );
@@ -53,7 +50,6 @@ const Home = () => {
     console.log(token);
     console.log(expiry);
     console.log(user);
-
     return <h1>홈 페이지입니다.</h1>;
 }
 

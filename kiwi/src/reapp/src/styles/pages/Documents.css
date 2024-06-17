@@ -250,9 +250,10 @@
     border-radius: 5px;
     padding: 5px;
     position: absolute;
+
     z-index: 1;
-    bottom: 125%;
-    left: 50%;
+    bottom: -120px;
+    left: 300px;
     transform: translateX(-50%);
     opacity: 0;
     transition: opacity 0.3s;
@@ -642,5 +643,3 @@ tr > td {
     max-width: 600px;
     margin: 20px auto;
 }
-
-
