@@ -1,0 +1,22 @@
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 150px;
+    left: 40px;
+    top: 20px;
+    position: absolute;
+    font-size: 18px;
+}
+
+.kiwi-icon {
+    width: 60px;
+    filter:drop-shadow(0.5px 0.5px 1px);
+    margin-top: 3px;
+}
+
+.kiwi-word {
+    width: 120px;
+
+}

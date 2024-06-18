@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import SchedulePopup from '../common/SchedulePopup';
+import SchedulePopup from '../calendar/SchedulePopup';
 import { useTranslation } from 'react-i18next';
 import '../../styles/components/calendar/CalendarApi.css';
 import 'react-calendar/dist/Calendar.css';

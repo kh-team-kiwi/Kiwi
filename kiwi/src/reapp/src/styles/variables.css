@@ -15,14 +15,19 @@
   --shadow: #0000001A;
   --day-clicked: #ddefff;
   --dark-blue: #2b98ff;
+  --light-gray4: #e7e5e5;
+
+  /* variables not intended for dark mode/다크모드 아닌 변수들 */
   --green: #69a84f;
-  --green-hover: #609648;
+  --green-hover: #609648;  
   --light-green: #e9f7e3;
   --light-green-hover: #cef5bd;
-  --lighter-than-black: #393939;
-  --light-gray4: #e7e5e5;
-  --blue: #0a6f88;
+  --white-hover1: rgb(241, 241, 241);
   --dark-brown: #393939;
+  --blue: #0a6f88;
+  --lighter-than-black: #393939;
+
+
 
 }
 
