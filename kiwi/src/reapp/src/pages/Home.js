@@ -6,17 +6,51 @@ import { Trans, useTranslation } from 'react-i18next';
 import backgroundImage from '../images/background.png'; 
 import kiwiImage from '../images/kiwi.png'; 
 import kiwiWord from '../images/kiwi-word.png'; 
+import CreateTeam from '../components/home/CreateTeam';
 
 
 import '../styles/pages/Home.css';
 
 
-const Home = ({ setIshome }) => {
+const Home = () => {
     const { t, i18n } = useTranslation();
     const [initialLoad, setInitialLoad] = useState(true);
     const [languageOptionsVisible, setLanguageOptionsVisible] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
     const [userDropdown, setUserDropdown] = useState(false);
+    const [welcomeStyle, setWelcomeStyle] = useState({ marginTop: '170px' });
+
+    const [teamListStyle, setTeamListStyle] = useState({ marginTop: '30px' });
+    const [createTeamStyle, setCreateTeamStyle] = useState({ marginTop: '-100%' });
+    const [createTeamVisible, setCreateTeamVisible] = useState(false);
+    const [hideCreateTeam, setHideCreateTeam] = useState(false);
+
+    const [teamName, setTeamName] = useState('');
+  
+    const toggleTeamView = () => {
+        setCreateTeamVisible(!createTeamVisible);
+
+
+      setTeamListStyle(prevStyle => ({
+        marginTop: prevStyle.marginTop === '30px' ? '-100%' : '30px'
+      }));
+      setCreateTeamStyle(prevStyle => ({
+        marginTop: prevStyle.marginTop === '-100%' ? '30px' : '-100%'
+      }));
+      setWelcomeStyle(prevStyle => ({
+        marginTop: prevStyle.marginTop === '170px' ? '-100%' : '170px'
+      }));
+
+      if (createTeamVisible) {
+        setTimeout(() => {
+          setHideCreateTeam(false);
+        }, 500);
+    } else {
+        setHideCreateTeam(!hideCreateTeam);
+
+    }
+
+    };
 
     const toggleUserDropdown = () => {
         setUserDropdown(!userDropdown);
@@ -86,7 +120,10 @@ const Home = ({ setIshome }) => {
 
         setLanguageOptionsVisible(false);
       };
-    
+
+      const handleCreateTeam = (formTeamData) => {
+        console.log('Team created:', formTeamData);
+      };
 
     return (
         <div className="home-background">
@@ -195,17 +232,15 @@ const Home = ({ setIshome }) => {
 
 
 
-            <div className='home-header-container'>
+            <div className='home-welcome-container'>
 
-                <div className='welcome-text'>
+                <div className='welcome-text' style={welcomeStyle}>
                     {t('welcome-back')}, Username
 
                 </div>
-
             </div>
+            <div className='team-list-container' style={teamListStyle}>
 
-
-            <div className='home-container'>
 
                 <ul className="team-list">
                     {teams.map(team => (
@@ -235,8 +270,8 @@ const Home = ({ setIshome }) => {
 
             </div>
 
-            <div className='create-new-team-container' >
-                <button className='create-new-team'>
+            <div className='create-new-team-button-container' >
+                <button className='create-new-team-button' onClick={toggleTeamView}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                     </svg>
@@ -245,6 +280,16 @@ const Home = ({ setIshome }) => {
                     </div>
                 </button>
             </div>
+            
+            {hideCreateTeam && 
+                <div className='create-team-toggle'>            
+         
+                    <CreateTeam onCreateTeam={handleCreateTeam} toggleTeamView={toggleTeamView}/>
+                </div>
+            }
+
+
+
 
         </div>
         

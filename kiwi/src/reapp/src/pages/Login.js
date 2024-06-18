@@ -116,9 +116,7 @@ const Login = ({ setIsLogin }) => {
         setLanguageOptionsVisible(false);
       };
     
-      const handleLanguageClick = () => {
-        setLanguageOptionsVisible(true); 
-    };
+
 
     const naverLogin = () => {
 
