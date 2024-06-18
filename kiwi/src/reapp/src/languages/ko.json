@@ -3,6 +3,8 @@
   "language": "언어",
   "profile": "프로필",
   "settings": "설정",
+  "notifications": "알림",
+  "help": "도움",
   "logout": "로그아웃",
   "search-messages": "메시지 검색",
   "mon": "월요일",

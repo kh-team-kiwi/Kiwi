@@ -94,7 +94,7 @@
 }
 
 .welcome-text {
-    margin-top: 100px;
+    margin-top: 170px;
 
     color: var(--dark-brown);
     font-size: 35px;
@@ -102,27 +102,129 @@
 }
 
 
-.home-user-details {
-    font-size: 20px;
+.home-user-container {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
-    display: flex;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
-    padding-left: 5px;
-    padding-right: 10px;
     margin-top: 34px;
     color: var(--dark-brown);
     height: 45px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    transition: 0.2s;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 101;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 150px;
 }
 
-.home-user-details:hover {
+.home-user-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+    padding-left: 5px;
+    padding-right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+
+}
+
+.home-user-dropdown> div {
+    padding: 5px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding-left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+
+
+}
+
+.user-dropdown-profile {
+    margin-top: 10px;
+}
+
+.user-dropdown-settings {
+    margin-bottom: 5px;
+}
+
+
+
+.home-user-dropdown {
+    
+    width: 100%;
+}
+
+.home-user-dropdown-bottom {
+    border-top: 1px solid lightgray;
+    font-size: 20px;
+    margin-left: 3px;
+    display: flex;
+    width: 100%;
+}
+
+.home-user-dropdown-bottom > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+    cursor: pointer;
+
+}
+
+.home-user-dropdown > div:hover {
+    background-color: var(--white-hover);
+}
+
+
+.home-help {
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.home-logout {
+    margin-left: auto;
+    margin-right: 15px;
+    padding: 5px;
+    border-radius: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+
+}
+
+.home-help:hover {
+    background-color: var(--white-hover);
+}
+
+.home-logout:hover {
+    background-color: var(--white-hover);
+}
+
+.home-user-container.active {
+    height: 185px;
+    background: white;
+    transition: 0.2s;
+
+}
+
+.home-user-container:hover {
     background-color: white;
     transition: 0.2s;
 
 }
+
+
 
 .home-title {
     font-size: 24px;
