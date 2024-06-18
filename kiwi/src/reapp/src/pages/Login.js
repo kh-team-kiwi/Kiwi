@@ -24,7 +24,6 @@ const Login = ({ setIsLogin }) => {
     const [languageOptionsVisible, setLanguageOptionsVisible] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
 
-
     const navigate = useNavigate();
 
     useEffect(() => {

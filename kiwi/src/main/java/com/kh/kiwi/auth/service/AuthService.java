@@ -77,7 +77,9 @@ public class AuthService {
     }
 
     public ResponseDto<?> duplicate(String memberId){
+        System.out.println(memberId);
         Member member = memberRepository.findById(memberId).orElse(null);
+        System.out.println(member);
         if(member == null) {
             return ResponseDto.setSuccess("생성가능한 이메일 입니다.");
         }
