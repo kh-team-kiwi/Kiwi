@@ -1,9 +1,6 @@
 package com.kh.kiwi.auth.controller;
 
-import com.kh.kiwi.auth.dto.EditMemberDto;
-import com.kh.kiwi.auth.dto.LoginDto;
-import com.kh.kiwi.auth.dto.ResponseDto;
-import com.kh.kiwi.auth.dto.SignupDto;
+import com.kh.kiwi.auth.dto.*;
 import com.kh.kiwi.auth.jwt.JWTUtil;
 import com.kh.kiwi.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,8 +44,8 @@ public class AuthController {
     }
     //이메일 중복검사
     @PostMapping("/api/auth/duplicate")
-    public ResponseDto<?> duplicate(@RequestBody String memberId) {
-        ResponseDto<?> result = authService.duplicate(memberId);
+    public ResponseDto<?> duplicate(@RequestBody SignupDto requestBody) {
+        ResponseDto<?> result = authService.duplicate(requestBody.getMemberId());
         return result;
     }
 }

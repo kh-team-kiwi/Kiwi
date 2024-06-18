@@ -4,7 +4,6 @@ import {Navigate, Outlet, Route, Routes, useLocation, useNavigate} from "react-r
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import FileManagement from "../components/drive/FileManagement";
-import Main from "../pages/Main";
 import Chat from "../pages/Chat";
 import Calendar from "../pages/Calendar";
 import Drive from "../pages/Drive";
@@ -34,19 +33,18 @@ const SecondRouts = () => {
     const location = useLocation();
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
-    
+
         return (
             <>
                 {shouldHideHeader && <Header />}
                 <Routes>
                     {/* 시작페이지이자 로그인페이지 */}
-                    <Route path="/" setIsLogin={setIsLogin} element={<Login />}></Route>
+                    <Route path="/" element={<Login setIsLogin={setIsLogin} />}></Route>
                     <Route path="/register" element={<Register/>}></Route>
 
                     {/* 로그인 해야 접속가능한 페이지들 */}
                     <Route element={<IsLogin isLogin={isLogin} />}>
                         <Route path="/FileManagement" element={<FileManagement/>}></Route>
-                        <Route path="/main" element={<Main/>}></Route>
                         <Route path='/chat' element={<Chat />} />
                         <Route path='/calendar' element={<Calendar />} />
                         <Route path='/drive' element={<Drive />} />
