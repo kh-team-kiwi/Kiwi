@@ -4,7 +4,7 @@ import '../../styles/components/chat/ChatMemberList.css';
 const Sidebar = () => {
   return (
     <div className="member-list">
-
+      memberlist
     </div>
   );
 };

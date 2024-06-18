@@ -52,7 +52,7 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
         <form className="member-form" onSubmit={handleSubmit}>
             <div className="form-group">
                 <label>회원아이디</label>
-                <input type="text" name="memberId" value={formData.memberId} onChange={handleChange} disabled/>
+                <input type="text" name="memberId" value={formData.memberId} onChange={handleChange}/>
             </div>
             <div className="form-group">
                 <label>이름</label>
@@ -64,7 +64,7 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
             </div>
             <div className="form-group">
                 <label>사번</label>
-                <input type="text" name="employeeNo" value={formData.employeeNo} onChange={handleChange} disabled/>
+                <input type="text" name="employeeNo" value={formData.employeeNo} onChange={handleChange}/>
             </div>
             <div className="form-group">
                 <label>부서</label>

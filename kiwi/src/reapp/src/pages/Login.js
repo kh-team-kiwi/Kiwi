@@ -24,7 +24,6 @@ const Login = ({ setIsLogin }) => {
     const [languageOptionsVisible, setLanguageOptionsVisible] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
 
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -65,6 +64,7 @@ const Login = ({ setIsLogin }) => {
                 if (accessToken) {
                     // 로컬 스토리지에 저장
                     setLocalItem("accessToken",accessToken);
+                    setIsLogin(true);
                     getLoginInfo(accessToken);
                 }
             }
@@ -84,7 +84,7 @@ const Login = ({ setIsLogin }) => {
             .then(response => {
                 console.log(response.data);
                 setSessionItem("profile", response.data.data);
-                navigate("/main");
+                navigate("/home");
             })
             .catch(error => {
                 console.error('Error fetching profile:', error);
