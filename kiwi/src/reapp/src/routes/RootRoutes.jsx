@@ -34,7 +34,7 @@ const SecondRouts = () => {
     const location = useLocation();
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
-
+    
         return (
             <>
                 {shouldHideHeader && <Header />}
