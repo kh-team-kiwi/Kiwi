@@ -75,7 +75,7 @@ const Register = () => {
                 if (res.data.result) {
                     console.log('회원가입 성공:', res.data);
                     alert(res.data.message);
-                    navigate('/login',{replace:true});
+                    navigate('/',{replace:true});
                 } else {
                     console.error('회원가입 실패:', res.data);
                     alert(res.data.message)
@@ -88,7 +88,7 @@ const Register = () => {
     const handleLoginClick = () => {
         setIsAnimating(true);
         setTimeout(() => {
-            navigate('/login');
+            navigate('/');
         }, 150); 
     };
 

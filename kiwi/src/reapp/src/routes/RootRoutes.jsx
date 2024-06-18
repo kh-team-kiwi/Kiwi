@@ -32,7 +32,7 @@ const SecondRouts = () => {
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
-    const [mounted, setMounted] = useState(false);
+    const [mounted, setMounted] = useState(true);
 
     if(mounted){
         return (
