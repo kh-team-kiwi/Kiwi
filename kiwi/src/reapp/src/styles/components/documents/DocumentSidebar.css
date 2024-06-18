@@ -1,0 +1,12 @@
+.sidebar .menu li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebar .menu li .count {
+    font-weight: bold;
+    color: #666;
+}

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MemberForm from './MemberForm';
-import '../../styles/pages/Documents.css';
+import '../../styles/components/documents/MemberManagement.css';
 
 const MemberManagement = () => {
     const [members, setMembers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
 
     useEffect(() => {
@@ -23,7 +24,7 @@ const MemberManagement = () => {
     const handleSave = async (member) => {
         try {
             if (selectedMember) {
-                await axios.put(`/api/members/details/${selectedMember.employeeNo}`, member);
+                await axios.put(`/api/members/details/${member.employeeNo}`, member);
             } else {
                 await axios.post('/api/members/details', member);
             }
@@ -48,17 +49,34 @@ const MemberManagement = () => {
         setSelectedMember(member);
     };
 
+    const filteredMembers = members.filter((member) =>
+        member.name.includes(searchTerm) || member.deptName.includes(searchTerm)
+    );
+
     return (
         <div className="member-management">
             <div className="member-list">
-                {members.map((member) => (
+            <div className="search-bar-container">
+                <input
+                    type="text"
+                    placeholder="검색 (이름/부서)"
+                    className="search-bar"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+                {filteredMembers.map((member) => (
                     <div key={member.employeeNo} className="member-item">
-                        <span>{member.name}</span>
-                        <button onClick={() => handleEdit(member)}>수정</button>
+                        <span>{member.name} {member.title} <small className="dept-name">({member.deptName})</small></span>
+                        <button className="document-button" onClick={() => handleEdit(member)}>수정</button>
                     </div>
                 ))}
             </div>
-            <MemberForm memberId={selectedMember ? selectedMember.employeeNo : null} />
+            <MemberForm
+                selectedMember={selectedMember}
+                onSave={handleSave}
+                onDelete={handleDelete}
+            />
         </div>
     );
 };

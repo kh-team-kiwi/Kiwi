@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import '../../styles/components/documents/ApprovalLineModal.css';
 
 const ApprovalLineModal = ({ onSave, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -73,7 +74,7 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
                         type="text"
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        placeholder="이름, 아이디 또는 조직 검색"
+                        placeholder="이름 또는 부서 검색"
                     />
                 </div>
                 <div className="container">
@@ -120,8 +121,8 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
                     </div>
                 </div>
                 <div className="modalActions">
-                    <button onClick={handleSave}>저장</button>
-                    <button onClick={onClose}>취소</button>
+                    <button className={"document-button"} onClick={handleSave}>저장</button>
+                    <button className={"document-button"} onClick={onClose}>취소</button>
                 </div>
 
                 {/* 모든 결재선 정보 표시 */}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from "moment";
+import '../../styles/components/documents/DocumentDetails.css';
 
 const DocumentDetails = ({ document, onClose }) => {
     const [docDetails, setDocDetails] = useState(null);

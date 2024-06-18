@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/components/documents/DocumentInfo.css';
 
 const DocumentInfo = ({ document }) => {
     const { docTitle = '', docStatus = '', docDate = '', docCompletion = '', name = '' } = document || {};

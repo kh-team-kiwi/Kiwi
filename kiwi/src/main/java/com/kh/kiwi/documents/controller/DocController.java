@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/documents")
@@ -73,6 +74,33 @@ public class DocController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 추가에 실패하였습니다.");
         }
+    }
+
+    // 문서 상태별로 문서를 가져오는 엔드포인트 추가
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Doc>> getDocumentsByStatus(@PathVariable String status) {
+        try {
+            Doc.DocStatus docStatus = Doc.DocStatus.valueOf(status.toUpperCase());
+            List<Doc> documents = docService.getDocumentsByStatus(docStatus);
+            return ResponseEntity.ok(documents);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    @GetMapping("/completed")
+    public List<Doc> getCompletedDocuments() {
+        return docService.getDocumentsByStatus(Doc.DocStatus.완료);
+    }
+
+    @GetMapping("/rejected")
+    public List<Doc> getRejectedDocuments() {
+        return docService.getDocumentsByStatus(Doc.DocStatus.반려);
+    }
+
+    @GetMapping("/count-by-status")
+    public ResponseEntity<Map<String, Long>> getCountByStatus() {
+        Map<String, Long> countMap = docService.getCountByStatus();
+        return ResponseEntity.ok(countMap);
     }
 
 }

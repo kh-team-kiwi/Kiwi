@@ -3,6 +3,7 @@ import ApprovalLineModal from './ApprovalLineModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import '../../styles/components/documents/NewDocument.css';
 
 const NewDocument = ({ author }) => {
     const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
@@ -151,7 +152,7 @@ const NewDocument = ({ author }) => {
                     <option value="S">S</option>
                 </select>
             </div>
-            <button type="button" onClick={() => setShowApprovalLineModal(true)}>결재선 설정</button>
+            <button type="button" className={"document-button"} onClick={() => setShowApprovalLineModal(true)}>결재선 설정</button>
             <div id="approvalDocumentLine">
                 <table className="cal_table1 approve-write js-approval-line">
                     <colgroup>
@@ -251,13 +252,13 @@ const NewDocument = ({ author }) => {
             </div>
             <div className="formGroup">
                 <label>내용</label>
-                <textarea name="content" value={newDocument.content} onChange={handleInputChange}></textarea>
+                <textarea name="content" className={"content"} value={newDocument.content} onChange={handleInputChange}></textarea>
             </div>
             <div className="formGroup">
                 <label>파일 첨부</label>
                 <input type="file" name="attachment" onChange={handleFileChange}/>
             </div>
-            <button type="button" onClick={handleSubmit}>제출하기</button>
+            <button type="button" className={"document-button"} onClick={handleSubmit}>제출하기</button>
 
             {showApprovalLineModal && (
                 <ApprovalLineModal

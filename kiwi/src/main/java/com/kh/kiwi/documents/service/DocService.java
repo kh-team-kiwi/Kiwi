@@ -13,9 +13,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-
-    // 기존 메서드들
+import java.util.Map;
 
 @Service
 public class DocService {
@@ -35,6 +35,26 @@ public class DocService {
     public List<Doc> selectAllList() {
         return docRepository.findAll();
     }
+
+    // 문서 상태별 문서를 가져오는 메서드
+    public List<Doc> getDocumentsByStatus(Doc.DocStatus status) {
+        return docRepository.findByDocStatus(status);
+    }
+
+    public Map<String, Long> getCountByStatus() {
+        long inProgressCount = docRepository.countByDocStatus(Doc.DocStatus.진행중);
+        long completedCount = docRepository.countByDocStatus(Doc.DocStatus.완료);
+        long rejectedCount = docRepository.countByDocStatus(Doc.DocStatus.반려);
+
+        Map<String, Long> countMap = new HashMap<>();
+        countMap.put("진행중", inProgressCount);
+        countMap.put("완료", completedCount);
+        countMap.put("반려", rejectedCount);
+        countMap.put("전체", inProgressCount + completedCount + rejectedCount);
+
+        return countMap;
+    }
+
 
     public Doc getDocById(Long id) {
         return docRepository.findById(id).orElse(null);
@@ -65,7 +85,6 @@ public class DocService {
     public Doc getDocByDocNum(Long docNum) {
         return docRepository.findByDocNum(docNum);
     }
-
 
     public void addComment(Long docNum, CommentDto commentDto) {
         Doc doc = docRepository.findByDocNum(docNum);
