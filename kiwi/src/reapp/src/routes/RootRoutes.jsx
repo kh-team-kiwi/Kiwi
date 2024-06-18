@@ -28,7 +28,7 @@ const RootRoutes = () => {
 };
 
 const SecondRouts = () => {
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
 
     const location = useLocation();
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];

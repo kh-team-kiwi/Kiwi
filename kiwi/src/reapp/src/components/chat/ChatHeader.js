@@ -8,7 +8,7 @@ const ChatHeader = () => {
     <div className='chat-header'>
       <div className='chat-header-left'>
         <div className='groupchat-name'>
-          Chat name 
+          Chat name header
         </div>
       </div>
 

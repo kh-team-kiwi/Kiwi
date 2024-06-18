@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import '../../styles/components/documents/ApprovalLineModal.css';
+import '../../styles/components/documents/ApprovalLineModal.css';
+import axiosHandler from "../../jwt/axiosHandler";
 
 const ApprovalLineModal = ({ onSave, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +13,7 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
 
     useEffect(() => {
         fetchMembers();
-        fetchAllApprovalLines();
+        // fetchAllApprovalLines();
     }, []);
 
     const fetchMembers = async () => {
@@ -31,14 +32,14 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
         }
     };
 
-    const fetchAllApprovalLines = async () => {
-        try {
-            const response = await axios.get('/documents/all-approval-lines');
-            setApprovalLines(response.data);
-        } catch (error) {
-            console.error("결재선 정보를 가져오는데 실패했습니다.", error);
-        }
-    };
+    // const fetchAllApprovalLines = async () => {
+    //     try {
+    //         const response = await axios.get('/documents/all-approval-lines');
+    //         setApprovalLines(response.data);
+    //     } catch (error) {
+    //         console.error("결재선 정보를 가져오는데 실패했습니다.", error);
+    //     }
+    // };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);

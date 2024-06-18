@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -53,6 +56,14 @@ public class TeamService {
         }
         return ResponseTeamDto.setSuccessData("팀 삭제를 성공했습니다.",dto);
     }
+    public Optional<Team> getTeamById(String teamId) {
+        return teamRepository.findById(teamId);
+    }
+
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
+
 
 
 }
