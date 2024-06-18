@@ -13,9 +13,6 @@ import '../styles/pages/Home.css';
 
 const Home = ({ setIshome }) => {
     const { t, i18n } = useTranslation();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isAnimating, setIsAnimating] = useState(false);
     const [initialLoad, setInitialLoad] = useState(true);
     const [languageOptionsVisible, setLanguageOptionsVisible] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
@@ -85,10 +82,6 @@ const Home = ({ setIshome }) => {
         setLanguageOptionsVisible(false);
       };
     
-      const handleLanguageClick = () => {
-        setLanguageOptionsVisible(true); 
-    };
-
 
     return (
         <div className="home-background">
