@@ -65,6 +65,7 @@ const Login = ({ setIsLogin }) => {
                 if (accessToken) {
                     // 로컬 스토리지에 저장
                     setLocalItem("accessToken",accessToken);
+                    setIsLogin(true);
                     getLoginInfo(accessToken);
                 }
             }

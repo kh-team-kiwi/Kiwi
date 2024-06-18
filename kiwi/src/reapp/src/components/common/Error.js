@@ -5,9 +5,17 @@ function Error() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    let errormessage = location.state.msg || "알 수 없는 에러가 발생했습니다.";
+    // 이전 경로를 가져옴, 기본값은 '알 수 없는 경로'
+    const from = location.state?.from || '알 수 없는 경로';
 
-    if(errormessage === "No message available") {
+    let errormessage = location.state?.msg || "알 수 없는 에러가 발생했습니다.";
+
+    console.log(from);
+
+    if(from !== "알 수 없는 경로"){
+        errormessage=from+" 해당 페이지는 존재하지 않습니다."
+    }
+    else if(errormessage === "No message available") {
         errormessage = "알 수 없는 에러가 발생했습니다.";
     }
 
