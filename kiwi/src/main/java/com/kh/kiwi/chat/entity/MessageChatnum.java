@@ -34,7 +34,7 @@ public class MessageChatnum {
     private Integer readCount;
 
     @Column(name = "CHAT_REF", nullable = false, columnDefinition = "BOOLEAN DEFAULT 0")
-    private Boolean chatRef;
+    private Boolean chatRef = false; // 기본값을 false로 설정
 
     @Column(name = "CHAT_REF_MESSAGE_NUM", length = 30)
     private String chatRefMessageNum;
