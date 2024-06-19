@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../styles/components/common/ChatSearchBar.css';
+import '../../styles/components/chat/ChatSearchBar.css';
 import { useTranslation } from 'react-i18next';
 
 

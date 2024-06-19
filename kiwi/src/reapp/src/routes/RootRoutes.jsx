@@ -7,6 +7,7 @@ import FileManagement from "../components/drive/FileManagement";
 import Chat from "../pages/Chat";
 import Calendar from "../pages/Calendar";
 import Drive from "../pages/Drive";
+import TeamSettings from "../pages/TeamSettings";
 import OAuth2RedirectHandler from "../jwt/OAuth2RedirectHandler";
 import Documents from "../pages/Documents";
 import Home from "../pages/Home";
@@ -31,7 +32,7 @@ const SecondRouts = () => {
     const [isLogin, setIsLogin] = useState(true);
 
     const location = useLocation();
-    const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
+    const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents','/teamsettings'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
         return (
@@ -51,6 +52,8 @@ const SecondRouts = () => {
                         <Route path='/drive' element={<Drive />} />
                         <Route path="/documents" element={<Documents/>}></Route>
                         <Route path="/home" element={<Home/>}></Route>
+                        <Route path="/teamsettings" element={<TeamSettings/>}></Route>
+
                     </Route>
 
                     {/* 존재하지 않는 경로에 대한 처리 */}

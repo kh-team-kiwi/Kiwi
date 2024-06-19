@@ -42,7 +42,7 @@ const Home = () => {
       if (createTeamVisible) {
         setTimeout(() => {
           setHideCreateTeam(false);
-        }, 500);
+        }, 350);
     } else {
         setHideCreateTeam(!hideCreateTeam);
 
