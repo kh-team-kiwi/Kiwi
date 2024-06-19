@@ -103,8 +103,14 @@ const Home = () => {
     }, []);
 
 
-      const handleCreateTeam = (formTeamData) => {
-        console.log('Team created:', formTeamData);
+      const handleCreateTeam = async (formTeamData) => {
+      const response = await axiosHandler.post("/api/team/create");
+      if (response.status === 200) {
+          removeLocalItem("accessToken");
+          removeSessionItem("profile");
+          localStorage.getItem("")
+          navigate('/');
+      }
       };
 
     const user = getSessionItem("profile");
