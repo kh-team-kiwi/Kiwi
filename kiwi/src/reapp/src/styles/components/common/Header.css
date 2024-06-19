@@ -1,12 +1,12 @@
 @import '../../variables.css';
 
-.header {
+.header-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 60px; 
-    background-color: var(--header-background-color); 
+    background-color: var(--header-background-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,7 +14,7 @@
     color: var(--text-color);
 }
 
-.header::after {
+.header-container::after {
     content: "";
     position: absolute;
     left: 0;
@@ -29,14 +29,14 @@
     margin-left: 10px;
 }
 
-.team-image-container {
+.header-team-image-container {
     width: 35px;
     height: 35px;
     border-radius: 10px;
     background-color: gray;
 }
 
-.team-dropdown-container {
+.header-team-dropdown-container {
     display: flex;
     width: 210px;
     height: 45px;
@@ -50,17 +50,17 @@
 
 }
 
-.dropdown-arrow {
+.header-team-dropdown-arrow {
     margin-left: auto; 
     margin-right: 10px;
 
 }
 
-.page-icon {
+.header-page-icon {
     margin-top: 10px;
 }
 
-.page-icon-container {
+.header-page-icon-container {
     position: relative;
     width: 45px;
     height: 45px;
@@ -69,15 +69,17 @@
     margin-right: 20px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: 0.2s;
 
 }
 
-.page-icon-container.active {
+.header-page-icon-container.active {
     background-color: var(--page-icon-active);
 }
 
 
-.page-icon-container.active::after {
+.header-page-icon-container.active::after {
     content: '';
     position: absolute;
     bottom: -7px; 
@@ -88,7 +90,7 @@
     background-color: var(--light-gray);
 }
 
-.user-profile-container {
+.header-user-profile-container {
     width: 40px;
     height: 40px;
     border-radius: 20px;
@@ -99,7 +101,7 @@
 
 
 
-.user-dropdown-container {
+.header-user-dropdown-container {
     display: flex;
     width: 200px;
     height: 45px;
@@ -109,7 +111,7 @@
     margin-right: 50px;
 }
 
-.dropdown-list {
+.header-dropdown-list {
     position: absolute;
     background-color: var(--white);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -120,7 +122,7 @@
     border-radius: 10px;
   }
   
-  .dropdown-list > * {
+.header-dropdown-list > * {
     color: var(--text-color);
     padding: 12px 16px;
     text-decoration: none;

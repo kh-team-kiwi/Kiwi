@@ -10,4 +10,5 @@ html, body, #root, .container {
 
 body {
     font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+    overflow: hidden;
 }

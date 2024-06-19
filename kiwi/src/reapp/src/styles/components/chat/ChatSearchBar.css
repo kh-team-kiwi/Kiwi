@@ -1,20 +1,20 @@
 @import '../../variables.css';
 
-.search-bar {
+.chat-search-container {
     display: flex;
     align-items: center;
     justify-content: center;
     padding-right: 10px;
     border: 1px solid var(--light-gray);
     border-radius: 15px;
-    height: 20px;
+    height: 30px;
     width: 200px;
     margin-right: 10px;
     background-color: var(--white2);
 
 }
 
-.search-input {
+.chat-search-input {
     width: 250px;
     height: 20px;
     outline: none;
@@ -25,12 +25,12 @@
 
 }
 
-.search-input::placeholder {
+.chat-search-input::placeholder {
     color: var(--gray);
 }
 
 
-.search-icon-button {
+.chat-search-icon-button {
     padding: 5px;
     border: none;
     background-color: transparent;
@@ -40,6 +40,6 @@
     margin-right: 100px;
 }
 
-.search-icon {
+.chat-search-icon {
     fill: var(--gray);
   }

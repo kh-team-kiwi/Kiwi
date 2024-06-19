@@ -1,11 +1,22 @@
 :root {
-  --header-background-color: #F2F7FC;
+  /* --header-background-color: #F2F7FC;
+  --page-icon: #B5DBFF;
+  --page-icon-active: #55ADFF; */
+
+
+  --header-background-color: #ecf5f0;
+  --page-icon: #aada96;
+  --page-icon-active: #7cb364;
+
+
   --container-background-color: #f7f9fc;
   --text-color: #000000;
   --gray: gray;
   --dark-gray: rgb(54, 54, 54);
-  --page-icon: #B5DBFF;
-  --page-icon-active: #55ADFF;
+  
+
+
+
   --white: white;
   --white2: white;
   --white-hover: rgb(241, 241, 241);
