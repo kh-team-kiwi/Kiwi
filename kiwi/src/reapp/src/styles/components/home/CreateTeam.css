@@ -15,7 +15,7 @@
 
 }
 
-.create-team-text-container {
+.create-team-title-container {
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -24,12 +24,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 100%;
-    margin-bottom: 30px;
+    margin-top: 435px;
+    margin-bottom: 15px;
 
 }
 
-.create-team-text {
+.create-team-title {
 
     color: var(--dark-brown);
     font-size: 35px;

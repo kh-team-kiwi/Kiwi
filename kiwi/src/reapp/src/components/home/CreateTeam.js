@@ -55,9 +55,9 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
   return (
     <>
-    <div className='create-team-text-container'>
-      <div className='create-team-text'>
-        Create a Team
+    <div className='create-team-title-container'>
+      <div className='create-team-title'>
+        Create Team
       </div> 
     </div>
         
