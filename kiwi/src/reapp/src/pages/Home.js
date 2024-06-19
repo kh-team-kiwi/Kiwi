@@ -37,7 +37,7 @@ const Home = () => {
         marginTop: prevStyle.marginTop === '30px' ? '-100%' : '30px'
       }));
       setCreateTeamStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '-100%' ? '30px' : '-100%'
+        marginTop: prevStyle.marginTop === '-100%' ? '-300px' : '-100%'
       }));
       setWelcomeStyle(prevStyle => ({
         marginTop: prevStyle.marginTop === '170px' ? '-100%' : '170px'
@@ -245,8 +245,8 @@ const Home = () => {
             </div>
             
             {hideCreateTeam && 
-                <div className='create-team-toggle'>            
-         
+                <div className='create-team-toggle'>
+                    
                     <CreateTeam onCreateTeam={handleCreateTeam} toggleTeamView={toggleTeamView}/>
                 </div>
             }

@@ -7,6 +7,25 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     invitedMembers: [],
   });
 
+  const members = [
+    {
+        email: 'test1@gmail.com',
+        name: 'test1',
+        image: ''
+    },
+    {
+      email: 'test2@gmail.com',
+      name: 'test2',
+      image: ''
+    }
+    ,
+    {
+      email: 'test3@gmail.com',
+      name: 'test3',
+      image: ''
+    }
+];
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'invitedMembers') {
@@ -35,7 +54,14 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
   };
 
   return (
-    <div className='create-team-container' >
+    <>
+    <div className='create-team-text-container'>
+      <div className='create-team-text'>
+        Create a Team
+      </div> 
+    </div>
+        
+    <div className='create-team-container' >  
       <form onSubmit={handleSubmit}>
         <div className='create-team-top'>
           <div className='create-team-name-container' >
@@ -59,8 +85,20 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
           </div>
 
             <div className='create-team-member-list-container'> 
-                Test1
-                Test2
+                <ul>
+                {members.map(member => (
+                        <li key={member.email} className="create-team-member">
+                            <img className='create-team-member-image' src={member.image} />
+
+                            <div className='create-team-member-info'>
+                              <div className='create-team-member-name'>{member.name}</div>
+
+                              <div className='create-team-member-email'>{member.email}</div>
+                            </div>
+                        </li>
+                    ))}
+
+                </ul>
 
             </div>
 
@@ -81,6 +119,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 
