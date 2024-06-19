@@ -20,13 +20,15 @@
   /* variables not intended for dark mode/다크모드 아닌 변수들 */
   --green: #69a84f;
   --green-hover: #609648;  
+  --mid-green: #90b87e;
+
   --light-green: #e9f7e3;
   --light-green-hover: #cef5bd;
   --white-hover1: rgb(241, 241, 241);
   --dark-brown: #393939;
   --blue: #0a6f88;
   --lighter-than-black: #393939;
-
+  --light-red: rgb(255, 248, 248);
 
 
 }

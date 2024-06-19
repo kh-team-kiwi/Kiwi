@@ -10,8 +10,9 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    padding: 15px;
-
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-top: 25px;
 
 }
 
@@ -48,39 +49,101 @@
 .create-team-name-container {
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    margin-bottom: 25px;
+    display: flex;
 
 }
 
-.create-team-search-members-container {
+.create-team-invite-members-container {
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    display: flex;
+    width: 400px;
 
 }
-
 
 
 .create-team-name-input {
-    width: 500px;
+    width: 450px;
+    height: 35px;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    margin-right: 10px;
+
 }
 
-.invite-members-input {
-    width: 500px;
+.create-team-name-title, .create-team-invite-members-title {
+    display: flex;
+    font-weight: 550;
+    margin-bottom: 5px;
+    color: var(--dark-brown);
+}
+
+.create-team-invite-members-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-team-invite-members-input {
+    width: 350px;
+    height: 35px;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    margin-right: 10px;
 
 
+}
+
+.create-team-invite-button {
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    padding-left: 15px;
+    padding-right: 15px;    
+    margin-left: 10px;
+}
+
+.create-team-create-button {
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    padding-left: 15px;
+    padding-right: 15px;    
+    margin-left: 10px;
 }
 
 .create-team-member-list-container {
     background-color: var(--light-green);
-    margin: 10px;
     display: flex;
     border-radius: 10px;
-    justify-content: column;
     padding: 10px;
+    margin-top: 10px;
 }
 
 .create-team-member {
     padding: 5px;
     display: flex;
+    width: 470px;
+    margin-bottom: 5px;
 }
 
 .create-team-member-info {
@@ -107,13 +170,76 @@
 }
 
 .create-team-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    margin-bottom: 25px;
 
+}
+
+.create-team-create-button:hover, .create-team-invite-button:hover {
+    background-color: var(--green-hover);
 }
 
 .create-team-cancel-button {
+    color: var(--dark-brown);
+    background-color: white;
+    border: 2px solid gray;
+    box-shadow: none;
+    transition: 0.2s;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    padding-left: 15px;
+    padding-right: 15px;    
+}
+
+.create-team-cancel-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 
 }
 
-.create-team-create-button {
+.create-team-member-cancel {
+    margin-left: auto;
+    color: var(--dark-brown);
+    border-radius: 5px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: 25px;
+    border-radius: 12px;
+    transition: 0.2s;
+    cursor: pointer;
+
+}
+
+.create-team-member-cancel:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+.create-team-member-name-wrapper {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+
+}
+
+.create-team-invite-pending {
+    font-size: 14px;
+    border-radius: 5px;
+    /* border: 1px solid black; */
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 5px;
+    padding-bottom: 3px;
+    background-color: var(--mid-green);
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 
 }
