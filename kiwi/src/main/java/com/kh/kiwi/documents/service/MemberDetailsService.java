@@ -6,7 +6,7 @@ import com.kh.kiwi.documents.repository.MemberDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,25 +42,31 @@ public class MemberDetailsService {
         MemberDetails existingMemberDetails = memberDetailsRepository.findById(employeeNo)
                 .orElseThrow(() -> new RuntimeException("Member details not found for employeeNo: " + employeeNo));
 
-        // Update the existing member details entity with values from DTO
+        // 회사 번호가 유효한지 확인하고 처리
+        if (memberDetailsDTO.getCompanyNum() <= 0) {
+            throw new RuntimeException("Invalid company number: " + memberDetailsDTO.getCompanyNum());
+        }
+
         existingMemberDetails.setName(memberDetailsDTO.getName());
         existingMemberDetails.setGender(memberDetailsDTO.getGender());
-        existingMemberDetails.setBirthDate(LocalDateTime.parse(memberDetailsDTO.getBirthDate()));
-        existingMemberDetails.setEmpDate(LocalDateTime.parse(memberDetailsDTO.getEmpDate()));
-        existingMemberDetails.setQuitDate(LocalDateTime.parse(memberDetailsDTO.getQuitDate()));
+        existingMemberDetails.setBirthDate(LocalDate.parse(memberDetailsDTO.getBirthDate()));
+        existingMemberDetails.setEmpDate(LocalDate.parse(memberDetailsDTO.getEmpDate()));
+        existingMemberDetails.setQuitDate(memberDetailsDTO.getQuitDate() != null && !memberDetailsDTO.getQuitDate().isEmpty() ?
+                LocalDate.parse(memberDetailsDTO.getQuitDate()) : null);
         existingMemberDetails.setPhone(memberDetailsDTO.getPhone());
         existingMemberDetails.setAddress(memberDetailsDTO.getAddress());
         existingMemberDetails.setDeptName(memberDetailsDTO.getDeptName());
         existingMemberDetails.setTitle(memberDetailsDTO.getTitle());
         existingMemberDetails.setPosition(memberDetailsDTO.getPosition());
-        existingMemberDetails.setDocSecurity(Integer.parseInt(String.valueOf(memberDetailsDTO.getDocSecurity())));
-        existingMemberDetails.setDayOff(Integer.valueOf(memberDetailsDTO.getDayOff()));
-        existingMemberDetails.setUsedDayOff(Double.valueOf(memberDetailsDTO.getUsedDayOff()));
-        existingMemberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum());
+        existingMemberDetails.setDocSecurity(memberDetailsDTO.getDocSecurity());
+        existingMemberDetails.setDayOff(memberDetailsDTO.getDayOff());
+        existingMemberDetails.setUsedDayOff(memberDetailsDTO.getUsedDayOff());
+        existingMemberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum()); // 이 값이 유효한지 확인
         existingMemberDetails.setMemberId(memberDetailsDTO.getMemberId());
 
         memberDetailsRepository.save(existingMemberDetails);
     }
+
 
     public void deleteMemberDetails(String employeeNo) {
         memberDetailsRepository.deleteById(employeeNo);
@@ -71,19 +77,26 @@ public class MemberDetailsService {
         memberDetails.setEmployeeNo(memberDetailsDTO.getEmployeeNo());
         memberDetails.setName(memberDetailsDTO.getName());
         memberDetails.setGender(memberDetailsDTO.getGender());
-        memberDetails.setBirthDate(LocalDateTime.parse(memberDetailsDTO.getBirthDate()));
-        memberDetails.setEmpDate(LocalDateTime.parse(memberDetailsDTO.getEmpDate()));
-        memberDetails.setQuitDate(LocalDateTime.parse(memberDetailsDTO.getQuitDate()));
+
+        // Use LocalDate.parse for date conversion
+        memberDetails.setBirthDate(LocalDate.parse(memberDetailsDTO.getBirthDate()));
+        memberDetails.setEmpDate(LocalDate.parse(memberDetailsDTO.getEmpDate()));
+
+        // Handle null case for quitDate
+        memberDetails.setQuitDate(memberDetailsDTO.getQuitDate() != null && !memberDetailsDTO.getQuitDate().isEmpty() ?
+                LocalDate.parse(memberDetailsDTO.getQuitDate()) : null);
+
         memberDetails.setPhone(memberDetailsDTO.getPhone());
         memberDetails.setAddress(memberDetailsDTO.getAddress());
         memberDetails.setDeptName(memberDetailsDTO.getDeptName());
         memberDetails.setTitle(memberDetailsDTO.getTitle());
         memberDetails.setPosition(memberDetailsDTO.getPosition());
-        memberDetails.setDocSecurity(Integer.parseInt(String.valueOf(memberDetailsDTO.getDocSecurity())));
-        memberDetails.setDayOff(Integer.valueOf(memberDetailsDTO.getDayOff()));
-        memberDetails.setUsedDayOff(Double.valueOf(memberDetailsDTO.getUsedDayOff()));
+        memberDetails.setDocSecurity(memberDetailsDTO.getDocSecurity());
+        memberDetails.setDayOff(memberDetailsDTO.getDayOff());
+        memberDetails.setUsedDayOff(memberDetailsDTO.getUsedDayOff());
         memberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum());
         memberDetails.setMemberId(memberDetailsDTO.getMemberId());
+
         return memberDetails;
     }
 }

@@ -1,15 +1,34 @@
 /* Member Management Container */
 .member-management {
+    height: 100%;
+    width: 100%;
+}
+.member-form {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 800px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 100%;
+    height: 75%;
+    width: 50%;
+    left: -160px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #f4f4f4;
+    right: 50px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: center;
+    align-items: baseline;
+}
+
+.member-form > .form-group {
+    width: 200px;
+    margin: 0 auto;
+    margin-top: 5px;
 }
 
 /* Search Bar Styling */
@@ -31,15 +50,19 @@
 
 /* Member List Styling */
 .member-list {
+    POSITION: absolute;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 300px;
     padding: 10px;
     background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+     border: 1px solid #ccc;
+    /* border-radius: 8px; */
     overflow-y: auto;
+    RIGHT: 0px;
+    TOP: -1PX;
+    HEIGHT: 98%;
 }
 
 .member-item {
@@ -78,17 +101,6 @@
 }
 
 /* Member Form Styling */
-.member-form {
-    flex-grow: 1;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
 .member-form .form-group {
     margin-bottom: 15px;
@@ -116,15 +128,19 @@
 }
 
 .member-form button {
-    width: 48%;
+    position: relative;
     padding: 10px;
+    display: flex;
+    right: 213px;
+    bottom: -100px;
+    width: 200px;
+    margin: 0 auto;
     background-color: #007bff;
     color: #fff;
-    border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
+    justify-content: center;
 }
 
 .member-form button:hover {
