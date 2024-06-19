@@ -3,7 +3,7 @@ import '../../styles/components/chat/ChatMemberList.css';
 
 const Sidebar = () => {
   return (
-    <div className="member-list">
+    <div className="chat-member-list-container">
       memberlist
     </div>
   );

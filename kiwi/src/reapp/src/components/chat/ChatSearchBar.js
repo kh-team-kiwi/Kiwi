@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import '../../styles/components/common/SearchBar.css';
+import '../../styles/components/common/ChatSearchBar.css';
 import { useTranslation } from 'react-i18next';
 
 
-const SearchBar = () => {
+const ChatSearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const { t } = useTranslation();
 
@@ -16,17 +16,17 @@ const SearchBar = () => {
     };
 
     return (
-        <div className="search-bar">
+        <div className="chat-search-container">
             <input
                 type="text"
                 value={searchTerm}
                 onChange={handleInputChange}
                 placeholder={t('search-messages')}
-                className="search-input"
+                className="chat-search-input"
             />
-            <div onClick={handleSearch} className="search-button">
+            <div onClick={handleSearch} className="chat-search-button">
             <svg
-                className="search-icon"
+                className="chat-search-icon"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -42,4 +42,4 @@ const SearchBar = () => {
     );
 };
 
-export default SearchBar;
+export default ChatSearchBar;

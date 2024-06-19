@@ -1,6 +1,6 @@
 @import '../../variables.css';
 
-.member-list {
+.chat-member-list-container {
     position: fixed;
     top: 60px; 
     right: 0;

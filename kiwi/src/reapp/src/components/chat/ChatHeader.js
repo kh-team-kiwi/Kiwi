@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchBar from '../common/SearchBar';
+import ChatSearchBar from './ChatSearchBar';
 
 import '../../styles/components/chat/ChatHeader.css';
 
@@ -32,7 +32,7 @@ const ChatHeader = () => {
 
         </div>
 
-        <SearchBar/>
+        <ChatSearchBar/>
 
       </div>
 
