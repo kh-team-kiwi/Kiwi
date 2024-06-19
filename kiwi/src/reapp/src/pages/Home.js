@@ -45,7 +45,6 @@ const Home = () => {
         }, 350);
     } else {
         setHideCreateTeam(!hideCreateTeam);
-
     }
 
     };
@@ -102,15 +101,20 @@ const Home = () => {
         };
     }, []);
 
+    useEffect(async () => {
+        const memberId = getSessionItem("profile").username;
+        const res= await axiosHandler.get("/api/team/"+memberId);
+        if(res.status===200){
+
+        }
+    }, []);
+
 
       const handleCreateTeam = async (formTeamData) => {
-      const response = await axiosHandler.post("/api/team/create");
-      if (response.status === 200) {
-          removeLocalItem("accessToken");
-          removeSessionItem("profile");
-          localStorage.getItem("")
-          navigate('/');
-      }
+        const response = await axiosHandler.post("/api/team/create", formTeamData);
+          if (response.status === 200) {
+
+          }
       };
 
     const user = getSessionItem("profile");
