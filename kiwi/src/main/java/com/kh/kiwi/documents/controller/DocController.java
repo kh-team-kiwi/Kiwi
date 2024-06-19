@@ -71,7 +71,9 @@ public class DocController {
         try {
             docService.addComment(docNum, commentDto);
             return ResponseEntity.ok().build();
+
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 추가에 실패하였습니다.");
         }
     }

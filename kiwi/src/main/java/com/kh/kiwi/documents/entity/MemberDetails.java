@@ -3,6 +3,7 @@ package com.kh.kiwi.documents.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,13 +22,13 @@ public class MemberDetails {
     private String gender;
 
     @Column(name = "BIRTH_DATE")
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "EMP_DATE", nullable = false)
-    private LocalDateTime empDate;
+    private LocalDate empDate;
 
     @Column(name = "QUIT_DATE")
-    private LocalDateTime quitDate;
+    private LocalDate quitDate;
 
     @Column(name = "PHONE", length = 15)
     private String phone;

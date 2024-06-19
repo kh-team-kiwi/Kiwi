@@ -235,6 +235,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
           </div>
 
 
+          {formData.invitedMembers.length > 0 && (
             <div className='create-team-member-list-container'> 
                 <ul>
                 {formData.invitedMembers.map(member => (
@@ -261,6 +262,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
                 </ul>
             </div>
+          )}
 
         </div>
 
