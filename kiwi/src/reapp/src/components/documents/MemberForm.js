@@ -112,20 +112,12 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
                 <input type="text" name="position" value={formData.position} onChange={handleChange}/>
             </div>
             <div className="form-group">
-                <label>보안등급</label>
-                <input type="text" name="docSecurity" value={formData.docSecurity} onChange={handleChange}/>
-            </div>
-            <div className="form-group">
                 <label>입사일</label>
                 <input type="date" name="empDate" value={formData.empDate} onChange={handleChange}/>
             </div>
             <div className="form-group">
                 <label>퇴사일</label>
                 <input type="date" name="quitDate" value={formData.quitDate} onChange={handleChange}/>
-            </div>
-            <div className="form-group">
-                <label>성별</label>
-                <input type="text" name="gender" value={formData.gender} onChange={handleChange}/>
             </div>
             <div className="form-group">
                 <label>생년월일</label>
@@ -136,7 +128,15 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
                 <input type="text" name="address" value={formData.address} onChange={handleChange}/>
             </div>
             <div className="form-group">
-                <label>회사번호</label>
+                <label>성별</label>
+                <input type="text" name="gender" value={formData.gender} onChange={handleChange}/>
+            </div>
+            <div className="form-group">
+                <label>보안등급</label>
+                <input type="text" name="docSecurity" value={formData.docSecurity} onChange={handleChange}/>
+            </div>
+            <div className="form-group">
+                <label>회사번호 (삭제예정)</label>
                 <input type="number" name="companyNum" value={formData.companyNum} onChange={handleChange} required/>
             </div>
             <div className="form-actions">
