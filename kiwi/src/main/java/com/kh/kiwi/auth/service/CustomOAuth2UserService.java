@@ -44,16 +44,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         //리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
-        String uid = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
-        String type = uid.split(" ",2)[0];
-       Member existData = memberRepository.findByMemberId(uid);
+//        String uid = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
+//        Member existData = memberRepository.findByMemberId(uid);
+
+        Member existData = memberRepository.findByMemberId(oAuth2Response.getEmail());
+
+//        if (existData!=null) {
+//            throw new OAuth2AuthenticationException("해당 이메일이 이미 존재합니다.");
+//        }
+
 
         if (existData==null) {
             Member member = Member.builder()
-                    .memberId(uid)
+                    .memberId(oAuth2Response.getEmail())
                     .memberNickname(oAuth2Response.getName())
                     .memberRole("MEMBER")
-                    .memberType(type)
+                    .memberType(oAuth2Response.getProvider())
                     .memberDate(LocalDateTime.now())
                     .expireDate(LocalDateTime.now().plusYears(1))
                     .build();
@@ -62,7 +68,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             MemberDto memberDto = new MemberDto();
             memberDto.setName(oAuth2Response.getName());
             memberDto.setRole("MEMBER");
-            memberDto.setUsername(uid);
+            memberDto.setUsername(oAuth2Response.getEmail());
 
             return new CustomOAuth2User(memberDto);
         }
@@ -74,7 +80,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             MemberDto memberDto = new MemberDto();
             memberDto.setName(oAuth2Response.getName());
             memberDto.setRole("MEMBER");
-            memberDto.setUsername(uid);
+            memberDto.setUsername(oAuth2Response.getEmail());
 
             return new CustomOAuth2User(memberDto);
         }

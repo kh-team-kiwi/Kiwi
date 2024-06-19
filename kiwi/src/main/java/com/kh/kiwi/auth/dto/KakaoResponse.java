@@ -33,4 +33,9 @@ public class KakaoResponse implements OAuth2Response{
 
         return attribute.get("profile_nickname").toString();
     }
+
+    @Override
+    public String getEmail() {
+        return attribute.get("email").toString();
+    }
 }
