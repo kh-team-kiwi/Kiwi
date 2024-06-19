@@ -20,10 +20,9 @@ const Home = () => {
     const { t, i18n } = useTranslation();
     const [initialLoad, setInitialLoad] = useState(true);
     const [userDropdown, setUserDropdown] = useState(false);
-    const [welcomeStyle, setWelcomeStyle] = useState({ marginTop: '170px' });
+    const [welcomeStyle, setWelcomeStyle] = useState({ marginTop: '180px' });
 
-    const [teamListStyle, setTeamListStyle] = useState({ marginTop: '30px' });
-    const [createTeamStyle, setCreateTeamStyle] = useState({ marginTop: '-100%' });
+    const [teamListStyle, setTeamListStyle] = useState({ marginTop: '15px' });
     const [createTeamVisible, setCreateTeamVisible] = useState(false);
     const [hideCreateTeam, setHideCreateTeam] = useState(false);
 
@@ -34,13 +33,10 @@ const Home = () => {
 
 
       setTeamListStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '30px' ? '-100%' : '30px'
-      }));
-      setCreateTeamStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '-100%' ? '30px' : '-100%'
+        marginTop: prevStyle.marginTop === '15px' ? '-100%' : '15px'
       }));
       setWelcomeStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '170px' ? '-100%' : '170px'
+        marginTop: prevStyle.marginTop === '180px' ? '-100%' : '180px'
       }));
 
       if (createTeamVisible) {
@@ -245,8 +241,8 @@ const Home = () => {
             </div>
             
             {hideCreateTeam && 
-                <div className='create-team-toggle'>            
-         
+                <div className='create-team-toggle'>
+                    
                     <CreateTeam onCreateTeam={handleCreateTeam} toggleTeamView={toggleTeamView}/>
                 </div>
             }

@@ -14,7 +14,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 30px;
     transition: all 0.5s cubic-bezier(0.68,-0.55,0.265,1.55);
 
 }
@@ -118,13 +117,13 @@
 }
 
 .home-user-dropdown> div {
-    padding: 5px;
+    padding: 8px;
     display: flex;
     justify-content: left;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     width: 100%;
-    padding-left: 10px;
+    padding-left: 20px;
     font-size: 20px;
     cursor: pointer;
     transition: 0.2s;
@@ -133,7 +132,7 @@
 }
 
 .user-dropdown-profile {
-    margin-top: 10px;
+    margin-top: 4px;
 }
 
 .user-dropdown-settings {
@@ -150,7 +149,6 @@
 .home-user-dropdown-bottom {
     border-top: 1px solid lightgray;
     font-size: 20px;
-    margin-left: 3px;
     display: flex;
     width: 100%;
 }
@@ -163,7 +161,6 @@
     margin-top: 5px;
     cursor: pointer;
     transition: 0.2s;
-
 
 }
 
@@ -199,7 +196,7 @@
 }
 
 .home-user-container.active {
-    height: 185px;
+    height: 196px;
     background: white;
     transition: 0.2s;
 

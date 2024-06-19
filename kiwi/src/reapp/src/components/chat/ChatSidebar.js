@@ -4,7 +4,7 @@ import TeamSelector from "./chatsidebar/TeamSelector";
 import CreateChat from "./chatsidebar/CreateChat";
 import ChatList from "./chatsidebar/ChatList";
 
-const ChatSidebar = () => {
+const ChatSidebar = ({ onChatSelect }) => {
     const [selectedTeam, setSelectedTeam] = useState('');
 
     const handleTeamSelect = (team) => {
@@ -17,7 +17,7 @@ const ChatSidebar = () => {
             {selectedTeam ? (
                 <>
                     <CreateChat selectedTeam={selectedTeam} />
-                    <ChatList selectedTeam={selectedTeam} />
+                    <ChatList selectedTeam={selectedTeam} onChatSelect={onChatSelect} />
                 </>
             ) : (
                 <p>Please select a team to view or create chat rooms.</p>

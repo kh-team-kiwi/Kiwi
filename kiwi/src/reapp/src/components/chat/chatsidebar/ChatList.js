@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const ChatList = ({ selectedTeam }) => {
+const ChatList = ({ selectedTeam, onChatSelect }) => {
     const [chats, setChats] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (selectedTeam) {
@@ -18,16 +16,12 @@ const ChatList = ({ selectedTeam }) => {
         }
     }, [selectedTeam]);
 
-    const handleChatClick = (chatNum) => {
-        navigate(`/chat/${chatNum}`);
-    };
-
     return (
         <div>
             <h2>Chat Rooms</h2>
             <ul>
                 {chats.map(chat => (
-                    <li key={chat.chatNum} onClick={() => handleChatClick(chat.chatNum)}>
+                    <li key={chat.chatNum} onClick={() => onChatSelect(chat.chatNum)}>
                         {chat.chatName}
                     </li>
                 ))}

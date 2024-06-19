@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
+import '../../../styles/components/chat/chatcontent/chatroom.css'; // CSS 파일을 가져옵니다.
 
-const ChatRoom = () => {
-    const { chatNum } = useParams();
+const ChatRoom = ({ chatNum }) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [sender, setSender] = useState('');
@@ -89,9 +88,8 @@ const ChatRoom = () => {
     };
 
     return (
-        <div>
-            <h2>Chat Room</h2>
-            <div>
+        <div className="chat-room-container">
+            <div className="chat-messages">
                 {messages.map((msg, index) => (
                     <div key={index}>
                         {msg.sender}: {msg.content} <small>{formatTime(msg.chatTime)}</small>
@@ -99,24 +97,26 @@ const ChatRoom = () => {
                     </div>
                 ))}
             </div>
-            <input
-                type="text"
-                value={sender}
-                onChange={(e) => setSender(e.target.value)}
-                placeholder="Enter your ID"
-            />
-            <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Enter your message"
-            />
-            <input
-                type="file"
-                onChange={handleFileChange}
-            />
-            {file && <div><img src={URL.createObjectURL(file)} alt="Preview" style={{maxWidth: '200px'}} /></div>}
-            <button onClick={sendMessage}>Send</button>
+            <div className="chat-input-container">
+                <input
+                    type="text"
+                    value={sender}
+                    onChange={(e) => setSender(e.target.value)}
+                    placeholder="Enter your ID"
+                />
+                <input
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Enter your message"
+                />
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                />
+                {file && <div><img src={URL.createObjectURL(file)} alt="Preview" style={{maxWidth: '200px'}} /></div>}
+                <button onClick={sendMessage}>Send</button>
+            </div>
         </div>
     );
 };
