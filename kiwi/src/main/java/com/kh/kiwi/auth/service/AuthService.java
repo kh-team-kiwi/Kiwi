@@ -58,11 +58,8 @@ public class AuthService {
     public ResponseDto<?> profile(String memberId){
         Member member = memberRepository.findById(memberId).orElse(null);
         if(member != null) {
-           MemberDto memberDto = new MemberDto();
-           memberDto.setUsername(member.getUsername());
-           memberDto.setName(member.getMemberNickname());
-           memberDto.setRole(member.getMemberRole());
-           memberDto.setFilepath(member.getMemberFilepath());
+            MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
+                    .role(member.getMemberRole()).build();
            return ResponseDto.setSuccessData("프로필 이미지 입니다.", memberDto);
         }
         return  ResponseDto.setFailed("해당하는 프로필 정보가 없습니다.");
@@ -84,6 +81,18 @@ public class AuthService {
             return ResponseDto.setSuccess("생성가능한 이메일 입니다.");
         }
         return  ResponseDto.setFailed("생성 불가능한 이메일입니다.");
+    }
+
+    public ResponseDto<?> member(String memberId){
+        System.out.println(memberId);
+        Member member = memberRepository.findById(memberId).orElse(null);
+        System.out.println(member);
+        if(member != null) {
+            MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
+                    .role(member.getMemberRole()).build();
+            return ResponseDto.setSuccessData("초대 가능한 이메일 입니다.",memberDto);
+        }
+        return  ResponseDto.setFailed("초대 불가능한 이메일입니다.");
     }
 
 }

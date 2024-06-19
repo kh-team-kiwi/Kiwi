@@ -60,6 +60,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .memberNickname(oAuth2Response.getName())
                     .memberRole("MEMBER")
                     .memberType(oAuth2Response.getProvider())
+                    .memberFilepath(oAuth2Response.getProfile())
                     .memberDate(LocalDateTime.now())
                     .expireDate(LocalDateTime.now().plusYears(1))
                     .build();
@@ -74,6 +75,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         else {
             existData.setMemberNickname(oAuth2Response.getName());
+            existData.setMemberFilepath(oAuth2Response.getProfile());
 
             memberRepository.save(existData);
 
@@ -81,6 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             memberDto.setName(oAuth2Response.getName());
             memberDto.setRole("MEMBER");
             memberDto.setUsername(oAuth2Response.getEmail());
+
 
             return new CustomOAuth2User(memberDto);
         }

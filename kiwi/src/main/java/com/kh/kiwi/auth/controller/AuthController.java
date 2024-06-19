@@ -48,4 +48,11 @@ public class AuthController {
         ResponseDto<?> result = authService.duplicate(requestBody.getMemberId());
         return result;
     }
+
+    //가입 여부 확인
+    @PostMapping("/api/auth/member")
+    public ResponseDto<?> member(@RequestBody SignupDto requestBody) {
+        ResponseDto<?> result = authService.member(requestBody.getMemberId());
+        return result;
+    }
 }
