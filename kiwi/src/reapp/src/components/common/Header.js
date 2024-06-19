@@ -8,11 +8,36 @@ import '../../styles/components/common/Header.css';
 const Header = () => {
   const [activePage, setActivePage] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [teamDropdown, setTeamDropdown] = useState(false);
+
   const dropdownRef = useRef(null);
   const [languageOptionsVisible, setLanguageOptionsVisible] = useState(false);
   const { t } = useTranslation();
   const { i18n } = useTranslation();
   const navigate = useNavigate(); 
+
+  
+  const teams = [
+    {
+        id: 1,
+        name: 'Team Name 2',
+        image: 'Team Image URL',
+        members: '12',
+    },
+    {
+        id: 2,
+        name: 'Team Name 3',
+        image: 'Team Image URL',
+        members: '16',
+    }
+    ,
+    {
+        id: 3,
+        name: 'Team Name 4',
+        image: 'Team Image URL',
+        members: '15',
+    }
+];
 
   const handleClick = (page) => {
     setActivePage(page);
@@ -39,6 +64,10 @@ const Header = () => {
     setDropdownVisible(false);
   };
 
+  const toggleTeamDropdown = () => {
+    setTeamDropdown(!teamDropdown);
+};
+
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleDarkModeToggle = () => {
@@ -47,14 +76,70 @@ const Header = () => {
   };
 
   return (
-    <header className='header-container'>
-      <div className='header-team-dropdown-container'>
-        <div className='header-team-image-container' style={{marginLeft: '5px'}}></div>
-        <div className='header-team-name'> Team name </div>
-        <svg className='header-team-dropdown-arrow' width="15" height="8" viewBox="0 0 17 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" clipRule="evenodd" d="M0.183617 0.183617C0.241674 0.125413 0.310644 0.0792341 0.386575 0.047726C0.462507 0.016218 0.543908 0 0.626117 0C0.708326 0 0.789728 0.016218 0.865659 0.047726C0.941591 0.0792341 1.01056 0.125413 1.06862 0.183617L8.12612 7.24237L15.1836 0.183617C15.2417 0.125507 15.3107 0.0794115 15.3866 0.0479627C15.4626 0.0165138 15.5439 0.000327229 15.6261 0.000327229C15.7083 0.000327229 15.7897 0.0165138 15.8656 0.0479627C15.9415 0.0794115 16.0105 0.125507 16.0686 0.183617C16.1267 0.241727 16.1728 0.310713 16.2043 0.386637C16.2357 0.462562 16.2519 0.543937 16.2519 0.626117C16.2519 0.708297 16.2357 0.789672 16.2043 0.865596C16.1728 0.941521 16.1267 1.01051 16.0686 1.06862L8.56862 8.56862C8.51056 8.62682 8.44159 8.673 8.36566 8.70451C8.28973 8.73602 8.20833 8.75223 8.12612 8.75223C8.04391 8.75223 7.96251 8.73602 7.88658 8.70451C7.81064 8.673 7.74167 8.62682 7.68362 8.56862L0.183617 1.06862C0.125413 1.01056 0.0792347 0.94159 0.0477266 0.865659C0.0162186 0.789728 0 0.708326 0 0.626117C0 0.543908 0.0162186 0.462506 0.0477266 0.386575C0.0792347 0.310643 0.125413 0.241674 0.183617 0.183617Z" fill="black"/>
-        </svg>
+    <header className='header-container'>      
+      <div className='temp'>
+      <div className={`header-team-container ${teamDropdown ? 'active' : ''}`}>
+        <div className='header-team-details' onClick={toggleTeamDropdown}>
+          <div className='header-team-profile-image'></div>
+          <div className='header-team-name'>
+          Team name 1
+
+          </div>
+          <div className={`header-team-arrow-container down-arrow ${teamDropdown ? 'flipped' : ''}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="home-icon" viewBox="0 0 16 16" style={{marginTop: '2px'}}>
+              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg>
+          </div>
+        </div>
+
+          <div className={`header-team-dropdown ${teamDropdown ? 'open' : 'closed'}`}>
+
+                {teams.map(team => (
+                  // <div>
+                  //       <img className='header-team-profile-image' src={team.image} />
+                  //         <div className='header-team-name'>{team.name}</div>
+                  // </div>    
+                  
+                  <div className='header-team-details'>
+                    <div className='header-team-profile-image'></div>
+                    <div className='header-team-name'>
+                      {team.name}
+          
+                    </div>
+                  </div>
+
+
+                ))}
+
+              
+
+              <div className='header-create-team-button-container'>
+                <div className='header-create-team-button'>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" viewBox="0 0 16 16" style={{ marginLeft: '4px' }}>
+                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+
+                    <div>
+                    &nbsp;&nbsp;
+                    Create Team
+                    </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
       </div>
+    </div>
+ 
+
+
+
+
       <div className={`header-page-icon-container ${activePage === 'chat' ? 'active' : ''}`} onClick={() => handleClick('chat')}>
         <svg className='header-page-icon' width="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M25 10.7827C25 16.7379 19.4031 21.5655 12.5 21.5655C11.2619 21.5682 10.0288 21.4097 8.83281 21.0941C7.92031 21.5501 5.825 22.425 2.3 22.9949C1.9875 23.0442 1.75 22.7238 1.87344 22.4373C2.42656 21.1496 2.92656 19.4336 3.07656 17.8685C1.1625 15.9738 0 13.4938 0 10.7827C0 4.82758 5.59687 0 12.5 0C19.4031 0 25 4.82758 25 10.7827ZM7.03125 6.16156C6.82405 6.16156 6.62534 6.24271 6.47882 6.38715C6.33231 6.53159 6.25 6.72749 6.25 6.93176C6.25 7.13602 6.33231 7.33193 6.47882 7.47637C6.62534 7.62081 6.82405 7.70195 7.03125 7.70195H17.9688C18.176 7.70195 18.3747 7.62081 18.5212 7.47637C18.6677 7.33193 18.75 7.13602 18.75 6.93176C18.75 6.72749 18.6677 6.53159 18.5212 6.38715C18.3747 6.24271 18.176 6.16156 17.9688 6.16156H7.03125ZM7.03125 10.0125C6.82405 10.0125 6.62534 10.0937 6.47882 10.2381C6.33231 10.3826 6.25 10.5785 6.25 10.7827C6.25 10.987 6.33231 11.1829 6.47882 11.3273C6.62534 11.4718 6.82405 11.5529 7.03125 11.5529H17.9688C18.176 11.5529 18.3747 11.4718 18.5212 11.3273C18.6677 11.1829 18.75 10.987 18.75 10.7827C18.75 10.5785 18.6677 10.3826 18.5212 10.2381C18.3747 10.0937 18.176 10.0125 17.9688 10.0125H7.03125ZM7.03125 13.8635C6.82405 13.8635 6.62534 13.9447 6.47882 14.0891C6.33231 14.2335 6.25 14.4294 6.25 14.6337C6.25 14.838 6.33231 15.0339 6.47882 15.1783C6.62534 15.3228 6.82405 15.4039 7.03125 15.4039H13.2812C13.4885 15.4039 13.6872 15.3228 13.8337 15.1783C13.9802 15.0339 14.0625 14.838 14.0625 14.6337C14.0625 14.4294 13.9802 14.2335 13.8337 14.0891C13.6872 13.9447 13.4885 13.8635 13.2812 13.8635H7.03125Z" fill="white"/>
@@ -83,14 +168,20 @@ const Header = () => {
 
       
 
-      <div className='header-user-dropdown-container' onClick={handleDropdownClick} ref={dropdownRef}>
+      <div className='header-user-container'>
         <div className='header-notification-button'>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="gray" viewBox="0 0 16 16">
             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
           </svg>
         </div>
-        <div className='header-user-profile-container' style={{ marginRight: '10px' }}></div>
-        <div>Username</div>
+
+        <div className='header-user-profile-button' onClick={handleDropdownClick} ref={dropdownRef}>
+          <div className='header-user-profile-container' style={{ marginRight: '10px' }}></div>
+          <div>Username</div>
+
+        </div>
+
+
       </div>
 
 

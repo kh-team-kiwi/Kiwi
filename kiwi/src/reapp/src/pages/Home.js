@@ -78,13 +78,13 @@ const Home = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setInitialLoad(true);
-        const timer = setTimeout(() => {
-            setInitialLoad(false);
-        }, 250);
-        return () => clearTimeout(timer);
-    }, []);
+    // useEffect(() => {
+    //     setInitialLoad(true);
+    //     const timer = setTimeout(() => {
+    //         setInitialLoad(false);
+    //     }, 250);
+    //     return () => clearTimeout(timer);
+    // }, []);
 
     useEffect(() => {
         document.body.style.backgroundImage = `url(${backgroundImage})`;
