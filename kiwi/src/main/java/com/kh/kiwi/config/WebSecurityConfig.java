@@ -34,6 +34,7 @@ public class WebSecurityConfig {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -84,8 +85,10 @@ public class WebSecurityConfig {
                                                 .userService(customOAuth2UserService)
                                 )
                                 .successHandler(customSuccessHandler)
-                                //.defaultSuccessUrl("http://localhost:3000/main")
                 );
+
+        http.exceptionHandling(exceptionHandling->exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint));
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)

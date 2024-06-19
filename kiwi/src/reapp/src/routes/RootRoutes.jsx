@@ -28,7 +28,7 @@ const RootRoutes = () => {
 };
 
 const SecondRouts = () => {
-    const [isLogin, setIsLogin] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
 
     const location = useLocation();
     const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents'];
@@ -41,6 +41,7 @@ const SecondRouts = () => {
                     {/* 시작페이지이자 로그인페이지 */}
                     <Route path="/" element={<Login setIsLogin={setIsLogin} />}></Route>
                     <Route path="/register" element={<Register/>}></Route>
+                    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler setIsLogin={setIsLogin} />} />
 
                     {/* 로그인 해야 접속가능한 페이지들 */}
                     <Route element={<IsLogin isLogin={isLogin} />}>
@@ -48,13 +49,12 @@ const SecondRouts = () => {
                         <Route path='/chat' element={<Chat />} />
                         <Route path='/calendar' element={<Calendar />} />
                         <Route path='/drive' element={<Drive />} />
-                        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
                         <Route path="/documents" element={<Documents/>}></Route>
                         <Route path="/home" element={<Home/>}></Route>
                     </Route>
 
                     {/* 존재하지 않는 경로에 대한 처리 */}
-                    <Route path="*" element={<Navigate to="/error" state={{ from: location.pathname }} />} />
+                    {/*<Route path="*" element={<Navigate to="/error" state={{ from: location.pathname }} />} />*/}
                 </Routes>
             </>
         );

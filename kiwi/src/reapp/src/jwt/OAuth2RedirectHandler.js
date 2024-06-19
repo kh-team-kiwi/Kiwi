@@ -5,7 +5,7 @@ import {Cookies} from "react-cookie";
 import {setLocalItem, setSessionItem} from "./storage";
 
 
-const OAuth2RedirectHandler = () => {
+const OAuth2RedirectHandler = ({setIsLogin}) => {
 
     const navigate = useNavigate();
 
@@ -65,7 +65,8 @@ const OAuth2RedirectHandler = () => {
                 .then(response => {
                     console.log(response.data);
                     setSessionItem("profile", response.data.data);
-                    navigate("/main");
+                    setIsLogin(true);
+                    navigate("/home");
                 })
                 .catch(error => {
                     console.error('Error fetching profile:', error);

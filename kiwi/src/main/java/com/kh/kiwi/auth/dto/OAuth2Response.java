@@ -9,4 +9,6 @@ public interface OAuth2Response {
     String getName();
     //사용자 프로필 (설정한 프로필)
     String getProfile();
+    //사용자 이메일 (설정한 프로필)
+    String getEmail();
 }

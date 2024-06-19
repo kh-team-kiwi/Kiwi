@@ -1,9 +1,8 @@
-/* ChatRoom.css */
+/* chatroom.css */
 .chat-room-container {
     display: flex;
     flex-direction: column;
     height: 100%;
-    justify-content: space-between;
 }
 
 .chat-messages {
@@ -14,9 +13,66 @@
 
 .chat-input-container {
     display: flex;
+    flex-direction: column;
     padding: 10px;
     background: #f1f1f1;
     border-top: 1px solid #ccc;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+}
+
+.files-preview {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.file-preview {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.file-preview span {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.file-preview-overlay:hover {
+    opacity: 1;
+}
+
+.remove-file {
+    cursor: pointer;
+    padding: 5px;
+    margin: 5px;
+    background-color: red;
+    border-radius: 50%;
 }
 
 .chat-input-container input[type="text"] {
@@ -24,11 +80,31 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
-.chat-input-container input[type="file"] {
-    margin-right: 10px;
+.chat-input-container .file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.chat-input-container .file-input-button {
+    border: 1px solid #ccc;
+    color: white;
+    background-color: #007bff;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-input-container .file-input {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
 }
 
 .chat-input-container button {

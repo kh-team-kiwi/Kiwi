@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import ChatSidebar from '../components/chat/ChatSidebar';
 import ChatMemberList from '../components/chat/ChatMemberList';
 import ChatHeader from '../components/chat/ChatHeader';
-import ChatTextBar from '../components/chat/ChatTextBar';
 import ChatRoom from '../components/chat/chatcontent/ChatRoom';
 import '../styles/pages/Page.css';
 import '../styles/pages/Chat.css';
-import "../components/chat/chatcontent/ChatRoom";
 
 const Chat = () => {
     const [selectedChatNum, setSelectedChatNum] = useState(null);
@@ -23,7 +21,9 @@ const Chat = () => {
                 {selectedChatNum ? (
                     <ChatRoom chatNum={selectedChatNum} />
                 ) : (
-                    <ChatTextBar />
+                    <div className='chat-placeholder'>
+                        <p>Select a chat room to start messaging.</p>
+                    </div>
                 )}
             </div>
             <ChatMemberList />
