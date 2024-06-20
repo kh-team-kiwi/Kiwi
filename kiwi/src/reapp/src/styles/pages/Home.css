@@ -219,7 +219,7 @@
     max-height: 546px;
 }
 
-.team-list > li {
+.team-list > div {
     display: flex;
     height: 100%;
     padding: 15px;
@@ -294,6 +294,11 @@
 
 }
 
+.team-item {
+    display: flex;
+    padding: 10px;
+}
+
 .team-image {
     background-color: gray;
     width: 60px;
@@ -343,5 +348,22 @@
 
 
 .home-no-team {
-    height: 91px;
+    height: 182px;
+}
+
+.home-no-team-title {
+    color: var(--dark-brown);
+    font-weight: 550;
+    font-size: 22px;
+}
+
+.home-no-team-desc {
+    color: var(--dark-brown);
+    margin-top: 10px;
+}
+
+
+.home-empty-icon {
+    width: 100px;
+    margin-top: 5px;
 }
