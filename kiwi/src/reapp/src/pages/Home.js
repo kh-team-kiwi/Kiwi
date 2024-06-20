@@ -9,6 +9,7 @@ import CreateTeam from '../components/home/CreateTeam';
 import ToggleLanguageButton from '../components/common/ToggleLanguageButton';
 import Logo from '../components/common/Logo';
 
+import EmptyIcon from '../images/empty.png';
 
 
 import '../styles/pages/Home.css';
@@ -30,7 +31,7 @@ const Home = () => {
   
     const toggleTeamView = () => {
         const teamCount = teams.length;
-        const dynamicMarginTop = teamCount >= 7 ? 875 : teamCount >= 2 ? 329 + (teamCount * 91) : 420;
+        const dynamicMarginTop = teamCount >= 7 ? 875 : teamCount >= 2 ? 329 + (teamCount * 91) : teamCount === 0 ? 511 : 420;
     
         setCreateTeamVisible(!createTeamVisible);
     
@@ -206,7 +207,12 @@ const Home = () => {
             <div className='team-list-container' style={teamListStyle}>
     {teams.length === 0 ? (
         <div className="home-no-team">
-            No teams to show
+            <img className='home-empty-icon' src={EmptyIcon} />
+
+            <div className="home-no-team-title">No teams to show</div>
+            <div className="home-no-team-desc">To get started, create a new team!</div>
+
+
         </div>
     ) : (
         <div className="team-list">
