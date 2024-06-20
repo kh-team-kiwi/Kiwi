@@ -26,7 +26,8 @@
 }
 
 .header-team-name {
-    margin-left: 10px;
+    margin-left: 8px;
+    font-size: 15px;
 }
 
 .header-selected-team-name {
@@ -222,11 +223,6 @@
 
 }
 
-
-.header-team-dropdown-list > div:hover {
-    background-color: var(--white-hover1);
-}
-
 .header-selected-team-details {
     display: flex;
     justify-content: left;
@@ -249,6 +245,10 @@
     cursor: pointer;
     transition: 0.2s;
     padding-left: 5px;
+}
+
+.header-team-details:hover {
+    background-color: var(--white-hover);
 }
 
 .header-team-profile-image {
@@ -284,10 +284,11 @@
     font-weight: 550;
     border-radius: 10px;
     padding-left: 40px;
+    cursor: pointer;
 }
 
 .header-create-team-button > div {
-    font-size: 16px;
+    font-size: 14px;
 
 }
 
@@ -310,7 +311,7 @@
 }
 
 .header-team-details.selected {
-    background-color: var(--white-hover);
+    background-color: var(--light-green);
   }
 
 .header-tick-icon {
