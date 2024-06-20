@@ -12,6 +12,7 @@ import OAuth2RedirectHandler from "../jwt/OAuth2RedirectHandler";
 import Documents from "../pages/Documents";
 import Home from "../pages/Home";
 import Error from "../components/common/Error";
+import {AuthContext, AuthProvider} from "../jwt/AuthContext";
 
 const RootRoutes = () => {
 
@@ -20,11 +21,13 @@ const RootRoutes = () => {
     * */
 
     return (
-        <Routes>
-            {/* 임시 에러페이지 */}
-            <Route path="/error" element={<Error />} />
-            <Route path="*" element={<SecondRouts />}></Route>
-        </Routes>
+        <AuthProvider>
+            <Routes>
+                {/* 임시 에러페이지 */}
+                <Route path="/error" element={<Error />} />
+                <Route path="*" element={<SecondRouts />}></Route>
+            </Routes>
+        </AuthProvider>
     );
 };
 
@@ -47,7 +50,7 @@ const SecondRouts = () => {
                     {/* 로그인 해야 접속가능한 페이지들 */}
                     <Route element={<IsLogin isLogin={isLogin} />}>
                         <Route path="/FileManagement" element={<FileManagement/>}></Route>
-                        <Route path='/chat' element={<Chat />} />
+                        <Route path='/chat/:team' element={<Chat />} />
                         <Route path='/calendar' element={<Calendar />} />
                         <Route path='/drive' element={<Drive />} />
                         <Route path="/documents" element={<Documents/>}></Route>

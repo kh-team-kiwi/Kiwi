@@ -1,5 +1,6 @@
 package com.kh.kiwi.chat.controller;
 
+import com.kh.kiwi.chat.dto.CreateChatRequest;
 import com.kh.kiwi.chat.entity.Chat;
 import com.kh.kiwi.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class ChatController {
         }
     }
 
-    @PostMapping
-    public Chat createChat(@RequestBody Chat chat) {
-        return chatService.createChat(chat);
+    @PostMapping("/createWithUsers")
+    public Chat createChatWithUsers(@RequestBody CreateChatRequest request) {
+        return chatService.createChatWithUsers(request);
     }
 
     @GetMapping("/{chatNum}")
@@ -43,6 +44,7 @@ public class ChatController {
     public void deleteChatById(@PathVariable Integer chatNum) {
         chatService.deleteChatById(chatNum);
     }
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("team") String team, @RequestParam("chatName") String chatName) throws IOException {
         String fileUrl = chatService.uploadFile(file, team, chatName);

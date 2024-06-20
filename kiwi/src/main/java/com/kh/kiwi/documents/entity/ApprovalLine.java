@@ -15,5 +15,4 @@ public class ApprovalLine {
     private String approver; // 결재자 이름 또는 ID
     private String reference; // 참조자 이름 또는 ID
 
-    // getters and setters...
 }

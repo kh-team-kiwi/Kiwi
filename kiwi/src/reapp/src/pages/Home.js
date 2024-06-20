@@ -15,6 +15,7 @@ import EmptyIcon from '../images/empty.png';
 import '../styles/pages/Home.css';
 import {getSessionItem, removeLocalItem, removeSessionItem} from "../jwt/storage";
 import axiosHandler from "../jwt/axiosHandler";
+import ErrorImageHandler from "../components/common/ErrorImageHandler";
 
 
 const Home = () => {
@@ -126,11 +127,6 @@ const Home = () => {
         }
     }
 
-    const teamClickBtn = () => {
-
-
-    }
-
     return (
         <div className="home-background">
             <Logo/>
@@ -139,10 +135,10 @@ const Home = () => {
 
                 <div className={`home-user-container ${userDropdown ? 'active' : ''}`}>
                     <div className='home-user-details'  onClick={toggleUserDropdown}>
-                        <div className='home-user-profile-image'>
+                        <img className='home-user-profile-image' src={getSessionItem("profile").filepath} onError={ErrorImageHandler}>
 
-                        </div>
-                        &nbsp;&nbsp;example-email@gmail.com&nbsp;&nbsp;
+                        </img>
+                        &nbsp;&nbsp;{getSessionItem("profile").username}&nbsp;&nbsp;
                         <div className={`down-arrow ${userDropdown ? 'flipped' : ''}`}>
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="home-icon" viewBox="0 0 16 16" style={{marginTop: '2px'}}>
@@ -205,7 +201,7 @@ const Home = () => {
             <div className='home-welcome-container'>
 
                 <div className='welcome-text' style={welcomeStyle}>
-                    {t('welcome-back')}, Username
+                    {t('welcome-back')}, {getSessionItem("profile").name}
 
                 </div>
             </div>
@@ -220,10 +216,10 @@ const Home = () => {
 
         </div>
     ) : (
-        <div className="team-list">
+        <div className="team-list" >
             {teams.map(team => (
-                <div key={team.id} className="team-item">
-                    <img className='team-image' src={team.teamFilepath} />
+                <div key={team.team} className="team-item" onClick={()=>navigate(`/chat/${team.team}`)}>
+                    <img className='team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
                     <div className='team-info'>
                         <div className='team-name'>{team.teamName}</div>
                         <div className='team-members'>{team.teamAdminMemberId} {t('members')}</div>
@@ -235,7 +231,7 @@ const Home = () => {
                                 <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
                             </svg>
                         </button>
-                        <button className='team-launch'>{t('launch')}</button>
+                        <button className='team-launch' onClick={()=>navigate(`/chat/${team.team}`)} >{t('launch')}</button>
                     </div>
                 </div>
             ))}

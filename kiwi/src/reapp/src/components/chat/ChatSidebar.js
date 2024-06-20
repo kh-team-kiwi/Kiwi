@@ -13,11 +13,11 @@ const ChatSidebar = ({ onChatSelect }) => {
 
     return (
         <div className="sidebar">
-            <TeamSelector onTeamSelect={handleTeamSelect} />
+            <TeamSelector onTeamSelect={handleTeamSelect}/>
             {selectedTeam ? (
                 <>
-                    <CreateChat selectedTeam={selectedTeam} />
-                    <ChatList selectedTeam={selectedTeam} onChatSelect={onChatSelect} />
+                    <CreateChat selectedTeam={selectedTeam}/>
+                    <ChatList selectedTeam={selectedTeam} onChatSelect={onChatSelect}/>
                 </>
             ) : (
                 <p>Please select a team to view or create chat rooms.</p>
