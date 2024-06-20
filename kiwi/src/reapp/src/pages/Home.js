@@ -33,10 +33,10 @@ const Home = () => {
 
 
       setTeamListStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '15px' ? '-100%' : '15px'
+        marginTop: prevStyle.marginTop === '15px' ? '-53%' : '15px'
       }));
       setWelcomeStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '180px' ? '-100%' : '180px'
+        marginTop: prevStyle.marginTop === '180px' ? '-53%' : '180px'
       }));
 
       if (createTeamVisible) {
