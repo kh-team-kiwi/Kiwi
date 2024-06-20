@@ -1,4 +1,8 @@
 import axios from 'axios';
+import {removeLocalItem, removeSessionItem, setLocalItem} from "./storage";
+import {useNavigate} from "react-router-dom";
+
+const navigate = useNavigate();
 
 // Axios 인스턴스 생성
 const axiosHandler = axios.create({
@@ -13,7 +17,7 @@ axiosHandler.interceptors.request.use(
             accessToken = accessToken.replace(/"/g, '');
         }
         const jwt = `Bearer ${accessToken}`;
-        console.log(jwt);
+        console.log("axiosHandler.interceptors.request : "+jwt);
         if (jwt) {
             // 요청을 보내기 전에 Authorization 헤더에 토큰 추가
             config.headers.Authorization = jwt;
@@ -33,8 +37,40 @@ axiosHandler.interceptors.response.use(
         return response;
     },
     error => {
-        // 응답 오류가 있는 경우
-        console.error('Error:', error.response ? error.response.data : 'Unknown error');
+
+        const originalRequest = error.config;
+
+        if (error.response && error.response.status === 401) {
+
+            axios.post('/api/auth/reissue', { withCredentials: true })
+                .then(response => {
+
+                    const accessToken = response.headers['access'];
+                    console.log("axiosHandler.interceptors.response : "+ accessToken);
+
+                    if (accessToken) {
+                        // Access Token을 로컬 스토리지에 저장
+                        setLocalItem('accessToken', accessToken);
+                    } else {
+                        console.error('Access Token not found in response headers')
+                        alert("서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.");
+                        removeLocalItem("accessToken");
+                        removeSessionItem("profile");
+                        navigate('/');
+                    }
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 400) {
+                        console.error('Refresh Token is invalid')
+                        alert("토큰이 만료 되었습니다. 다시 로그인해 주세요.");
+                        removeLocalItem("accessToken");
+                        removeSessionItem("profile");
+                        navigate('/');
+                    }
+                });
+        }
+
+
         return Promise.reject(error);
     }
 );
