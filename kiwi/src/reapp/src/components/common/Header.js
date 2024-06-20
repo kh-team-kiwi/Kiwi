@@ -201,8 +201,7 @@ const Header = () => {
         </div>
       )}
 
-      {dropdownVisible && (
-        <div className='header-dropdown-list'>
+        <div className={`header-dropdown-list ${dropdownVisible ? 'open' : 'close'}`}>
           <div>
             {t('darkmode')}
             <ToggleButton
@@ -217,7 +216,7 @@ const Header = () => {
           <div onClick={() => handleClick('settings')}>{t('settings')}</div>
           <div onClick={() => handleClick('logout')}>{t('logout')}</div>
         </div>
-      )}
+      
     </header>
   );
 };

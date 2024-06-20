@@ -32,12 +32,12 @@ const SecondRouts = () => {
     const [isLogin, setIsLogin] = useState(true);
 
     const location = useLocation();
-    const hideHeaderPaths = ['/chat', '/calendar', '/drive', '/documents','/teamsettings'];
+    const hideHeaderPaths = ['/register', '/', '/home'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
         return (
             <>
-                {shouldHideHeader && <Header />}
+                {!shouldHideHeader && <Header />}
                 <Routes>
                     {/* 시작페이지이자 로그인페이지 */}
                     <Route path="/" element={<Login setIsLogin={setIsLogin} />}></Route>

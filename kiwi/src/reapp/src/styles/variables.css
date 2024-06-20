@@ -20,9 +20,13 @@
   --white: white;
   --white2: white;
   --white-hover: rgb(241, 241, 241);
+  --white-hover2: rgb(247, 247, 247);
+
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
   --light-gray3: rgb(248, 248, 248);
+  --light-gray5: rgb(160, 160, 160);
+
   --shadow: #0000001A;
   --day-clicked: #ddefff;
   --dark-blue: #2b98ff;
