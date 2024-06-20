@@ -1,5 +1,6 @@
 package com.kh.kiwi.team.service;
 
+import com.kh.kiwi.auth.dto.MemberDto;
 import com.kh.kiwi.team.dto.ResponseTeamDto;
 import com.kh.kiwi.team.dto.TeamCreateRequest;
 import com.kh.kiwi.team.dto.TeamDto;
@@ -27,7 +28,7 @@ public class TeamService {
     @Transactional
     public ResponseTeamDto createTeam(String memberId, TeamCreateRequest tcdto) {
         TeamDto dto = TeamDto.builder().teamAdminMemberId(memberId).teamName(tcdto.getTeamName()).build();
-        List<String> invitedMembers = tcdto.getInvitedMembers();
+        List<MemberDto> invitedMembers = tcdto.getInvitedMembers();
 
         System.out.println("TeamService > createTeam : "+dto);
         System.out.println("TeamService > createTeam : "+invitedMembers);
