@@ -43,8 +43,6 @@ public class MessageChatnumService {
 
         if (message.getFiles() != null && !message.getFiles().isEmpty()) {
             messageChatnum.setChatContent(message.getContent() + "\n" + String.join("\n", message.getFiles()));
-        } else {
-            messageChatnum.setChatContent(message.getContent());
         }
 
         messageChatnumRepository.save(messageChatnum);
@@ -66,5 +64,11 @@ public class MessageChatnumService {
     public byte[] downloadFile(String fileKey) {
         // 다운로드 로직 구현
         return new byte[0];
+    }
+
+    public String getNicknameByEmail(String email) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member email: " + email));
+        return member.getMemberNickname();
     }
 }

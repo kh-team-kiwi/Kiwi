@@ -23,6 +23,12 @@ public class ChatMessageController {
     @MessageMapping("/chat.sendMessage/{chatNum}")
     @SendTo("/topic/chat/{chatNum}")
     public ChatMessage sendMessage(ChatMessage message) {
+        message.setChatTime(LocalDateTime.now());
+        // sender (이메일)로부터 memberNickname을 설정
+        String memberNickname = messageChatnumService.getNicknameByEmail(message.getSender());
+        message.setMemberNickname(memberNickname);
+        message.setChatContent(message.getContent()); // chatContent 설정
+        System.out.println("Received message: " + message); // Log the received message
         messageChatnumService.saveMessage(message);
         return message;
     }
