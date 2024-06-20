@@ -16,6 +16,7 @@ const ChatRoom = ({ chatNum }) => {
         // 채팅방 메시지 기록 불러오기
         axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`)
             .then(response => {
+                console.log(response.data); // Check the response data
                 setMessages(response.data);
             })
             .catch(error => {

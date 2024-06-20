@@ -41,11 +41,10 @@ public class MessageChatnumService {
         messageChatnum.setChatTime(LocalDateTime.now());
         messageChatnum.setChatContent(message.getContent());
 
-        messageChatnum.setChatRef(false); // 기본값으로 false 설정
-        messageChatnum.setChatRefMessageNum(null); // 기본값 설정
-
         if (message.getFiles() != null && !message.getFiles().isEmpty()) {
-            messageChatnum.setChatContent(messageChatnum.getChatContent() + "\n" + String.join("\n", message.getFiles()));
+            messageChatnum.setChatContent(message.getContent() + "\n" + String.join("\n", message.getFiles()));
+        } else {
+            messageChatnum.setChatContent(message.getContent());
         }
 
         messageChatnumRepository.save(messageChatnum);
@@ -67,13 +66,5 @@ public class MessageChatnumService {
     public byte[] downloadFile(String fileKey) {
         // 다운로드 로직 구현
         return new byte[0];
-    }
-
-    public List<MessageChatnum> getAllMessages() {
-        return messageChatnumRepository.findAll();
-    }
-
-    public MessageChatnum createMessage(MessageChatnum message) {
-        return messageChatnumRepository.save(message);
     }
 }

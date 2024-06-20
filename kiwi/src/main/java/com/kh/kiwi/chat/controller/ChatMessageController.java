@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,6 @@ public class ChatMessageController {
     @MessageMapping("/chat.sendMessage/{chatNum}")
     @SendTo("/topic/chat/{chatNum}")
     public ChatMessage sendMessage(ChatMessage message) {
-        System.out.println("Received message: " + message); // Log the received message
         messageChatnumService.saveMessage(message);
         return message;
     }
