@@ -2,7 +2,6 @@ import axios from 'axios';
 import {removeLocalItem, removeSessionItem, setLocalItem} from "./storage";
 import {useNavigate} from "react-router-dom";
 
-const navigate = useNavigate();
 
 // Axios 인스턴스 생성
 const axiosHandler = axios.create({
@@ -49,14 +48,16 @@ axiosHandler.interceptors.response.use(
                     console.log("axiosHandler.interceptors.response : "+ accessToken);
 
                     if (accessToken) {
-                        // Access Token을 로컬 스토리지에 저장
                         setLocalItem('accessToken', accessToken);
+                        // 새로운 액세스 토큰을 얻은 후 원래 요청을 재시도
+                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                        return axiosHandler(originalRequest);
                     } else {
                         console.error('Access Token not found in response headers')
                         alert("서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.");
                         removeLocalItem("accessToken");
                         removeSessionItem("profile");
-                        navigate('/');
+                        window.location.replace = '/';
                     }
                 })
                 .catch(error => {
@@ -65,7 +66,7 @@ axiosHandler.interceptors.response.use(
                         alert("토큰이 만료 되었습니다. 다시 로그인해 주세요.");
                         removeLocalItem("accessToken");
                         removeSessionItem("profile");
-                        navigate('/');
+                        window.location.replace = '/';
                     }
                 });
         }

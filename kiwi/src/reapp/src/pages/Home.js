@@ -53,27 +53,7 @@ const Home = () => {
         setUserDropdown(!userDropdown);
     };
 
-    const teams = [
-        {
-            id: 1,
-            name: 'Team Name 1',
-            image: 'Team Image URL',
-            members: '12',
-        },
-        {
-            id: 2,
-            name: 'Team Name 2',
-            image: 'Team Image URL',
-            members: '16',
-        }
-        ,
-        {
-            id: 3,
-            name: 'Team Name 3',
-            image: 'Team Image URL',
-            members: '15',
-        }
-    ];
+    const [teams, setTeams] = useState([]);
 
     const navigate = useNavigate();
 
@@ -101,19 +81,29 @@ const Home = () => {
         };
     }, []);
 
-    useEffect(async () => {
-        const memberId = getSessionItem("profile").username;
-        const res= await axiosHandler.get("/api/team/"+memberId);
-        if(res.status===200){
 
+    const fetchTeams = async () => {
+        const memberId = getSessionItem("profile").username;
+        try {
+            const res = await axiosHandler.get("/api/team/list/" + memberId);
+            if (res.status === 200) {
+                setTeams(res.data);
+            }
+        } catch (error) {
+            console.error('Error fetching teams:', error);
         }
+    };
+
+    useEffect(() => {
+        fetchTeams();
     }, []);
 
 
       const handleCreateTeam = async (formTeamData) => {
-        const response = await axiosHandler.post("/api/team/create", formTeamData);
+          const memberId = getSessionItem("profile").username;
+          const response = await axiosHandler.post(`/api/team/create?memberId=${memberId}`, formTeamData);
           if (response.status === 200) {
-
+              fetchTeams();
           }
       };
 

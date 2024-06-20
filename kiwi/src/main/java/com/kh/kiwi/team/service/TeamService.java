@@ -1,6 +1,7 @@
 package com.kh.kiwi.team.service;
 
 import com.kh.kiwi.team.dto.ResponseTeamDto;
+import com.kh.kiwi.team.dto.TeamCreateRequest;
 import com.kh.kiwi.team.dto.TeamDto;
 import com.kh.kiwi.team.entity.Group;
 import com.kh.kiwi.team.entity.Team;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +25,12 @@ public class TeamService {
     private final TeamMapper teamMapper;
 
     @Transactional
-    public ResponseTeamDto createTeam(TeamDto dto) {
+    public ResponseTeamDto createTeam(String memberId, TeamCreateRequest tcdto) {
+        TeamDto dto = TeamDto.builder().teamAdminMemberId(memberId).teamName(tcdto.getTeamName()).build();
+        List<String> invitedMembers = tcdto.getInvitedMembers();
+
+        System.out.println("TeamService > createTeam : "+dto);
+        System.out.println("TeamService > createTeam : "+invitedMembers);
 
         // 금일 가장 최근에 생성된 팀의 PK 조회
         Integer no = teamMapper.getLastTeam();
@@ -56,12 +63,21 @@ public class TeamService {
         }
         return ResponseTeamDto.setSuccessData("팀 삭제를 성공했습니다.",dto);
     }
+
     public Optional<Team> getTeamById(String teamId) {
         return teamRepository.findById(teamId);
     }
 
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+    public List<Team> getAllTeams(String memberId) {
+        List<Group> groups = groupRepository.findAllByMemberId(memberId);
+        System.out.println("TeamService > getAllTeams : "+groups);
+
+        return groups.stream()
+                .map(Group::getTeam) // Group 객체에서 teamId를 추출
+                .map(teamRepository::findById) // teamId로 Team 객체 조회
+                .filter(Optional::isPresent) // Optional이 존재하는지 확인
+                .map(Optional::get) // Optional에서 Team 객체를 추출
+                .collect(Collectors.toList()); // List<Team>으로 수집
     }
 
 

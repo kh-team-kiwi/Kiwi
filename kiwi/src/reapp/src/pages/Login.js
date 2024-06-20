@@ -85,7 +85,7 @@ const Login = ({ setIsLogin }) => {
             .then(response => {
                 console.log(response.data);
                 setSessionItem("profile", response.data.data);
-                navigate("/home");
+                window.location.replace("/home");
             })
             .catch(error => {
                 console.error('Error fetching profile:', error);
