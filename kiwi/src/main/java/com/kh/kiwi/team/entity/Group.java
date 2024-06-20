@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
+@Builder
 @Table(name="GROUP_LIST")
 @IdClass(GroupId.class)
 public class Group {

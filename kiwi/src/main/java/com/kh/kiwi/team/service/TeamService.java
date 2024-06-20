@@ -40,9 +40,19 @@ public class TeamService {
         Group group = new Group();
         group.setTeam(team.getTeam());
         group.setMemberId(team.getTeamAdminMemberId());
+
         try{
             teamRepository.save(team);
             groupRepository.save(group);
+
+            invitedMembers.forEach(member -> {
+                Group invite = Group.builder()
+                        .team(team.getTeam())
+                        .memberId(member.getUsername())
+                        .build();
+                groupRepository.save(invite);
+            });
+
         } catch ( Exception e ) {
             return ResponseTeamDto.setFailed("데이터베이스 연결에 실패했습니다.");
         }

@@ -20,12 +20,15 @@ public class Team {
     private String team;
     private String teamName;
     private String teamAdminMemberId;
+    private String teamCount;
+    private String teamFilepath;
 
     public Team(TeamDto dto, Integer no){
         String teamno = "000000";
         this.team=LocalDate.now().toString().replace("-","");
         this.teamName=dto.getTeamName();
         this.teamAdminMemberId=dto.getTeamAdminMemberId();
+        this.teamCount="0";
         if(no == null) {
             no=1;
         } else {
