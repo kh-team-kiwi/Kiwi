@@ -5,9 +5,12 @@ import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +35,22 @@ public class DocController {
     }
 
     @PostMapping
-    public void addDoc(@RequestBody Doc doc) {
+    public ResponseEntity<String> addDoc(
+            @RequestPart("doc") Doc doc,
+            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
+
+        // employeeNo가 없으면 기본 값 설정
+        if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
+            doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
+        }
+
         docService.addDoc(doc);
+
+        return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
+
+
+
 
     @PutMapping("/{id}")
     public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
@@ -104,5 +120,7 @@ public class DocController {
         Map<String, Long> countMap = docService.getCountByStatus();
         return ResponseEntity.ok(countMap);
     }
+
+
 
 }

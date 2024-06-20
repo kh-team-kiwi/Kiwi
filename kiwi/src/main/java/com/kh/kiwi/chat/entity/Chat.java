@@ -1,30 +1,28 @@
 package com.kh.kiwi.chat.entity;
 
-import com.kh.kiwi.auth.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name = "chat")
 @Getter
 @Setter
-@Table(name = "chat")
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CHAT_NUM")
+    @Column(name = "chat_num")
     private Integer chatNum;
 
-    @Column(name = "CHAT_NAME", length = 30, nullable = false)
+    @Column(name = "chat_name")
     private String chatName;
 
-    @Column(name = "CHAT_OPEN", nullable = false, columnDefinition = "BOOLEAN DEFAULT 0")
+    @Column(name = "chat_open")
     private Boolean chatOpen;
 
-    @ManyToOne
-    @JoinColumn(name = "CHAT_ADMIN_MEMBER_ID", referencedColumnName = "memberId", nullable = false)
-    private Member chatAdminMember;
+    @Column(name = "chat_admin_member_id")
+    private String chatAdminMemberId;
 
-    @Column(name = "TEAM", length = 15, nullable = false)
+    @Column(name = "team")
     private String team;
 }

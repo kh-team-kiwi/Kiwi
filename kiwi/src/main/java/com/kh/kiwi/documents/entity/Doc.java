@@ -1,7 +1,9 @@
 package com.kh.kiwi.documents.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -10,20 +12,34 @@ import java.time.LocalDateTime;
 @Table(name = "doc")  // 테이블 이름에 맞게 변경
 public class Doc {
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime docDate;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long docNum;
 
     @Enumerated(EnumType.STRING)
-    private DocStatus docStatus; // Enum 타입으로 수정
+    private DocStatus docStatus = DocStatus.진행중; // 기본값 설정
 
     // Enum 타입 정의
     public enum DocStatus {
         진행중, 완료, 반려
     }
 
+    @Column(name = "DOC_TITLE", nullable = false)
     private String docTitle;
-    private LocalDateTime docDate;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.docTitle == null || this.docTitle.trim().isEmpty()) {
+            this.docTitle = "기본 제목"; // 기본 제목 설정
+        }
+    }
+
+//    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+//    private LocalDateTime docDate;
+
     private LocalDateTime docCompletion;
     private String docContents;
     private String name;

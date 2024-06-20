@@ -1,54 +1,190 @@
+/* NewDocument.css */
+
+/* 전체적인 레이아웃 설정 */
+.newDocument {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* 기본 설정 테이블 스타일 */
+.tableType02 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.tableType02 th,
+.tableType02 td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.tableType02 th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 선택 및 입력 필드 스타일 */
+.tableType02 select,
+.tableType02 input {
+    width: 65%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.tableType02 select {
+    /*width: calc(100% - 16px);*/
+}
+
+
+/* formGroup 스타일링 */
 .newDocument .formGroup {
     margin-bottom: 20px;
 }
 
 .newDocument .formGroup label {
     display: block;
+    font-size: 14px;
+    font-weight: bold;
     margin-bottom: 5px;
 }
 
+/* input, select, textarea 기본 스타일링 */
 .newDocument .formGroup input,
 .newDocument .formGroup select,
 .newDocument .formGroup textarea {
-    width: calc(100% - 16px);
-    padding: 8px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     box-sizing: border-box;
-    margin-bottom: 10px;
-}
-.content{
-    height: 250px;
+    margin-top: 5px;
 }
 
+.formGroup textarea {
+    height: 200px;
+}
+
+/* 파일 첨부 스타일링 */
 .newDocument .formGroup input[type="file"] {
-    padding: 0;
+    padding: 3px;
 }
 
+/* tooltip 아이콘과 텍스트 스타일링 */
 .newDocument .tooltipIcon {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    margin: 5px;
+    margin-left: 5px;
 }
 
 .newDocument .tooltipText {
     visibility: hidden;
-    width: 550px;
+    width: 350px;
     background-color: #555;
     color: #fff;
     text-align: left;
     border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     position: absolute;
     z-index: 1;
     bottom: -120px;
-    left: 300px;
+    left: 200px;
     transform: translateX(-50%);
     opacity: 0;
     transition: opacity 0.3s;
-    line-height: 25px;
+    line-height: 1.5;
+    font-size: 12px;
 }
 
 .newDocument .tooltipIcon:hover .tooltipText {
     visibility: visible;
     opacity: 1;
+}
+
+/* 결재선 설정 테이블 스타일링 */
+#approvalDocumentLine {
+    margin-top: 20px;
+}
+
+#approvalDocumentLine table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+#approvalDocumentLine th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#approvalDocumentLine td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: middle;
+}
+#approvalDocumentLine th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+/* 신청 테이블과 처리 테이블의 동일한 셀 높이 */
+.applyTable td,
+.processTable td {
+    height: 40px; /* 모든 셀의 높이를 동일하게 고정 */
+}
+
+/* 신청과 처리 테이블의 셀 수 동일하게 유지 */
+.applyTable .teamTable td,
+.processTable .teamTable td {
+    width: calc(100% / 3); /* 3개 열로 나눠서 */
+}
+
+.processTable .teamTable td {
+    width: calc(100% / 5); /* 5개 열로 나눠서 */
+}
+
+#approvalDocumentLine td .name {
+    text-align: center;
+    padding-left: 10px;
+}
+
+/* 결재선 설정 버튼 스타일링 */
+.document-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.document-button:hover {
+    background-color: #0056b3;
+}
+
+.author-name {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.author-position, .author-department {
+    font-size: 14px;
+    color: #555;
+    margin-right: 5px;
 }

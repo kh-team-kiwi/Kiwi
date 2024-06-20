@@ -61,8 +61,16 @@ public class DocService {
     }
 
     public void addDoc(Doc doc) {
+        // employeeNo가 없으면 기본 값 설정
+        if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
+            doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
+        }
+
+        // 다른 필드에 대한 기본 값 설정을 추가할 수 있습니다.
+
         docRepository.save(doc);
     }
+
 
     public void updateDoc(Long id, Doc updatedDoc) {
         Doc existingDoc = docRepository.findById(id).orElse(null);
