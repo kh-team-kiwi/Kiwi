@@ -30,7 +30,7 @@ const Home = () => {
   
     const toggleTeamView = () => {
         const teamCount = teams.length;
-        const dynamicMarginTop = teamCount >= 2 ? 329 + (teamCount * 91) : 420;
+        const dynamicMarginTop = teamCount >= 7 ? 875 : teamCount >= 2 ? 329 + (teamCount * 91) : 420;
     
         setCreateTeamVisible(!createTeamVisible);
     
