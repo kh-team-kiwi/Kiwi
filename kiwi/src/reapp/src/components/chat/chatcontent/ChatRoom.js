@@ -9,26 +9,27 @@ const ChatRoom = ({ chatNum }) => {
     const [message, setMessage] = useState('');
     const [sender, setSender] = useState('');
     const [files, setFiles] = useState([]);
-    const [stompClient, setStompClient] = useState(null);
+    const stompClient = useRef(null);
     const fileInputRef = useRef();
 
     useEffect(() => {
-        // 채팅방 메시지 기록 불러오기
-        axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`)
-            .then(response => {
+        const fetchMessages = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
                 setMessages(response.data);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching messages:', error);
-            });
+            }
+        };
 
-        // WebSocket 연결 설정
+        fetchMessages();
+
         const socket = new SockJS('http://localhost:8080/ws');
         const client = Stomp.over(socket);
 
         client.connect({}, (frame) => {
             console.log('Connected: ' + frame);
-            setStompClient(client);
+            stompClient.current = client;
             client.subscribe(`/topic/chat/${chatNum}`, (msg) => {
                 const newMessage = JSON.parse(msg.body);
                 setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -38,51 +39,48 @@ const ChatRoom = ({ chatNum }) => {
         });
 
         return () => {
-            if (client) {
-                client.disconnect(() => {
+            if (stompClient.current) {
+                stompClient.current.disconnect(() => {
                     console.log('Disconnected');
                 });
             }
         };
     }, [chatNum]);
 
-    const sendMessage = () => {
-        if (stompClient && stompClient.connected) {
+    const sendMessage = async () => {
+        if (stompClient.current && stompClient.current.connected) {
             const chatMessage = {
-                sender: sender,
+                sender,
                 content: message,
-                chatNum: chatNum,
-                files: files.map(file => file.name), // Add file names to message
+                chatNum,
+                files: files.map(file => file.name),
                 type: 'CHAT'
             };
 
-            if (files.length > 0) {
-                const formData = new FormData();
-                files.forEach(file => formData.append('files', file));
-                formData.append('team', 'your-team-name'); // Replace with actual team name
-                formData.append('chatName', 'your-chat-name'); // Replace with actual chat name
+            try {
+                if (files.length > 0) {
+                    const formData = new FormData();
+                    files.forEach(file => formData.append('files', file));
+                    formData.append('team', 'your-team-name');
+                    formData.append('chatName', 'your-chat-name');
 
-                axios.post('http://localhost:8080/api/chat/message/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then(response => {
-                    chatMessage.files = response.data; // Get uploaded file names from response
-                    stompClient.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(chatMessage));
-                    console.log("Message sent with files: ", chatMessage); // Add log to confirm message sent
-                    setMessage('');
-                    setFiles([]);
-                    if (fileInputRef.current) {
-                        fileInputRef.current.value = '';
-                    }
-                }).catch(error => {
-                    console.error('Error uploading files:', error);
-                });
-            } else {
-                console.log("Sending message without files: ", chatMessage); // Add log before sending message
-                stompClient.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(chatMessage));
-                console.log("Message sent: ", chatMessage); // Add log to confirm message sent
+                    const response = await axios.post('http://localhost:8080/api/chat/message/upload', formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+
+                    chatMessage.files = response.data;
+                }
+
+                stompClient.current.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(chatMessage));
+
+                // 메시지를 전송한 후 필드 초기화
                 setMessage('');
+                setFiles([]);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+            } catch (error) {
+                console.error('Error sending message or uploading files:', error);
             }
         } else {
             console.error('There is no underlying STOMP connection');
@@ -103,7 +101,7 @@ const ChatRoom = ({ chatNum }) => {
         newFiles.splice(index, 1);
         setFiles(newFiles);
         if (fileInputRef.current) {
-            fileInputRef.current.value = ''; // Reset file input value
+            fileInputRef.current.value = '';
         }
     };
 
@@ -112,13 +110,15 @@ const ChatRoom = ({ chatNum }) => {
             <div className="chat-messages">
                 {messages.map((msg, index) => (
                     <div key={index} className="message-container">
-                        <div className="message-sender">{msg.member ? msg.member.memberNickname : 'Unknown'}</div>
+                        <div className="message-sender">
+                            {msg.memberNickname || (msg.member && msg.member.memberNickname)}
+                        </div>
                         <div className="message-content">
                             {msg.chatContent} <small>{formatTime(msg.chatTime)}</small>
                             {msg.file && (
                                 <div>
                                     <a href={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} download>{msg.file}</a>
-                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} alt="Uploaded" style={{maxWidth: '200px'}} />
+                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} alt="Uploaded" style={{ maxWidth: '200px' }} />
                                 </div>
                             )}
                         </div>
@@ -153,7 +153,7 @@ const ChatRoom = ({ chatNum }) => {
                     multiple
                     onChange={handleFileChange}
                     ref={fileInputRef}
-                    style={{ display: 'none' }} // Hide the default file input element
+                    style={{ display: 'none' }}
                 />
                 <button onClick={() => fileInputRef.current && fileInputRef.current.click()}>Choose Files</button>
                 <button onClick={sendMessage}>Send</button>

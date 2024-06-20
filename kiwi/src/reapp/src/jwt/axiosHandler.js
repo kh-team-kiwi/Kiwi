@@ -1,6 +1,4 @@
 import axios from 'axios';
-import {removeLocalItem, removeSessionItem, setLocalItem} from "./storage";
-import {useNavigate} from "react-router-dom";
 
 
 // Axios 인스턴스 생성
@@ -16,7 +14,7 @@ axiosHandler.interceptors.request.use(
             accessToken = accessToken.replace(/"/g, '');
         }
         const jwt = `Bearer ${accessToken}`;
-        console.log("axiosHandler.interceptors.request : "+jwt);
+        console.log(jwt);
         if (jwt) {
             // 요청을 보내기 전에 Authorization 헤더에 토큰 추가
             config.headers.Authorization = jwt;
@@ -70,7 +68,6 @@ axiosHandler.interceptors.response.use(
                     }
                 });
         }
-
 
         return Promise.reject(error);
     }
