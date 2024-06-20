@@ -101,6 +101,8 @@ const Home = () => {
 
       const handleCreateTeam = async (formTeamData) => {
           const memberId = getSessionItem("profile").username;
+          console.log("home.js> handleCreateTeam : ",memberId);
+          console.log("home.js> handleCreateTeam : ",formTeamData)
           const response = await axiosHandler.post(`/api/team/create?memberId=${memberId}`, formTeamData);
           if (response.status === 200) {
               fetchTeams();
