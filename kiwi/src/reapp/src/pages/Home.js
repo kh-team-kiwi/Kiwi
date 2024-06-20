@@ -208,9 +208,9 @@ const Home = () => {
             No teams to show
         </div>
     ) : (
-        <ul className="team-list">
+        <div className="team-list">
             {teams.map(team => (
-                <li key={team.id} className="team-item">
+                <div key={team.id} className="team-item">
                     <img className='team-image' src={team.image} />
                     <div className='team-info'>
                         <div className='team-name'>{team.name}</div>
@@ -224,9 +224,9 @@ const Home = () => {
                         </button>
                         <button className='team-launch'>{t('launch')}</button>
                     </div>
-                </li>
+                </div>
             ))}
-        </ul>
+        </div>
     )}
 </div>
 

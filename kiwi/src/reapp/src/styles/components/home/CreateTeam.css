@@ -139,6 +139,7 @@
     margin-top: 10px;
     max-height: 400px;
     overflow-y: auto;
+    flex-direction: column;
 }
 
 .create-team-member {

@@ -219,7 +219,7 @@
     max-height: 546px;
 }
 
-.team-list > li {
+.team-list > div {
     display: flex;
     height: 100%;
     padding: 15px;
@@ -292,6 +292,11 @@
     fill: rgb(121, 121, 121);
     transition: 0.2s;
 
+}
+
+.team-item {
+    display: flex;
+    padding: 10px;
 }
 
 .team-image {

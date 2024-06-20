@@ -239,9 +239,8 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
           {formData.invitedMembers.length > 0 && (
             <div className='create-team-member-list-container'> 
-                <ul>
                 {formData.invitedMembers.map(member => (
-                        <li key={member.username} className="create-team-member">
+                        <div key={member.username} className="create-team-member">
                             <img className='create-team-member-image' src={member.filepath} />
 
                             <div className='create-team-member-info'>
@@ -259,10 +258,9 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
                             </svg>
 
                             </div>
-                        </li>
+                        </div>
                     ))}
 
-                </ul>
             </div>
           )}
 
