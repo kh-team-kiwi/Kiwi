@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../../styles/components/documents/ApprovalLineModal.css';
-import axiosHandler from "../../jwt/axiosHandler";
 
 const ApprovalLineModal = ({ onSave, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -9,11 +8,9 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     const [selectedMember, setSelectedMember] = useState(null);
     const [approvers, setApprovers] = useState([]);
     const [references, setReferences] = useState([]);
-    const [approvalLines, setApprovalLines] = useState([]);
 
     useEffect(() => {
         fetchMembers();
-        // fetchAllApprovalLines();
     }, []);
 
     const fetchMembers = async () => {
@@ -31,15 +28,6 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
             console.error("멤버 목록을 가져오는데 실패했습니다.", error);
         }
     };
-
-    // const fetchAllApprovalLines = async () => {
-    //     try {
-    //         const response = await axios.get('/documents/all-approval-lines');
-    //         setApprovalLines(response.data);
-    //     } catch (error) {
-    //         console.error("결재선 정보를 가져오는데 실패했습니다.", error);
-    //     }
-    // };
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -62,7 +50,15 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     };
 
     const handleSave = () => {
-        onSave({ approvers, references });
+        onSave({
+            approvers: approvers.map(approver => ({
+                id: approver.id,
+                name: approver.name,
+                team: approver.team,
+                position: approver.role
+            })),
+            references
+        });
         onClose();
     };
 
@@ -124,18 +120,6 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
                 <div className="modalActions">
                     <button className={"document-button"} onClick={handleSave}>저장</button>
                     <button className={"document-button"} onClick={onClose}>취소</button>
-                </div>
-
-                {/* 모든 결재선 정보 표시 */}
-                <div className="approvalLineList">
-                    <h2>모든 결재선 정보</h2>
-                    <ul>
-                        {approvalLines.map(line => (
-                            <li key={line.id}>
-                                결재자: {line.approver} - 참조자: {line.reference}
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             </div>
         </div>
