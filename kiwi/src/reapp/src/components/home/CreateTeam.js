@@ -35,7 +35,8 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       return;
     }
     onCreateTeam(formData); 
-    setFormData({ teamName: '', invitedMembers: [] }); 
+    setFormData({ teamName: '', invitedMembers: [] });
+    toggleTeamView();
   };
 
   function validateInputName(input) {

@@ -87,6 +87,7 @@ const Home = () => {
         try {
             const res = await axiosHandler.get("/api/team/list/" + memberId);
             if (res.status === 200) {
+                console.log("home.js > fetchTeams : ",res.data);
                 setTeams(res.data);
             }
         } catch (error) {
@@ -205,11 +206,11 @@ const Home = () => {
 
                 <ul className="team-list">
                     {teams.map(team => (
-                        <li key={team.id} className="team-item">
-                            <img className='team-image' src={team.image} />
+                        <li key={team.team} className="team-item">
+                            <img className='team-image' src={{/*team.image*/}} />
                             <div className='team-info'>
-                                <div className='team-name'>{team.name}</div>
-                                <div className='team-members' >{team.members} {t('members')}</div>
+                                <div className='team-name'>{team.teamName}</div>
+                                <div className='team-members' >{team.teamAdminMemberId} {t('members')}</div>
                             </div>
                             <div className='team-buttons'>
                                 <button className='team-settings' >
