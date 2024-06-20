@@ -4,6 +4,7 @@ import ToggleButton from './ToggleButton';
 import { useTranslation } from 'react-i18next';
 
 import '../../styles/components/common/Header.css';
+import ErrorImageHandler from "./ErrorImageHandler";
 
 const Header = () => {
   const [activePage, setActivePage] = useState(null);
@@ -91,7 +92,7 @@ const Header = () => {
       <div className='header-team-container-wrapper'>
         <div className={`header-team-container ${teamDropdown ? 'active' : ''}`}>
           <div className='header-selected-team-details' onClick={toggleTeamDropdown}>
-            <img className='header-selected-team-profile-image' src={selectedTeam.image} alt={''} />
+            <img className='header-selected-team-profile-image' src={selectedTeam.image} alt={''} onError={ErrorImageHandler}/>
             <div className='header-selected-team-name'>
               {selectedTeam.name}
             </div>

@@ -5,8 +5,11 @@ import ChatHeader from '../components/chat/ChatHeader';
 import ChatRoom from '../components/chat/chatcontent/ChatRoom';
 import '../styles/pages/Page.css';
 import '../styles/pages/Chat.css';
+import {useParams} from "react-router-dom";
 
 const Chat = () => {
+    const { team } = useParams();
+
     const [selectedChatNum, setSelectedChatNum] = useState(null);
 
     const handleChatSelect = (chatNum) => {
