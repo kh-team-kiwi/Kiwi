@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface GroupRepository extends JpaRepository<Group, GroupId> {
     List<Group> findAllByMemberId(String memberId);
+    List<Group> findByTeam(String team);
 }
