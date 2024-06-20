@@ -66,7 +66,7 @@ const OAuth2RedirectHandler = ({setIsLogin}) => {
                     console.log(response.data);
                     setSessionItem("profile", response.data.data);
                     setIsLogin(true);
-                    navigate("/home");
+                    window.location.replace("/home");
                 })
                 .catch(error => {
                     console.error('Error fetching profile:', error);

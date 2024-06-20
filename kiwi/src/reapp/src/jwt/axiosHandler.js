@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {removeLocalItem, removeSessionItem, setLocalItem} from "./storage";
+
 
 // Axios 인스턴스 생성
 const axiosHandler = axios.create({
@@ -33,8 +35,41 @@ axiosHandler.interceptors.response.use(
         return response;
     },
     error => {
-        // 응답 오류가 있는 경우
-        console.error('Error:', error.response ? error.response.data : 'Unknown error');
+
+        const originalRequest = error.config;
+
+        if (error.response && error.response.status === 401) {
+
+            axios.post('/api/auth/reissue', { withCredentials: true })
+                .then(response => {
+
+                    const accessToken = response.headers['access'];
+                    console.log("axiosHandler.interceptors.response : "+ accessToken);
+
+                    if (accessToken) {
+                        setLocalItem('accessToken', accessToken);
+                        // 새로운 액세스 토큰을 얻은 후 원래 요청을 재시도
+                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                        return axiosHandler(originalRequest);
+                    } else {
+                        console.error('Access Token not found in response headers')
+                        alert("서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.");
+                        removeLocalItem("accessToken");
+                        removeSessionItem("profile");
+                        window.location.replace = '/';
+                    }
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 400) {
+                        console.error('Refresh Token is invalid')
+                        alert("토큰이 만료 되었습니다. 다시 로그인해 주세요.");
+                        removeLocalItem("accessToken");
+                        removeSessionItem("profile");
+                        window.location.replace = '/';
+                    }
+                });
+        }
+
         return Promise.reject(error);
     }
 );
