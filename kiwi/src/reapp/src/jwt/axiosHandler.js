@@ -56,7 +56,7 @@ axiosHandler.interceptors.response.use(
                         alert("서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.");
                         removeLocalItem("accessToken");
                         removeSessionItem("profile");
-                        window.location.replace = '/';
+                        window.location.replace('/');
                     }
                 })
                 .catch(error => {
@@ -65,7 +65,7 @@ axiosHandler.interceptors.response.use(
                         alert("토큰이 만료 되었습니다. 다시 로그인해 주세요.");
                         removeLocalItem("accessToken");
                         removeSessionItem("profile");
-                        window.location.replace = '/';
+                        window.location.replace('/');
                     }
                 });
         }

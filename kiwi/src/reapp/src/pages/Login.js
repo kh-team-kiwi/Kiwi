@@ -56,7 +56,7 @@ const Login = ({ setIsLogin }) => {
         console.log('id:', username);
         console.log('password:', password);
         try {
-            const response = await axiosHandler.post('api/auth/login', {
+            const response = await axios.post('api/auth/login', {
                 username: username,
                 password: password});
 
@@ -69,8 +69,12 @@ const Login = ({ setIsLogin }) => {
                     getLoginInfo(accessToken);
                 }
             }
+
         } catch (error) {
             console.log(error);
+            if ( error.response.status === 401){
+                alert("인증에 실패 했습니다.")
+            }
         }
 
     };

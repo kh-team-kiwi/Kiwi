@@ -89,6 +89,7 @@ const Home = () => {
         try {
             const res = await axiosHandler.get("/api/team/list/" + memberId);
             if (res.status === 200) {
+                console.log("home.js > fetchTeams : ",res.data);
                 setTeams(res.data);
             }
         } catch (error) {
