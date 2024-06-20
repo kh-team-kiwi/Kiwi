@@ -214,11 +214,13 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 546px;
 }
 
 .team-list > li {
     display: flex;
-    width: 100%;
     height: 100%;
     padding: 15px;
     border-bottom: 1px solid lightgray;
@@ -237,14 +239,13 @@
     justify-content: center;
     align-items: center;
     right: 20px;
-    position: absolute;
     padding-top: 3px;
+    margin-left: auto;
 }
 
 .team-launch {
     height: 40px;
     font-size: 22px;
-    margin-top: 0.5rem;
     border-radius: 10px;
     border: 1px solid #ccc;
     background-color: var(--green);
@@ -258,7 +259,6 @@
 .team-settings {
     height: 40px;
     font-size: 20px;
-    margin-top: 0.5rem;
     border-radius: 10px;
     border: 1px solid #ccc;
     color: white;
@@ -341,3 +341,7 @@
 
 }
 
+
+.home-no-team {
+    height: 91px;
+}

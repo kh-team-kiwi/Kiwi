@@ -29,24 +29,26 @@ const Home = () => {
     const [teamName, setTeamName] = useState('');
   
     const toggleTeamView = () => {
+        const teamCount = teams.length;
+        const dynamicMarginTop = teamCount >= 7 ? 875 : teamCount >= 2 ? 329 + (teamCount * 91) : 420;
+    
         setCreateTeamVisible(!createTeamVisible);
-
-
-      setTeamListStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '15px' ? '-53%' : '15px'
-      }));
-      setWelcomeStyle(prevStyle => ({
-        marginTop: prevStyle.marginTop === '180px' ? '-53%' : '180px'
-      }));
-
-      if (createTeamVisible) {
-        setTimeout(() => {
-          setHideCreateTeam(false);
-        }, 350);
-    } else {
-        setHideCreateTeam(!hideCreateTeam);
-    }
-
+    
+        setTeamListStyle(prevStyle => ({
+            marginTop: prevStyle.marginTop === '15px' ? `-${dynamicMarginTop}px` : '15px'
+        }));
+    
+        setWelcomeStyle(prevStyle => ({
+            marginTop: prevStyle.marginTop === '180px' ? `-${dynamicMarginTop}px` : '180px'
+        }));
+    
+        if (createTeamVisible) {
+            setTimeout(() => {
+                setHideCreateTeam(false);
+            }, 350);
+        } else {
+            setHideCreateTeam(!hideCreateTeam);
+        }
     };
 
     const toggleUserDropdown = () => {
