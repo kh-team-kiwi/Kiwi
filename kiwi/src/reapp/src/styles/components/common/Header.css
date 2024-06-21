@@ -235,7 +235,7 @@
 }
 
 .header-team-dropdown {
-    overflow: hidden;
+    overflow-y: auto;
     transition: max-height 0.2s ease;
     width: 100%;
 }
@@ -351,6 +351,8 @@
     border-top: 1px solid lightgray;
 
     border-bottom: 1px solid lightgray;
+    overflow-y: auto;
+
 
 }
 
