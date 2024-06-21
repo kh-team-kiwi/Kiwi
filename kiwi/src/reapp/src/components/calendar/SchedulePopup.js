@@ -133,6 +133,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
   };
 
   const handleAddEvent = () => {
+    console.log("handleAddEvent<><><><>",newEvent);
     const startDateTime = new Date(`${newEvent.startDate}T${newEvent.startTime}`);
     const endDateTime = new Date(`${newEvent.endDate}T${newEvent.endTime}`);
     addEvent({
