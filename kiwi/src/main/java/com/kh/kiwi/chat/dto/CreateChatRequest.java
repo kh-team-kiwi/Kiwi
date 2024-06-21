@@ -1,7 +1,10 @@
 package com.kh.kiwi.chat.dto;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class CreateChatRequest {
     private String chatName;
     private String chatAdminMemberId;
@@ -10,7 +13,6 @@ public class CreateChatRequest {
     private List<String> admins;
     private List<String> participants;
 
-    // Getters and Setters
     public String getChatName() {
         return chatName;
     }

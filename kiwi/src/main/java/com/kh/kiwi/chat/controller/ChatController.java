@@ -22,12 +22,8 @@ public class ChatController {
     }
 
     @GetMapping
-    public List<Chat> getAllChats(@RequestParam(required = false) String team) {
-        if (team != null && !team.isEmpty()) {
-            return chatService.getChatsByTeam(team);
-        } else {
-            return chatService.getAllChats();
-        }
+    public List<Chat> getChatsByTeam(@RequestParam String team) {
+        return chatService.getChatsByTeam(team);
     }
 
     @PostMapping("/createWithUsers")

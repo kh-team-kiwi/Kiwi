@@ -14,7 +14,6 @@ const Chat = () => {
 
     const [selectedChatNum, setSelectedChatNum] = useState(null);
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
-    const [team, setTeam] = useState("your-team-id"); // 팀 ID를 설정
 
     const handleApprovalLineSave = (line) => {
         setShowCreateChatModal(false);
@@ -37,7 +36,7 @@ const Chat = () => {
         const newChat = {
             chatName: "새로운 채팅방", // 필요에 따라 입력받도록 수정
             chatAdminMemberId: data.approvers[0].id,
-            team: team, // 실제 팀 ID를 설정
+            team: teamno, // 실제 팀 ID를 설정
             chatOpen: true
         };
 
@@ -67,7 +66,7 @@ const Chat = () => {
             </div>
             <ChatMemberList chatNum={selectedChatNum} />
             {showCreateChatModal && (
-                <CreateChatModal onSave={handleSaveModal} onClose={handleCloseModal} team={team} />
+                <CreateChatModal onSave={handleSaveModal} onClose={handleCloseModal} team={teamno} />
             )}
         </>
     );

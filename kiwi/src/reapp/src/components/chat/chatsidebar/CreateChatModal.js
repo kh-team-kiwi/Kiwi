@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../../../styles/components/chat/chatsidebar/CreateChatModal.css';
+import { getSessionItem } from "../../../jwt/storage";
 
-const CreateChatModal = ({ onSave, onClose, team }) => {
+const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        const storedProfile = getSessionItem("profile");
+        setProfile(storedProfile);
+        if (storedProfile) {
+            setAdmins([{ id: storedProfile.username, name: storedProfile.name, email: storedProfile.username, role: storedProfile.role }]);
+        }
+    }, []);
+
     const [searchTerm, setSearchTerm] = useState("");
     const [chatName, setChatName] = useState("");
     const [members, setMembers] = useState([]);
@@ -11,14 +22,17 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
     const [participants, setParticipants] = useState([]);
 
     useEffect(() => {
-        if (team) {
+        if (showCreateChatModal && team) {
+            console.log("Fetching members for team:", team); // 추가된 로그
             fetchMembers();
         }
-    }, [team]);
+    }, [showCreateChatModal, team]);
 
     const fetchMembers = async () => {
         try {
+            console.log(`Requesting members from: http://localhost:8080/api/chat/user/members?team=${team}`);
             const response = await axios.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            console.log("Fetched members:", response.data); // 추가된 로그
             const fetchedMembers = response.data.map(member => ({
                 id: member.memberId,
                 name: member.memberNickname,
@@ -27,7 +41,7 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
             }));
             setMembers(fetchedMembers);
         } catch (error) {
-            console.error("멤버 목록을 가져오는데 실패했습니다.", error);
+            console.error("Failed to fetch members:", error);
         }
     };
 
@@ -55,23 +69,23 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
         }
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
+        if (!profile) {
+            console.error("No profile available");
+            return;
+        }
+
         const chatData = {
             chatName,
-            chatAdminMemberId: admins.length > 0 ? admins[0].id : null,
+            approvers: admins, // 이 부분을 approvers로 설정
             admins: admins.map(admin => admin.id),
             participants: participants.map(participant => participant.id),
             team,
             chatOpen: true
         };
 
-        try {
-            await axios.post('http://localhost:8080/api/chat/createWithUsers', chatData);
-            onSave(chatData);
-            onClose();
-        } catch (error) {
-            console.error("채팅방 생성에 실패했습니다.", error);
-        }
+        onSave(chatData);
+        onClose();
     };
 
     return (
@@ -116,23 +130,14 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
                             ))}
                     </div>
                     <div className="arrows">
-                        <button onClick={handleAddAdmin}>→ 관리자 추가</button>
-                        <button onClick={handleAddParticipant}>→ 참여자 추가</button>
+                        <button onClick={handleAddAdmin}>→초대</button>
                     </div>
                     <div className="selectedLists">
                         <div className="adminsList">
-                            <h3>관리자</h3>
+                            <h3>초대 인원</h3>
                             {admins.map((admin) => (
                                 <div key={admin.id}>
                                     {admin.name} ({admin.email}:{admin.role})
-                                </div>
-                            ))}
-                        </div>
-                        <div className="participantsList">
-                            <h3>참여자</h3>
-                            {participants.map((participant) => (
-                                <div key={participant.id}>
-                                    {participant.name} ({participant.email}:{participant.role})
                                 </div>
                             ))}
                         </div>

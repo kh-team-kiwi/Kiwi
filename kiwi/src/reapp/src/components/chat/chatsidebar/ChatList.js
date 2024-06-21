@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ChatList = ({ selectedTeam, onChatSelect }) => {
+const ChatList = ({ team, onChatSelect }) => {
     const [chats, setChats] = useState([]);
 
     useEffect(() => {
-        if (selectedTeam) {
-            axios.get(`http://localhost:8080/api/chat?team=${selectedTeam}`)
+        if (team) {
+            axios.get(`http://localhost:8080/api/chat?team=${team}`)
                 .then(response => {
                     setChats(response.data);
                 })
@@ -14,7 +14,7 @@ const ChatList = ({ selectedTeam, onChatSelect }) => {
                     console.error('There was an error fetching the chat rooms!', error);
                 });
         }
-    }, [selectedTeam]);
+    }, [team]);
 
     return (
         <div>
