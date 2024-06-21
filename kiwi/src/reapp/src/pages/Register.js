@@ -7,12 +7,16 @@ import backgroundImage from '../images/background.png';
 import ToggleLanguageButton from '../components/common/ToggleLanguageButton';
 import Logo from '../components/common/Logo';
 
+import EmailIcon from '../images/svg/account/EmailIcon';
+import PasswordIcon from '../images/svg/account/PasswordIcon';
+import ProfileIcon from '../images/svg/account/ProfileIcon';
+import ExitIcon from '../images/svg/buttons/ExitIcon';
 
 
 import '../styles/pages/Register.css';
 
 const Register = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [isAnimating, setIsAnimating] = useState(false);
     const [initialLoad, setInitialLoad] = useState(true);
     const [showTac, setShowTac] = useState(false);
@@ -124,11 +128,7 @@ const Register = () => {
                     <div className='register-field-group'>
                         <div className='register-input-container'>
                             <div className="register-icon-container">
-                                <svg className='register-icon' xmlns="http://www.w3.org/2000/svg" width="23" height="23"
-                                     fill="gray" viewBox="0 0 16 16">
-                                    <path
-                                        d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
-                                </svg>
+                                <EmailIcon className='register-icon' />
                             </div>
                             <input className="register-id-input" type="text" id="memberId" name="memberId"
                                    placeholder={t('email')} value={formData.memberId} onChange={handleChange} required/>
@@ -136,10 +136,7 @@ const Register = () => {
                         {/* <div className="register-email-check">{emailCheckText}</div> */}
                         <div className='register-input-container'>
                             <div className="register-icon-container">
-                                <svg className='register-icon' xmlns="http://www.w3.org/2000/svg" width="23" height="23"
-                                     fill="gray" viewBox="0 0 16 16">
-                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                                </svg>
+                                <ProfileIcon className='register-icon'/>
                             </div>
                             <input className="register-name-input" type="text" id="memberNickname" name="memberNickname"
                                    placeholder={t('username')} value={formData.memberNickname} onChange={handleChange}
@@ -150,17 +147,13 @@ const Register = () => {
                     <div className='register-field-group'>
                         <div className='register-input-container'>
                             <div className="register-icon-container">
-                                <svg className='register-icon' xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="gray" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5"/>
-                                </svg>
+                                <PasswordIcon className='register-icon'/>
                             </div>
                             <input className="register-password-input" type="password" id="memberPwd" name="memberPwd" placeholder={t('password')} value={formData.memberPwd} onChange={handleChange} required />
                         </div>
                         <div className='register-input-container'>
                             <div className="register-icon-container">
-                                <svg className='register-icon' xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="gray" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5"/>
-                                </svg>
+                                <PasswordIcon className='register-icon'/>
                             </div>
                             <input className="register-password-input" type="password" id="confirmPwd" name="confirmPwd" placeholder={t('confirm-password')} value={formData.confirmPwd} onChange={handleChange} required />
                         </div>
@@ -182,10 +175,8 @@ const Register = () => {
                     <div className="tac-top">
                         <b>{t('terms-and-conditions')}</b>
                     </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" id="tac-exit" onClick={toggleTac} viewBox="0 0 16 16">
-                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                        </svg>
+                    <div  onClick={toggleTac}>
+                        <ExitIcon className='tac-exit'/>
                     </div>
 
                 </div>

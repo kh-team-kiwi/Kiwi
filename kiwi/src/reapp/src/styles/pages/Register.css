@@ -232,14 +232,14 @@ body {
     justify-content: space-between;
 }
 
-#tac-exit {
+.tac-exit {
     margin-left: auto;
     margin-right: 10px;
     border-radius: 15px;
     transition: 0.2s;
 }
 
-#tac-exit:hover {
+.tac-exit:hover {
     background-color: var(--white-hover1);
     transition: 0.2s;
 

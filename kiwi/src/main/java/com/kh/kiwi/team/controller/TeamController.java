@@ -31,6 +31,10 @@ public class TeamController {
 //    public List<Team> getAllTeams() {
 //        return teamService.getAllTeams(null);
 //    }
+    @GetMapping("/list/{memberId}")
+    public List<Team> getAllTeams(@PathVariable String memberId) {
+        return teamService.getAllTeams(memberId);
+    }
 
     @GetMapping("/list/{memberId}")
     public List<Team> getAllTeams(@PathVariable String memberId) {

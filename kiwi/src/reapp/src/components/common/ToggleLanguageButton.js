@@ -10,7 +10,7 @@ import GermanFlag from '../../images/svg/flags/GermanFlag';
 import JapaneseFlag from '../../images/svg/flags/JapaneseFlag';
 import ChineseFlag from '../../images/svg/flags/ChineseFlag';
 
-import DownArrow from '../../images/svg/arrows/DownArrow';
+import DownArrow from '../../images/svg/shapes/DownArrow';
 
 const ToggleLanguageButton = () => {
     const { t, i18n } = useTranslation();
