@@ -14,7 +14,7 @@ const Chat = () => {
     const [selectedChatNum, setSelectedChatNum] = useState(null);
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
     const [team, setTeam] = useState("your-team-id"); // 팀 ID를 설정
-    머지 오류 테스트2
+    머지 오류 테스트3
     const handleApprovalLineSave = (line) => {
         setShowCreateChatModal(false);
     };
