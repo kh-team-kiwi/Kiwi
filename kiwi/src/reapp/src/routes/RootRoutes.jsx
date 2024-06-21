@@ -12,7 +12,8 @@ import OAuth2RedirectHandler from "../jwt/OAuth2RedirectHandler";
 import Documents from "../pages/Documents";
 import Home from "../pages/Home";
 import Error from "../components/common/Error";
-import {AuthContext, AuthProvider} from "../jwt/AuthContext";
+import {TeamContext, TeamProvider} from "../context/TeamContext";
+import TeamLayout from "../pages/TeamLayout";
 
 const RootRoutes = () => {
 
@@ -21,18 +22,15 @@ const RootRoutes = () => {
     * */
 
     return (
-        <AuthProvider>
             <Routes>
                 {/* 임시 에러페이지 */}
                 <Route path="/error" element={<Error />} />
                 <Route path="*" element={<SecondRouts />}></Route>
             </Routes>
-        </AuthProvider>
     );
 };
 
 const SecondRouts = () => {
-    const [isLogin, setIsLogin] = useState(true);
 
     const location = useLocation();
     const hideHeaderPaths = ['/register', '/', '/home'];
@@ -40,39 +38,36 @@ const SecondRouts = () => {
 
         return (
             <>
-                {!shouldHideHeader && <Header />}
+                <TeamProvider>
                 <Routes>
                     {/* 시작페이지이자 로그인페이지 */}
-                    <Route path="/" element={<Login setIsLogin={setIsLogin} />}></Route>
+                    <Route path="/" element={<Login />}></Route>
                     <Route path="/register" element={<Register/>}></Route>
-                    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler setIsLogin={setIsLogin} />} />
+                    <Route path="/home" element={<Home/>}></Route>
+                    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
-                    {/* 로그인 해야 접속가능한 페이지들 */}
-                    <Route element={<IsLogin isLogin={isLogin} />}>
-                        <Route path="/FileManagement" element={<FileManagement/>}></Route>
-                        <Route path='/chat/:team' element={<Chat />} />
-                        <Route path='/calendar' element={<Calendar />} />
-                        <Route path='/drive' element={<Drive />} />
-                        <Route path="/documents" element={<Documents/>}></Route>
-                        <Route path="/home" element={<Home/>}></Route>
-                        <Route path="/teamsettings" element={<TeamSettings/>}></Route>
-
+                    {/* 팀 관련 경로 그룹화 */}
+                    <Route path="/team/:teamno/*" element={<TeamLayout />}>
+                        <Route path="FileManagement" element={<FileManagement/>}></Route>
+                        <Route path='chat' element={<Chat />} />
+                        <Route path='calendar' element={<Calendar />} />
+                        <Route path='drive' element={<Drive />} />
+                        <Route path="documents" element={<Documents/>}></Route>
+                        <Route path="teamsettings" element={<TeamSettings/>}></Route>
                     </Route>
-
-                    {/* 존재하지 않는 경로에 대한 처리 */}
-                    {/*<Route path="*" element={<Navigate to="/error" state={{ from: location.pathname }} />} />*/}
                 </Routes>
+                </TeamProvider>
             </>
         );
 };
 
 
-const IsLogin = ({isLogin}) => {
-    if(!isLogin){
-        alert("로그인이 필요합니다.")
-    }
-    return isLogin ? <Outlet /> : <Navigate to="/" />
-};
+// const IsLogin = ({isLogin}) => {
+//     if(!isLogin){
+//         alert("로그인이 필요합니다.")
+//     }
+//     return isLogin ? <Outlet /> : <Navigate to="/" />
+// };
 
 
 export default RootRoutes;

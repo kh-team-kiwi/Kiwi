@@ -1,12 +1,19 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useRef, useContext, useEffect} from 'react';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import ToggleButton from './ToggleButton';
 import { useTranslation } from 'react-i18next';
 
 import '../../styles/components/common/Header.css';
 import ErrorImageHandler from "./ErrorImageHandler";
+import {TeamContext} from "../../context/TeamContext";
+import {getSessionItem, setSessionItem} from "../../jwt/storage";
+import axiosHandler from "../../jwt/axiosHandler";
 
 const Header = () => {
+
+  const [teams, setTeams] = useContext(TeamContext);
+  const { teamno } = useParams();
+
   const [activePage, setActivePage] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [teamDropdown, setTeamDropdown] = useState(false);
@@ -16,39 +23,35 @@ const Header = () => {
   const { t } = useTranslation();
   const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const [selectedTeam, setSelectedTeam] = useState({});
 
-  const teams = [
-    {
-      id: 1,
-      name: 'Team Name 1',
-      image: '1',
-      members: '12',
-    },
-    {
-      id: 2,
-      name: 'Team Name 2',
-      image: '2',
-      members: '12',
-    },
-    {
-      id: 3,
-      name: 'Team Name 3',
-      image: '3',
-      members: '16',
-    },
-    {
-      id: 4,
-      name: 'Team Name 4',
-      image: '4',
-      members: '15',
-    }
-  ];
+  useEffect(() => {
+    const team = teams.filter(team=>team.team===teamno);
+    setSelectedTeam(team[0]);
+  }, [teamno]);
 
-  const [selectedTeam, setSelectedTeam] = useState(teams[0]);  
+  // const fetchTeams = async () => {
+  //   const memberId = getSessionItem("profile").username;
+  //   try {
+  //     const res = await axiosHandler.get("/api/team/list/" + memberId);
+  //     if (res.status === 200) {
+  //       setTeams(res.data);
+  //       setSessionItem("teams",res.data);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching teams:', error);
+  //   }
+  // };
+  //
+  // useEffect(() => {
+  //   fetchTeams();
+  // }, []);
+
+
 
   const handleClick = (page) => {
     setActivePage(page);
-    navigate(`/${page}`);
+    navigate(`/team/${teamno}/${page}`);
   };
 
   const handleDropdownClick = () => {
@@ -83,8 +86,9 @@ const Header = () => {
   };
 
   const handleTeamClick = (team) => {
+    setTeamDropdown(false);
     setSelectedTeam(team);
-    setTeamDropdown(false); 
+    navigate(`/team/${team.team}`);
   };
 
   return (
@@ -92,9 +96,9 @@ const Header = () => {
       <div className='header-team-container-wrapper'>
         <div className={`header-team-container ${teamDropdown ? 'active' : ''}`}>
           <div className='header-selected-team-details' onClick={toggleTeamDropdown}>
-            <img className='header-selected-team-profile-image' src={selectedTeam.image} alt={''} onError={ErrorImageHandler}/>
+            <img className='header-selected-team-profile-image' src={selectedTeam.teamFilepath} alt={''} onError={ErrorImageHandler}/>
             <div className='header-selected-team-name'>
-              {selectedTeam.name}
+              {selectedTeam.teamName}
             </div>
             <div className={`header-team-arrow-container down-arrow ${teamDropdown ? 'flipped' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="home-icon" viewBox="0 0 16 16" style={{marginTop: '2px'}}>
@@ -108,15 +112,15 @@ const Header = () => {
               <div className='header-team-dropdown-list'>
                 {teams.map(team => (
                   <div 
-                    className={`header-team-details ${selectedTeam.id === team.id ? 'selected' : ''}`} 
-                    key={team.id} 
+                    className={`header-team-details ${team.team === selectedTeam.team ? 'selected' : ''}`}
+                    key={team.team}
                     onClick={() => handleTeamClick(team)}
                   >
-                    <img className='header-team-profile-image' src={team.image} alt={''} />
+                    <img className='header-team-profile-image' src={team.teamFilepath} alt={''} onError={ErrorImageHandler} />
                     <div className='header-team-name'>
-                      {team.name}
+                      {team.teamName}
                     </div>
-                    {selectedTeam.id === team.id && (
+                    {selectedTeam.team === team.team && (
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className='header-tick-icon' viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                     </svg>
@@ -176,7 +180,7 @@ const Header = () => {
         </div>
 
         <div className='header-user-profile-button' onClick={handleDropdownClick} ref={dropdownRef}>
-          <div className='header-user-profile-container'></div>
+          <img className='header-user-profile-container' src={getSessionItem("profile").filepath} alt={''} onError={ErrorImageHandler}></img>
         </div>
       </div>
 

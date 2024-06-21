@@ -10,11 +10,12 @@ import '../styles/pages/Chat.css';
 import {useParams} from "react-router-dom";
 
 const Chat = () => {
-    khkhkh
+    const { teamno } = useParams();
+
     const [selectedChatNum, setSelectedChatNum] = useState(null);
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
     const [team, setTeam] = useState("your-team-id"); // 팀 ID를 설정
-    머지 오류 테스트3
+
     const handleApprovalLineSave = (line) => {
         setShowCreateChatModal(false);
     };

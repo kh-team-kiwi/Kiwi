@@ -17,7 +17,7 @@ import naverImage from '../images/naver.png';
 import axiosHandler from "../jwt/axiosHandler";
 import {setLocalItem, setSessionItem} from "../jwt/storage";
 
-const Login = ({ setIsLogin }) => {
+const Login = () => {
     const { t, i18n } = useTranslation();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -65,7 +65,6 @@ const Login = ({ setIsLogin }) => {
                 if (accessToken) {
                     // 로컬 스토리지에 저장
                     setLocalItem("accessToken",accessToken);
-                    setIsLogin(true);
                     getLoginInfo(accessToken);
                 }
             }
