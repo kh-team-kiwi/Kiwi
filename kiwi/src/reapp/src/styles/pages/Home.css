@@ -51,9 +51,6 @@
     transition: 0.2s;
 }
 
-.create-new-team > div {
-    margin-right: 7px;
-}
 
 .create-new-team-button:hover {
     background-color: white;
@@ -74,7 +71,7 @@
 
 }
 
-.welcome-text {
+.home-welcome-container > .welcome-text {
 
     color: var(--dark-brown);
     font-size: 35px;
@@ -132,14 +129,19 @@
 
 }
 
-.user-dropdown-profile {
+.home-user-dropdown-profile {
     margin-top: 4px;
 }
 
-.user-dropdown-settings {
+.home-user-dropdown-settings {
     margin-bottom: 5px;
 }
 
+.home-user-dropdown-icon {
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+}
 
 
 .home-user-dropdown {
@@ -203,14 +205,8 @@
 
 }
 
-.home-user-container:hover {
-    background-color: white;
-    transition: 0.2s;
 
-}
-
-
-.team-list {
+.home-team-list {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -219,7 +215,7 @@
     max-height: 546px;
 }
 
-.team-list > div {
+.home-team-list > div {
     display: flex;
     height: 100%;
     padding: 15px;
@@ -228,13 +224,8 @@
 
 }
 
-.team-list > li:hover {
-    background-color: var(--white-hover1);
-    transition: 0.2s;
 
-}
-
-.team-buttons {
+.home-team-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,7 +234,7 @@
     margin-left: auto;
 }
 
-.team-launch {
+.home-team-launch {
     height: 40px;
     font-size: 22px;
     border-radius: 10px;
@@ -256,7 +247,7 @@
     padding-right: 15px;    
 }
 
-.team-settings {
+.home-team-settings {
     height: 40px;
     font-size: 20px;
     border-radius: 10px;
@@ -272,26 +263,20 @@
     border: none;
 }
 
-.team-settings:hover {
+.home-team-settings:hover {
     background-color: var(--white-hover1);
-    transition: 0.2s;
 }
 
 
-.team-launch:hover {
+.home-team-launch:hover {
     background-color: var(--green-hover);
-    transition: 0.2s;
 }
 
-.settings-icon {
+.home-settings-icon {
     fill: darkgrey;
     transition: 0.2s;
-}
-
-.settings-icon:hover {
-    fill: rgb(121, 121, 121);
-    transition: 0.2s;
-
+    width: 24px;
+    height: 24px;
 }
 
 .team-item {
@@ -299,39 +284,36 @@
     padding: 10px;
 }
 
-.team-image {
+.home-team-image {
     background-color: gray;
     width: 60px;
     height: 60px;
     border-radius: 10px;
 }
 
-.team-name {
+.home-team-name {
     font-size: 22px;
     font-weight: 550;
     color: var(--dark-brown);
+    display: flex;
+    justify-content: left;
 
 }
 
-.team-members {
+.home-team-members {
     font-size: 16px;
     display: flex;
     color: var(--dark-brown);
 
 }
 
-.team-info {
+.home-team-info {
     display: flex;
     flex-direction: column;
     gap: 5px;
     margin-left: 10px;
 }
 
-
-
-.home-icon {
-    fill: var(--dark-brown);
-}
 
 
 .home-user-profile-image {
@@ -366,4 +348,10 @@
 .home-empty-icon {
     width: 100px;
     margin-top: 5px;
+}
+
+.create-team-plus-icon {
+    fill: currentColor;
+    width: 28px;
+    height: 28px;
 }
