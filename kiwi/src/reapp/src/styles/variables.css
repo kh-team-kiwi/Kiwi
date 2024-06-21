@@ -4,9 +4,11 @@
   --page-icon-active: #55ADFF; */
 
 
-  --header-background-color: #f0f5f3;
-  --page-icon: #a5cf92;
-  --page-icon-active: #7cb364;
+  --header-background-color: #e8f6f7;
+  --page-icon: #8ab290;
+  --page-icon-active: #55755b;
+  --settings: #bfbb9e;
+  --settings-active: #adaa90;
 
 
   --container-background-color: #f7f9fc;
@@ -27,7 +29,7 @@
   --light-gray3: rgb(248, 248, 248);
   --light-gray5: rgb(160, 160, 160);
 
-  --shadow: #0000001A;
+  --shadow: rgba(0, 0, 0, 0.2);
   --day-clicked: #ddefff;
   --dark-blue: #2b98ff;
   --light-gray4: #e7e5e5;
