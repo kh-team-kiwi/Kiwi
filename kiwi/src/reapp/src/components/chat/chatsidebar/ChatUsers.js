@@ -7,7 +7,7 @@ const ChatUsers = ({ chatNum }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/chat/users/${chatNum}`);
+                const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);
@@ -22,7 +22,9 @@ const ChatUsers = ({ chatNum }) => {
             <h3>Users in Chat</h3>
             <ul>
                 {users.map((user) => (
-                    <li key={user.memberId}>{user.memberNickname}</li>
+                    <li key={user.memberId}>
+                        {user.memberNickname} ({user.memberId})
+                    </li>
                 ))}
             </ul>
         </div>

@@ -31,6 +31,12 @@ public class ChatUserService {
                 .collect(Collectors.toList());
         return memberRepository.findAllById(memberIds);
     }
+    public List<Member> getUsersInChat(int chatNum) {
+        List<ChatUsers> chatUsers = chatUsersRepository.findByIdChatNum(chatNum);
+        return chatUsers.stream()
+                .map(chatUser -> memberRepository.findById(chatUser.getId().getMemberId()).orElse(null))
+                .collect(Collectors.toList());
+    }
 
     public void addChatUser(ChatUsers chatUser) {
         chatUsersRepository.save(chatUser);

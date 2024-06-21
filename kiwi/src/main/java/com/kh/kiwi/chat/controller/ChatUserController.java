@@ -14,6 +14,11 @@ public class ChatUserController {
     @Autowired
     private ChatUserService chatUserService;
 
+    @GetMapping("/{chatNum}")
+    public List<Member> getUsersInChat(@PathVariable int chatNum) {
+        return chatUserService.getUsersInChat(chatNum);
+    }
+
     @GetMapping("/members")
     public List<Member> getUsersByTeam(@RequestParam String team) {
         return chatUserService.getUsersInTeam(team);

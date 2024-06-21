@@ -11,16 +11,18 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
     const [participants, setParticipants] = useState([]);
 
     useEffect(() => {
-        fetchMembers();
+        if (team) {
+            fetchMembers();
+        }
     }, [team]);
 
     const fetchMembers = async () => {
         try {
-            const response = await axios.get(`/api/chat/users/members?team=${team}`);
+            const response = await axios.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
             const fetchedMembers = response.data.map(member => ({
                 id: member.memberId,
                 name: member.memberNickname,
-                team: member.team,
+                email: member.memberId,
                 role: member.memberRole
             }));
             setMembers(fetchedMembers);
@@ -64,7 +66,7 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
         };
 
         try {
-            await axios.post('/api/chat/createWithUsers', chatData);
+            await axios.post('http://localhost:8080/api/chat/createWithUsers', chatData);
             onSave(chatData);
             onClose();
         } catch (error) {
@@ -99,7 +101,7 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
                             .filter(
                                 (member) =>
                                     member.name.includes(searchTerm) ||
-                                    member.team.includes(searchTerm)
+                                    member.email.includes(searchTerm)
                             )
                             .map((member) => (
                                 <div
@@ -109,7 +111,7 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
                                     }`}
                                     onClick={() => handleMemberClick(member)}
                                 >
-                                    {member.name} ({member.team}:{member.role})
+                                    {member.name} ({member.email}:{member.role})
                                 </div>
                             ))}
                     </div>
@@ -122,7 +124,7 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
                             <h3>관리자</h3>
                             {admins.map((admin) => (
                                 <div key={admin.id}>
-                                    {admin.name} ({admin.team}:{admin.role})
+                                    {admin.name} ({admin.email}:{admin.role})
                                 </div>
                             ))}
                         </div>
@@ -130,7 +132,7 @@ const CreateChatModal = ({ onSave, onClose, team }) => {
                             <h3>참여자</h3>
                             {participants.map((participant) => (
                                 <div key={participant.id}>
-                                    {participant.name} ({participant.team}:{participant.role})
+                                    {participant.name} ({participant.email}:{participant.role})
                                 </div>
                             ))}
                         </div>
