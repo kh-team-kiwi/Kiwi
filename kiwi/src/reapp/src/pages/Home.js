@@ -205,17 +205,17 @@ const Home = () => {
         <div className="home-team-list" >
             {teams.map(team => (
                 <div key={team.team} className="team-item" onClick={()=>navigate(`/team/${team.team}`)}>
-                    <img className='team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
-                    <div className='team-info'>
-                        <div className='team-name'>{team.teamName}</div>
-                        <div className='team-members'>{team.teamAdminMemberId} {t('members')}</div>
-                        <div className='team-members'>{"count : "}{team.teamCount}</div>
+                    <img className='home-team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
+                    <div className='home-team-info'>
+                        <div className='home-team-name'>{team.teamName}</div>
+                        <div className='home-team-members'>{team.teamAdminMemberId} {t('members')}</div>
+                        <div className='home-team-members'>{"count : "}{team.teamCount}</div>
                     </div>
                     <div className='home-team-buttons'>
                         <button className='home-team-settings'>
                             <SettingsIcon className="home-settings-icon" />
                         </button>
-                        <button className='team-launch' onClick={()=>navigate(`/team/${team.team}`)} >{t('launch')}</button>
+                        <button className='home-team-launch' onClick={()=>navigate(`/team/${team.team}`)} >{t('launch')}</button>
                     </div>
                 </div>
             ))}
