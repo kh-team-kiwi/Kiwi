@@ -83,17 +83,6 @@ public class TeamService {
 //        // memberId를 사용하는 경우 로직 추가, 필요하지 않다면 아래 코드로 대체 가능
 //        return teamRepository.findAll();
 //    }
-    public List<Team> getAllTeams(String memberId) {
-        List<Group> groups = groupRepository.findAllByMemberId(memberId);
-        System.out.println("TeamService > getAllTeams : "+groups);
-
-        return groups.stream()
-                .map(Group::getTeam) // Group 객체에서 teamId를 추출
-                .map(teamRepository::findById) // teamId로 Team 객체 조회
-                .filter(Optional::isPresent) // Optional이 존재하는지 확인
-                .map(Optional::get) // Optional에서 Team 객체를 추출
-                .collect(Collectors.toList()); // List<Team>으로 수집
-    }
 
     public List<Team> getAllTeams(String memberId) {
         List<Group> groups = groupRepository.findAllByMemberId(memberId);
@@ -106,7 +95,5 @@ public class TeamService {
                 .map(Optional::get) // Optional에서 Team 객체를 추출
                 .collect(Collectors.toList()); // List<Team>으로 수집
     }
-
-
 
 }

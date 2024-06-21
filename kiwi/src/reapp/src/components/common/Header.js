@@ -25,29 +25,34 @@ const Header = () => {
   const navigate = useNavigate();
   const [selectedTeam, setSelectedTeam] = useState({});
 
+  const fetchTeams = async () => {
+    const memberId = getSessionItem("profile").username;
+    try {
+      const res = await axiosHandler.get("/api/team/list/" + memberId);
+      if (res.status === 200) {
+        setTeams(res.data);
+        setSessionItem("teams",res.data);
+      }
+    } catch (error) {
+      console.error('Error fetching teams:', error);
+    }
+  };
+
   useEffect(() => {
-    const team = teams.filter(team=>team.team===teamno);
-    setSelectedTeam(team[0]);
-  }, [teamno]);
-
-  // const fetchTeams = async () => {
-  //   const memberId = getSessionItem("profile").username;
-  //   try {
-  //     const res = await axiosHandler.get("/api/team/list/" + memberId);
-  //     if (res.status === 200) {
-  //       setTeams(res.data);
-  //       setSessionItem("teams",res.data);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching teams:', error);
-  //   }
-  // };
-  //
-  // useEffect(() => {
-  //   fetchTeams();
-  // }, []);
+    fetchTeams();
+  }, []);
 
 
+  useEffect(() => {
+    if (teams.length > 0) {
+      const team = teams.find(team => team.team === teamno);
+      if (team) {
+        setSelectedTeam(team);
+      } else {
+        setSelectedTeam({});
+      }
+    }
+  }, [teamno, teams]);
 
   const handleClick = (page) => {
     setActivePage(page);
