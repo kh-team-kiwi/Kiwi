@@ -46,7 +46,7 @@ const Calendar = () => {
   };
 
   return (
-    <>
+    <div className='test'>
       <CalendarSidebar 
         events={events[selectedCalendar]}  
         calendars={calendars}
@@ -54,7 +54,7 @@ const Calendar = () => {
       <div className='content-container'>
         <CalendarApi events={events[selectedCalendar]} addEvent={addEvent} calendars={calendars} setSelectedCalendar={setSelectedCalendar} selectedCalendar={selectedCalendar}  />
       </div>
-    </>
+    </div>
   );
 };
 

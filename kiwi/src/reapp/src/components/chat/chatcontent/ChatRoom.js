@@ -3,8 +3,17 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
+import {useParams} from "react-router-dom";
+import {getSessionItem} from "../../../jwt/storage";
 
 const ChatRoom = ({ chatNum }) => {
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        const storedProfile = getSessionItem("profile");
+        setProfile(storedProfile);
+    }, []);
+    const { team } = useParams();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [sender, setSender] = useState('');
@@ -61,8 +70,8 @@ const ChatRoom = ({ chatNum }) => {
                 if (files.length > 0) {
                     const formData = new FormData();
                     files.forEach(file => formData.append('files', file));
-                    formData.append('team', 'your-team-name');
-                    formData.append('chatName', 'your-chat-name');
+                    formData.append('team', team);
+                    formData.append('chatName', sender);
 
                     const response = await axios.post('http://localhost:8080/api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
@@ -73,7 +82,6 @@ const ChatRoom = ({ chatNum }) => {
 
                 stompClient.current.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(chatMessage));
 
-                // 메시지를 전송한 후 필드 초기화
                 setMessage('');
                 setFiles([]);
                 if (fileInputRef.current) {

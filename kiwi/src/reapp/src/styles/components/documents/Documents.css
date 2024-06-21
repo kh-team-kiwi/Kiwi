@@ -5,13 +5,13 @@
     left: 250px;
 }
 
-.sidebar {
+.documents-sidebar {
     width: 250px;
     background: #f4f4f4;
     padding: 20px;
 }
 
-.sidebar button.newDoc {
+.documents-sidebar button.newDoc {
     width: 100%;
     padding: 10px;
     background: #007bff;
@@ -25,25 +25,25 @@
     border-radius: 5px;
 }
 
-.sidebar button.newDoc:hover {
+.documents-sidebar button.newDoc:hover {
     background: #0056b3;
 }
 
-.sidebar ul.menu {
+.documents-sidebar ul.menu {
     list-style: none;
     padding: 0;
 }
 
-.sidebar ul.menu li {
+.documents-sidebar ul.menu li {
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.sidebar ul.menu li:hover {
+.documents-sidebar ul.menu li:hover {
     background: #eaeaea;
 }
 
-.sidebar ul.menu li span {
+.documents-sidebar ul.menu li span {
     float: right;
 }

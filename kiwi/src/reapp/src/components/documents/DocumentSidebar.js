@@ -51,7 +51,7 @@ const DocumentSidebar = ({ handleMenuClick }) => {
     };
 
     return (
-        <div className="sidebar">
+        <div className="sidebar documents-sidebar">
             <button type='button' className="newDoc document-btn" onClick={() => handleMenuClick('newDocument')}>작성하기</button>
             <ul className="menu">
                 <li onClick={() => handleMenuClick('documentList')}>전체 <span className="count">{counts.전체}</span></li>
