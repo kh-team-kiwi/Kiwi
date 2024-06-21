@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
@@ -13,9 +13,10 @@ import EmptyIcon from '../images/empty.png';
 
 
 import '../styles/pages/Home.css';
-import {getSessionItem, removeLocalItem, removeSessionItem} from "../jwt/storage";
+import {getSessionItem, removeLocalItem, removeSessionItem, setSessionItem} from "../jwt/storage";
 import axiosHandler from "../jwt/axiosHandler";
 import ErrorImageHandler from "../components/common/ErrorImageHandler";
+import {TeamContext} from "../context/TeamContext";
 
 import DownArrow from '../images/svg/shapes/DownArrow';
 import PlusIcon from '../images/svg/shapes/PlusIcon';
@@ -65,7 +66,6 @@ const Home = () => {
         setUserDropdown(!userDropdown);
     };
 
-    const [teams, setTeams] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -84,6 +84,7 @@ const Home = () => {
         };
     }, []);
 
+    const [teams, setTeams] = useContext(TeamContext);
 
     const fetchTeams = async () => {
         const memberId = getSessionItem("profile").username;
@@ -92,6 +93,7 @@ const Home = () => {
             if (res.status === 200) {
                 console.log("home.js > fetchTeams : ",res.data);
                 setTeams(res.data);
+                setSessionItem("teams",res.data);
             }
         } catch (error) {
             console.error('Error fetching teams:', error);
@@ -102,16 +104,15 @@ const Home = () => {
         fetchTeams();
     }, []);
 
-
-      const handleCreateTeam = async (formTeamData) => {
-          const memberId = getSessionItem("profile").username;
-          console.log("home.js> handleCreateTeam : ",memberId);
-          console.log("home.js> handleCreateTeam : ",formTeamData)
-          const response = await axiosHandler.post(`/api/team/create?memberId=${memberId}`, formTeamData);
-          if (response.status === 200) {
-              fetchTeams();
-          }
-      };
+    const handleCreateTeam = async (formTeamData) => {
+        const memberId = getSessionItem("profile").username;
+        console.log("home.js> handleCreateTeam : ",memberId);
+        console.log("home.js> handleCreateTeam : ",formTeamData)
+        const response = await axiosHandler.post(`/api/team/create?memberId=${memberId}`, formTeamData);
+        if (response.status === 200) {
+        fetchTeams();
+        }
+    };
 
     const user = getSessionItem("profile");
     /* 로그아웃 */
@@ -203,18 +204,18 @@ const Home = () => {
     ) : (
         <div className="home-team-list" >
             {teams.map(team => (
-                <div key={team.team} className="team-item" onClick={()=>navigate(`/chat/${team.team}`)}>
-                    <img className='home-team-image' src={team.teamFilepath} onError={ErrorImageHandler} alt='Team image' />
-                    <div className='home-team-info'>
-                        <div className='home-team-name'>{team.teamName}</div>
-                        <div className='home-team-members'>{team.teamAdminMemberId} {t('members')}</div>
-                        <div className='home-team-members'>{"count : "}{team.teamCount}</div>
+                <div key={team.team} className="team-item" onClick={()=>navigate(`/team/${team.team}`)}>
+                    <img className='team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
+                    <div className='team-info'>
+                        <div className='team-name'>{team.teamName}</div>
+                        <div className='team-members'>{team.teamAdminMemberId} {t('members')}</div>
+                        <div className='team-members'>{"count : "}{team.teamCount}</div>
                     </div>
                     <div className='home-team-buttons'>
                         <button className='home-team-settings'>
                             <SettingsIcon className="home-settings-icon" />
                         </button>
-                        <button className='home-team-launch' onClick={()=>navigate(`/chat/${team.team}`)} >{t('launch')}</button>
+                        <button className='team-launch' onClick={()=>navigate(`/team/${team.team}`)} >{t('launch')}</button>
                     </div>
                 </div>
             ))}
