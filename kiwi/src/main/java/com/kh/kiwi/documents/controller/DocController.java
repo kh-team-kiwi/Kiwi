@@ -39,18 +39,18 @@ public class DocController {
             @RequestPart("doc") Doc doc,
             @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
 
-        // employeeNo가 없으면 기본 값 설정
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
             doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
         }
-
+        if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
+            doc.setDocTitle("제목을 불러오지 못했습니다.c");
+        }
+        if (doc.getName() == null || doc.getName().trim().isEmpty()) {
+            doc.setName("이름없음"); // 기본 작성자 이름 설정
+        }
         docService.addDoc(doc);
-
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
-
-
-
 
     @PutMapping("/{id}")
     public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ApprovalLineModal from './ApprovalLineModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import '../../styles/components/documents/NewDocument.css';
 
-const NewDocument = ({ author = { name: '', department: '', position: '' } }) => {
+const NewDocument = () => {
     const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
     const [approvalLine, setApprovalLine] = useState({ approvers: [], references: [] });
     const [tooltipVisible, setTooltipVisible] = useState(false);
-
+    const [author, setAuthor] = useState({ name: '', department: '', position: '' });
     const [newDocument, setNewDocument] = useState({
         docType: '',
         retentionPeriod: '',
@@ -17,9 +17,48 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
         title: '',
         content: '',
         attachment: null,
-        name: author?.name || '',
-        docDate: new Date().toISOString() // 현재 시간을 ISO 형식으로 추가
+        name: '',
+        memberId: '', // 변경된 필드 이름 사용
+        docDate: new Date().toISOString()
     });
+
+    // sessionStorage에서 username을 가져와서 API 호출
+    useEffect(() => {
+        const profile = JSON.parse(sessionStorage.getItem('profile'));
+        console.log("Session profile:", profile);
+
+        if (profile) {
+            const { username } = profile;
+            console.log("Username from session:", username);
+
+            // API 호출 시 username을 memberId로 사용
+            axios.get(`/api/members/details/${username}`)
+                .then((response) => {
+                    console.log("API response:", response.data);
+                    if (response.data) {
+                        const { name, deptName, position } = response.data;
+                        setAuthor({
+                            name: name || 'N/A',
+                            department: deptName || 'N/A',
+                            position: position || 'N/A'
+                        });
+                        setNewDocument((prevState) => ({
+                            ...prevState,
+                            name: name || 'N/A',
+                            memberId: username
+                        }));
+                    } else {
+                        // alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
+                        // window.location.href = "/";
+                    }
+                })
+                .catch((error) => {
+                    console.error("Failed to fetch user data:", error);
+                    // alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
+                    // window.location.href = "/"; // 홈 페이지로 이동
+                });
+        }
+    }, []);
 
     const handleTooltipMouseEnter = () => {
         setTooltipVisible(true);
@@ -43,10 +82,6 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
 
         try {
             const formData = new FormData();
-
-            // 기본 값 설정 로직 추가
-            const employeeNo = newDocument.employeeNo && newDocument.employeeNo.trim() !== '' ? newDocument.employeeNo : '1@kimcs';
-
             const docData = {
                 docType: newDocument.docType,
                 retentionPeriod: newDocument.retentionPeriod,
@@ -54,9 +89,9 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                 title: newDocument.title,
                 content: newDocument.content,
                 name: newDocument.name,
-                employeeNo: employeeNo, // 기본 값이 설정된 employeeNo 사용
-                docDate: new Date().toISOString().slice(0, 19), // ISO 형식의 끝 'Z' 제거
-                docStatus: "진행중" // 기본 상태로 설정
+                memberId: newDocument.memberId, // 변경된 필드 이름 사용
+                docDate: new Date().toISOString().slice(0, 19),
+                docStatus: "진행중"
             };
 
             // docTitle이 비어 있으면 경고 메시지 표시
@@ -65,15 +100,12 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                 return;
             }
 
-            // JSON을 문자열로 변환하고 Blob으로 감싸서 FormData에 추가합니다.
             formData.append('doc', new Blob([JSON.stringify(docData)], { type: 'application/json' }));
 
-            // 파일이 있을 경우에만 FormData에 추가합니다.
             if (newDocument.attachment) {
                 formData.append('attachment', newDocument.attachment);
             }
 
-            // Axios로 POST 요청을 보냅니다.
             await axios.post('/documents', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -87,8 +119,6 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
         }
     };
 
-
-    // 문서 저장 버튼 클릭 시
     const handleSaveClick = () => {
         if (!newDocument.title || newDocument.title.trim() === '') {
             alert("문서 제목을 입력해 주세요.");
@@ -97,12 +127,6 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
         handleSubmit();
     };
 
-
-
-
-
-
-    // 문서 종류에 따른 예시 내용을 반환
     const getExampleContent = (docType) => {
         switch (docType) {
             case '품의서':
@@ -194,9 +218,9 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                     </td>
                     <th scope="row">작성자</th>
                     <td>
-                        <span className="author-name">{author?.name || '홍길동'}</span>
-                        <span className="author-department">{author?.department || '개발부서'}</span>
-                        <span className="author-position">{author?.position || '사원'}</span>
+                        <span className="author-name">{author.name || 'N/A'}</span>
+                        <span className="author-department">{author.department || 'N/A'}</span>
+                        <span className="author-position">{author.position || 'N/A'}</span>
                     </td>
                 </tr>
                 <tr>
@@ -220,11 +244,11 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                             <FontAwesomeIcon icon={faQuestionCircle} />
                             {tooltipVisible && (
                                 <span className="tooltipText">
-                                        S 등급 : 관련자들만 문서를 열람<br />
-                                        A 등급 : 관련자 및 2등급(부장, 이사, 사내이사, 본부장) 이상인 사람만 열람<br />
-                                        B 등급 : 관련자 및 3등급(팀장, PA) 이상인 사람만 열람<br />
-                                        C 등급 : 모든 임직원이 문서를 열람
-                                    </span>
+                                    S 등급 : 관련자들만 문서를 열람<br />
+                                    A 등급 : 관련자 및 2등급(부장, 이사, 사내이사, 본부장) 이상인 사람만 열람<br />
+                                    B 등급 : 관련자 및 3등급(팀장, PA) 이상인 사람만 열람<br />
+                                    C 등급 : 모든 임직원이 문서를 열람
+                                </span>
                             )}
                         </div>
                     </th>
@@ -265,8 +289,8 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                                 <tbody>
                                 <tr>
                                     <td className="team name">{author.position}</td>
-                                    <td className="team name">{author.position}</td>
-                                    <td className="team name">{author.position}</td>
+                                    <td className="team name"></td>
+                                    <td className="team name"></td>
                                 </tr>
                                 <tr>
                                     <td className="stamp"></td>
@@ -275,8 +299,8 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                                 </tr>
                                 <tr>
                                     <td className="name">{author.name}</td>
-                                    <td className="name">{author.name}</td>
-                                    <td className="name">{author.name}</td>
+                                    <td className="name"></td>
+                                    <td className="name"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -332,9 +356,9 @@ const NewDocument = ({ author = { name: '', department: '', position: '' } }) =>
                         <td id="approvalThirdLine">
                             {approvalLine.references.map((ref, index) => (
                                 <span key={ref.id}>
-                                        {ref.name}
+                                    {ref.name}
                                     {index < approvalLine.references.length - 1 ? ', ' : ''}
-                                    </span>
+                                </span>
                             ))}
                         </td>
                     </tr>

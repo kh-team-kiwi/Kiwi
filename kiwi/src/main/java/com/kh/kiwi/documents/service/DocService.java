@@ -61,12 +61,19 @@ public class DocService {
     }
 
     public void addDoc(Doc doc) {
-        // employeeNo가 없으면 기본 값 설정
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
-            doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
+            doc.setEmployeeNo("1@kimcs");
         }
 
-        // 다른 필드에 대한 기본 값 설정을 추가할 수 있습니다.
+        if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
+            doc.setDocTitle("제목을 불러오지 못했습니다.s");
+        }
+
+        if (doc.getName() == null || doc.getName().trim().isEmpty()) {
+            MemberDetails memberDetails = memberDetailsRepository.findById(doc.getEmployeeNo())
+                    .orElseThrow(() -> new RuntimeException("사원 정보를 찾을 수 없습니다."));
+            doc.setName(memberDetails.getName());
+        }
 
         docRepository.save(doc);
     }

@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface MemberDetailsRepository extends JpaRepository<MemberDetails, String> {
 
+
     MemberDetails findByEmployeeNo(String employeeNo);
 
     List<MemberDetails> findByCompanyNum(int companyNum);

@@ -38,6 +38,12 @@ public class MemberDetailsService {
         return optionalMemberDetails.map(MemberDetailsDTO::new).orElse(null);
     }
 
+    // MemberDetailsService에 수정된 메서드
+    public MemberDetailsDTO getMemberDetailsByMemberId(String memberId) {
+        List<MemberDetails> memberDetailsList = memberDetailsRepository.findByMemberId(memberId);
+        return memberDetailsList.stream().findFirst().map(MemberDetailsDTO::new).orElse(null);
+    }
+
     public void updateMemberDetails(String employeeNo, MemberDetailsDTO memberDetailsDTO) {
         MemberDetails existingMemberDetails = memberDetailsRepository.findById(employeeNo)
                 .orElseThrow(() -> new RuntimeException("Member details not found for employeeNo: " + employeeNo));
