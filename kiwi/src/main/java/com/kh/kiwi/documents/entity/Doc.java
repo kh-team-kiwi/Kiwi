@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "doc")  // 테이블 이름에 맞게 변경
 public class Doc {
-
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime docDate;
 
@@ -22,7 +21,6 @@ public class Doc {
     @Enumerated(EnumType.STRING)
     private DocStatus docStatus = DocStatus.진행중; // 기본값 설정
 
-    // Enum 타입 정의
     public enum DocStatus {
         진행중, 완료, 반려
     }
@@ -36,9 +34,6 @@ public class Doc {
             this.docTitle = "기본 제목"; // 기본 제목 설정
         }
     }
-
-//    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-//    private LocalDateTime docDate;
 
     private LocalDateTime docCompletion;
     private String docContents;

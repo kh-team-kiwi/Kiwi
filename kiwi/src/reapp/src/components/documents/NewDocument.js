@@ -86,10 +86,10 @@ const NewDocument = () => {
                 docType: newDocument.docType,
                 retentionPeriod: newDocument.retentionPeriod,
                 accessLevel: newDocument.accessLevel,
-                title: newDocument.title,
-                content: newDocument.content,
+                docTitle: newDocument.title, // 올바르게 설정됨
+                docContents: newDocument.content, // 올바르게 설정됨
                 name: newDocument.name,
-                memberId: newDocument.memberId, // 변경된 필드 이름 사용
+                employeeNo: newDocument.memberId, // 올바르게 설정됨
                 docDate: new Date().toISOString().slice(0, 19),
                 docStatus: "진행중"
             };
@@ -106,18 +106,20 @@ const NewDocument = () => {
                 formData.append('attachment', newDocument.attachment);
             }
 
-            await axios.post('/documents', formData, {
+            const response = await axios.post('/documents', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
+            console.log('Document saved successfully:', response.data);
             alert("문서가 성공적으로 저장되었습니다.");
         } catch (error) {
             console.error("문서 저장 중 오류가 발생했습니다.", error);
             alert("문서 저장 중 오류가 발생했습니다.");
         }
     };
+
 
     const handleSaveClick = () => {
         if (!newDocument.title || newDocument.title.trim() === '') {

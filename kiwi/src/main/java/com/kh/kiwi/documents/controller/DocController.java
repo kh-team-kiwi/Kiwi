@@ -5,12 +5,10 @@ import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -39,15 +37,27 @@ public class DocController {
             @RequestPart("doc") Doc doc,
             @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
 
+        // 기본 설정 로직 확인
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
             doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
         }
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
-            doc.setDocTitle("제목을 불러오지 못했습니다.c");
+            doc.setDocTitle("제목을 불러오지 못했습니다.");
         }
         if (doc.getName() == null || doc.getName().trim().isEmpty()) {
             doc.setName("이름없음"); // 기본 작성자 이름 설정
         }
+
+        // 문서 내용이 비어 있을 경우 기본값 설정
+        if (doc.getDocContents() == null || doc.getDocContents().trim().isEmpty()) {
+            doc.setDocContents("내용 없음");
+        }
+
+        // 첨부 파일 처리 로직 (옵션)
+        // if (attachment != null) {
+        //     // 파일 저장 로직 추가 가능
+        // }
+
         docService.addDoc(doc);
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
@@ -120,7 +130,4 @@ public class DocController {
         Map<String, Long> countMap = docService.getCountByStatus();
         return ResponseEntity.ok(countMap);
     }
-
-
-
 }
