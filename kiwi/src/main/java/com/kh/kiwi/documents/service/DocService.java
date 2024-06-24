@@ -136,6 +136,8 @@ public class DocService {
     }
 
     public void addComment(Long docNum, CommentDto commentDto) {
+        System.out.println("addComment called with docNum: " + docNum + " and commentDto: " + commentDto);
+
         Doc doc = docRepository.findByDocNum(docNum);
         if (doc == null) {
             throw new EntityNotFoundException("해당 문서를 찾을 수 없습니다.");
@@ -143,14 +145,20 @@ public class DocService {
 
         // 사원 번호로 MemberDetails를 조회
         MemberDetails employee = memberDetailsRepository.findById(commentDto.getEmployeeNo())
-                .orElseThrow(() -> new EntityNotFoundException("해당 사원을 찾을 수 없습니다."));
+                .orElseThrow(() -> {
+                    System.err.println("해당 사원을 찾을 수 없습니다: " + commentDto.getEmployeeNo());
+                    return new EntityNotFoundException("해당 사원을 찾을 수 없습니다.");
+                });
 
         Comment comment = new Comment();
         comment.setDoc(doc);
         comment.setContent(commentDto.getContent());
         comment.setCreatedAt(LocalDateTime.now());
-        comment.setEmployee(employee); // 사원 정보 설정
+        comment.setEmployee(employee);
 
         commentRepository.save(comment);
+        System.out.println("의견이 저장되었습니다.");
     }
+
+
 }

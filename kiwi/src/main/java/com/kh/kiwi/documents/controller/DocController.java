@@ -74,6 +74,7 @@ public class DocController {
         }
     }
 
+
     @PostMapping
     public ResponseEntity<String> addDoc(
             @RequestPart("doc") Doc doc,
@@ -138,14 +139,16 @@ public class DocController {
     @PostMapping("/{docNum}/comments")
     public ResponseEntity<?> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
         try {
+            System.out.println("Received request to add comment for docNum: " + docNum + " with content: " + commentDto.getContent());
             docService.addComment(docNum, commentDto);
             return ResponseEntity.ok().build();
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 추가에 실패하였습니다.");
         }
     }
+
+
 
     // 문서 상태별로 문서를 가져오는 엔드포인트 추가
     @GetMapping("/status/{status}")

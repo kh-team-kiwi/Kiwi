@@ -11,20 +11,54 @@ const DocumentDetails = ({ document, onClose }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [attachments, setAttachments] = useState([]);
+    const [employeeNo, setEmployeeNo] = useState(''); // employeeNo 상태 추가
+    const [author, setAuthor] = useState({ name: '', deptName: '', position: '' }); // 인사 정보 추가
+
+    useEffect(() => {
+        // 세션에서 사용자 정보 가져오기
+        const profile = JSON.parse(sessionStorage.getItem('profile'));
+        if (profile && profile.username) {
+            console.log("Session profile:", profile);
+            const username = profile.username;
+
+            // API 호출하여 사용자의 인사 정보 가져오기
+            axios.get(`/api/members/details/${username}`)
+                .then(response => {
+                    if (response.data) {
+                        const { employeeNo, name, deptName, position } = response.data;
+                        setEmployeeNo(employeeNo);
+                        setAuthor({ name, deptName, position });
+                        console.log("User details from API:", response.data);
+                    } else {
+                        console.warn("No HR information found for the user.");
+                        setError('사용자의 인사 정보를 찾을 수 없습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error("Failed to fetch user details:", error);
+                    setError('사용자의 인사 정보를 가져오는 중 오류가 발생했습니다.');
+                });
+        } else {
+            console.warn("No user profile found in session.");
+            setError('로그인 정보가 없습니다.');
+        }
+    }, []);
 
     useEffect(() => {
         const fetchDocumentDetails = async () => {
             try {
+                console.log("Fetching document details for docNum:", document.docNum);
                 const response = await axios.get(`http://localhost:8080/documents/details/${document.docNum}`);
                 const details = response.data;
-                console.log('Document details:', details);
 
                 setDocDetails(details);
                 setApprovalLine(details.approvalLines || []);
                 setComments(details.comments || []);
                 setAttachments(details.attachments || []);
                 setLoading(false);
+                console.log("Document details fetched successfully:", details);
             } catch (error) {
+                console.error("Failed to fetch document details:", error);
                 setError('문서 세부 정보를 불러오는데 실패하였습니다.');
                 setLoading(false);
             }
@@ -39,15 +73,28 @@ const DocumentDetails = ({ document, onClose }) => {
     }, [document.docNum]);
 
     const handleAddComment = async () => {
-        if (newComment.trim() === '') return;
+        if (newComment.trim() === '') {
+            console.warn("Empty comment cannot be submitted");
+            return;
+        }
+
+        if (!employeeNo) {
+            console.warn("employeeNo is not set. User may not be logged in properly.");
+            return;
+        }
+
         try {
+            console.log("Sending comment:", newComment, "by employeeNo:", employeeNo);
             const response = await axios.post(`http://localhost:8080/documents/${document.docNum}/comments`, {
-                content: newComment
+                content: newComment,
+                employeeNo: employeeNo // 실제 로그인된 사용자 정보 사용
             }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
+
+            console.log("Comment added successfully:", response.data);
             setComments([...comments, response.data]);
             setNewComment('');
         } catch (error) {
@@ -110,7 +157,7 @@ const DocumentDetails = ({ document, onClose }) => {
                             <tr>
                                 {[...Array(8)].map((_, index) => (
                                     <td key={index} className="team name">
-                                        {approvalLine[index]?.position || ''} {/* 추가된 직책 */}
+                                        {approvalLine[index]?.position || ''}
                                     </td>
                                 ))}
                             </tr>
@@ -124,7 +171,7 @@ const DocumentDetails = ({ document, onClose }) => {
                             <tr>
                                 {[...Array(8)].map((_, index) => (
                                     <td key={index} className="name">
-                                        {approvalLine[index]?.employeeName || ''} {/* 추가된 이름 */}
+                                        {approvalLine[index]?.employeeName || ''}
                                     </td>
                                 ))}
                             </tr>
@@ -147,11 +194,11 @@ const DocumentDetails = ({ document, onClose }) => {
                         {docDetails.references && docDetails.references.length > 0 ? (
                             docDetails.references.map((reference, index) => (
                                 <span key={index}>
-                                    <span className="referenceHead"> {reference.employeeName} {/* 참조자 이름 */}</span>
-                                    <span className="referenceBody"> {reference.deptName} {/* 참조자 부서 */}</span>
-                                    <span className="referenceBody"> {reference.position} {/* 참조자 직책 */}</span>
+                                        <span className="referenceHead"> {reference.employeeName}</span>
+                                        <span className="referenceBody"> {reference.deptName}</span>
+                                        <span className="referenceBody"> {reference.position}</span>
                                     {index < docDetails.references.length - 1 ? ', ' : ''}
-                                </span>
+                                    </span>
                             ))
                         ) : (
                             <span>참조자 없음</span>

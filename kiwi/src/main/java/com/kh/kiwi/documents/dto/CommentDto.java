@@ -1,11 +1,8 @@
 package com.kh.kiwi.documents.dto;
 
-import lombok.ToString;
-
-@ToString
 public class CommentDto {
     private String content;
-    private String employeeNo; // 추가된 필드
+    private String employeeNo; // 댓글 작성자 번호 추가
 
     // Getters and setters
     public String getContent() {
