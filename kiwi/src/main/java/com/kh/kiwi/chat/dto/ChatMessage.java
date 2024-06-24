@@ -22,5 +22,4 @@ public class ChatMessage {
     private String chatContent;
     private String memberNickname; // 추가된 필드
 
-
 }

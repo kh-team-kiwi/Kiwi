@@ -80,10 +80,11 @@ const DocumentDetails = ({ document, onClose }) => {
                     </tr>
                     <tr>
                         <th>보존 기간</th>
-                        <td>{docDetails.scheduledDeletionDate ? moment(docDetails.scheduledDeletionDate).format('YYYY-MM-DD') : 'N/A'}</td>
+                        {/*<td>{docDetails.scheduledDeletionDate ? moment(docDetails.scheduledDeletionDate).format('YYYY-MM-DD') : 'N/A'}</td>*/}
+                        <td>{docDetails.retentionPeriod}</td>
                     </tr>
                     <tr>
-                        <th>열람 권한 등급</th>
+                    <th>열람 권한 등급</th>
                         <td>{docDetails.accessLevel}</td>
                     </tr>
                     <tr>

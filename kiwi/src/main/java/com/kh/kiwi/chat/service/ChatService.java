@@ -6,9 +6,8 @@ import com.kh.kiwi.chat.entity.ChatUsers;
 import com.kh.kiwi.chat.entity.ChatUsers.ChatUsersId;
 import com.kh.kiwi.chat.repository.ChatRepository;
 import com.kh.kiwi.chat.repository.ChatUsersRepository;
-import com.kh.kiwi.s3drive.dto.FileDriveDTO;
-import com.kh.kiwi.s3drive.service.FileDriveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -27,10 +26,9 @@ public class ChatService {
     private ChatUsersRepository chatUsersRepository;
     @Autowired
     private S3Client s3Client;
-    @Autowired
-    private FileDriveService fileDriveService;
 
-    private final String bucketName = "YOUR_BUCKET_NAME";
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
 
     public List<Chat> getAllChats() {
         return chatRepository.findAll();
@@ -52,11 +50,8 @@ public class ChatService {
         chat.setChatOpen(request.isChatOpen());
         Chat createdChat = chatRepository.save(chat);
 
-        // 드라이브 생성
-        FileDriveDTO fileDriveDTO = new FileDriveDTO();
-        fileDriveDTO.setDriveName(request.getChatName());
-        fileDriveDTO.setTeam(request.getTeam());
-        fileDriveService.createDrive(fileDriveDTO);
+        // S3에 폴더 생성
+        createS3Folder(request.getTeam(), createdChat.getChatNum());
 
         // Add admins and participants to the chat
         request.getAdmins().forEach(admin -> {
@@ -84,6 +79,15 @@ public class ChatService {
         return createdChat;
     }
 
+    private void createS3Folder(String team, Integer chatNum) {
+        String folderName =  team + "/chat/" + chatNum + "/";
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(folderName)
+                .build();
+        s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromBytes(new byte[0]));
+    }
+
     public Chat getChatById(Integer chatNum) {
         return chatRepository.findById(chatNum).orElse(null);
     }
@@ -92,9 +96,9 @@ public class ChatService {
         chatRepository.deleteById(chatNum);
     }
 
-    public String uploadFile(MultipartFile file, String team, String chatName) throws IOException {
+    public String uploadFile(MultipartFile file, String team, Integer chatNum) throws IOException {
         String fileCode = UUID.randomUUID().toString();
-        String uniqueFileName = "chat/" + team + "/" + chatName + "/" + fileCode + "-" + file.getOriginalFilename();
+        String uniqueFileName = team + "/chat/" + chatNum + "/" + fileCode;
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)

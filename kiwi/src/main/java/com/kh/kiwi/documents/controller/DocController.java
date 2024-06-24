@@ -3,6 +3,7 @@ package com.kh.kiwi.documents.controller;
 import com.kh.kiwi.documents.dto.CommentDto;
 import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
+import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,30 +36,37 @@ public class DocController {
     @PostMapping
     public ResponseEntity<String> addDoc(
             @RequestPart("doc") Doc doc,
-            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
+            @RequestPart(value = "attachment", required = false) MultipartFile attachment,
+            @RequestPart(value = "approvalLine", required = false) ApprovalLineDto approvalLine) { // 추가된 부분
 
-        // 기본 설정 로직 확인
+        // 기존 문서 저장 로직
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
-            doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
+            doc.setEmployeeNo("1@kimcs");
         }
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
             doc.setDocTitle("제목을 불러오지 못했습니다.");
         }
         if (doc.getName() == null || doc.getName().trim().isEmpty()) {
-            doc.setName("이름없음"); // 기본 작성자 이름 설정
+            doc.setName("이름없음");
         }
-
-        // 문서 내용이 비어 있을 경우 기본값 설정
         if (doc.getDocContents() == null || doc.getDocContents().trim().isEmpty()) {
             doc.setDocContents("내용 없음");
         }
+        if (doc.getRetentionPeriod() == null || doc.getRetentionPeriod().trim().isEmpty()) {
+            doc.setRetentionPeriod("1년");
+        }
+        if (doc.getAccessLevel() == null) {
+            doc.setAccessLevel(Doc.AccessLevel.C);
+        }
 
-        // 첨부 파일 처리 로직 (옵션)
-        // if (attachment != null) {
-        //     // 파일 저장 로직 추가 가능
-        // }
-
+        // 문서 저장
         docService.addDoc(doc);
+
+        // 결재선 및 참조자 저장 로직 추가
+        if (approvalLine != null) {
+            docService.saveApprovalLine(doc, approvalLine); // 새로운 메서드 호출
+        }
+
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
 

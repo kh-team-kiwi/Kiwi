@@ -84,23 +84,39 @@ const NewDocument = () => {
             const formData = new FormData();
             const docData = {
                 docType: newDocument.docType,
-                retentionPeriod: newDocument.retentionPeriod,
-                accessLevel: newDocument.accessLevel,
-                docTitle: newDocument.title, // 올바르게 설정됨
-                docContents: newDocument.content, // 올바르게 설정됨
+                retentionPeriod: newDocument.retentionPeriod, // 추가된 필드
+                accessLevel: newDocument.accessLevel, // 추가된 필드
+                docTitle: newDocument.title,
+                docContents: newDocument.content,
                 name: newDocument.name,
-                employeeNo: newDocument.memberId, // 올바르게 설정됨
+                employeeNo: newDocument.memberId,
                 docDate: new Date().toISOString().slice(0, 19),
                 docStatus: "진행중"
             };
 
-            // docTitle이 비어 있으면 경고 메시지 표시
             if (!newDocument.title || newDocument.title.trim() === '') {
                 alert("문서 제목을 입력해 주세요.");
                 return;
             }
 
             formData.append('doc', new Blob([JSON.stringify(docData)], { type: 'application/json' }));
+
+            // 결재자와 참조자 정보를 추가
+            const approvalLineData = {
+                approvers: approvalLine.approvers.map((approver, index) => ({
+                    employeeNo: approver.id,
+                    name: approver.name,
+                    position: approver.position
+                })),
+                references: approvalLine.references.map(ref => ({
+                    employeeNo: ref.id,
+                    name: ref.name,
+                    companyNum: 1, // 예시로 추가된 필드
+                    memberId: ref.id // 예시로 추가된 필드
+                }))
+            };
+
+            formData.append('approvalLine', new Blob([JSON.stringify(approvalLineData)], { type: 'application/json' }));
 
             if (newDocument.attachment) {
                 formData.append('attachment', newDocument.attachment);

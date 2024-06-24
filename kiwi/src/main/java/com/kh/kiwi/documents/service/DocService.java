@@ -1,14 +1,9 @@
 package com.kh.kiwi.documents.service;
 
+import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.dto.CommentDto;
-import com.kh.kiwi.documents.entity.Comment;
-import com.kh.kiwi.documents.entity.Doc;
-import com.kh.kiwi.documents.entity.ApprovalLine;
-import com.kh.kiwi.documents.entity.MemberDetails;
-import com.kh.kiwi.documents.repository.CommentRepository;
-import com.kh.kiwi.documents.repository.DocRepository;
-import com.kh.kiwi.documents.repository.ApprovalLineRepository;
-import com.kh.kiwi.documents.repository.MemberDetailsRepository;
+import com.kh.kiwi.documents.entity.*;
+import com.kh.kiwi.documents.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +19,14 @@ public class DocService {
     private final ApprovalLineRepository approvalLineRepository;
     private final CommentRepository commentRepository;
     private final MemberDetailsRepository memberDetailsRepository;
+    private final ReferrerRepository referrerRepository;
 
-    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository, CommentRepository commentRepository, MemberDetailsRepository memberDetailsRepository) {
+    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository, CommentRepository commentRepository, MemberDetailsRepository memberDetailsRepository, ReferrerRepository referrerRepository) {
         this.docRepository = docRepository;
         this.approvalLineRepository = approvalLineRepository;
         this.commentRepository = commentRepository;
         this.memberDetailsRepository = memberDetailsRepository;
+        this.referrerRepository = referrerRepository;
     }
 
     public List<Doc> selectAllList() {
@@ -55,33 +52,52 @@ public class DocService {
         return countMap;
     }
 
-
     public Doc getDocById(Long id) {
         return docRepository.findById(id).orElse(null);
     }
 
     public void addDoc(Doc doc) {
-        // 제목 설정
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
             doc.setDocTitle("기본 제목");
         }
-
-        // 작성자 이름 설정
         if (doc.getName() == null || doc.getName().trim().isEmpty()) {
             MemberDetails memberDetails = memberDetailsRepository.findById(doc.getEmployeeNo())
                     .orElseThrow(() -> new RuntimeException("사원 정보를 찾을 수 없습니다."));
             doc.setName(memberDetails.getName());
         }
-
-        // 문서 내용 설정
         if (doc.getDocContents() == null || doc.getDocContents().trim().isEmpty()) {
             doc.setDocContents("내용 없음");
+        }
+        if (doc.getRetentionPeriod() == null || doc.getRetentionPeriod().trim().isEmpty()) {
+            doc.setRetentionPeriod("1년");
+        }
+        if (doc.getAccessLevel() == null) {
+            doc.setAccessLevel(Doc.AccessLevel.C);
         }
 
         docRepository.save(doc);
     }
 
+    public void saveApprovalLine(Doc doc, ApprovalLineDto approvalLineDto) {
+        // 결재자 저장
+        for (int i = 0; i < approvalLineDto.getApprovers().size(); i++) {
+            ApprovalLine approvalLine = new ApprovalLine();
+            approvalLine.setDocNum(doc.getDocNum());
+            approvalLine.setDocSeq(String.valueOf(i + 1)); // 결재 순서 설정
+            approvalLine.setEmployeeNo(approvalLineDto.getApprovers().get(i).getEmployeeNo());
+            approvalLine.setDocConf(0); // 기본값 설정
+            approvalLineRepository.save(approvalLine);
+        }
 
+        // 참조자 저장
+        for (int i = 0; i < approvalLineDto.getReferences().size(); i++) {
+            DocReferrer referrer = new DocReferrer();
+            referrer.setDocNum(doc.getDocNum());
+            referrer.setMemberId(approvalLineDto.getReferences().get(i).getEmployeeNo()); // 예시: 실제 로직에 따라 값을 설정
+            referrer.setEmployeeNo(approvalLineDto.getReferences().get(i).getEmployeeNo());
+            referrerRepository.save(referrer);
+        }
+    }
 
     public void updateDoc(Long id, Doc updatedDoc) {
         Doc existingDoc = docRepository.findById(id).orElse(null);
