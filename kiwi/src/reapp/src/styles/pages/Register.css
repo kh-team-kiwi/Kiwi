@@ -325,3 +325,168 @@ body {
     background-color: var(--green-hover);
     transition: 0.2s;
 }
+
+.validator-email-box.show {
+    display: block;
+}
+
+.validator-email-box.hide {
+    display: none;
+}
+
+
+.validator-email-box {
+    position: absolute;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-color: #fff;
+    text-align: center;
+    margin-left: -520px;
+    z-index: 300;
+    width: 500px;
+    height: 230px;
+    margin-top: -470px;
+}
+
+.validator-email-box::before {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    right: calc( -0.7em + 4px );
+    transform: rotate( 135deg );
+    background-color: #fff;
+    content: '';
+    z-index:299;
+    margin-top: 105px;
+}
+
+.validator-username-box.show {
+    display: block;
+}
+
+.validator-username-box.hide {
+    display: none;
+}
+
+.validator-username-box {
+    position: absolute;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-color: #fff;
+    text-align: center;
+    margin-left: -520px;
+    z-index: 300;
+    width: 500px;
+    height: 130px;
+    margin-top: -370px;
+}
+
+.validator-username-box::before {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    right: calc( -0.7em + 4px );
+    transform: rotate( 135deg );
+    background-color: #fff;
+    content: '';
+    z-index:299;
+    margin-top: 55px;
+}
+
+.validator-password-box.show {
+    display: block;
+}
+
+.validator-password-box.hide {
+    display: none;
+}
+
+.validator-password-box {
+    position: absolute;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-color: #fff;
+    text-align: center;
+    margin-left: -520px;
+    z-index: 300;
+    width: 500px;
+    height: 200px;
+    margin-top: -350px;
+}
+
+.validator-password-box::before {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    right: calc( -0.7em + 4px );
+    transform: rotate( 135deg );
+    background-color: #fff;
+    content: '';
+    z-index:299;
+    margin-top: 104px;
+}
+
+.validator-confirmPW-box.show {
+    display: block;
+}
+
+.validator-confirmPW-box.hide {
+    display: none;
+}
+
+.validator-confirmPW-box {
+    position: absolute;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-color: #fff;
+    text-align: center;
+    margin-left: -520px;
+    z-index: 300;
+    width: 500px;
+    height: 200px;
+    margin-top: -300px;
+}
+
+.validator-confirmPW-box::before {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    right: calc( -0.7em + 4px );
+    transform: rotate( 135deg );
+    background-color: #fff;
+    content: '';
+    z-index:299;
+    margin-top: 100px;
+}
+
+.checkedCircle {
+    width: 24px;
+    height: 24px;
+}
+
+.regularCircle {
+    width: 24px;
+    height: 24px;
+}
+
+.validator-content {
+    height: 90%;
+    text-align: left;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.validator-content li {
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
