@@ -3,8 +3,9 @@ package com.kh.kiwi.documents.controller;
 import com.kh.kiwi.documents.dto.CommentDto;
 import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
-import com.kh.kiwi.documents.dto.ApprovalLineDto;
+import com.kh.kiwi.documents.entity.DocReferrer;
 import com.kh.kiwi.documents.entity.MemberDetails;
+import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.repository.MemberDetailsRepository;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,7 @@ public class DocController {
         Doc doc = docService.getDocWithApprovalAndReferences(docNum);
 
         if (doc != null) {
+            // approvalLines에 대한 추가 정보를 가져옵니다.
             List<ApprovalLine> approvalLines = doc.getApprovalLines();
             if (approvalLines != null) {
                 approvalLines.forEach(approvalLine -> {
@@ -52,6 +54,20 @@ public class DocController {
                     }
                 });
             }
+
+            // references에 대한 추가 정보를 가져옵니다.
+            List<DocReferrer> references = doc.getReferences();
+            if (references != null) {
+                references.forEach(reference -> {
+                    MemberDetails memberDetails = memberDetailsRepository.findByEmployeeNo(reference.getEmployeeNo());
+                    if (memberDetails != null) {
+                        reference.setEmployeeName(memberDetails.getName());
+                        reference.setDeptName(memberDetails.getDeptName());
+                        reference.setPosition(memberDetails.getPosition());
+                    }
+                });
+            }
+
             return ResponseEntity.ok(doc);
         } else {
             return ResponseEntity.notFound().build();
@@ -111,13 +127,6 @@ public class DocController {
     public List<Doc> getAllDocuments() {
         return docService.selectAllList();
     }
-
-//    // 문서 번호로 문서 상세 정보를 가져오는 엔드포인트 추가
-//    @GetMapping("/details/{docNum}")
-//    public ResponseEntity<Doc> getDocDetailsByDocNum(@PathVariable Long docNum) {
-//        Doc doc = docService.getDocByDocNum(docNum);
-//        return ResponseEntity.ok(doc);
-//    }
 
     // 모든 결재선 정보를 조회하는 엔드포인트
     @GetMapping("/all-approval-lines")

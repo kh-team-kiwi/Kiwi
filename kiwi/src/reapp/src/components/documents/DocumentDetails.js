@@ -65,9 +65,9 @@ const DocumentDetails = ({ document, onClose }) => {
             <h1 className="docType">{docDetails.docType}</h1>
             <table className="tableType02 docInfoTable">
                 <colgroup>
-                    <col style={{ width: '13%' }} />
+                    <col style={{ width: '10%' }} />
                     <col style={{ width: '35%' }} />
-                    <col style={{ width: '17%' }} />
+                    <col style={{ width: '20%' }} />
                     <col style={{ width: '35%' }} />
                 </colgroup>
                 <tbody className="docInfo">
@@ -88,8 +88,8 @@ const DocumentDetails = ({ document, onClose }) => {
 
             <table className="approvalLineTable">
                 <colgroup>
-                    <col style={{ width: '13%' }} />
-                    <col style={{ width: '87%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '90%' }} />
                 </colgroup>
                 <tbody>
                 <tr>
@@ -137,8 +137,8 @@ const DocumentDetails = ({ document, onClose }) => {
 
             <table className="referenceTable">
                 <colgroup>
-                    <col style={{ width: '13%' }} />
-                    <col style={{ width: '87%' }} />
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '90%' }} />
                 </colgroup>
                 <tbody>
                 <tr>
@@ -147,7 +147,9 @@ const DocumentDetails = ({ document, onClose }) => {
                         {docDetails.references && docDetails.references.length > 0 ? (
                             docDetails.references.map((reference, index) => (
                                 <span key={index}>
-                                    {reference.memberId} {/* 적절한 데이터 필드 사용 */}
+                                    <span className="referenceHead"> {reference.employeeName} {/* 참조자 이름 */}</span>
+                                    <span className="referenceBody"> {reference.deptName} {/* 참조자 부서 */}</span>
+                                    <span className="referenceBody"> {reference.position} {/* 참조자 직책 */}</span>
                                     {index < docDetails.references.length - 1 ? ', ' : ''}
                                 </span>
                             ))

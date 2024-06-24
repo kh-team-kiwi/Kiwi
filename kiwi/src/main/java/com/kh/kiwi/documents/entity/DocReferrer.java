@@ -20,7 +20,17 @@ public class DocReferrer {
 
     @Column(name = "EMPLOYEE_NO", nullable = false)
     private String employeeNo;
+
+    @Transient
+    private String employeeName;
+
+    @Transient
+    private String deptName;
+
+    @Transient
+    private String position;
 }
+
 
 @Data
 class DocReferrerPK implements Serializable {

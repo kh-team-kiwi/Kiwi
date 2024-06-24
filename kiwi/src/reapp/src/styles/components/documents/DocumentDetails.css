@@ -21,7 +21,7 @@
 
 /* 문서 정보 테이블 스타일 */
 .docInfoTable {
-    width: 1000px;
+    width: 900px;
     border-collapse: collapse;
     margin-bottom: 0px; /* 테이블 간격 최소화 */
 }
@@ -43,12 +43,16 @@
 }
 
 /* 결재선 스타일 */
+
+.approvalLineHeader {
+    width: 100px;
+}
 .approvalLineSection {
     margin: 0; /* 테이블 간격 최소화 */
 }
 
 .approvalLineTable {
-    width: 1000px;
+    width: 900px;
     border-collapse: collapse;
     margin-bottom: 0px; /* 테이블 간격 최소화 */
     font-size: 14px;
@@ -71,7 +75,7 @@
 }
 
 .approvalTeamTable td {
-    width: calc(100% / 8); /* 8개 열로 나눠서 */
+    width: 100px;
     text-align: center;
     vertical-align: middle;
 }
@@ -91,7 +95,7 @@
 }
 
 .referenceTable {
-    width: 1000px;
+    width: 900px;
     border-collapse: collapse;
     margin-bottom: 20px; /* 테이블 간격 최소화 */
 }
@@ -112,9 +116,16 @@
     font-size: 14px;
 }
 
+.referenceBody {
+    font-size: smaller;
+    color: #555;
+}
+
+
+
 /* 문서 제목 스타일 */
 .docTitleSection {
-    width: 1000px;
+    width: 900px;
     margin: 20px 0;
     text-align: center;
     color: #333;
@@ -131,7 +142,7 @@
 
 /* 문서 내용 스타일 */
 .docContentsSection {
-    width: 1000px;
+    width: 900px;
     margin-bottom: 20px;
     padding: 10px;
     background-color: #f9f9f9;
@@ -201,7 +212,7 @@
 }
 
 .commentSection textarea {
-    width: 1000px;
+    width: 900px;
     height: 80px;
     padding: 10px;
     border: 1px solid #ccc;
