@@ -155,6 +155,7 @@
 /* 첨부 파일 스타일 */
 .attachmentsSection {
     margin-bottom: 20px;
+    width: 900px;
 }
 
 .attachmentsSection h3 {
@@ -251,9 +252,9 @@
     background-color: #0056b3;
 }
 
-/* 클론코딩용 추가 스타일 */
 .approval-comment.approval {
     margin-top: 20px;
+    width: 900px;
 }
 
 .number_comments {

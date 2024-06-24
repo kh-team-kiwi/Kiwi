@@ -233,11 +233,13 @@ const DocumentDetails = ({ document, onClose }) => {
                         comments.map((comment, index) => (
                             <li key={index}>
                                 <div className="profile">
-                                    <img className="myphoto" src={`https://ui-avatars.com/api/?name=${comment.employeeName}&background=random`} alt="" />
+                                    <img className="myphoto"
+                                         src={`https://api.multiavatar.com/${comment.employeeName}.png`}
+                                         alt="A multicultural avatar"/>
                                 </div>
                                 <div className="txt">
                                     <div className="hidden after">
-                                        <p className="name bold">{comment.employeeName}</p>
+                                    <p className="name bold">{comment.employeeName}</p>
                                         <p className="date">{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</p>
                                     </div>
                                     <p>{comment.content}</p>
