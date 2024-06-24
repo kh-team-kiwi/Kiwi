@@ -18,8 +18,20 @@ public class ChatMessage {
     private String sender; // Member ID
     private Integer chatNum;
     private LocalDateTime chatTime;
-    private List<String> files;
+    private List<FileInfo> files;
     private String chatContent;
     private String memberNickname; // 추가된 필드
 
+    @Data
+    public static class FileInfo {
+        private String originalFileName;
+        private String fileCode; // UUID로 변형된 파일 이름
+        private String filePath;
+
+        public FileInfo(String originalFileName, String fileCode, String filePath) {
+            this.originalFileName = originalFileName;
+            this.fileCode = fileCode;
+            this.filePath = filePath;
+        }
+    }
 }

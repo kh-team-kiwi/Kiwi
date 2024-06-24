@@ -1,7 +1,6 @@
 package com.kh.kiwi.chat.controller;
 
 import com.kh.kiwi.chat.dto.ChatMessage;
-import com.kh.kiwi.chat.entity.MessageChatnum;
 import com.kh.kiwi.chat.service.MessageChatnumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -32,14 +31,14 @@ public class ChatMessageController {
     }
 
     @PostMapping("/upload")
-    public List<String> uploadFiles(@RequestParam("files") MultipartFile[] files,
-                                    @RequestParam("team") String team,
-                                    @RequestParam("chatNum") String chatNum) throws IOException {
+    public List<ChatMessage.FileInfo> uploadFiles(@RequestParam("files") MultipartFile[] files,
+                                                  @RequestParam("team") String team,
+                                                  @RequestParam("chatNum") String chatNum) throws IOException {
         return messageChatnumService.uploadFiles(files, team, chatNum);
     }
 
     @GetMapping("/messages/{chatNum}")
-    public List<MessageChatnum> getMessagesByChatNum(@PathVariable Integer chatNum) {
+    public List<ChatMessage> getMessagesByChatNum(@PathVariable Integer chatNum) {
         return messageChatnumService.getMessagesByChatNum(chatNum);
     }
 

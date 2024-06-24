@@ -119,16 +119,16 @@ const ChatRoom = ({ chatNum }) => {
                 {messages.map((msg, index) => (
                     <div key={index} className="message-container">
                         <div className="message-sender">
-                            {msg.memberNickname || (msg.member && msg.member.memberNickname)}
+                            {msg.memberNickname}
                         </div>
                         <div className="message-content">
                             {msg.chatContent} <small>{formatTime(msg.chatTime)}</small>
-                            {msg.file && (
-                                <div>
-                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} download>{msg.file}</a>
-                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} alt="Uploaded" style={{ maxWidth: '200px' }} />
+                            {msg.files && msg.files.map((file, fileIndex) => (
+                                <div key={fileIndex}>
+                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} download>{file.originalFileName}</a>
+                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" style={{ maxWidth: '100px' }} />
                                 </div>
-                            )}
+                            ))}
                         </div>
                     </div>
                 ))}

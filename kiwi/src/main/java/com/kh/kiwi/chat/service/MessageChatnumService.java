@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageChatnumService {
@@ -57,30 +58,51 @@ public class MessageChatnumService {
 
         messageChatnumRepository.save(messageChatnum);
 
-        // Save file messages if there are files
+        // 파일 메시지가 있는 경우 저장
         if (message.getFiles() != null && !message.getFiles().isEmpty()) {
-            for (String filePath : message.getFiles()) {
+            for (ChatMessage.FileInfo fileInfo : message.getFiles()) {
                 FileMessage fileMessage = new FileMessage();
-                fileMessage.setFileCode(UUID.randomUUID().toString());
+                fileMessage.setFileCode(fileInfo.getFileCode()); // UUID로 변형된 파일 이름
                 fileMessage.setMessageNum(messageChatnum.getMessageNum());
-                fileMessage.setFileName(filePath.substring(filePath.lastIndexOf("/") + 1));
-                fileMessage.setFilePath(filePath);
+                fileMessage.setFileName(fileInfo.getOriginalFileName()); // 원래 파일 이름
+                fileMessage.setFilePath(fileInfo.getFilePath());
                 fileMessageRepository.save(fileMessage);
             }
         }
     }
 
-    public List<String> uploadFiles(MultipartFile[] files, String team, String chatNum) throws IOException {
-        List<String> fileUrls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String fileUrl = uploadFileToS3(file, team, chatNum);
-            fileUrls.add(fileUrl);
-        }
-        return fileUrls;
+    public List<ChatMessage> getMessagesByChatNum(Integer chatNum) {
+        List<MessageChatnum> messages = messageChatnumRepository.findByChat_ChatNum(chatNum);
+        return messages.stream().map(message -> {
+            List<FileMessage> fileMessages = fileMessageRepository.findByMessageNum(message.getMessageNum());
+            List<ChatMessage.FileInfo> fileInfos = fileMessages.stream().map(fileMessage ->
+                    new ChatMessage.FileInfo(fileMessage.getFileName(), fileMessage.getFileCode(), fileMessage.getFilePath())
+            ).collect(Collectors.toList());
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setType(ChatMessage.MessageType.CHAT);
+            chatMessage.setSender(message.getMember().getMemberId());
+            chatMessage.setChatNum(message.getChat().getChatNum());
+            chatMessage.setChatTime(message.getChatTime());
+            chatMessage.setFiles(fileInfos);
+            chatMessage.setChatContent(message.getChatContent());
+            chatMessage.setMemberNickname(message.getMember().getMemberNickname());
+            return chatMessage;
+        }).collect(Collectors.toList());
     }
 
-    private String uploadFileToS3(MultipartFile file, String team, String chatNum) throws IOException {
-        String fileCode = UUID.randomUUID().toString();
+    public List<ChatMessage.FileInfo> uploadFiles(MultipartFile[] files, String team, String chatNum) throws IOException {
+        List<ChatMessage.FileInfo> fileInfos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String originalFileName = file.getOriginalFilename();
+            String fileCode = UUID.randomUUID().toString();
+            String filePath = uploadFileToS3(file, team, chatNum, fileCode);
+            fileInfos.add(new ChatMessage.FileInfo(originalFileName, fileCode, filePath));
+        }
+        return fileInfos;
+    }
+
+    private String uploadFileToS3(MultipartFile file, String team, String chatNum, String fileCode) throws IOException {
         String uniqueFileName = team + "/chat/" + chatNum + "/" + fileCode;
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -91,10 +113,6 @@ public class MessageChatnumService {
         s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
         return uniqueFileName;
-    }
-
-    public List<MessageChatnum> getMessagesByChatNum(Integer chatNum) {
-        return messageChatnumRepository.findByChat_ChatNum(chatNum);
     }
 
     public byte[] downloadFile(String fileKey) {
