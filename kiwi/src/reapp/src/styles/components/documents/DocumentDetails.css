@@ -44,10 +44,10 @@
 }
 
 /* 결재선 스타일 */
-
 .approvalLineHeader {
     width: 100px;
 }
+
 .approvalLineSection {
     margin: 0; /* 테이블 간격 최소화 */
 }
@@ -57,7 +57,6 @@
     border-collapse: collapse;
     margin-bottom: 0px; /* 테이블 간격 최소화 */
     font-size: 14px;
-
 }
 
 .approvalLineTable th,
@@ -85,9 +84,8 @@
     margin-bottom: 0;
 }
 
-.approvalLineTable .stamp{
+.approvalLineTable .stamp {
     height: 75px;
-
 }
 
 /* 참조 스타일 */
@@ -121,8 +119,6 @@
     font-size: smaller;
     color: #555;
 }
-
-
 
 /* 문서 제목 스타일 */
 .docTitleSection {
@@ -252,5 +248,88 @@
 }
 
 .backButton:hover {
+    background-color: #0056b3;
+}
+
+/* 클론코딩용 추가 스타일 */
+.approval-comment.approval {
+    margin-top: 20px;
+}
+
+.number_comments {
+    margin-bottom: 10px;
+}
+
+.point_color {
+    color: #007bff;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.approvalComments {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.approvalComments li {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.profile {
+    margin-right: 10px;
+}
+
+.myphoto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.txt {
+    flex: 1;
+}
+
+.txt .hidden {
+    display: flex;
+    justify-content: space-between;
+}
+
+.txt .name {
+    font-size: 14px;
+}
+
+.txt .date {
+    font-size: 12px;
+    color: #888;
+}
+
+.comment_write {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-texarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.bt_left {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bt_left:hover {
     background-color: #0056b3;
 }

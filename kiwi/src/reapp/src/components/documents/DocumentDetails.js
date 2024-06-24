@@ -11,17 +11,15 @@ const DocumentDetails = ({ document, onClose }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [attachments, setAttachments] = useState([]);
-    const [employeeNo, setEmployeeNo] = useState(''); // employeeNo 상태 추가
-    const [author, setAuthor] = useState({ name: '', deptName: '', position: '' }); // 인사 정보 추가
+    const [employeeNo, setEmployeeNo] = useState('');
+    const [author, setAuthor] = useState({ name: '', deptName: '', position: '' });
 
     useEffect(() => {
-        // 세션에서 사용자 정보 가져오기
         const profile = JSON.parse(sessionStorage.getItem('profile'));
         if (profile && profile.username) {
             console.log("Session profile:", profile);
             const username = profile.username;
 
-            // API 호출하여 사용자의 인사 정보 가져오기
             axios.get(`/api/members/details/${username}`)
                 .then(response => {
                     if (response.data) {
@@ -47,7 +45,6 @@ const DocumentDetails = ({ document, onClose }) => {
     useEffect(() => {
         const fetchDocumentDetails = async () => {
             try {
-                console.log("Fetching document details for docNum:", document.docNum);
                 const response = await axios.get(`http://localhost:8080/documents/details/${document.docNum}`);
                 const details = response.data;
 
@@ -56,9 +53,7 @@ const DocumentDetails = ({ document, onClose }) => {
                 setComments(details.comments || []);
                 setAttachments(details.attachments || []);
                 setLoading(false);
-                console.log("Document details fetched successfully:", details);
             } catch (error) {
-                console.error("Failed to fetch document details:", error);
                 setError('문서 세부 정보를 불러오는데 실패하였습니다.');
                 setLoading(false);
             }
@@ -87,7 +82,7 @@ const DocumentDetails = ({ document, onClose }) => {
             console.log("Sending comment:", newComment, "by employeeNo:", employeeNo);
             const response = await axios.post(`http://localhost:8080/documents/${document.docNum}/comments`, {
                 content: newComment,
-                employeeNo: employeeNo // 실제 로그인된 사용자 정보 사용
+                employeeNo: employeeNo
             }, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -228,25 +223,42 @@ const DocumentDetails = ({ document, onClose }) => {
                     )}
                 </ul>
             </div>
-            <div className="commentSection">
+            <div className="commentSection approval-comment approval">
                 <h3>의견</h3>
-                {comments.length > 0 ? (
-                    comments.map((comment, index) => (
-                        <div key={index} className="comment">
-                            <p>{comment.content}</p>
-                            <small>{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</small>
-                        </div>
-                    ))
-                ) : (
-                    <p>의견 없음</p>
-                )}
-                <div className="commentInput">
+                <p className="top number_comments">
+                    <span className="point_color bold">{comments.length}</span>개의 의견
+                </p>
+                <ul className="approvalComments">
+                    {comments.length > 0 ? (
+                        comments.map((comment, index) => (
+                            <li key={index}>
+                                <div className="profile">
+                                    <img className="myphoto" src={`https://ui-avatars.com/api/?name=${comment.employeeName}&background=random`} alt="" />
+                                </div>
+                                <div className="txt">
+                                    <div className="hidden after">
+                                        <p className="name bold">{comment.employeeName}</p>
+                                        <p className="date">{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</p>
+                                    </div>
+                                    <p>{comment.content}</p>
+                                </div>
+                            </li>
+                        ))
+                    ) : (
+                        <p>의견 없음</p>
+                    )}
+                </ul>
+                <div className="comment_write">
+                    <label htmlFor="commentInput" className="blind">댓글 입력란</label>
                     <textarea
+                        id="approvalDocumentComment"
+                        placeholder="댓글을 남겨주세요."
+                        title="댓글을 남겨주세요."
+                        className="comment-texarea"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="의견을 입력하세요."
                     />
-                    <button className="submitCommentButton" onClick={handleAddComment}>의견 제출</button>
+                    <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>
                 </div>
             </div>
             <button className="backButton" onClick={onClose}>뒤로가기</button>
