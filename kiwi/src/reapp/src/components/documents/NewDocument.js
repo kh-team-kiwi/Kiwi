@@ -299,12 +299,7 @@ const NewDocument = () => {
                         </th>
                         <td className="confer vt applyTable" id="approvalFirstLine">
                             <table className="teamTable">
-                                <colgroup>
-                                    <col />
-                                    <col />
-                                    <col />
-                                </colgroup>
-                                <tbody>
+                               <tbody>
                                 <tr>
                                     <td className="team name">{author.position}</td>
                                     <td className="team name"></td>
@@ -324,7 +319,7 @@ const NewDocument = () => {
                             </table>
                         </td>
                         <th scope="row" className="process">
-                            <div className="choice">처리</div>
+                            <div className="choice">결재</div>
                         </th>
                         <td className="confer vt processTable" id="approvalSecondLine">
                             <table className="teamTable">

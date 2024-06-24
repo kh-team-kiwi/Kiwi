@@ -55,131 +55,144 @@ const DocumentDetails = ({ document, onClose }) => {
         }
     };
 
-
     if (loading) return <p>로딩중...</p>;
     if (error) return <p>{error}</p>;
     if (!docDetails) return null;
 
     return (
         <div className="documentDetails">
-            <h1 className="title">문서 상세 정보</h1>
-            <div className="docInfo">
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>상태</th>
-                        <td>{docDetails.docStatus}</td>
-                    </tr>
-                    <tr>
-                        <th>작성일</th>
-                        <td>{moment(docDetails.docDate).format('YYYY-MM-DD HH:mm')}</td>
-                    </tr>
-                    <tr>
-                        <th>완료일</th>
-                        <td>{docDetails.docCompletion ? moment(docDetails.docCompletion).format('YYYY-MM-DD HH:mm') : ''}</td>
-                    </tr>
-                    <tr>
-                        <th>보존 기간</th>
-                        {/*<td>{docDetails.scheduledDeletionDate ? moment(docDetails.scheduledDeletionDate).format('YYYY-MM-DD') : 'N/A'}</td>*/}
-                        <td>{docDetails.retentionPeriod}</td>
-                    </tr>
-                    <tr>
-                    <th>열람 권한 등급</th>
-                        <td>{docDetails.accessLevel}</td>
-                    </tr>
-                    <tr>
-                        <th>작성자</th>
-                        <td>{docDetails.name}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div className="approvalLine">
-                    <h3>결재선</h3>
-                    <table className="cal_table1">
-                        <thead>
-                        <tr>
-                            <th>신청</th>
-                            <th>처리</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        {approvalLine.slice(0, 3).map((approver, index) => (
-                                            <td key={index} className="team name">{approver.name}</td>
-                                        ))}
-                                    </tr>
-                                    <tr>
-                                        {approvalLine.slice(0, 3).map((approver, index) => (
-                                            <td key={index}
-                                                className="stamp">{approver.status === 'APPROVED' ? '✔️' : '❌'}</td>
-                                        ))}
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td>
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        {approvalLine.slice(3, 7).map((approver, index) => (
-                                            <td key={index} className="team name">{approver.name}</td>
-                                        ))}
-                                    </tr>
-                                    <tr>
-                                        {approvalLine.slice(3, 7).map((approver, index) => (
-                                            <td key={index}
-                                                className="stamp">{approver.status === 'APPROVED' ? '✔️' : '❌'}</td>
-                                        ))}
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div className="references">
-                    <h3>참조자</h3>
-                    <p>{docDetails.references && docDetails.references.map((reference, index) => (
-                        <span key={index}>{reference.name}{index < docDetails.references.length - 1 ? ', ' : ''}</span>
-                    ))}</p>
-                </div>
+            <h1 className="docType">{docDetails.docType}</h1>
+            <table className="tableType02 docInfoTable">
+                <colgroup>
+                    <col style={{ width: '13%' }} />
+                    <col style={{ width: '35%' }} />
+                    <col style={{ width: '17%' }} />
+                    <col style={{ width: '35%' }} />
+                </colgroup>
+                <tbody className="docInfo">
+                <tr>
+                    <th>문서 번호</th>
+                    <td>{docDetails.docNum}</td>
+                    <th>기안자</th>
+                    <td>{docDetails.name}</td>
+                </tr>
+                <tr>
+                    <th>문서 상태</th>
+                    <td>{docDetails.docStatus}</td>
+                    <th>보존 연한 / 보안 등급</th>
+                    <td>{docDetails.retentionPeriod} / {docDetails.accessLevel} 등급</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table className="approvalLineTable">
+                <colgroup>
+                    <col style={{ width: '13%' }} />
+                    <col style={{ width: '87%' }} />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th className="approvalLineHeader">결재</th>
+                    <td className="approvalLineContent">
+                        <table className="approvalTeamTable">
+                            <colgroup>
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                {[...Array(8)].map((_, index) => (
+                                    <td key={index} className="team name">{approvalLine[index]?.position || ''}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                {[...Array(8)].map((_, index) => (
+                                    <td key={index} className="stamp">
+                                        {approvalLine[index]?.status === 'APPROVED' ? '✔️' : approvalLine[index]?.status === 'REJECTED' ? '❌' : ''}
+                                    </td>
+                                ))}
+                            </tr>
+                            <tr>
+                                {[...Array(8)].map((_, index) => (
+                                    <td key={index} className="name">{approvalLine[index]?.name || ''}</td>
+                                ))}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table className="referenceTable">
+                <colgroup>
+                    <col style={{ width: '13%' }} />
+                    <col style={{ width: '87%' }} />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th className="referenceHeader">참조</th>
+                    <td className="referenceContent">
+                        {docDetails.references && docDetails.references.length > 0 ? (
+                            docDetails.references.map((reference, index) => (
+                                <span key={index}>
+                                        {reference.name}
+                                    {index < docDetails.references.length - 1 ? ', ' : ''}
+                                    </span>
+                            ))
+                        ) : (
+                            <span>참조자 없음</span>
+                        )}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div className="docTitleSection">
+                <h2 className="docTitle">{docDetails.docTitle}</h2>
             </div>
-            <div className="docTitle">
-                <h2>{docDetails.docTitle}</h2>
+            <div className="docContentsSection">
+                <p className="docContents" dangerouslySetInnerHTML={{ __html: docDetails.docContents }}></p>
             </div>
-            <div className="docContents">
-                <p dangerouslySetInnerHTML={{__html: docDetails.docContents}}></p>
-            </div>
-            <div className="attachments">
+            <div className="attachmentsSection">
                 <h3>파일 첨부</h3>
-                <ul>
-                    {attachments.map((file, index) => (
-                        <li key={index}>
-                            <a href={`http://localhost:8080/files/${file.id}`} download={file.name}>{file.name}</a>
-                        </li>
-                    ))}
+                <ul className="attachmentList">
+                    {attachments.length > 0 ? (
+                        attachments.map((file, index) => (
+                            <li key={index}>
+                                <a href={`http://localhost:8080/files/${file.id}`} download={file.name}>{file.name}</a>
+                            </li>
+                        ))
+                    ) : (
+                        <li>첨부 파일 없음</li>
+                    )}
                 </ul>
             </div>
             <div className="commentSection">
                 <h3>의견</h3>
-                {comments.map((comment, index) => (
-                    <div key={index} className="comment">
-                        <p>{comment.content}</p>
-                        <small>{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</small>
-                    </div>
-                ))}
+                {comments.length > 0 ? (
+                    comments.map((comment, index) => (
+                        <div key={index} className="comment">
+                            <p>{comment.content}</p>
+                            <small>{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</small>
+                        </div>
+                    ))
+                ) : (
+                    <p>의견 없음</p>
+                )}
                 <div className="commentInput">
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="의견을 입력하세요."
                     />
-                    <button onClick={handleAddComment}>의견 제출</button>
+                    <button className="submitCommentButton" onClick={handleAddComment}>의견 제출</button>
                 </div>
             </div>
             <button className="backButton" onClick={onClose}>뒤로가기</button>
