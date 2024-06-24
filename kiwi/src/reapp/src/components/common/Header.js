@@ -63,7 +63,7 @@ const Header = () => {
   };
 
   const handleDropdownClick = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
 
     if (languageOptionsVisible === true) {
       setLanguageOptionsVisible(false);
@@ -103,23 +103,23 @@ const Header = () => {
     
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownVisible(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       setDropdownVisible(false);
+  //     }
+  //   };
 
-    if (dropdownVisible) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+  //   if (dropdownVisible) {
+  //     document.addEventListener('mousedown', handleClickOutside);
+  //   } else {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   }
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [dropdownVisible]);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [dropdownVisible]);
 
 
 
