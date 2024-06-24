@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import '../../styles/components/common/SchedulePopup.css';
 import {getSessionItem} from "../../jwt/storage";
+import {useLocation} from "react-router-dom";
+import axiosHandler from "../../jwt/axiosHandler";
 
 const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
   const { t } = useTranslation();
@@ -55,6 +57,8 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
   });
 
   const [newEvent, setNewEvent] = useState(getInitialEventState());
+
+  const location = useLocation();
 
   useEffect(() => {
     setNewEvent((prevEvent) => ({
@@ -133,7 +137,9 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
   };
 
   const handleAddEvent = () => {
-    console.log("handleAddEvent<><><><>",newEvent);
+    console.log("#### handleAddEvent #####");
+    addSchedule(); // db
+
     const startDateTime = new Date(`${newEvent.startDate}T${newEvent.startTime}`);
     const endDateTime = new Date(`${newEvent.endDate}T${newEvent.endTime}`);
     addEvent({
@@ -149,6 +155,11 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
     closePopup();
   };
 
+  const addSchedule = async () => {
+    console.log("SchedulePopup.js >> addSchedule : ");
+    const response = await axiosHandler.post("/api"+location.pathname+"/create/"+getSessionItem("profile").username, newEvent);
+    console.log(response);
+  }
   return (
     <>
       <button className="schedule-button" onClick={openPopup}>

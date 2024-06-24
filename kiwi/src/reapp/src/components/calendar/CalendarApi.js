@@ -4,6 +4,9 @@ import SchedulePopup from '../calendar/SchedulePopup';
 import { useTranslation } from 'react-i18next';
 import '../../styles/components/calendar/CalendarApi.css';
 import 'react-calendar/dist/Calendar.css';
+import axiosHandler from "../../jwt/axiosHandler";
+import {useLocation} from "react-router-dom";
+import {getSessionItem} from "../../jwt/storage";
 
 const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar  }) => {
   const { t, i18n } = useTranslation();
@@ -31,6 +34,8 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
     setSelectedCalendar(e.target.value);
     console.log('Selected calendar:', e.target.value);
   };
+
+  const location = useLocation();
 
   useEffect(() => {
     const calculateEventPositions = () => {
@@ -63,6 +68,17 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
 
     calculateEventPositions();
   }, [events, currentMonth]);
+
+  useEffect(()=>{
+    fetchSchedule();
+  },[events])
+
+  const fetchSchedule = async () => {
+    console.log("CalendarApi.js >> fetchSchedule : ");
+    const response = await axiosHandler.post("/api"+location.pathname+"/list/"+getSessionItem("profile").username);
+    console.log(response);
+  }
+
 
   const tileContent = ({ date, view }) => {
     if (view === 'month') {
