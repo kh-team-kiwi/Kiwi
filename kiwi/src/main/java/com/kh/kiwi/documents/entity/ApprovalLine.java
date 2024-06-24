@@ -1,18 +1,35 @@
 package com.kh.kiwi.documents.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
+import java.io.Serializable;
 
+@Data
 @Entity
+@Table(name = "doc_approval")
+@IdClass(ApprovalLinePK.class)
 public class ApprovalLine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "DOC_NUM", nullable = false)
+    private Long docNum;
 
-    private String approver; // 결재자 이름 또는 ID
-    private String reference; // 참조자 이름 또는 ID
+    @Id
+    @Column(name = "DOC_SEQ", nullable = false)
+    private String docSeq;
 
+    @Column(name = "EMPLOYEE_NO", nullable = false)
+    private String employeeNo;
+
+    @Column(name = "DOC_CONF", nullable = false)
+    private int docConf;
+
+    @Column(name = "DOC_REJECT", nullable = true)
+    private String docReject;
+}
+
+@Data
+class ApprovalLinePK implements Serializable {
+    private Long docNum;
+    private String docSeq;
 }

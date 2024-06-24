@@ -3,23 +3,22 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
-import {useParams} from "react-router-dom";
-import {getSessionItem} from "../../../jwt/storage";
+import { useParams } from "react-router-dom";
+import { getSessionItem } from "../../../jwt/storage";
 
 const ChatRoom = ({ chatNum }) => {
     const [profile, setProfile] = useState(null);
+    const { teamno } = useParams();
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState('');
+    const [files, setFiles] = useState([]);
+    const stompClient = useRef(null);
+    const fileInputRef = useRef();
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
         setProfile(storedProfile);
     }, []);
-    const { team } = useParams();
-    const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState('');
-    const [sender, setSender] = useState('');
-    const [files, setFiles] = useState([]);
-    const stompClient = useRef(null);
-    const fileInputRef = useRef();
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -59,10 +58,10 @@ const ChatRoom = ({ chatNum }) => {
     const sendMessage = async () => {
         if (stompClient.current && stompClient.current.connected) {
             const chatMessage = {
-                sender,
+                sender: profile.username,
                 content: message,
                 chatNum,
-                files: files.map(file => file.name),
+                files: [],
                 type: 'CHAT'
             };
 
@@ -70,8 +69,9 @@ const ChatRoom = ({ chatNum }) => {
                 if (files.length > 0) {
                     const formData = new FormData();
                     files.forEach(file => formData.append('files', file));
-                    formData.append('team', team);
-                    formData.append('chatName', sender);
+                    formData.append('team', teamno);
+                    formData.append('chatNum', chatNum);
+                    formData.append('messageNum', `${chatNum}-${Date.now()}`);
 
                     const response = await axios.post('http://localhost:8080/api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
@@ -144,12 +144,6 @@ const ChatRoom = ({ chatNum }) => {
                         ))}
                     </div>
                 )}
-                <input
-                    type="text"
-                    value={sender}
-                    onChange={(e) => setSender(e.target.value)}
-                    placeholder="Enter your ID"
-                />
                 <input
                     type="text"
                     value={message}

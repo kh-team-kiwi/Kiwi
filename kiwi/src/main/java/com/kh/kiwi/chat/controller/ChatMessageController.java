@@ -34,8 +34,8 @@ public class ChatMessageController {
     @PostMapping("/upload")
     public List<String> uploadFiles(@RequestParam("files") MultipartFile[] files,
                                     @RequestParam("team") String team,
-                                    @RequestParam("chatName") String chatName) throws IOException {
-        return messageChatnumService.uploadFiles(files, team, chatName);
+                                    @RequestParam("chatNum") String chatNum) throws IOException {
+        return messageChatnumService.uploadFiles(files, team, chatNum);
     }
 
     @GetMapping("/messages/{chatNum}")
