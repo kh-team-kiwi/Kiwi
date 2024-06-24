@@ -4,6 +4,8 @@ import com.kh.kiwi.documents.dto.CommentDto;
 import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
 import com.kh.kiwi.documents.dto.ApprovalLineDto;
+import com.kh.kiwi.documents.entity.MemberDetails;
+import com.kh.kiwi.documents.repository.MemberDetailsRepository;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/documents")
 public class DocController {
-
     private final DocService docService;
+    private final MemberDetailsRepository memberDetailsRepository;
 
-    public DocController(DocService docService) {
+    public DocController(DocService docService, MemberDetailsRepository memberDetailsRepository) {
         this.docService = docService;
+        this.memberDetailsRepository = memberDetailsRepository;
     }
 
     @GetMapping
@@ -31,6 +34,28 @@ public class DocController {
     @GetMapping("/{id}")
     public Doc getDocById(@PathVariable Long id) {
         return docService.getDocById(id);
+    }
+
+    @GetMapping("/details/{docNum}")
+    public ResponseEntity<Doc> getDocWithDetails(@PathVariable Long docNum) {
+        Doc doc = docService.getDocWithApprovalAndReferences(docNum);
+
+        if (doc != null) {
+            List<ApprovalLine> approvalLines = doc.getApprovalLines();
+            if (approvalLines != null) {
+                approvalLines.forEach(approvalLine -> {
+                    MemberDetails memberDetails = memberDetailsRepository.findByEmployeeNo(approvalLine.getEmployeeNo());
+                    if (memberDetails != null) {
+                        approvalLine.setEmployeeName(memberDetails.getName());
+                        approvalLine.setDeptName(memberDetails.getDeptName());
+                        approvalLine.setPosition(memberDetails.getPosition());
+                    }
+                });
+            }
+            return ResponseEntity.ok(doc);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -70,6 +95,7 @@ public class DocController {
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
 
+
     @PutMapping("/{id}")
     public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
         docService.updateDoc(id, updatedDoc);
@@ -86,12 +112,12 @@ public class DocController {
         return docService.selectAllList();
     }
 
-    // 문서 번호로 문서 상세 정보를 가져오는 엔드포인트 추가
-    @GetMapping("/details/{docNum}")
-    public ResponseEntity<Doc> getDocDetailsByDocNum(@PathVariable Long docNum) {
-        Doc doc = docService.getDocByDocNum(docNum);
-        return ResponseEntity.ok(doc);
-    }
+//    // 문서 번호로 문서 상세 정보를 가져오는 엔드포인트 추가
+//    @GetMapping("/details/{docNum}")
+//    public ResponseEntity<Doc> getDocDetailsByDocNum(@PathVariable Long docNum) {
+//        Doc doc = docService.getDocByDocNum(docNum);
+//        return ResponseEntity.ok(doc);
+//    }
 
     // 모든 결재선 정보를 조회하는 엔드포인트
     @GetMapping("/all-approval-lines")

@@ -17,9 +17,10 @@ const DocumentDetails = ({ document, onClose }) => {
             try {
                 const response = await axios.get(`http://localhost:8080/documents/details/${document.docNum}`);
                 const details = response.data;
+                console.log('Document details:', details);
 
                 setDocDetails(details);
-                setApprovalLine(details.approvalLine || []);
+                setApprovalLine(details.approvalLines || []);
                 setComments(details.comments || []);
                 setAttachments(details.attachments || []);
                 setLoading(false);
@@ -108,19 +109,23 @@ const DocumentDetails = ({ document, onClose }) => {
                             <tbody>
                             <tr>
                                 {[...Array(8)].map((_, index) => (
-                                    <td key={index} className="team name">{approvalLine[index]?.position || ''}</td>
-                                ))}
-                            </tr>
-                            <tr>
-                                {[...Array(8)].map((_, index) => (
-                                    <td key={index} className="stamp">
-                                        {approvalLine[index]?.status === 'APPROVED' ? '✔️' : approvalLine[index]?.status === 'REJECTED' ? '❌' : ''}
+                                    <td key={index} className="team name">
+                                        {approvalLine[index]?.position || ''} {/* 추가된 직책 */}
                                     </td>
                                 ))}
                             </tr>
                             <tr>
                                 {[...Array(8)].map((_, index) => (
-                                    <td key={index} className="name">{approvalLine[index]?.name || ''}</td>
+                                    <td key={index} className="stamp">
+                                        {approvalLine[index]?.docConf === 1 ? '✔️' : approvalLine[index]?.docConf === -1 ? '❌' : ''}
+                                    </td>
+                                ))}
+                            </tr>
+                            <tr>
+                                {[...Array(8)].map((_, index) => (
+                                    <td key={index} className="name">
+                                        {approvalLine[index]?.employeeName || ''} {/* 추가된 이름 */}
+                                    </td>
                                 ))}
                             </tr>
                             </tbody>
@@ -142,9 +147,9 @@ const DocumentDetails = ({ document, onClose }) => {
                         {docDetails.references && docDetails.references.length > 0 ? (
                             docDetails.references.map((reference, index) => (
                                 <span key={index}>
-                                        {reference.name}
+                                    {reference.memberId} {/* 적절한 데이터 필드 사용 */}
                                     {index < docDetails.references.length - 1 ? ', ' : ''}
-                                    </span>
+                                </span>
                             ))
                         ) : (
                             <span>참조자 없음</span>
