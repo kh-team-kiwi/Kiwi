@@ -42,8 +42,8 @@ public class ChatController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("team") String team, @RequestParam("chatName") String chatName) throws IOException {
-        String fileUrl = chatService.uploadFile(file, team, chatName);
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("team") String team, @RequestParam("chatNum") Integer chatNum) throws IOException {
+        String fileUrl = chatService.uploadFile(file, team, chatNum);
         return ResponseEntity.ok(fileUrl);
     }
 }
