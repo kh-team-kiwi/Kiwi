@@ -39,24 +39,24 @@ public class DocController {
 
         // 기본 설정 로직 확인
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
-            doc.setEmployeeNo("1@kimcs"); // 기본 직원 번호로 설정
+            doc.setEmployeeNo("1@kimcs");
         }
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
             doc.setDocTitle("제목을 불러오지 못했습니다.");
         }
         if (doc.getName() == null || doc.getName().trim().isEmpty()) {
-            doc.setName("이름없음"); // 기본 작성자 이름 설정
+            doc.setName("이름없음");
         }
-
-        // 문서 내용이 비어 있을 경우 기본값 설정
         if (doc.getDocContents() == null || doc.getDocContents().trim().isEmpty()) {
             doc.setDocContents("내용 없음");
         }
-
-        // 첨부 파일 처리 로직 (옵션)
-        // if (attachment != null) {
-        //     // 파일 저장 로직 추가 가능
-        // }
+        // 보존 기간과 보안 등급 기본값 설정
+        if (doc.getRetentionPeriod() == null || doc.getRetentionPeriod().trim().isEmpty()) {
+            doc.setRetentionPeriod("1년");
+        }
+        if (doc.getAccessLevel() == null) {
+            doc.setAccessLevel(Doc.AccessLevel.C);
+        }
 
         docService.addDoc(doc);
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);

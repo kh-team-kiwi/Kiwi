@@ -84,17 +84,16 @@ const NewDocument = () => {
             const formData = new FormData();
             const docData = {
                 docType: newDocument.docType,
-                retentionPeriod: newDocument.retentionPeriod,
-                accessLevel: newDocument.accessLevel,
-                docTitle: newDocument.title, // 올바르게 설정됨
-                docContents: newDocument.content, // 올바르게 설정됨
+                retentionPeriod: newDocument.retentionPeriod, // 추가된 필드
+                accessLevel: newDocument.accessLevel, // 추가된 필드
+                docTitle: newDocument.title,
+                docContents: newDocument.content,
                 name: newDocument.name,
-                employeeNo: newDocument.memberId, // 올바르게 설정됨
+                employeeNo: newDocument.memberId,
                 docDate: new Date().toISOString().slice(0, 19),
                 docStatus: "진행중"
             };
 
-            // docTitle이 비어 있으면 경고 메시지 표시
             if (!newDocument.title || newDocument.title.trim() === '') {
                 alert("문서 제목을 입력해 주세요.");
                 return;

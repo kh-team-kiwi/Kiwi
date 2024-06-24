@@ -61,21 +61,22 @@ public class DocService {
     }
 
     public void addDoc(Doc doc) {
-        // 제목 설정
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
             doc.setDocTitle("기본 제목");
         }
-
-        // 작성자 이름 설정
         if (doc.getName() == null || doc.getName().trim().isEmpty()) {
             MemberDetails memberDetails = memberDetailsRepository.findById(doc.getEmployeeNo())
                     .orElseThrow(() -> new RuntimeException("사원 정보를 찾을 수 없습니다."));
             doc.setName(memberDetails.getName());
         }
-
-        // 문서 내용 설정
         if (doc.getDocContents() == null || doc.getDocContents().trim().isEmpty()) {
             doc.setDocContents("내용 없음");
+        }
+        if (doc.getRetentionPeriod() == null || doc.getRetentionPeriod().trim().isEmpty()) {
+            doc.setRetentionPeriod("1년");
+        }
+        if (doc.getAccessLevel() == null) {
+            doc.setAccessLevel(Doc.AccessLevel.C);
         }
 
         docRepository.save(doc);
