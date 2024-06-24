@@ -5,15 +5,6 @@ import { getSessionItem } from "../../../jwt/storage";
 
 const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     const [profile, setProfile] = useState(null);
-
-    useEffect(() => {
-        const storedProfile = getSessionItem("profile");
-        setProfile(storedProfile);
-        if (storedProfile) {
-            setAdmins([{ id: storedProfile.username, name: storedProfile.name, email: storedProfile.username, role: storedProfile.role }]);
-        }
-    }, []);
-
     const [searchTerm, setSearchTerm] = useState("");
     const [chatName, setChatName] = useState("");
     const [members, setMembers] = useState([]);
@@ -22,23 +13,35 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     const [participants, setParticipants] = useState([]);
 
     useEffect(() => {
-        if (showCreateChatModal && team) {
-            console.log("Fetching members for team:", team); // 추가된 로그
+        console.log("Profile loading");
+        const storedProfile = getSessionItem("profile");
+        setProfile(storedProfile);
+        if (storedProfile) {
+            console.log("Profile loaded", storedProfile);
+            setAdmins([{ id: storedProfile.username, name: storedProfile.name, email: storedProfile.username, role: storedProfile.role }]);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (profile && showCreateChatModal && team) {
+            console.log("Modal opened. Fetching members for team:", team);
             fetchMembers();
         }
-    }, [showCreateChatModal, team]);
+    }, [profile, showCreateChatModal, team]);
 
     const fetchMembers = async () => {
         try {
             console.log(`Requesting members from: http://localhost:8080/api/chat/user/members?team=${team}`);
             const response = await axios.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
-            console.log("Fetched members:", response.data); // 추가된 로그
-            const fetchedMembers = response.data.map(member => ({
-                id: member.memberId,
-                name: member.memberNickname,
-                email: member.memberId,
-                role: member.memberRole
-            }));
+            console.log("Fetched members:", response.data);
+            const fetchedMembers = response.data
+                .filter(member => member.memberId !== profile.username) // 현재 사용자 제외
+                .map(member => ({
+                    id: member.memberId,
+                    name: member.memberNickname,
+                    email: member.memberId,
+                    role: member.memberRole
+                }));
             setMembers(fetchedMembers);
         } catch (error) {
             console.error("Failed to fetch members:", error);
@@ -77,7 +80,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
         const chatData = {
             chatName,
-            approvers: admins, // 이 부분을 approvers로 설정
+            approvers: admins,
             admins: admins.map(admin => admin.id),
             participants: participants.map(participant => participant.id),
             team,
@@ -120,9 +123,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                             .map((member) => (
                                 <div
                                     key={member.id}
-                                    className={`memberItem ${
-                                        selectedMember === member ? "selected" : ""
-                                    }`}
+                                    className={`memberItem ${selectedMember === member ? "selected" : ""}`}
                                     onClick={() => handleMemberClick(member)}
                                 >
                                     {member.name} ({member.email}:{member.role})

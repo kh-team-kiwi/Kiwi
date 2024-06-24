@@ -21,7 +21,6 @@ public class ChatUserController {
 
     @GetMapping("/members")
     public List<Member> getUsersByTeam(@RequestParam String team) {
-        System.out.print("aaa");
         return chatUserService.getUsersInTeam(team);
     }
 }

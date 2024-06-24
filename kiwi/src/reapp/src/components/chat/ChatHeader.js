@@ -3,12 +3,12 @@ import ChatSearchBar from './ChatSearchBar';
 
 import '../../styles/components/chat/ChatHeader.css';
 
-const ChatHeader = () => {
+const ChatHeader = ({chatName} ) => {
   return (
     <div className='chat-header'>
       <div className='chat-header-left'>
         <div className='groupchat-name'>
-          Chat name header
+            {chatName || 'Chat name header'}
         </div>
       </div>
 
