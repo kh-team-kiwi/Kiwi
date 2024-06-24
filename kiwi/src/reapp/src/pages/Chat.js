@@ -10,7 +10,7 @@ import '../styles/pages/Chat.css';
 import { useParams } from "react-router-dom";
 
 const Chat = () => {
-    const { teamno } = useParams();
+        const { teamno } = useParams();
     const [selectedChatNum, setSelectedChatNum] = useState(null);
     const [selectedChatName, setSelectedChatName] = useState("");
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);

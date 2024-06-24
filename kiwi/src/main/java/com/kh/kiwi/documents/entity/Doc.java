@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -47,6 +48,14 @@ public class Doc {
     public enum AccessLevel {
         S, A, B, C
     }
+
+    // 결재자 리스트와의 관계 설정
+    @OneToMany(mappedBy = "docNum", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ApprovalLine> approvalLines;
+
+    // 참조자 리스트와의 관계 설정
+    @OneToMany(mappedBy = "docNum", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DocReferrer> references;
 
     @PrePersist
     public void prePersist() {

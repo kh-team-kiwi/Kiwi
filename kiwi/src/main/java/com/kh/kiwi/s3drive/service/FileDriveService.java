@@ -1,12 +1,14 @@
 package com.kh.kiwi.s3drive.service;
 
 import com.kh.kiwi.s3drive.dto.FileDriveDTO;
+import com.kh.kiwi.s3drive.entity.DriveUsers;
 import com.kh.kiwi.s3drive.entity.FileDrive;
+import com.kh.kiwi.s3drive.repository.DriveUsersRepository;
 import com.kh.kiwi.s3drive.repository.FileDriveRepository;
-import com.kh.kiwi.s3file.repository.FileDriveFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -21,17 +23,19 @@ public class FileDriveService {
 
     private final S3Client s3Client;
     private final FileDriveRepository fileDriveRepository;
+    private final DriveUsersRepository driveUsersRepository;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
 
     @Autowired
-    public FileDriveService(S3Client s3Client, FileDriveRepository fileDriveRepository) {
+    public FileDriveService(S3Client s3Client, FileDriveRepository fileDriveRepository, DriveUsersRepository driveUsersRepository) {
         this.s3Client = s3Client;
         this.fileDriveRepository = fileDriveRepository;
+        this.driveUsersRepository = driveUsersRepository;
     }
 
-    public FileDriveDTO createDrive(FileDriveDTO fileDriveDTO) {
+    public FileDriveDTO createDrive(FileDriveDTO fileDriveDTO, List<String> userIds) {
         // 드라이브 코드 생성
         String driveCode = UUID.randomUUID().toString();
 
@@ -54,6 +58,14 @@ public class FileDriveService {
         fileDrive.setTeam(fileDriveDTO.getTeam());
         fileDriveRepository.save(fileDrive);
 
+        // 드라이브 사용자 정보 저장
+        for (String userId : userIds) {
+            DriveUsers driveUser = new DriveUsers();
+            driveUser.setDriveCode(driveCode);
+            driveUser.setMemberId(userId);
+            driveUsersRepository.save(driveUser);
+        }
+
         // 드라이브 DTO 반환
         return new FileDriveDTO(driveCode, fileDriveDTO.getDriveName(), fileDriveDTO.getTeam());
     }
@@ -64,6 +76,13 @@ public class FileDriveService {
                 .collect(Collectors.toList());
     }
 
+    public List<FileDriveDTO> listDrivesByTeam(String team) {
+        return fileDriveRepository.findByTeam(team).stream()
+                .map(fileDrive -> new FileDriveDTO(fileDrive.getDriveCode(), fileDrive.getDriveName(), fileDrive.getTeam()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public void deleteDrive(String driveCode) {
         // S3에서 폴더 삭제
         try {
@@ -76,6 +95,9 @@ public class FileDriveService {
             e.printStackTrace();
             throw new RuntimeException("Failed to delete folder in S3", e);
         }
+
+        // drive_users 테이블에서 관련 레코드 삭제
+        driveUsersRepository.deleteByDriveCode(driveCode);
 
         // 드라이브 정보 삭제
         fileDriveRepository.deleteById(driveCode);

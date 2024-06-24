@@ -14,19 +14,19 @@ import java.util.Map;
 
 @Service
 public class DocService {
-
+    // 기존 변수 선언들
     private final DocRepository docRepository;
     private final ApprovalLineRepository approvalLineRepository;
-    private final CommentRepository commentRepository;
-    private final MemberDetailsRepository memberDetailsRepository;
     private final ReferrerRepository referrerRepository;
+    private final MemberDetailsRepository memberDetailsRepository;
+    private final CommentRepository commentRepository;
 
-    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository, CommentRepository commentRepository, MemberDetailsRepository memberDetailsRepository, ReferrerRepository referrerRepository) {
+    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository, ReferrerRepository referrerRepository, MemberDetailsRepository memberDetailsRepository, CommentRepository commentRepository) {
         this.docRepository = docRepository;
         this.approvalLineRepository = approvalLineRepository;
-        this.commentRepository = commentRepository;
-        this.memberDetailsRepository = memberDetailsRepository;
         this.referrerRepository = referrerRepository;
+        this.memberDetailsRepository = memberDetailsRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Doc> selectAllList() {
@@ -52,9 +52,22 @@ public class DocService {
         return countMap;
     }
 
+    public Doc getDocWithApprovalAndReferences(Long docNum) {
+        Doc doc = docRepository.findByDocNum(docNum);
+        if (doc != null) {
+            List<ApprovalLine> approvalLines = approvalLineRepository.findByDocNum(docNum);
+            List<DocReferrer> references = referrerRepository.findByDocNum(docNum);
+            doc.setApprovalLines(approvalLines);
+            doc.setReferences(references);
+        }
+        return doc;
+    }
+
     public Doc getDocById(Long id) {
         return docRepository.findById(id).orElse(null);
     }
+
+
 
     public void addDoc(Doc doc) {
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
@@ -77,6 +90,7 @@ public class DocService {
 
         docRepository.save(doc);
     }
+
 
     public void saveApprovalLine(Doc doc, ApprovalLineDto approvalLineDto) {
         // 결재자 저장

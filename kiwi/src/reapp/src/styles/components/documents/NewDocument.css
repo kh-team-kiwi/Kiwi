@@ -8,7 +8,7 @@
 
 /* 기본 설정 테이블 스타일 */
 .tableType02 {
-    width: 100%;
+    width: 1000px;
     border-collapse: collapse;
     margin-bottom: 20px;
     font-size: 14px;
@@ -48,6 +48,7 @@
 /* formGroup 스타일링 */
 .newDocument .formGroup {
     margin-bottom: 20px;
+    width: 1000px;
 }
 
 .newDocument .formGroup label {
@@ -113,13 +114,19 @@
 /* 결재선 설정 테이블 스타일링 */
 #approvalDocumentLine {
     margin-top: 20px;
+
+}
+
+.teamTable > tbody > tr {
+    height: 40px;
 }
 
 #approvalDocumentLine table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     font-size: 12px;
+
 }
 
 #approvalDocumentLine th {
@@ -127,11 +134,12 @@
     padding: 8px;
     text-align: center;
     vertical-align: middle;
+    height: 20px;
 }
 
 #approvalDocumentLine td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 0px;
     text-align: left;
     vertical-align: middle;
 }

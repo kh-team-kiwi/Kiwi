@@ -113,6 +113,28 @@ const ChatRoom = ({ chatNum }) => {
         }
     };
 
+    const isImage = (fileName) => {
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        return imageExtensions.includes(fileExtension);
+    };
+
+    const handleDownload = (event, filePath, fileName) => {
+        event.preventDefault();
+        axios({
+            url: `http://localhost:8080/api/chat/message/download?fileKey=${filePath}`,
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        });
+    };
+
     return (
         <div className="chat-room-container">
             <div className="chat-messages">
@@ -125,8 +147,12 @@ const ChatRoom = ({ chatNum }) => {
                             {msg.chatContent} <small>{formatTime(msg.chatTime)}</small>
                             {msg.files && msg.files.map((file, fileIndex) => (
                                 <div key={fileIndex}>
-                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} download>{file.originalFileName}</a>
-                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
+                                        {file.originalFileName}
+                                    </a>
+                                    {isImage(file.originalFileName) && (
+                                        <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                                    )}
                                 </div>
                             ))}
                         </div>

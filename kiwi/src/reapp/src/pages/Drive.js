@@ -3,15 +3,18 @@ import DriveSidebar from '../components/drive/DriveSidebar';
 import '../styles/pages/Page.css';
 import '../styles/pages/Drive.css';
 import DriveFileList from '../components/drive/DriveContent/DriveFileList';
-import DrivePopup from "../components/drive/DriveContent/DrivePopup";
+import CreateDriveModal from "../components/drive/DriveContent/CreateDriveModal";
+import { useParams } from "react-router-dom";
 
 const Drive = () => {
+    const { teamno } = useParams();
     const [selectedDrive, setSelectedDrive] = useState(null);
     const [selectedDriveName, setSelectedDriveName] = useState('');
     const [selectedFolder, setSelectedFolder] = useState(null);
     const [selectedFolderName, setSelectedFolderName] = useState('');
     const [breadcrumbs, setBreadcrumbs] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [showCreateDriveModal, setShowCreateDriveModal] = useState(false);
 
     const handleViewDrive = (driveCode, driveName) => {
         setSelectedDrive(driveCode);
@@ -44,6 +47,14 @@ const Drive = () => {
         setRefresh(!refresh);
     };
 
+    const handleOpenCreateDriveModal = () => {
+        setShowCreateDriveModal(true);
+    };
+
+    const handleCloseCreateDriveModal = () => {
+        setShowCreateDriveModal(false);
+    };
+
     const getBreadcrumb = () => {
         return breadcrumbs.map(b => b.name).join(' > ');
     };
@@ -52,7 +63,17 @@ const Drive = () => {
         <>
             <DriveSidebar onView={handleViewDrive} refresh={refresh} />
             <div className='content-container'>
-                <DrivePopup onDriveCreated={handleDriveCreated} />
+                <button className="schedule-button" onClick={handleOpenCreateDriveModal}>
+                    드라이브 생성
+                </button>
+                {showCreateDriveModal && (
+                    <CreateDriveModal
+                        team={teamno}
+                        showCreateDriveModal={showCreateDriveModal}
+                        onSave={handleDriveCreated}
+                        onClose={handleCloseCreateDriveModal}
+                    />
+                )}
                 {selectedDrive && (
                     <div>
                         <h2>{getBreadcrumb()}</h2>
