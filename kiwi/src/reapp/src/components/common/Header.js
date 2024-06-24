@@ -9,24 +9,42 @@ import {TeamContext} from "../../context/TeamContext";
 import {getSessionItem, setSessionItem} from "../../jwt/storage";
 import axiosHandler from "../../jwt/axiosHandler";
 
-import Calendar from '../../images/svg/calendar.svg';
+import KoreanFlag from '../../images/svg/flags/KoreanFlag';
+import EnglishFlag from '../../images/svg/flags/EnglishFlag';
+import SpanishFlag from '../../images/svg/flags/SpanishFlag';
+import FrenchFlag from '../../images/svg/flags/FrenchFlag';
+import GermanFlag from '../../images/svg/flags/GermanFlag';
+import JapaneseFlag from '../../images/svg/flags/JapaneseFlag';
+import ChineseFlag from '../../images/svg/flags/ChineseFlag';
 
 
 const Header = () => {
-
   const [teams, setTeams] = useContext(TeamContext);
   const { teamno } = useParams();
 
   const [activePage, setActivePage] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [notificationDropdownVisible, setNotificationDropdownVisible] = useState(false);
+
   const [teamDropdown, setTeamDropdown] = useState(false);
 
   const dropdownRef = useRef(null);
+  const userProfileRef = useRef(null);
+  const userNotificationRef = useRef(null);
+
+  const teamButtonRef = useRef(null);
+  const teamDropdownRef = useRef(null);
+  const languageDropdownRef = useRef(null);
+  const notificationDropdownRef = useRef(null);
+
+
   const [languageOptionsVisible, setLanguageOptionsVisible] = useState(false);
-  const { t } = useTranslation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [selectedTeam, setSelectedTeam] = useState({});
+
+  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+
 
   const fetchTeams = async () => {
     const memberId = getSessionItem("profile").username;
@@ -34,7 +52,7 @@ const Header = () => {
       const res = await axiosHandler.get("/api/team/list/" + memberId);
       if (res.status === 200) {
         setTeams(res.data);
-        setSessionItem("teams",res.data);
+        setSessionItem("teams", res.data);
       }
     } catch (error) {
       console.error('Error fetching teams:', error);
@@ -44,7 +62,6 @@ const Header = () => {
   useEffect(() => {
     fetchTeams();
   }, []);
-
 
   useEffect(() => {
     if (teams.length > 0) {
@@ -62,22 +79,41 @@ const Header = () => {
     navigate(`/team/${teamno}/${page}`);
   };
 
-  const handleDropdownClick = (event) => {
-    // event.stopPropagation();
+  const handleDropdownClick = () => {
+    if (notificationDropdownVisible) {
+      setNotificationDropdownVisible(false);
 
-    if (languageOptionsVisible === true) {
+    }
+    if (languageOptionsVisible) {
       setLanguageOptionsVisible(false);
     } else {
-      setDropdownVisible(!dropdownVisible);
+      setDropdownVisible(prevVisible => !prevVisible);
       setLanguageOptionsVisible(false);
+
     }
+
+  };
+
+  const handleNotificationClick = () => {
+
+      setNotificationDropdownVisible(prevVisible => !prevVisible);
+
+      if (dropdownVisible) {
+        setDropdownVisible(false);
+
+      }
+    
+
   };
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
+    setSelectedLanguage(lng);
+
     setLanguageOptionsVisible(false);
     setDropdownVisible(true);
   };
+
 
   const handleLanguageClick = () => {
     setLanguageOptionsVisible(true);
@@ -99,35 +135,59 @@ const Header = () => {
     setTeamDropdown(false);
     setSelectedTeam(team);
     navigate(`/team/${team.team}`);
+  };
+
+  const handleOutsideClick = (event) => {
+    if (
+      dropdownVisible &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      userProfileRef.current &&
+      !userProfileRef.current.contains(event.target) &&
+      !teamButtonRef.current.contains(event.target)
+    ) {
+      setDropdownVisible(false);
+    }
+
+    if (
+      notificationDropdownVisible &&
+      notificationDropdownRef.current &&
+      !notificationDropdownRef.current.contains(event.target) &&
+      userNotificationRef.current &&
+      !userNotificationRef.current.contains(event.target) &&
+      !teamButtonRef.current.contains(event.target)
+    ) {
+      setNotificationDropdownVisible(false);
+    }
+
+    if (
+      teamDropdownRef.current &&
+      !teamDropdownRef.current.contains(event.target) &&
+      teamButtonRef.current &&
+      !teamButtonRef.current.contains(event.target) &&
+      !userProfileRef.current.contains(event.target) &&
+      (!languageDropdownRef.current || !languageDropdownRef.current.contains(event.target))
+        ) {
+      setTeamDropdown(false);
+      setLanguageOptionsVisible(false);
+    }
 
     
   };
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //       setDropdownVisible(false);
-  //     }
-  //   };
-
-  //   if (dropdownVisible) {
-  //     document.addEventListener('mousedown', handleClickOutside);
-  //   } else {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [dropdownVisible]);
-
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [dropdownVisible, notificationDropdownVisible]);
 
 
   return (
     <header className='header-container'>
       <div className='header-team-container-wrapper'>
-        <div className={`header-team-container ${teamDropdown ? 'active' : ''}`}>
-          <div className='header-selected-team-details' onClick={toggleTeamDropdown}>
+        <div className={`header-team-container ${teamDropdown ? 'active' : ''}`} ref={teamDropdownRef}>
+          <div className='header-selected-team-details' onClick={toggleTeamDropdown} ref={teamButtonRef}>
             <img className='header-selected-team-profile-image' src={selectedTeam.teamFilepath} alt={''} onError={ErrorImageHandler}/>
             <div className='header-selected-team-name'>
               {selectedTeam.teamName}
@@ -167,10 +227,7 @@ const Header = () => {
 
             <div className='header-create-team-button-container'>
               <div className='header-create-team-button'>
-                {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style={{ marginLeft: '4px' }}>
-                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                </svg> */}
+
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17" className='create-team-icon'>
                   <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
                 </svg>
@@ -190,7 +247,6 @@ const Header = () => {
         <svg className='header-page-icon' width="25" height="25" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.25 0.78125C6.25 0.57405 6.16769 0.375336 6.02118 0.228823C5.87466 0.0823101 5.67595 0 5.46875 0C5.26155 0 5.06284 0.0823101 4.91632 0.228823C4.76981 0.375336 4.6875 0.57405 4.6875 0.78125V1.5625H3.125C2.2962 1.5625 1.50134 1.89174 0.915291 2.47779C0.32924 3.06384 0 3.8587 0 4.6875L0 6.25H25V4.6875C25 3.8587 24.6708 3.06384 24.0847 2.47779C23.4987 1.89174 22.7038 1.5625 21.875 1.5625H20.3125V0.78125C20.3125 0.57405 20.2302 0.375336 20.0837 0.228823C19.9372 0.0823101 19.7385 0 19.5312 0C19.324 0 19.1253 0.0823101 18.9788 0.228823C18.8323 0.375336 18.75 0.57405 18.75 0.78125V1.5625H6.25V0.78125ZM25 21.875V7.8125H0V21.875C0 22.7038 0.32924 23.4987 0.915291 24.0847C1.50134 24.6708 2.2962 25 3.125 25H21.875C22.7038 25 23.4987 24.6708 24.0847 24.0847C24.6708 23.4987 25 22.7038 25 21.875ZM14.8438 10.9375H16.4062C16.6135 10.9375 16.8122 11.0198 16.9587 11.1663C17.1052 11.3128 17.1875 11.5115 17.1875 11.7188V13.2812C17.1875 13.4885 17.1052 13.6872 16.9587 13.8337C16.8122 13.9802 16.6135 14.0625 16.4062 14.0625H14.8438C14.6365 14.0625 14.4378 13.9802 14.2913 13.8337C14.1448 13.6872 14.0625 13.4885 14.0625 13.2812V11.7188C14.0625 11.5115 14.1448 11.3128 14.2913 11.1663C14.4378 11.0198 14.6365 10.9375 14.8438 10.9375ZM19.5312 10.9375H21.0938C21.301 10.9375 21.4997 11.0198 21.6462 11.1663C21.7927 11.3128 21.875 11.5115 21.875 11.7188V13.2812C21.875 13.4885 21.7927 13.6872 21.6462 13.8337C21.4997 13.9802 21.301 14.0625 21.0938 14.0625H19.5312C19.324 14.0625 19.1253 13.9802 18.9788 13.8337C18.8323 13.6872 18.75 13.4885 18.75 13.2812V11.7188C18.75 11.5115 18.8323 11.3128 18.9788 11.1663C19.1253 11.0198 19.324 10.9375 19.5312 10.9375ZM3.125 16.4062C3.125 16.199 3.20731 16.0003 3.35382 15.8538C3.50034 15.7073 3.69905 15.625 3.90625 15.625H5.46875C5.67595 15.625 5.87466 15.7073 6.02118 15.8538C6.16769 16.0003 6.25 16.199 6.25 16.4062V17.9688C6.25 18.176 6.16769 18.3747 6.02118 18.5212C5.87466 18.6677 5.67595 18.75 5.46875 18.75H3.90625C3.69905 18.75 3.50034 18.6677 3.35382 18.5212C3.20731 18.3747 3.125 18.176 3.125 17.9688V16.4062ZM8.59375 15.625H10.1562C10.3635 15.625 10.5622 15.7073 10.7087 15.8538C10.8552 16.0003 10.9375 16.199 10.9375 16.4062V17.9688C10.9375 18.176 10.8552 18.3747 10.7087 18.5212C10.5622 18.6677 10.3635 18.75 10.1562 18.75H8.59375C8.38655 18.75 8.18784 18.6677 8.04132 18.5212C7.89481 18.3747 7.8125 18.176 7.8125 17.9688V16.4062C7.8125 16.199 7.89481 16.0003 8.04132 15.8538C8.18784 15.7073 8.38655 15.625 8.59375 15.625Z" fill="white"/>
         </svg>
-        {/* <img src={Calendar} alt="Logo" width={27} height={27} style={{ marginTop: '9px' }} /> */}
     </div>
       <div className={`header-page-icon-container ${activePage === 'drive' ? 'active' : 'inactive'}`} onClick={() => handleClick('drive')}>
         <svg className='header-page-icon' width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -209,40 +265,109 @@ const Header = () => {
       </div>
 
       <div className='header-user-container'>
-        <div className='header-notification-button'>
+        <div className='header-notification-button' onClick={handleNotificationClick} ref={userNotificationRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className='header-notification-icon' viewBox="0 0 16 16">
             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
           </svg>
         </div>
 
-        <div className='header-user-profile-button' onClick={handleDropdownClick} ref={dropdownRef}>
+        <div className='header-user-profile-button' onClick={handleDropdownClick} ref={userProfileRef}>
           <img className='header-user-profile-container' src={getSessionItem("profile").filepath} alt={''} onError={ErrorImageHandler}></img>
         </div>
       </div>
 
+      <div className={`header-notification-dropdown-container ${notificationDropdownVisible ? 'open' : 'close'}`}  ref={notificationDropdownRef}>
+          <div className='header-notification-dropdown-top'>
+            <div className='header-notification-dropdown-top-left'>
+              <div>
+              Notifications
+              </div>
+              <div>
+              6
+              </div>
+            </div>
+            <div className='header-notification-dropdown-top-right'>
+                Clear
+            </div>
+
+          </div>
+          <div className='header-notification-dropdown-list'>
+            <div className='header-notification-dropdown-profile-container'>
+              <div className='header-notification-dropdown-profile-image-container'>
+                <img className='header-notification-dropdown-profile-image' src={''} alt={''} onError={ErrorImageHandler}></img>
+              </div>
+              <div className='header-notification-dropdown-profile-info-container'>
+                <div className='header-notification-dropdown-name' >
+                  Username
+                </div>
+                <div className='header-notification-dropdown-email' >
+                  Username@gmail.com
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+
       {languageOptionsVisible && (
-        <div className='header-profile-language-dropdown-list'>
-          <div>
-            <div onClick={() => {
+        <div className='header-language-dropdown-list' ref={languageDropdownRef}>
+          <div className='header-language-top'>
+            <div className='header-language-back-button' onClick={() => {
               setLanguageOptionsVisible(false);
               setDropdownVisible(true);
             }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
-                <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-              </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                </svg>
+            </div>
+            
+            <div className='header-language-text' >
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="gray" viewBox="0 0 16 16">
+                  <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/>
+                </svg>
+                <div>
+                  Language
+                </div>
             </div>
           </div>
-          <div onClick={() => changeLanguage('ko')}>한국어</div>
-          <div onClick={() => changeLanguage('en')}>English</div>
-          <div onClick={() => changeLanguage('es')}>Español</div>
-          <div onClick={() => changeLanguage('fr')}>Français</div>
-          <div onClick={() => changeLanguage('ja')}>日本語</div>
-          <div onClick={() => changeLanguage('zh')}>中文</div>
-          <div onClick={() => changeLanguage('de')}>Deutsch</div>
+              <div className='header-language-option-container'>
+              <div onClick={() => changeLanguage('ko')} className={`header-toggle-language-option ${selectedLanguage === 'ko' ? 'language-selected' : ''}`}>
+                    한국어
+                    <KoreanFlag />
+                </div>
+                <div onClick={() => changeLanguage('en')} className={`header-toggle-language-option ${selectedLanguage === 'en' ? 'language-selected' : ''}`}>
+                    English
+                    <EnglishFlag />
+                </div>
+                <div onClick={() => changeLanguage('es')} className={`header-toggle-language-option ${selectedLanguage === 'es' ? 'language-selected' : ''}`}>
+                    Español
+                    <SpanishFlag />
+                </div>
+                <div onClick={() => changeLanguage('fr')} className={`header-toggle-language-option ${selectedLanguage === 'fr' ? 'language-selected' : ''}`}>
+                    Français
+                    <FrenchFlag />
+                </div>
+                <div onClick={() => changeLanguage('de')} className={`header-toggle-language-option ${selectedLanguage === 'de' ? 'language-selected' : ''}`}>
+                    Deutsch
+                    <GermanFlag />
+                </div>
+                <div onClick={() => changeLanguage('ja')} className={`header-toggle-language-option ${selectedLanguage === 'ja' ? 'language-selected' : ''}`}>
+                    日本語
+                    <JapaneseFlag />
+                </div>
+                <div onClick={() => changeLanguage('zh')} className={`header-toggle-language-option ${selectedLanguage === 'zh' ? 'language-selected' : ''}`}>
+                    中文
+                    <ChineseFlag />
+                </div>
+
+              </div>
+                
         </div>
       )}
 
-        <div className={`header-profile-dropdown-list ${dropdownVisible ? 'open' : 'close'}`}>
+        <div className={`header-profile-dropdown-list ${dropdownVisible ? 'open' : 'close'}`}  ref={dropdownRef}>
           <div className='header-profile-dropdown-profile-container'>
             <div className='header-profile-dropdown-profile-image-container'>
               <img className='header-profile-dropdown-profile-image' src={getSessionItem("profile").filepath} alt={''} onError={ErrorImageHandler}></img>
@@ -284,6 +409,9 @@ const Header = () => {
                   Language
                 </div>
               </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+              </svg>
             </div>
             <div className='header-profile-dropdown-option' onClick={() => handleClick('settings')}>
               <div className='header-profile-dropdown-option-left' >
