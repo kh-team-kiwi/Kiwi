@@ -3,23 +3,22 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
-import {useParams} from "react-router-dom";
-import {getSessionItem} from "../../../jwt/storage";
+import { useParams } from "react-router-dom";
+import { getSessionItem } from "../../../jwt/storage";
 
 const ChatRoom = ({ chatNum }) => {
     const [profile, setProfile] = useState(null);
+    const { teamno } = useParams();
+    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState('');
+    const [files, setFiles] = useState([]);
+    const stompClient = useRef(null);
+    const fileInputRef = useRef();
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
         setProfile(storedProfile);
     }, []);
-    const { team } = useParams();
-    const [messages, setMessages] = useState([]);
-    const [message, setMessage] = useState('');
-    const [sender, setSender] = useState('');
-    const [files, setFiles] = useState([]);
-    const stompClient = useRef(null);
-    const fileInputRef = useRef();
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -59,10 +58,10 @@ const ChatRoom = ({ chatNum }) => {
     const sendMessage = async () => {
         if (stompClient.current && stompClient.current.connected) {
             const chatMessage = {
-                sender,
+                sender: profile.username,
                 content: message,
                 chatNum,
-                files: files.map(file => file.name),
+                files: [],
                 type: 'CHAT'
             };
 
@@ -70,8 +69,9 @@ const ChatRoom = ({ chatNum }) => {
                 if (files.length > 0) {
                     const formData = new FormData();
                     files.forEach(file => formData.append('files', file));
-                    formData.append('team', team);
-                    formData.append('chatName', sender);
+                    formData.append('team', teamno);
+                    formData.append('chatNum', chatNum);
+                    formData.append('messageNum', `${chatNum}-${Date.now()}`);
 
                     const response = await axios.post('http://localhost:8080/api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
@@ -113,22 +113,48 @@ const ChatRoom = ({ chatNum }) => {
         }
     };
 
+    const isImage = (fileName) => {
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        return imageExtensions.includes(fileExtension);
+    };
+
+    const handleDownload = (event, filePath, fileName) => {
+        event.preventDefault();
+        axios({
+            url: `http://localhost:8080/api/chat/message/download?fileKey=${filePath}`,
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        });
+    };
+
     return (
         <div className="chat-room-container">
             <div className="chat-messages">
                 {messages.map((msg, index) => (
                     <div key={index} className="message-container">
                         <div className="message-sender">
-                            {msg.memberNickname || (msg.member && msg.member.memberNickname)}
+                            {msg.memberNickname}
                         </div>
                         <div className="message-content">
                             {msg.chatContent} <small>{formatTime(msg.chatTime)}</small>
-                            {msg.file && (
-                                <div>
-                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} download>{msg.file}</a>
-                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${msg.file}`} alt="Uploaded" style={{ maxWidth: '200px' }} />
+                            {msg.files && msg.files.map((file, fileIndex) => (
+                                <div key={fileIndex}>
+                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
+                                        {file.originalFileName}
+                                    </a>
+                                    {isImage(file.originalFileName) && (
+                                        <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                                    )}
                                 </div>
-                            )}
+                            ))}
                         </div>
                     </div>
                 ))}
@@ -144,12 +170,6 @@ const ChatRoom = ({ chatNum }) => {
                         ))}
                     </div>
                 )}
-                <input
-                    type="text"
-                    value={sender}
-                    onChange={(e) => setSender(e.target.value)}
-                    placeholder="Enter your ID"
-                />
                 <input
                     type="text"
                     value={message}

@@ -4,19 +4,23 @@ import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
 import com.kh.kiwi.chat.dto.ChatMessage;
 import com.kh.kiwi.chat.entity.Chat;
+import com.kh.kiwi.chat.entity.FileMessage;
 import com.kh.kiwi.chat.entity.MessageChatnum;
+import com.kh.kiwi.chat.repository.FileMessageRepository;
 import com.kh.kiwi.chat.repository.MessageChatnumRepository;
-import com.kh.kiwi.s3file.dto.FileDriveFileDTO;
-import com.kh.kiwi.s3file.service.FileDriveFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageChatnumService {
@@ -31,7 +35,10 @@ public class MessageChatnumService {
     private ChatService chatService;
 
     @Autowired
-    private FileDriveFileService fileDriveFileService;
+    private S3Client s3Client;
+
+    @Autowired
+    private FileMessageRepository fileMessageRepository;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
@@ -49,28 +56,67 @@ public class MessageChatnumService {
         messageChatnum.setChatTime(LocalDateTime.now());
         messageChatnum.setChatContent(message.getContent());
 
-        if (message.getFiles() != null && !message.getFiles().isEmpty()) {
-            messageChatnum.setChatContent(message.getContent() + "\n" + String.join("\n", message.getFiles()));
-        }
-
         messageChatnumRepository.save(messageChatnum);
-    }
 
-    public List<String> uploadFiles(MultipartFile[] files, String team, String chatName) throws IOException {
-        List<String> fileUrls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            FileDriveFileDTO uploadedFile = fileDriveFileService.uploadFile(team, file, chatName);
-            fileUrls.add(uploadedFile.getFilePath());
+        // 파일 메시지가 있는 경우 저장
+        if (message.getFiles() != null && !message.getFiles().isEmpty()) {
+            for (ChatMessage.FileInfo fileInfo : message.getFiles()) {
+                FileMessage fileMessage = new FileMessage();
+                fileMessage.setFileCode(fileInfo.getFileCode()); // UUID로 변형된 파일 이름
+                fileMessage.setMessageNum(messageChatnum.getMessageNum());
+                fileMessage.setFileName(fileInfo.getOriginalFileName()); // 원래 파일 이름
+                fileMessage.setFilePath(fileInfo.getFilePath());
+                fileMessageRepository.save(fileMessage);
+            }
         }
-        return fileUrls;
     }
 
-    public List<MessageChatnum> getMessagesByChatNum(Integer chatNum) {
-        return messageChatnumRepository.findByChat_ChatNum(chatNum);
+    public List<ChatMessage> getMessagesByChatNum(Integer chatNum) {
+        List<MessageChatnum> messages = messageChatnumRepository.findByChat_ChatNum(chatNum);
+        return messages.stream().map(message -> {
+            List<FileMessage> fileMessages = fileMessageRepository.findByMessageNum(message.getMessageNum());
+            List<ChatMessage.FileInfo> fileInfos = fileMessages.stream().map(fileMessage ->
+                    new ChatMessage.FileInfo(fileMessage.getFileName(), fileMessage.getFileCode(), fileMessage.getFilePath())
+            ).collect(Collectors.toList());
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setType(ChatMessage.MessageType.CHAT);
+            chatMessage.setSender(message.getMember().getMemberId());
+            chatMessage.setChatNum(message.getChat().getChatNum());
+            chatMessage.setChatTime(message.getChatTime());
+            chatMessage.setFiles(fileInfos);
+            chatMessage.setChatContent(message.getChatContent());
+            chatMessage.setMemberNickname(message.getMember().getMemberNickname());
+            return chatMessage;
+        }).collect(Collectors.toList());
+    }
+
+    public List<ChatMessage.FileInfo> uploadFiles(MultipartFile[] files, String team, String chatNum) throws IOException {
+        List<ChatMessage.FileInfo> fileInfos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String originalFileName = file.getOriginalFilename();
+            String fileCode = UUID.randomUUID().toString();
+            String filePath = uploadFileToS3(file, team, chatNum, fileCode);
+            fileInfos.add(new ChatMessage.FileInfo(originalFileName, fileCode, filePath));
+        }
+        return fileInfos;
+    }
+
+    private String uploadFileToS3(MultipartFile file, String team, String chatNum, String fileCode) throws IOException {
+        String uniqueFileName = team + "/chat/" + chatNum + "/" + fileCode;
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(uniqueFileName)
+                .build();
+
+        s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+        return uniqueFileName;
     }
 
     public byte[] downloadFile(String fileKey) {
-        return fileDriveFileService.downloadFile(fileKey, bucketName);
+        return s3Client.getObjectAsBytes(builder -> builder.bucket(bucketName).key(fileKey)).asByteArray();
     }
 
     public String getNicknameByEmail(String email) {
