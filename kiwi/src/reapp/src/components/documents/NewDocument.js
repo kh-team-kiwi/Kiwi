@@ -101,6 +101,23 @@ const NewDocument = () => {
 
             formData.append('doc', new Blob([JSON.stringify(docData)], { type: 'application/json' }));
 
+            // 결재자와 참조자 정보를 추가
+            const approvalLineData = {
+                approvers: approvalLine.approvers.map((approver, index) => ({
+                    employeeNo: approver.id,
+                    name: approver.name,
+                    position: approver.position
+                })),
+                references: approvalLine.references.map(ref => ({
+                    employeeNo: ref.id,
+                    name: ref.name,
+                    companyNum: 1, // 예시로 추가된 필드
+                    memberId: ref.id // 예시로 추가된 필드
+                }))
+            };
+
+            formData.append('approvalLine', new Blob([JSON.stringify(approvalLineData)], { type: 'application/json' }));
+
             if (newDocument.attachment) {
                 formData.append('attachment', newDocument.attachment);
             }

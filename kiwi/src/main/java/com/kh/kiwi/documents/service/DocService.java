@@ -1,16 +1,12 @@
 package com.kh.kiwi.documents.service;
 
+import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.dto.CommentDto;
-import com.kh.kiwi.documents.entity.Comment;
-import com.kh.kiwi.documents.entity.Doc;
-import com.kh.kiwi.documents.entity.ApprovalLine;
-import com.kh.kiwi.documents.entity.MemberDetails;
-import com.kh.kiwi.documents.repository.CommentRepository;
-import com.kh.kiwi.documents.repository.DocRepository;
-import com.kh.kiwi.documents.repository.ApprovalLineRepository;
-import com.kh.kiwi.documents.repository.MemberDetailsRepository;
+import com.kh.kiwi.documents.entity.*;
+import com.kh.kiwi.documents.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -24,12 +20,14 @@ public class DocService {
     private final ApprovalLineRepository approvalLineRepository;
     private final CommentRepository commentRepository;
     private final MemberDetailsRepository memberDetailsRepository;
+    private final ReferrerRepository referrerRepository;
 
-    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository, CommentRepository commentRepository, MemberDetailsRepository memberDetailsRepository) {
+    public DocService(DocRepository docRepository, ApprovalLineRepository approvalLineRepository, CommentRepository commentRepository, MemberDetailsRepository memberDetailsRepository, ReferrerRepository referrerRepository) {
         this.docRepository = docRepository;
         this.approvalLineRepository = approvalLineRepository;
         this.commentRepository = commentRepository;
         this.memberDetailsRepository = memberDetailsRepository;
+        this.referrerRepository = referrerRepository;
     }
 
     public List<Doc> selectAllList() {
@@ -54,7 +52,6 @@ public class DocService {
 
         return countMap;
     }
-
 
     public Doc getDocById(Long id) {
         return docRepository.findById(id).orElse(null);
@@ -82,7 +79,27 @@ public class DocService {
         docRepository.save(doc);
     }
 
+    public void saveApprovalLine(Doc doc, ApprovalLineDto approvalLineDto) {
+        // 결재자 저장
+        for (int i = 0; i < approvalLineDto.getApprovers().size(); i++) {
+            ApprovalLineId approvalLineId = new ApprovalLineId(doc.getDocNum(), String.valueOf(i + 1));
+            ApprovalLine approvalLine = new ApprovalLine();
+            approvalLine.setId(approvalLineId);
+            approvalLine.setEmployeeNo(approvalLineDto.getApprovers().get(i).getEmployeeNo());
+            approvalLine.setDocConf(0); // 초기 결재 상태 설정
+            approvalLineRepository.save(approvalLine);
+        }
 
+        // 참조자 저장
+        for (int i = 0; i < approvalLineDto.getReferences().size(); i++) {
+            DocReferrer referrer = new DocReferrer();
+            referrer.setDocNum(doc.getDocNum());
+            referrer.setCompanyNum(1L); // 예시: 실제 로직에 따라 값을 설정
+            referrer.setMemberId(approvalLineDto.getReferences().get(i).getEmployeeNo()); // 예시: 실제 로직에 따라 값을 설정
+            referrer.setEmployeeNo(approvalLineDto.getReferences().get(i).getEmployeeNo());
+            referrerRepository.save(referrer);
+        }
+    }
 
     public void updateDoc(Long id, Doc updatedDoc) {
         Doc existingDoc = docRepository.findById(id).orElse(null);

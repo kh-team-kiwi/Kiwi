@@ -3,6 +3,7 @@ package com.kh.kiwi.documents.controller;
 import com.kh.kiwi.documents.dto.CommentDto;
 import com.kh.kiwi.documents.entity.Doc;
 import com.kh.kiwi.documents.entity.ApprovalLine;
+import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.service.DocService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,10 @@ public class DocController {
     @PostMapping
     public ResponseEntity<String> addDoc(
             @RequestPart("doc") Doc doc,
-            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
+            @RequestPart(value = "attachment", required = false) MultipartFile attachment,
+            @RequestPart(value = "approvalLine", required = false) ApprovalLineDto approvalLine) { // 추가된 부분
 
-        // 기본 설정 로직 확인
+        // 기존 문서 저장 로직
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
             doc.setEmployeeNo("1@kimcs");
         }
@@ -50,7 +52,6 @@ public class DocController {
         if (doc.getDocContents() == null || doc.getDocContents().trim().isEmpty()) {
             doc.setDocContents("내용 없음");
         }
-        // 보존 기간과 보안 등급 기본값 설정
         if (doc.getRetentionPeriod() == null || doc.getRetentionPeriod().trim().isEmpty()) {
             doc.setRetentionPeriod("1년");
         }
@@ -58,7 +59,14 @@ public class DocController {
             doc.setAccessLevel(Doc.AccessLevel.C);
         }
 
+        // 문서 저장
         docService.addDoc(doc);
+
+        // 결재선 및 참조자 저장 로직 추가
+        if (approvalLine != null) {
+            docService.saveApprovalLine(doc, approvalLine); // 새로운 메서드 호출
+        }
+
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
 
