@@ -2,25 +2,28 @@ package com.kh.kiwi.documents.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.io.Serializable;
 
 @Data
 @Entity
 @Table(name = "doc_referrer")
-@IdClass(DocReferrerId.class) // 복합 키를 위한 IdClass 사용
+@IdClass(DocReferrerPK.class)
 public class DocReferrer {
 
     @Id
-    @Column(name = "DOC_NUM")
+    @Column(name = "DOC_NUM", nullable = false)
     private Long docNum;
 
     @Id
-    @Column(name = "COMPANY_NUM")
-    private Long companyNum;
-
-    @Id
-    @Column(name = "MEMBER_ID")
+    @Column(name = "MEMBER_ID", nullable = false)
     private String memberId;
 
-    @Column(name = "EMPLOYEE_NO")
+    @Column(name = "EMPLOYEE_NO", nullable = false)
     private String employeeNo;
+}
+
+@Data
+class DocReferrerPK implements Serializable {
+    private Long docNum;
+    private String memberId;
 }

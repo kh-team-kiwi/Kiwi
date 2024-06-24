@@ -6,7 +6,6 @@ import com.kh.kiwi.documents.entity.*;
 import com.kh.kiwi.documents.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -82,11 +81,11 @@ public class DocService {
     public void saveApprovalLine(Doc doc, ApprovalLineDto approvalLineDto) {
         // 결재자 저장
         for (int i = 0; i < approvalLineDto.getApprovers().size(); i++) {
-            ApprovalLineId approvalLineId = new ApprovalLineId(doc.getDocNum(), String.valueOf(i + 1));
             ApprovalLine approvalLine = new ApprovalLine();
-            approvalLine.setId(approvalLineId);
+            approvalLine.setDocNum(doc.getDocNum());
+            approvalLine.setDocSeq(String.valueOf(i + 1)); // 결재 순서 설정
             approvalLine.setEmployeeNo(approvalLineDto.getApprovers().get(i).getEmployeeNo());
-            approvalLine.setDocConf(0); // 초기 결재 상태 설정
+            approvalLine.setDocConf(0); // 기본값 설정
             approvalLineRepository.save(approvalLine);
         }
 
@@ -94,7 +93,6 @@ public class DocService {
         for (int i = 0; i < approvalLineDto.getReferences().size(); i++) {
             DocReferrer referrer = new DocReferrer();
             referrer.setDocNum(doc.getDocNum());
-            referrer.setCompanyNum(1L); // 예시: 실제 로직에 따라 값을 설정
             referrer.setMemberId(approvalLineDto.getReferences().get(i).getEmployeeNo()); // 예시: 실제 로직에 따라 값을 설정
             referrer.setEmployeeNo(approvalLineDto.getReferences().get(i).getEmployeeNo());
             referrerRepository.save(referrer);
