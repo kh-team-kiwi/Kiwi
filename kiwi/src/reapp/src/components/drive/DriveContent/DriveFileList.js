@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import FileUploadWithDropzone from './FileUploadWithDropzone';
 import DriveFolderPopup from "./DriveFolderPopup";
@@ -9,6 +9,7 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
     const [editFolderCode, setEditFolderCode] = useState(null);
     const [newFileName, setNewFileName] = useState('');
     const [newFolderName, setNewFolderName] = useState('');
+    const fileInputRef = useRef(null); // useRef 훅을 사용하여 참조 생성
 
     useEffect(() => {
         fetchItems(parentPath);
@@ -98,10 +99,37 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
         }
     };
 
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('files', file);
+        formData.append('parentPath', parentPath);
+
+        try {
+            await axios.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            fetchItems(parentPath); // 파일 목록 갱신
+        } catch (error) {
+            console.error('Failed to upload file', error);
+        }
+    };
+
     return (
         <div>
             <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath}/>
             <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} />
+            <input
+                type="file"
+                style={{ display: 'none' }}
+                onChange={handleFileUpload}
+                ref={fileInputRef} // useRef 훅을 통해 생성된 참조 사용
+            />
+            <button onClick={() => fileInputRef.current.click()}>Upload File</button>
             <h1>{breadcrumbs.map(b => b.name).join(' > ')}</h1>
             {breadcrumbs.length > 1 && (
                 <button onClick={onBack}>Back</button>

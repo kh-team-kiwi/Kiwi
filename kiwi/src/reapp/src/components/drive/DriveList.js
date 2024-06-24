@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const DriveList = ({ onView, refresh }) => {
+    const { teamno } = useParams();
     const [drives, setDrives] = useState([]);
     const [editDriveCode, setEditDriveCode] = useState(null);
     const [newName, setNewName] = useState('');
@@ -12,7 +14,7 @@ const DriveList = ({ onView, refresh }) => {
 
     const fetchDrives = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/drive/list');
+            const response = await axios.get(`http://localhost:8080/api/drive/list/${teamno}`);
             setDrives(response.data);
         } catch (error) {
             console.error('Failed to fetch drives', error);

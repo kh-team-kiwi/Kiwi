@@ -1,5 +1,6 @@
 package com.kh.kiwi.s3drive.controller;
 
+import com.kh.kiwi.s3drive.dto.CreateDriveRequest;
 import com.kh.kiwi.s3drive.dto.FileDriveDTO;
 import com.kh.kiwi.s3drive.service.FileDriveService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,18 @@ public class FileDriveController {
     }
 
     @PostMapping("/create")
-    public FileDriveDTO createDrive(@RequestBody FileDriveDTO fileDriveDTO) {
-        return fileDriveService.createDrive(fileDriveDTO);
+    public FileDriveDTO createDrive(@RequestBody CreateDriveRequest createDriveRequest) {
+        return fileDriveService.createDrive(createDriveRequest.getFileDriveDTO(), createDriveRequest.getUserIds());
     }
 
     @GetMapping("/list")
     public List<FileDriveDTO> listDrives() {
         return fileDriveService.listDrives();
+    }
+
+    @GetMapping("/list/{team}")
+    public List<FileDriveDTO> listDrivesByTeam(@PathVariable String team) {
+        return fileDriveService.listDrivesByTeam(team);
     }
 
     @DeleteMapping("/{driveCode}")

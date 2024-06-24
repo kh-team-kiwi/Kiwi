@@ -3,7 +3,6 @@ import Header from "../components/common/Header";
 import {Navigate, Outlet, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import FileManagement from "../components/drive/FileManagement";
 import Chat from "../pages/Chat";
 import Calendar from "../pages/Calendar";
 import Drive from "../pages/Drive";
@@ -48,7 +47,6 @@ const SecondRouts = () => {
 
                     {/* 팀 관련 경로 그룹화 */}
                     <Route path="/team/:teamno/*" element={<TeamLayout />}>
-                        <Route path="FileManagement" element={<FileManagement/>}></Route>
                         <Route path='chat' element={<Chat />} />
                         <Route path='calendar' element={<Calendar />} />
                         <Route path='drive' element={<Drive />} />
