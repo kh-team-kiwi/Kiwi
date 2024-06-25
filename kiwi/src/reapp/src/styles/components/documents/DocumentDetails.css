@@ -160,6 +160,15 @@
     padding: 0;
 }
 
+.edit-input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
 /* 문서 내용 스타일 */
 .docContentsSection {
     width: 900px;
@@ -173,6 +182,16 @@
 
 .docContents {
     margin: 0;
+}
+
+.edit-textarea {
+    width: 90%;
+    height: 300px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
 }
 
 /* 첨부 파일 스타일 */

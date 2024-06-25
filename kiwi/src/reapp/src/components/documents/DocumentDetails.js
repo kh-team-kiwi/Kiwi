@@ -302,6 +302,7 @@ const DocumentDetails = ({ document, onClose }) => {
                         type="text"
                         value={editedDocDetails.docTitle}
                         onChange={(e) => setEditedDocDetails({ ...editedDocDetails, docTitle: e.target.value })}
+                        className="edit-input"
                     />
                 ) : (
                     <h2 className="docTitle">{docDetails.docTitle}</h2>
@@ -312,6 +313,7 @@ const DocumentDetails = ({ document, onClose }) => {
                     <textarea
                         value={editedDocDetails.docContents}
                         onChange={(e) => setEditedDocDetails({ ...editedDocDetails, docContents: e.target.value })}
+                        className="edit-textarea"
                     />
                 ) : (
                     <p className="docContents" dangerouslySetInnerHTML={{ __html: docDetails.docContents }}></p>
@@ -353,6 +355,7 @@ const DocumentDetails = ({ document, onClose }) => {
                                             <textarea
                                                 value={editedComment}
                                                 onChange={(e) => setEditedComment(e.target.value)}
+                                                className="edit-textarea"
                                             />
                                             <button className="edit-delete-button" onClick={handleUpdateComment}>수정</button>
                                             <button className="edit-delete-button" onClick={() => setEditingComment(null)}>취소</button>
