@@ -39,7 +39,6 @@ public class DocController {
         Doc doc = docService.getDocWithApprovalAndReferences(docNum);
 
         if (doc != null) {
-            // 결재선과 참조자 정보 가져오기
             List<ApprovalLine> approvalLines = doc.getApprovalLines();
             if (approvalLines != null) {
                 approvalLines.forEach(approvalLine -> {
@@ -64,7 +63,6 @@ public class DocController {
                 });
             }
 
-            // 댓글 추가
             List<CommentDto> comments = docService.getCommentsWithAuthor(doc);
             doc.setCommentDtos(comments);
 
@@ -74,14 +72,12 @@ public class DocController {
         }
     }
 
-
     @PostMapping
     public ResponseEntity<String> addDoc(
             @RequestPart("doc") Doc doc,
             @RequestPart(value = "attachment", required = false) MultipartFile attachment,
-            @RequestPart(value = "approvalLine", required = false) ApprovalLineDto approvalLine) { // 추가된 부분
+            @RequestPart(value = "approvalLine", required = false) ApprovalLineDto approvalLine) {
 
-        // 기존 문서 저장 로직
         if (doc.getEmployeeNo() == null || doc.getEmployeeNo().trim().isEmpty()) {
             doc.setEmployeeNo("1@kimcs");
         }
@@ -101,53 +97,78 @@ public class DocController {
             doc.setAccessLevel(Doc.AccessLevel.C);
         }
 
-        // 문서 저장
         docService.addDoc(doc);
 
-        // 결재선 및 참조자 저장 로직 추가
         if (approvalLine != null) {
-            docService.saveApprovalLine(doc, approvalLine); // 새로운 메서드 호출
+            docService.saveApprovalLine(doc, approvalLine);
         }
 
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
-        docService.updateDoc(id, updatedDoc);
+    public ResponseEntity<Doc> updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
+        try {
+            docService.updateDoc(id, updatedDoc);
+            return ResponseEntity.ok(updatedDoc);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDoc(@PathVariable Long id) {
-        docService.deleteDoc(id);
+    public ResponseEntity<Void> deleteDoc(@PathVariable Long id) {
+        try {
+            docService.deleteDoc(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // 모든 문서를 조회하는 엔드포인트
     @GetMapping("/all-documents")
     public List<Doc> getAllDocuments() {
         return docService.selectAllList();
     }
 
-    // 모든 결재선 정보를 조회하는 엔드포인트
     @GetMapping("/all-approval-lines")
     public List<ApprovalLine> getAllApprovalLines() {
         return docService.getAllApprovalLines();
     }
 
-    // 댓글 추가 엔드포인트
     @PostMapping("/{docNum}/comments")
     public ResponseEntity<Comment> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
         try {
-            System.out.println("Received request to add comment for docNum: " + docNum + " with content: " + commentDto.getContent());
             Comment comment = docService.addComment(docNum, commentDto);
-            return ResponseEntity.ok(comment); // Comment 객체를 반환합니다.
+            return ResponseEntity.ok(comment);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    // 문서 상태별로 문서를 가져오는 엔드포인트 추가
+    @PutMapping("/comments/{id}")
+    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody CommentDto commentDto) {
+        try {
+            Comment updatedComment = docService.updateComment(id, commentDto);
+            return ResponseEntity.ok(updatedComment);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+        try {
+            docService.deleteComment(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Doc>> getDocumentsByStatus(@PathVariable String status) {
         try {

@@ -18,4 +18,8 @@ public class Group {
     @Id
     @Column(name = "TEAM")
     private String team;
+    /*
+    * MEMBER/ADMIN/OWNER
+    * */
+    private String role;
 }

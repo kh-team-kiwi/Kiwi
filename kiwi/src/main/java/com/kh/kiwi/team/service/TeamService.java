@@ -40,6 +40,7 @@ public class TeamService {
         Group group = new Group();
         group.setTeam(team.getTeam());
         group.setMemberId(team.getTeamAdminMemberId());
+        group.setRole("OWNER");
 
         try{
             teamRepository.save(team);
@@ -49,6 +50,7 @@ public class TeamService {
                 Group invite = Group.builder()
                         .team(team.getTeam())
                         .memberId(member.getUsername())
+                        .role("MEMBER")
                         .build();
                 groupRepository.save(invite);
             });
