@@ -6,7 +6,7 @@ const TeamSettings = () => {
 
     return (
         <>
-        <div className='content-container'>
+        <div className='settings-content-container'>
         </div>
       </>
     );

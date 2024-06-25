@@ -10,9 +10,21 @@ const Calendar = () => {
   const [selectedCalendar, setSelectedCalendar] = useState('personal');
   const calendars = ['personal', 'team'];
 
+  // useEffect(() => {
+  //   const fetchEvents = () => {
+  //     const storedEvents = JSON.parse(sessionStorage.getItem('events')) || {
+  //       personal: [],
+  //       team: []
+  //     };
+  //     setEvents(storedEvents);
+  //   };
+
+  //   fetchEvents();
+  // }, []);
+
   useEffect(() => {
     const fetchEvents = () => {
-      const storedEvents = JSON.parse(sessionStorage.getItem('events')) || {
+      const storedEvents = {
         personal: [],
         team: []
       };

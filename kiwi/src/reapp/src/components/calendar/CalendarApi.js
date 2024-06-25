@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import SchedulePopup from '../calendar/SchedulePopup';
+import EventPopup from './EventPopup';
 import { useTranslation } from 'react-i18next';
 import '../../styles/components/calendar/CalendarApi.css';
 import 'react-calendar/dist/Calendar.css';
 import axiosHandler from "../../jwt/axiosHandler";
-import {useLocation} from "react-router-dom";
-import {getSessionItem} from "../../jwt/storage";
+import { useLocation } from "react-router-dom";
+import { getSessionItem } from "../../jwt/storage";
 
-const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar  }) => {
+const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar }) => {
   const { t, i18n } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [eventPositions, setEventPositions] = useState(new Map());
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -69,16 +72,20 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
     calculateEventPositions();
   }, [events, currentMonth]);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchSchedule();
-  },[events])
+  }, [events]);
 
   const fetchSchedule = async () => {
     console.log("CalendarApi.js >> fetchSchedule : ");
-    const response = await axiosHandler.post("/api"+location.pathname+"/list/"+getSessionItem("profile").username);
+    const response = await axiosHandler.post("/api" + location.pathname + "/list/" + getSessionItem("profile").username);
     console.log(response);
   }
 
+  const handleTileClick = (event, position) => {
+    setSelectedEvent(event);
+    setClickPosition(position);
+  };
 
   const tileContent = ({ date, view }) => {
     if (view === 'month') {
@@ -108,8 +115,10 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
                   position: 'absolute',
                   width: '400px',
                   height: '20px',
+                  cursor: 'pointer'
                 }}
                 className="event-indicator"
+                onClick={(e) => handleTileClick(event, { top: e.clientY, left: e.clientX })}
               >
                 {isFirstTile && event.title}
               </div>
@@ -126,7 +135,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
   };
 
   const closePopup = () => {
-    console.log('Closing popup');
+    setSelectedEvent(null);
   };
 
   const formatMonthYear = (date) => {
@@ -165,11 +174,9 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
           </div>
         </div>
 
-
         <div className="date-container">
           {formatMonthYear(currentMonth)}
         </div>
-
 
         <div className="month-nav">
           <button className="month-left" onClick={() => handleMonthChange(-1)}>
@@ -193,6 +200,13 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
         showNavigation={false} 
         formatShortWeekday={formatShortWeekday} 
       />
+      {selectedEvent && (
+        <EventPopup
+          event={selectedEvent}
+          position={clickPosition}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };
