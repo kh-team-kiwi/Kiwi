@@ -139,7 +139,7 @@ public class DocService {
     }
 
 
-    public void addComment(Long docNum, CommentDto commentDto) {
+    public Comment addComment(Long docNum, CommentDto commentDto) {
         System.out.println("addComment called with docNum: " + docNum + " and commentDto: " + commentDto);
 
         Doc doc = docRepository.findByDocNum(docNum);
@@ -162,6 +162,8 @@ public class DocService {
 
         commentRepository.save(comment);
         System.out.println("의견이 저장되었습니다.");
+
+        return comment;
     }
 
 

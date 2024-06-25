@@ -8,7 +8,7 @@ const DocumentDetails = ({ document, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [approvalLine, setApprovalLine] = useState([]);
-    const [comments, setComments] = useState({content: '', employeeNo: ''});
+    const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [employeeNo, setEmployeeNo] = useState('');
@@ -90,7 +90,15 @@ const DocumentDetails = ({ document, onClose }) => {
             });
 
             console.log("Comment added successfully:", response.data);
-            setComments([...comments, response.data]);
+
+            // response.data가 추가된 댓글의 정보를 담고 있어야 합니다.
+            const newCommentData = {
+                ...response.data,
+                employeeName: author.name, // 추가된 댓글 작성자의 이름
+                createdAt: new Date().toISOString() // 현재 시간
+            };
+
+            setComments([...comments, newCommentData]);
             setNewComment('');
         } catch (error) {
             console.error('댓글 추가 오류:', error.response ? error.response.data : error.message);
@@ -230,17 +238,17 @@ const DocumentDetails = ({ document, onClose }) => {
                 </p>
                 <ul className="approvalComments">
                     {comments.length > 0 ? (
-                        comments.map((comments, index) => (
+                        comments.map((comment, index) => (
                             <li key={index}>
                                 <div className="profile">
-                                    <img className="myphoto" src={`https://api.multiavatar.com/${comments.employeeName}.png`} alt="A multicultural avatar"/>
+                                    <img className="myphoto" src={`https://api.multiavatar.com/${comment.employeeName}.png`} alt="A multicultural avatar"/>
                                 </div>
                                 <div className="txt">
                                     <div className="hidden after">
-                                    <p className="name bold">{comments.employeeName}</p>
-                                        <p className="date">{moment(comments.createdAt).format('YYYY-MM-DD HH:mm')}</p>
+                                        <p className="name bold">{comment.employeeName}</p>
+                                        <p className="date">{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</p>
                                     </div>
-                                    <p>{comments.content}</p>
+                                    <p>{comment.content}</p>
                                 </div>
                             </li>
                         ))

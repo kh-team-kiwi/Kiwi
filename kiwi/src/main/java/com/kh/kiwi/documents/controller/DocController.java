@@ -137,14 +137,14 @@ public class DocController {
 
     // 댓글 추가 엔드포인트
     @PostMapping("/{docNum}/comments")
-    public ResponseEntity<?> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
+    public ResponseEntity<Comment> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
         try {
             System.out.println("Received request to add comment for docNum: " + docNum + " with content: " + commentDto.getContent());
-            docService.addComment(docNum, commentDto);
-            return ResponseEntity.ok().build();
+            Comment comment = docService.addComment(docNum, commentDto);
+            return ResponseEntity.ok(comment);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 추가에 실패하였습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
