@@ -10,14 +10,21 @@ const DocumentDetails = ({ document, onClose }) => {
     const [approvalLine, setApprovalLine] = useState([]);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [editingComment, setEditingComment] = useState(null);
+    const [editedComment, setEditedComment] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [employeeNo, setEmployeeNo] = useState('');
     const [author, setAuthor] = useState({ name: '', deptName: '', position: '' });
 
+    const [isEditingDoc, setIsEditingDoc] = useState(false);
+    const [editedDocDetails, setEditedDocDetails] = useState({
+        docTitle: '',
+        docContents: '',
+    });
+
     useEffect(() => {
         const profile = JSON.parse(sessionStorage.getItem('profile'));
         if (profile && profile.username) {
-            console.log("Session profile:", profile);
             const username = profile.username;
 
             axios.get(`/api/members/details/${username}`)
@@ -26,18 +33,14 @@ const DocumentDetails = ({ document, onClose }) => {
                         const { employeeNo, name, deptName, position } = response.data;
                         setEmployeeNo(employeeNo);
                         setAuthor({ name, deptName, position });
-                        console.log("User details from API:", response.data);
                     } else {
-                        console.warn("No HR information found for the user.");
                         setError('사용자의 인사 정보를 찾을 수 없습니다.');
                     }
                 })
                 .catch(error => {
-                    console.error("Failed to fetch user details:", error);
                     setError('사용자의 인사 정보를 가져오는 중 오류가 발생했습니다.');
                 });
         } else {
-            console.warn("No user profile found in session.");
             setError('로그인 정보가 없습니다.');
         }
     }, []);
@@ -50,7 +53,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
                 setDocDetails(details);
                 setApprovalLine(details.approvalLines || []);
-                setComments(details.commentDtos || []); // commentDtos 사용
+                setComments(details.commentDtos || []);
                 setAttachments(details.attachments || []);
                 setLoading(false);
             } catch (error) {
@@ -69,28 +72,23 @@ const DocumentDetails = ({ document, onClose }) => {
 
     const handleAddComment = async () => {
         if (newComment.trim() === '') {
-            console.warn("Empty comment cannot be submitted");
             return;
         }
 
         if (!employeeNo) {
-            console.warn("employeeNo is not set. User may not be logged in properly.");
             return;
         }
 
         try {
-            console.log("Sending comment:", newComment, "by employeeNo:", employeeNo);
             const response = await axios.post(`http://localhost:8080/documents/${document.docNum}/comments`, {
                 content: newComment,
                 employeeNo: employeeNo,
-                employeeName: author.name // 작성자 이름을 함께 보냅니다.
+                employeeName: author.name
             }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-
-            console.log("Comment added successfully:", response.data);
 
             const newCommentData = {
                 ...response.data,
@@ -101,8 +99,87 @@ const DocumentDetails = ({ document, onClose }) => {
             setComments([...comments, newCommentData]);
             setNewComment('');
         } catch (error) {
-            console.error('댓글 추가 오류:', error.response ? error.response.data : error.message);
             setError('댓글 추가에 실패하였습니다.');
+        }
+    };
+
+    const handleEditComment = (comment) => {
+        if (comment.employeeNo !== employeeNo) {
+            setError('자신의 댓글만 수정할 수 있습니다.');
+            return;
+        }
+        setEditingComment(comment);
+        setEditedComment(comment.content);
+    };
+
+    const handleUpdateComment = async () => {
+        try {
+            const response = await axios.put(`http://localhost:8080/documents/comments/${editingComment.id}`, {
+                id: editingComment.id,
+                content: editedComment,
+                employeeNo: editingComment.employeeNo,
+                employeeName: editingComment.employeeName,
+                createdAt: editingComment.createdAt
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const updatedComment = response.data;
+            setComments(comments.map(comment => (comment.id === updatedComment.id ? updatedComment : comment)));
+            setEditingComment(null);
+            setEditedComment('');
+        } catch (error) {
+            setError('댓글 수정에 실패하였습니다.');
+        }
+    };
+
+    const handleDeleteComment = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8080/documents/comments/${id}`);
+            setComments(comments.filter(comment => comment.id !== id));
+        } catch (error) {
+            setError('댓글 삭제에 실패하였습니다.');
+        }
+    };
+
+    const handleEditDoc = () => {
+        setIsEditingDoc(true);
+        setEditedDocDetails({
+            docTitle: docDetails.docTitle,
+            docContents: docDetails.docContents,
+        });
+    };
+
+    const handleUpdateDoc = async () => {
+        try {
+            const response = await axios.put(`http://localhost:8080/documents/${document.docNum}`, {
+                docTitle: editedDocDetails.docTitle,
+                docContents: editedDocDetails.docContents,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            setDocDetails({
+                ...docDetails,
+                docTitle: response.data.docTitle,
+                docContents: response.data.docContents,
+            });
+            setIsEditingDoc(false);
+        } catch (error) {
+            setError('문서 수정에 실패하였습니다.');
+        }
+    };
+
+    const handleDeleteDoc = async () => {
+        try {
+            await axios.delete(`http://localhost:8080/documents/${document.docNum}`);
+            onClose(); // 문서 삭제 후 페이지를 닫음
+        } catch (error) {
+            setError('문서 삭제에 실패하였습니다.');
         }
     };
 
@@ -112,6 +189,14 @@ const DocumentDetails = ({ document, onClose }) => {
 
     return (
         <div className="documentDetails">
+            <div className="edit-delete-doc-buttons">
+                {isEditingDoc ? (
+                    <button className="edit-delete-doc-button" onClick={handleUpdateDoc}>저장</button>
+                ) : (
+                    <button className="edit-delete-doc-button" onClick={handleEditDoc}>수정</button>
+                )}
+                <button className="edit-delete-doc-button" onClick={handleDeleteDoc}>삭제</button>
+            </div>
             <h1 className="docType">{docDetails.docType}</h1>
             <table className="tableType02 docInfoTable">
                 <colgroup>
@@ -212,10 +297,25 @@ const DocumentDetails = ({ document, onClose }) => {
             </table>
 
             <div className="docTitleSection">
-                <h2 className="docTitle">{docDetails.docTitle}</h2>
+                {isEditingDoc ? (
+                    <input
+                        type="text"
+                        value={editedDocDetails.docTitle}
+                        onChange={(e) => setEditedDocDetails({ ...editedDocDetails, docTitle: e.target.value })}
+                    />
+                ) : (
+                    <h2 className="docTitle">{docDetails.docTitle}</h2>
+                )}
             </div>
             <div className="docContentsSection">
-                <p className="docContents" dangerouslySetInnerHTML={{ __html: docDetails.docContents }}></p>
+                {isEditingDoc ? (
+                    <textarea
+                        value={editedDocDetails.docContents}
+                        onChange={(e) => setEditedDocDetails({ ...editedDocDetails, docContents: e.target.value })}
+                    />
+                ) : (
+                    <p className="docContents" dangerouslySetInnerHTML={{ __html: docDetails.docContents }}></p>
+                )}
             </div>
             <div className="attachmentsSection">
                 <h3>파일 첨부</h3>
@@ -248,7 +348,26 @@ const DocumentDetails = ({ document, onClose }) => {
                                         <p className="name bold">{comment.employeeName}</p>
                                         <p className="date">{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</p>
                                     </div>
-                                    <p>{comment.content}</p>
+                                    {editingComment && editingComment.id === comment.id ? (
+                                        <div>
+                                            <textarea
+                                                value={editedComment}
+                                                onChange={(e) => setEditedComment(e.target.value)}
+                                            />
+                                            <button className="edit-delete-button" onClick={handleUpdateComment}>수정</button>
+                                            <button className="edit-delete-button" onClick={() => setEditingComment(null)}>취소</button>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <p>{comment.content}</p>
+                                            {comment.employeeNo === employeeNo && (
+                                                <div className="edit-delete-buttons">
+                                                    <button className="edit-delete-button" onClick={() => handleEditComment(comment)}>수정</button>
+                                                    <button className="edit-delete-button" onClick={() => handleDeleteComment(comment.id)}>삭제</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </li>
                         ))
@@ -257,9 +376,9 @@ const DocumentDetails = ({ document, onClose }) => {
                     )}
                 </ul>
                 <div className="comment_write">
-                    <label htmlFor="commentInput" className="blind">댓글 입력란</label>
+                    <label htmlFor="commentInput" className="blind">의견 입력란</label>
                     <textarea
-                        id="approvalDocumentComment" placeholder="댓글을 남겨주세요." title="댓글을 남겨주세요."
+                        id="approvalDocumentComment" placeholder="의견을 남겨주세요." title="의견을 남겨주세요."
                         className="comment-texarea" value={newComment} onChange={
                         (e) => setNewComment(e.target.value)}/>
                     <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>

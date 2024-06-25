@@ -9,6 +9,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     const [members, setMembers] = useState([]);
     const [selectedMember, setSelectedMember] = useState(null);
     const [admins, setAdmins] = useState([]);
+    const [nameError, setNameError] = useState(false);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -42,7 +43,9 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     };
 
     const handleDriveNameChange = (event) => {
-        setDriveName(event.target.value);
+        const name = event.target.value;
+        setDriveName(name);
+        setNameError(!name.trim()); // 드라이브 이름이 공백이거나 띄어쓰기만 있을 때 에러 표시
     };
 
     const handleMemberClick = (member) => {
@@ -67,8 +70,8 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     };
 
     const handleSave = async () => {
-        if (!profile) {
-            console.error('No profile available');
+        if (!profile || !driveName.trim()) {
+            console.error('Invalid profile or drive name');
             return;
         }
 
@@ -101,6 +104,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                         onChange={handleDriveNameChange}
                         placeholder="드라이브 이름을 입력하세요"
                     />
+                    {nameError && <p className="error-text">드라이브 이름을 올바르게 입력하세요.</p>}
                 </div>
                 <div className="container">
                     <div className="memberList">
@@ -134,7 +138,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                     </div>
                 </div>
                 <div className="modalActions">
-                    <button className="create-drive-button" onClick={handleSave}>저장</button>
+                    <button className="create-drive-button" onClick={handleSave} disabled={!driveName.trim()}>저장</button>
                     <button className="create-drive-button" onClick={onClose}>취소</button>
                 </div>
             </div>

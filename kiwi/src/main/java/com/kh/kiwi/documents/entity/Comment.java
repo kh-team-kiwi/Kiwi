@@ -27,11 +27,13 @@ public class Comment {
     @Column(name = "DOC_COMMENTS_DATE", nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "EMPLOYEE_NO", nullable = false)
-    private MemberDetails employee;
+    @Column(name = "EMPLOYEE_NO", nullable = false)
+    private String employeeNo;
 
     @Transient
     private String employeeName;
 
+    @ManyToOne
+    @JoinColumn(name = "EMPLOYEE_NO", insertable = false, updatable = false)
+    private MemberDetails employee;
 }

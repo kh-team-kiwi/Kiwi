@@ -179,46 +179,50 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
       {isOpen && (
         <div className="popup-container">
           <div className="popup-content" ref={popupRef}>
-            <div className="close-button" onClick={closePopup}>
+            {/* <div className="close-button" onClick={closePopup}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M18.71 5.29a1 1 0 0 0-1.42 0L12 10.59 7.71 6.29a1 1 0 0 0-1.42 1.42L10.59 12 6.29 16.29a1 1 0 0 0 1.42 1.42L12 13.41l4.29 4.3a1 1 0 0 0 1.42-1.42L13.41 12l4.3-4.29a1 1 0 0 0 0-1.42z"/>
               </svg>
-            </div>
-            <div className='popup-title'>Create Event</div>
+            </div> */}
             <form className="event-form">
-              <div className="slide-controls">
-                <div className="radio-wrapper">
-                  <input 
-                    type="radio" 
-                    name="slide" 
-                    id="personal" 
-                    value="personal" 
-                    checked={selectedEventCalendar === 'personal'} 
-                    onChange={() => handleCalendarChange('personal')} 
-                  />
-                  <input 
-                    type="radio" 
-                    name="slide" 
-                    id="team" 
-                    value="team" 
-                    checked={selectedEventCalendar === 'team'} 
-                    onChange={() => handleCalendarChange('team')} 
-                  />
-                  <label htmlFor="personal" className="slide">{t('personal')}</label>
-                  <label htmlFor="team" className="slide">{t('team')}</label>
-                  <div className="slider-tab"></div>
+              <div className='event-calendar-option'>
+                <div className="slide-controls">
+                  <div className="radio-wrapper">
+                    <input 
+                      type="radio" 
+                      name="slide" 
+                      id="personal" 
+                      value="personal" 
+                      checked={selectedEventCalendar === 'personal'} 
+                      onChange={() => handleCalendarChange('personal')} 
+                    />
+                    <input 
+                      type="radio" 
+                      name="slide" 
+                      id="team" 
+                      value="team" 
+                      checked={selectedEventCalendar === 'team'} 
+                      onChange={() => handleCalendarChange('team')} 
+                    />
+                    <label htmlFor="personal" className="slide">{t('personal')}</label>
+                    <label htmlFor="team" className="slide">{t('team')}</label>
+                    <div className="slider-tab popup"></div>
+                  </div>
                 </div>
+
               </div>
 
-              <div className="event-top-input" >
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                  className="event-title-input"
-                  value={newEvent.title}
-                  onChange={handleInputChange}
-                />
+
+              <div className="event-title-container" >
+                <div className='event-title-input-container'>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Title"
+                      className="event-title-input"
+                      value={newEvent.title}
+                      onChange={handleInputChange}
+                    />
                 <div className="color-picker" ref={dropdownRef}>
                   <div className="color-dropdown-container">
                     <button 
@@ -228,11 +232,9 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
                     >
                       <div
                         className="color-circle"
-                        style={{ backgroundColor: selectedColor, width: '20px', height: '20px' }}
+                        style={{ backgroundColor: selectedColor, marginRight: '1px'}}
                       ></div>
-                      <svg className="dropdown-arrow" width="11" height="6" viewBox="0 0 17 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd" clipRule="evenodd" d="M0.183617 0.183617C0.241674 0.125413 0.310644 0.0792341 0.386575 0.047726C0.462507 0.016218 0.543908 0 0.626117 0C0.708326 0 0.789728 0.016218 0.865659 0.047726C0.941591 0.0792341 1.01056 0.125413 1.06862 0.183617L8.12612 7.24237L15.1836 0.183617C15.2417 0.125507 15.3107 0.0794115 15.3866 0.0479627C15.4626 0.0165138 15.5439 0.000327229 15.6261 0.000327229C15.7083 0.000327229 15.7897 0.0165138 15.8656 0.0479627C15.9415 0.0794115 16.0105 0.125507 16.0686 0.183617C16.1267 0.241727 16.1728 0.310713 16.2043 0.386637C16.2357 0.462562 16.2519 0.543937 16.2519 0.626117C16.2519 0.708297 16.2357 0.789672 16.2043 0.865596C16.1728 0.941521 16.1267 1.01051 16.0686 1.06862L8.56862 8.56862C8.51056 8.62682 8.44159 8.673 8.36566 8.70451C8.28973 8.73602 8.20833 8.75223 8.12612 8.75223C8.04391 8.75223 7.96251 8.73602 7.88658 8.70451C7.81064 8.673 7.74167 8.62682 7.68362 8.56862L0.183617 1.06862C0.125413 1.01056 0.0792347 0.94159 0.0477266 0.865659C0.0162186 0.789728 0 0.708326 0 0.626117C0 0.543908 0.0162186 0.462506 0.0477266 0.386575C0.0792347 0.310643 0.125413 0.241674 0.183617 0.183617Z" fill="black"></path>
-                      </svg>
+                      
                     </button>
                     {dropdownOpen && (
                       <ul className="color-dropdown-list">
@@ -244,7 +246,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
                           >
                             <div
                               className="color-circle"
-                              style={{ backgroundColor: color, width: '20px', height: '20px' }}
+                              style={{ backgroundColor: color, marginRight: '1px'}}
                             ></div>
                           </li>
                         ))}
@@ -252,73 +254,98 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
                     )}
                   </div>
                 </div>
-              </div>
-
-              <div className="event-location-container">
-                <div>
-                  <svg className="event-location-icon bi bi-geo-alt-fill" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                  </svg>
                 </div>
-                <input
-                  type="text"
-                  name="location"
-                  className="event-location"
-                  placeholder="Location"
-                  value={newEvent.location}
-                  onChange={handleInputChange}
-                />
+
               </div>
 
               <div className="event-description-container" >
                 <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className ="event-description-icon bi bi-text-paragraph" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" className='event-popup-icon' viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
                   </svg>
                 </div>
-                <input
-                  name="description"
-                  className="event-description"
-                  placeholder="Description"
-                  value={newEvent.description}
-                  onChange={handleInputChange}
-                />
+                <div className='event-input-container'>
+                  <input
+                    name="description"
+                    placeholder="Description"
+                    value={newEvent.description}
+                    onChange={handleInputChange}
+                    className='event-description-input'
+                  />
+                </div>
+
               </div>
 
-              <div className="schedule-date-container">
-                <div className="schedule-date-start">
-                  Start
-                  <input
-                    type="date"
-                    name="startDate"
-                    value={newEvent.startDate}
-                    onChange={handleInputChange}
-                  />
-                  <input
-                    type="time"
-                    name="startTime"
-                    value={newEvent.startTime}
-                    onChange={handleInputChange}
-                  />
+              <div className="event-location-container">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className='event-popup-icon' viewBox="0 0 16 16">
+                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                  </svg>
                 </div>
-                <div className="schedule-date-bottom">
-                  Finish
+                <div className='event-input-container'>
                   <input
-                    type="date"
-                    name="endDate"
-                    value={newEvent.endDate}
+                    type="text"
+                    name="location"
+                    className="event-location-input"
+                    placeholder="Location"
+                    value={newEvent.location}
                     onChange={handleInputChange}
                   />
-                  <input
-                    type="time"
-                    name="endTime"
-                    value={newEvent.endTime}
-                    onChange={handleInputChange}
-                  />
+
                 </div>
+
+              </div>
+
+              <div className="event-duration-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className='event-popup-icon' style={{marginTop:'5px'}} viewBox="0 0 16 16">
+                  <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                </svg>
+
+                <div className='event-duration-input-container'>
+                  <div className="event-start-container">
+                    <input
+                      type="time"
+                      name="startTime"
+                      value={newEvent.startTime}
+                      onChange={handleInputChange}
+                      className='event-time-input'
+
+                    />
+                    <input
+                      type="date"
+                      name="startDate"
+                      value={newEvent.startDate}
+                      onChange={handleInputChange}
+                      className='event-date-input'
+                    />
+
+                  </div>
+                  <div className="event-end-container">
+                    <input
+                      type="time"
+                      name="endTime"
+                      value={newEvent.endTime}
+                      onChange={handleInputChange}
+                      className='event-time-input'
+
+                    />
+                    <input
+                      type="date"
+                      name="endDate"
+                      value={newEvent.endDate}
+                      onChange={handleInputChange}
+                      className='event-date-input'
+                    />
+                  </div>
+
+                </div>
+
               </div>
               <div className="event-bottom-container">
-                <button type="button" className="create-button" onClick={handleAddEvent}>Create</button>
+                <button type="button" className="event-cancel-button" onClick={closePopup}>Cancel</button>
+
+                <button type="button" className="event-create-button" onClick={handleAddEvent}>Create</button>
               </div>
             </form>
           </div>

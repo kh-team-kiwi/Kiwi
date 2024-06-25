@@ -8,7 +8,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class DocService {
-    // 기존 변수 선언들
     private final DocRepository docRepository;
     private final ApprovalLineRepository approvalLineRepository;
     private final ReferrerRepository referrerRepository;
@@ -35,7 +33,6 @@ public class DocService {
         return docRepository.findAll();
     }
 
-    // 문서 상태별 문서를 가져오는 메서드
     public List<Doc> getDocumentsByStatus(Doc.DocStatus status) {
         return docRepository.findByDocStatus(status);
     }
@@ -92,21 +89,19 @@ public class DocService {
     }
 
     public void saveApprovalLine(Doc doc, ApprovalLineDto approvalLineDto) {
-        // 결재자 저장
         for (int i = 0; i < approvalLineDto.getApprovers().size(); i++) {
             ApprovalLine approvalLine = new ApprovalLine();
             approvalLine.setDocNum(doc.getDocNum());
-            approvalLine.setDocSeq(String.valueOf(i + 1)); // 결재 순서 설정
+            approvalLine.setDocSeq(String.valueOf(i + 1));
             approvalLine.setEmployeeNo(approvalLineDto.getApprovers().get(i).getEmployeeNo());
-            approvalLine.setDocConf(0); // 기본값 설정
+            approvalLine.setDocConf(0);
             approvalLineRepository.save(approvalLine);
         }
 
-        // 참조자 저장
         for (int i = 0; i < approvalLineDto.getReferences().size(); i++) {
             DocReferrer referrer = new DocReferrer();
             referrer.setDocNum(doc.getDocNum());
-            referrer.setMemberId(approvalLineDto.getReferences().get(i).getEmployeeNo()); // 예시: 실제 로직에 따라 값을 설정
+            referrer.setMemberId(approvalLineDto.getReferences().get(i).getEmployeeNo());
             referrer.setEmployeeNo(approvalLineDto.getReferences().get(i).getEmployeeNo());
             referrerRepository.save(referrer);
         }
@@ -138,39 +133,53 @@ public class DocService {
         List<Comment> comments = commentRepository.findByDoc(doc);
         return comments.stream().map(comment -> {
             CommentDto commentDto = new CommentDto();
+            commentDto.setId(comment.getId()); // ID 설정
             commentDto.setContent(comment.getContent());
-            commentDto.setEmployeeNo(comment.getEmployee().getEmployeeNo());
-            commentDto.setEmployeeName(comment.getEmployee().getName());
+            commentDto.setEmployeeNo(comment.getEmployeeNo());
+            commentDto.setEmployeeName(comment.getEmployee().getName()); // employee 객체에서 이름 가져오기
             commentDto.setCreatedAt(comment.getCreatedAt());
             return commentDto;
         }).collect(Collectors.toList());
     }
 
-
-
     public Comment addComment(Long docNum, CommentDto commentDto) {
-        System.out.println("addComment called with docNum: " + docNum + " and commentDto: " + commentDto);
-
         Doc doc = docRepository.findByDocNum(docNum);
         if (doc == null) {
             throw new EntityNotFoundException("해당 문서를 찾을 수 없습니다.");
         }
 
         MemberDetails employee = memberDetailsRepository.findById(commentDto.getEmployeeNo())
-                .orElseThrow(() -> {
-                    System.err.println("해당 사원을 찾을 수 없습니다: " + commentDto.getEmployeeNo());
-                    return new EntityNotFoundException("해당 사원을 찾을 수 없습니다.");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("해당 사원을 찾을 수 없습니다."));
 
         Comment comment = new Comment();
         comment.setDoc(doc);
         comment.setContent(commentDto.getContent());
         comment.setCreatedAt(LocalDateTime.now());
         comment.setEmployee(employee);
+        comment.setEmployeeNo(commentDto.getEmployeeNo());
+        comment.setEmployeeName(commentDto.getEmployeeName());
 
         commentRepository.save(comment);
-        System.out.println("의견이 저장되었습니다.");
 
         return comment;
+    }
+
+    public Comment updateComment(Long id, CommentDto commentDto) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+
+        comment.setContent(commentDto.getContent());
+        comment.setEmployeeNo(commentDto.getEmployeeNo());
+        comment.setEmployeeName(commentDto.getEmployeeName());
+        commentRepository.save(comment);
+
+        return comment;
+    }
+
+    public void deleteComment(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+
+        commentRepository.delete(comment);
     }
 }
