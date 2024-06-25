@@ -11,6 +11,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     const [selectedMember, setSelectedMember] = useState(null);
     const [admins, setAdmins] = useState([]);
     const [participants, setParticipants] = useState([]);
+    const [chatNameError, setChatNameError] = useState("");
 
     useEffect(() => {
         console.log("Profile loading");
@@ -54,6 +55,9 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
     const handleChatNameChange = (event) => {
         setChatName(event.target.value);
+        if (event.target.value.trim()) {
+            setChatNameError(""); // 입력값이 있을 경우 오류 메시지 제거
+        }
     };
 
     const handleMemberClick = (member) => {
@@ -75,6 +79,12 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     const handleSave = () => {
         if (!profile) {
             console.error("No profile available");
+            return;
+        }
+
+        // 채팅방 이름이 공백이거나 띄어쓰기만 있는지 확인
+        if (!chatName.trim()) {
+            setChatNameError("채팅방 이름을 입력하세요.");
             return;
         }
 
@@ -103,6 +113,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                         onChange={handleChatNameChange}
                         placeholder="채팅방 이름을 입력하세요"
                     />
+                    {chatNameError && <div className="error-message">{chatNameError}</div>}
                 </div>
                 <div className="searchBox">
                     <input

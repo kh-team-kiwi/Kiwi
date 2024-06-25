@@ -178,7 +178,7 @@ const ChatRoom = ({ chatNum }) => {
                                             ) : (
                                                 <div className="file-link-container">
                                                     <span className="file-link">{file.originalFileName}</span>
-                                                    <span className="file-download-icon">↓</span>
+                                                    <span className="file-link">↓</span>
                                                 </div>
                                             )}
                                         </a>
