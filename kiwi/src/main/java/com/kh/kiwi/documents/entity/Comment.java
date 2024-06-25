@@ -1,8 +1,13 @@
 package com.kh.kiwi.documents.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "doc_comments")
 public class Comment {
@@ -12,6 +17,8 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "DOC_NUM", nullable = false)
+    @ToString.Exclude
+    @JsonBackReference
     private Doc doc;
 
     @Column(name = "DOC_COMMENTS_CONTENT", nullable = false)
@@ -24,44 +31,7 @@ public class Comment {
     @JoinColumn(name = "EMPLOYEE_NO", nullable = false)
     private MemberDetails employee;
 
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
+    @Transient
+    private String employeeName;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Doc getDoc() {
-        return doc;
-    }
-
-    public void setDoc(Doc doc) {
-        this.doc = doc;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public MemberDetails getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(MemberDetails employee) {
-        this.employee = employee;
-    }
 }

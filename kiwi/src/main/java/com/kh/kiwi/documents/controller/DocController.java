@@ -1,10 +1,7 @@
 package com.kh.kiwi.documents.controller;
 
 import com.kh.kiwi.documents.dto.CommentDto;
-import com.kh.kiwi.documents.entity.Doc;
-import com.kh.kiwi.documents.entity.ApprovalLine;
-import com.kh.kiwi.documents.entity.DocReferrer;
-import com.kh.kiwi.documents.entity.MemberDetails;
+import com.kh.kiwi.documents.entity.*;
 import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.repository.MemberDetailsRepository;
 import com.kh.kiwi.documents.service.DocService;
@@ -42,7 +39,7 @@ public class DocController {
         Doc doc = docService.getDocWithApprovalAndReferences(docNum);
 
         if (doc != null) {
-            // approvalLines에 대한 추가 정보를 가져옵니다.
+            // 결재선과 참조자 정보 가져오기
             List<ApprovalLine> approvalLines = doc.getApprovalLines();
             if (approvalLines != null) {
                 approvalLines.forEach(approvalLine -> {
@@ -55,7 +52,6 @@ public class DocController {
                 });
             }
 
-            // references에 대한 추가 정보를 가져옵니다.
             List<DocReferrer> references = doc.getReferences();
             if (references != null) {
                 references.forEach(reference -> {
@@ -67,6 +63,10 @@ public class DocController {
                     }
                 });
             }
+
+            // 댓글 추가
+            List<CommentDto> comments = docService.getCommentsWithAuthor(doc);
+            doc.setCommentDtos(comments);
 
             return ResponseEntity.ok(doc);
         } else {
@@ -112,7 +112,6 @@ public class DocController {
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
 
-
     @PutMapping("/{id}")
     public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
         docService.updateDoc(id, updatedDoc);
@@ -137,18 +136,16 @@ public class DocController {
 
     // 댓글 추가 엔드포인트
     @PostMapping("/{docNum}/comments")
-    public ResponseEntity<?> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
+    public ResponseEntity<Comment> addComment(@PathVariable Long docNum, @RequestBody CommentDto commentDto) {
         try {
             System.out.println("Received request to add comment for docNum: " + docNum + " with content: " + commentDto.getContent());
-            docService.addComment(docNum, commentDto);
-            return ResponseEntity.ok().build();
+            Comment comment = docService.addComment(docNum, commentDto);
+            return ResponseEntity.ok(comment); // Comment 객체를 반환합니다.
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 추가에 실패하였습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 
     // 문서 상태별로 문서를 가져오는 엔드포인트 추가
     @GetMapping("/status/{status}")
@@ -161,6 +158,7 @@ public class DocController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @GetMapping("/completed")
     public List<Doc> getCompletedDocuments() {
         return docService.getDocumentsByStatus(Doc.DocStatus.완료);

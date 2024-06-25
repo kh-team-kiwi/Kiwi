@@ -50,7 +50,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
                 setDocDetails(details);
                 setApprovalLine(details.approvalLines || []);
-                setComments(details.comments || []);
+                setComments(details.commentDtos || []); // commentDtos 사용
                 setAttachments(details.attachments || []);
                 setLoading(false);
             } catch (error) {
@@ -82,7 +82,8 @@ const DocumentDetails = ({ document, onClose }) => {
             console.log("Sending comment:", newComment, "by employeeNo:", employeeNo);
             const response = await axios.post(`http://localhost:8080/documents/${document.docNum}/comments`, {
                 content: newComment,
-                employeeNo: employeeNo
+                employeeNo: employeeNo,
+                employeeName: author.name // 작성자 이름을 함께 보냅니다.
             }, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -90,7 +91,14 @@ const DocumentDetails = ({ document, onClose }) => {
             });
 
             console.log("Comment added successfully:", response.data);
-            setComments([...comments, response.data]);
+
+            const newCommentData = {
+                ...response.data,
+                employeeName: author.name,
+                createdAt: response.data.createdAt
+            };
+
+            setComments([...comments, newCommentData]);
             setNewComment('');
         } catch (error) {
             console.error('댓글 추가 오류:', error.response ? error.response.data : error.message);
@@ -233,13 +241,11 @@ const DocumentDetails = ({ document, onClose }) => {
                         comments.map((comment, index) => (
                             <li key={index}>
                                 <div className="profile">
-                                    <img className="myphoto"
-                                         src={`https://api.multiavatar.com/${comment.employeeName}.png`}
-                                         alt="A multicultural avatar"/>
+                                    <img className="myphoto" src={`https://api.multiavatar.com/${comment.employeeName}.png`} alt="A multicultural avatar"/>
                                 </div>
                                 <div className="txt">
                                     <div className="hidden after">
-                                    <p className="name bold">{comment.employeeName}</p>
+                                        <p className="name bold">{comment.employeeName}</p>
                                         <p className="date">{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</p>
                                     </div>
                                     <p>{comment.content}</p>
@@ -253,13 +259,9 @@ const DocumentDetails = ({ document, onClose }) => {
                 <div className="comment_write">
                     <label htmlFor="commentInput" className="blind">댓글 입력란</label>
                     <textarea
-                        id="approvalDocumentComment"
-                        placeholder="댓글을 남겨주세요."
-                        title="댓글을 남겨주세요."
-                        className="comment-texarea"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    />
+                        id="approvalDocumentComment" placeholder="댓글을 남겨주세요." title="댓글을 남겨주세요."
+                        className="comment-texarea" value={newComment} onChange={
+                        (e) => setNewComment(e.target.value)}/>
                     <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>
                 </div>
             </div>
