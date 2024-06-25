@@ -1,7 +1,9 @@
 package com.kh.kiwi.documents.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -14,6 +16,11 @@ public class Doc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long docNum;
+
+    @OneToMany(mappedBy = "doc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonManagedReference
+    private List<Comment> comments;
 
     @Column(name = "DOC_TITLE", nullable = false)
     private String docTitle;

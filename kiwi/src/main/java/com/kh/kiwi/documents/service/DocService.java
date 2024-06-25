@@ -134,6 +134,10 @@ public class DocService {
     public Doc getDocByDocNum(Long docNum) {
         return docRepository.findByDocNum(docNum);
     }
+    public List<Comment> getCommentsByDoc(Doc doc) {
+        return commentRepository.findByDoc(doc);
+    }
+
 
     public void addComment(Long docNum, CommentDto commentDto) {
         System.out.println("addComment called with docNum: " + docNum + " and commentDto: " + commentDto);

@@ -1,10 +1,7 @@
 package com.kh.kiwi.documents.controller;
 
 import com.kh.kiwi.documents.dto.CommentDto;
-import com.kh.kiwi.documents.entity.Doc;
-import com.kh.kiwi.documents.entity.ApprovalLine;
-import com.kh.kiwi.documents.entity.DocReferrer;
-import com.kh.kiwi.documents.entity.MemberDetails;
+import com.kh.kiwi.documents.entity.*;
 import com.kh.kiwi.documents.dto.ApprovalLineDto;
 import com.kh.kiwi.documents.repository.MemberDetailsRepository;
 import com.kh.kiwi.documents.service.DocService;
@@ -42,7 +39,7 @@ public class DocController {
         Doc doc = docService.getDocWithApprovalAndReferences(docNum);
 
         if (doc != null) {
-            // approvalLines에 대한 추가 정보를 가져옵니다.
+            // 결재선과 참조자 정보 가져오기
             List<ApprovalLine> approvalLines = doc.getApprovalLines();
             if (approvalLines != null) {
                 approvalLines.forEach(approvalLine -> {
@@ -55,7 +52,6 @@ public class DocController {
                 });
             }
 
-            // references에 대한 추가 정보를 가져옵니다.
             List<DocReferrer> references = doc.getReferences();
             if (references != null) {
                 references.forEach(reference -> {
@@ -67,6 +63,10 @@ public class DocController {
                     }
                 });
             }
+
+            // 댓글 추가
+            List<Comment> comments = docService.getCommentsByDoc(doc);
+            doc.setComments(comments);
 
             return ResponseEntity.ok(doc);
         } else {

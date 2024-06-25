@@ -8,7 +8,7 @@ const DocumentDetails = ({ document, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [approvalLine, setApprovalLine] = useState([]);
-    const [comments, setComments] = useState([]);
+    const [comments, setComments] = useState({content: '', employeeNo: ''});
     const [newComment, setNewComment] = useState('');
     const [attachments, setAttachments] = useState([]);
     const [employeeNo, setEmployeeNo] = useState('');
@@ -230,19 +230,17 @@ const DocumentDetails = ({ document, onClose }) => {
                 </p>
                 <ul className="approvalComments">
                     {comments.length > 0 ? (
-                        comments.map((comment, index) => (
+                        comments.map((comments, index) => (
                             <li key={index}>
                                 <div className="profile">
-                                    <img className="myphoto"
-                                         src={`https://api.multiavatar.com/${comment.employeeName}.png`}
-                                         alt="A multicultural avatar"/>
+                                    <img className="myphoto" src={`https://api.multiavatar.com/${comments.employeeName}.png`} alt="A multicultural avatar"/>
                                 </div>
                                 <div className="txt">
                                     <div className="hidden after">
-                                    <p className="name bold">{comment.employeeName}</p>
-                                        <p className="date">{moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}</p>
+                                    <p className="name bold">{comments.employeeName}</p>
+                                        <p className="date">{moment(comments.createdAt).format('YYYY-MM-DD HH:mm')}</p>
                                     </div>
-                                    <p>{comment.content}</p>
+                                    <p>{comments.content}</p>
                                 </div>
                             </li>
                         ))
@@ -253,13 +251,9 @@ const DocumentDetails = ({ document, onClose }) => {
                 <div className="comment_write">
                     <label htmlFor="commentInput" className="blind">댓글 입력란</label>
                     <textarea
-                        id="approvalDocumentComment"
-                        placeholder="댓글을 남겨주세요."
-                        title="댓글을 남겨주세요."
-                        className="comment-texarea"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    />
+                        id="approvalDocumentComment" placeholder="댓글을 남겨주세요." title="댓글을 남겨주세요."
+                        className="comment-texarea" value={newComment} onChange={
+                        (e) => setNewComment(e.target.value)}/>
                     <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>
                 </div>
             </div>

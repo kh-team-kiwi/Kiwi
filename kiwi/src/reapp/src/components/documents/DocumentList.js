@@ -55,6 +55,6 @@ const DocumentList = ({ onDocumentClick }) => {
             </table>
         </div>
     );
-}
+};
 
 export default DocumentList;
