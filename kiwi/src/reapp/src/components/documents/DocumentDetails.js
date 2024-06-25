@@ -16,6 +16,12 @@ const DocumentDetails = ({ document, onClose }) => {
     const [employeeNo, setEmployeeNo] = useState('');
     const [author, setAuthor] = useState({ name: '', deptName: '', position: '' });
 
+    const [isEditingDoc, setIsEditingDoc] = useState(false);
+    const [editedDocDetails, setEditedDocDetails] = useState({
+        docTitle: '',
+        docContents: '',
+    });
+
     useEffect(() => {
         const profile = JSON.parse(sessionStorage.getItem('profile'));
         if (profile && profile.username) {
@@ -138,12 +144,59 @@ const DocumentDetails = ({ document, onClose }) => {
         }
     };
 
+    const handleEditDoc = () => {
+        setIsEditingDoc(true);
+        setEditedDocDetails({
+            docTitle: docDetails.docTitle,
+            docContents: docDetails.docContents,
+        });
+    };
+
+    const handleUpdateDoc = async () => {
+        try {
+            const response = await axios.put(`http://localhost:8080/documents/${document.docNum}`, {
+                docTitle: editedDocDetails.docTitle,
+                docContents: editedDocDetails.docContents,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            setDocDetails({
+                ...docDetails,
+                docTitle: response.data.docTitle,
+                docContents: response.data.docContents,
+            });
+            setIsEditingDoc(false);
+        } catch (error) {
+            setError('문서 수정에 실패하였습니다.');
+        }
+    };
+
+    const handleDeleteDoc = async () => {
+        try {
+            await axios.delete(`http://localhost:8080/documents/${document.docNum}`);
+            onClose(); // 문서 삭제 후 페이지를 닫음
+        } catch (error) {
+            setError('문서 삭제에 실패하였습니다.');
+        }
+    };
+
     if (loading) return <p>로딩중...</p>;
     if (error) return <p>{error}</p>;
     if (!docDetails) return null;
 
     return (
         <div className="documentDetails">
+            <div className="edit-delete-doc-buttons">
+                {isEditingDoc ? (
+                    <button className="edit-delete-doc-button" onClick={handleUpdateDoc}>저장</button>
+                ) : (
+                    <button className="edit-delete-doc-button" onClick={handleEditDoc}>수정</button>
+                )}
+                <button className="edit-delete-doc-button" onClick={handleDeleteDoc}>삭제</button>
+            </div>
             <h1 className="docType">{docDetails.docType}</h1>
             <table className="tableType02 docInfoTable">
                 <colgroup>
@@ -244,10 +297,25 @@ const DocumentDetails = ({ document, onClose }) => {
             </table>
 
             <div className="docTitleSection">
-                <h2 className="docTitle">{docDetails.docTitle}</h2>
+                {isEditingDoc ? (
+                    <input
+                        type="text"
+                        value={editedDocDetails.docTitle}
+                        onChange={(e) => setEditedDocDetails({ ...editedDocDetails, docTitle: e.target.value })}
+                    />
+                ) : (
+                    <h2 className="docTitle">{docDetails.docTitle}</h2>
+                )}
             </div>
             <div className="docContentsSection">
-                <p className="docContents" dangerouslySetInnerHTML={{ __html: docDetails.docContents }}></p>
+                {isEditingDoc ? (
+                    <textarea
+                        value={editedDocDetails.docContents}
+                        onChange={(e) => setEditedDocDetails({ ...editedDocDetails, docContents: e.target.value })}
+                    />
+                ) : (
+                    <p className="docContents" dangerouslySetInnerHTML={{ __html: docDetails.docContents }}></p>
+                )}
             </div>
             <div className="attachmentsSection">
                 <h3>파일 첨부</h3>

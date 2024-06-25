@@ -107,13 +107,23 @@ public class DocController {
     }
 
     @PutMapping("/{id}")
-    public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
-        docService.updateDoc(id, updatedDoc);
+    public ResponseEntity<Doc> updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
+        try {
+            docService.updateDoc(id, updatedDoc);
+            return ResponseEntity.ok(updatedDoc);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDoc(@PathVariable Long id) {
-        docService.deleteDoc(id);
+    public ResponseEntity<Void> deleteDoc(@PathVariable Long id) {
+        try {
+            docService.deleteDoc(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/all-documents")
