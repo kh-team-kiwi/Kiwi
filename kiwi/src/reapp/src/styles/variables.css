@@ -28,6 +28,8 @@
   --light-gray2: rgb(245, 241, 241);
   --light-gray3: rgb(248, 248, 248);
   --light-gray5: rgb(160, 160, 160);
+  --light-gray-field: #e9ebe8;
+
 
   --shadow: rgba(0, 0, 0, 0.2);
   --day-clicked: #ddefff;
