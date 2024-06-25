@@ -52,6 +52,10 @@ body {
     height: 24px;
 }
 
+.register-icon.clear{
+    fill: var(--green);
+}
+
 .register-button {
     width: 270px;
     height: 40px;
@@ -197,7 +201,7 @@ body {
     height: 650px;
     margin-top: -550px;
     padding-top: 10px;
-    }
+}
 
 .tac-dialogue-box::before {
     position: absolute; 
@@ -324,6 +328,11 @@ body {
 .register-button:hover {
     background-color: var(--green-hover);
     transition: 0.2s;
+}
+
+.register-button[disabled]{
+    background-color: var(--gray);
+    pointer-events: none;
 }
 
 .validator-email-box.show {

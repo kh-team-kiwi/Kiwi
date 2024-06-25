@@ -8,9 +8,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class DocService {
@@ -67,8 +69,6 @@ public class DocService {
         return docRepository.findById(id).orElse(null);
     }
 
-
-
     public void addDoc(Doc doc) {
         if (doc.getDocTitle() == null || doc.getDocTitle().trim().isEmpty()) {
             doc.setDocTitle("기본 제목");
@@ -90,7 +90,6 @@ public class DocService {
 
         docRepository.save(doc);
     }
-
 
     public void saveApprovalLine(Doc doc, ApprovalLineDto approvalLineDto) {
         // 결재자 저장
@@ -135,7 +134,21 @@ public class DocService {
         return docRepository.findByDocNum(docNum);
     }
 
-    public void addComment(Long docNum, CommentDto commentDto) {
+    public List<CommentDto> getCommentsWithAuthor(Doc doc) {
+        List<Comment> comments = commentRepository.findByDoc(doc);
+        return comments.stream().map(comment -> {
+            CommentDto commentDto = new CommentDto();
+            commentDto.setContent(comment.getContent());
+            commentDto.setEmployeeNo(comment.getEmployee().getEmployeeNo());
+            commentDto.setEmployeeName(comment.getEmployee().getName());
+            commentDto.setCreatedAt(comment.getCreatedAt());
+            return commentDto;
+        }).collect(Collectors.toList());
+    }
+
+
+
+    public Comment addComment(Long docNum, CommentDto commentDto) {
         System.out.println("addComment called with docNum: " + docNum + " and commentDto: " + commentDto);
 
         Doc doc = docRepository.findByDocNum(docNum);
@@ -143,7 +156,6 @@ public class DocService {
             throw new EntityNotFoundException("해당 문서를 찾을 수 없습니다.");
         }
 
-        // 사원 번호로 MemberDetails를 조회
         MemberDetails employee = memberDetailsRepository.findById(commentDto.getEmployeeNo())
                 .orElseThrow(() -> {
                     System.err.println("해당 사원을 찾을 수 없습니다: " + commentDto.getEmployeeNo());
@@ -158,7 +170,7 @@ public class DocService {
 
         commentRepository.save(comment);
         System.out.println("의견이 저장되었습니다.");
+
+        return comment;
     }
-
-
 }
