@@ -50,7 +50,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
                 setDocDetails(details);
                 setApprovalLine(details.approvalLines || []);
-                setComments(details.comments || []);
+                setComments(details.commentDtos || []); // commentDtos 사용
                 setAttachments(details.attachments || []);
                 setLoading(false);
             } catch (error) {
@@ -82,7 +82,8 @@ const DocumentDetails = ({ document, onClose }) => {
             console.log("Sending comment:", newComment, "by employeeNo:", employeeNo);
             const response = await axios.post(`http://localhost:8080/documents/${document.docNum}/comments`, {
                 content: newComment,
-                employeeNo: employeeNo
+                employeeNo: employeeNo,
+                employeeName: author.name // 작성자 이름을 함께 보냅니다.
             }, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -91,11 +92,10 @@ const DocumentDetails = ({ document, onClose }) => {
 
             console.log("Comment added successfully:", response.data);
 
-            // response.data가 추가된 댓글의 정보를 담고 있어야 합니다.
             const newCommentData = {
                 ...response.data,
-                employeeName: author.name, // 추가된 댓글 작성자의 이름
-                createdAt: new Date().toISOString() // 현재 시간
+                employeeName: author.name,
+                createdAt: response.data.createdAt
             };
 
             setComments([...comments, newCommentData]);

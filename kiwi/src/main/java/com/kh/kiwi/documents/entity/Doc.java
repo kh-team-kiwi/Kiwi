@@ -1,6 +1,7 @@
 package com.kh.kiwi.documents.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.kh.kiwi.documents.dto.CommentDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -8,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -21,6 +23,9 @@ public class Doc {
     @ToString.Exclude
     @JsonManagedReference
     private List<Comment> comments;
+
+    @Transient
+    private List<CommentDto> commentDtos;  // DTO 리스트를 저장할 필드를 추가합니다.
 
     @Column(name = "DOC_TITLE", nullable = false)
     private String docTitle;
@@ -72,5 +77,9 @@ public class Doc {
         if (this.docDate == null) {
             this.docDate = LocalDateTime.now();
         }
+    }
+
+    public void setCommentDtos(List<CommentDto> commentDtos) {
+        this.commentDtos = commentDtos;
     }
 }

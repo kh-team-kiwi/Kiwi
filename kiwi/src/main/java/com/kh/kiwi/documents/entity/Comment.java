@@ -31,4 +31,7 @@ public class Comment {
     @JoinColumn(name = "EMPLOYEE_NO", nullable = false)
     private MemberDetails employee;
 
+    @Transient
+    private String employeeName;
+
 }

@@ -65,8 +65,8 @@ public class DocController {
             }
 
             // 댓글 추가
-            List<Comment> comments = docService.getCommentsByDoc(doc);
-            doc.setComments(comments);
+            List<CommentDto> comments = docService.getCommentsWithAuthor(doc);
+            doc.setCommentDtos(comments);
 
             return ResponseEntity.ok(doc);
         } else {
@@ -112,7 +112,6 @@ public class DocController {
         return new ResponseEntity<>("문서가 성공적으로 저장되었습니다.", HttpStatus.OK);
     }
 
-
     @PutMapping("/{id}")
     public void updateDoc(@PathVariable Long id, @RequestBody Doc updatedDoc) {
         docService.updateDoc(id, updatedDoc);
@@ -141,14 +140,12 @@ public class DocController {
         try {
             System.out.println("Received request to add comment for docNum: " + docNum + " with content: " + commentDto.getContent());
             Comment comment = docService.addComment(docNum, commentDto);
-            return ResponseEntity.ok(comment);
+            return ResponseEntity.ok(comment); // Comment 객체를 반환합니다.
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 
     // 문서 상태별로 문서를 가져오는 엔드포인트 추가
     @GetMapping("/status/{status}")
@@ -161,6 +158,7 @@ public class DocController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @GetMapping("/completed")
     public List<Doc> getCompletedDocuments() {
         return docService.getDocumentsByStatus(Doc.DocStatus.완료);
