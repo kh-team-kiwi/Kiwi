@@ -207,21 +207,25 @@ const Home = () => {
                 <div key={team.team} className="team-item" onClick={()=>navigate(`/team/${team.team}`)}>
                     <img className='home-team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
                     <div className='home-team-info'>
-                        <div className='home-team-name'>{team.teamName}</div>
-                        <div className='home-team-members'>{team.teamAdminMemberId} {t('members')}</div>
-                        <div className='home-team-members'>{"count : "}{team.teamCount}</div>
+                        <div>
+                            <div className='home-team-name'>{team.teamName}</div>
+                            <u className='home-team-num'>{team.team}</u>
+                            <div className='home-team-members'><span className='home-team-owner'>{t('owner')}</span><span className='home-team-member'>&nbsp;{team.teamAdminMemberId}</span></div>
+                        </div>
                     </div>
                     <div className='home-team-buttons'>
+                        <div className='home-team-count'>{"participant : "}{team.teamCount}</div>
                         <button className='home-team-settings'>
-                            <SettingsIcon className="home-settings-icon" />
+                            <SettingsIcon className="home-settings-icon"/>
                         </button>
-                        <button className='home-team-launch' onClick={()=>navigate(`/team/${team.team}`)} >{t('launch')}</button>
+                        <button className='home-team-launch'
+                                onClick={() => navigate(`/team/${team.team}`)}>{t('launch')}</button>
                     </div>
                 </div>
             ))}
         </div>
     )}
-</div>
+            </div>
 
             <div className='create-new-team-button-container' >
                 <button className='create-new-team-button' onClick={toggleTeamView}>

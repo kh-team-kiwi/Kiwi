@@ -293,7 +293,7 @@
 }
 
 .home-team-name {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 550;
     color: var(--dark-brown);
     display: flex;
@@ -302,20 +302,20 @@
 }
 
 .home-team-members {
-    font-size: 16px;
     display: flex;
+}
+.home-team-member{
+    font-size: 16px;
     color: var(--dark-brown);
-
+    padding: 3px;
 }
 
 .home-team-info {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 5px;
     margin-left: 10px;
 }
-
-
 
 .home-user-profile-image {
     width: 34px;
@@ -326,9 +326,7 @@
 
 .create-team-toggle {
     transition: all 0.5s cubic-bezier(0.68,-0.55,0.265,1.55);
-
 }
-
 
 .home-no-team {
     height: 182px;
@@ -355,4 +353,26 @@
     fill: currentColor;
     width: 28px;
     height: 28px;
+}
+
+.home-team-num {
+    font-size: 12px;
+    display: flex;
+    color: var(--dark-brown);
+    margin: 10px 0;
+}
+
+.home-team-owner {
+    color: var(--dark-blue);
+    border: 1px solid var(--dark-blue);
+    border-radius: 5px;
+    line-height: 10px;
+    padding: 5px;
+}
+
+.home-team-participant {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3px;
 }
