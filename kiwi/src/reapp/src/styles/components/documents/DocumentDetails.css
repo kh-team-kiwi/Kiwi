@@ -1,5 +1,3 @@
-/* DocumentDetails.css */
-
 /* 공통 스타일 */
 .documentDetails {
     padding: 20px;
@@ -333,4 +331,25 @@
 
 .bt_left:hover {
     background-color: #0056b3;
+}
+
+/* 수정, 삭제 버튼 스타일 */
+.edit-delete-buttons {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+/* 수정 및 삭제 버튼 스타일 */
+.edit-delete-button {
+    background: none;
+    border: none;
+    color: gray;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.3s;
+}
+
+.edit-delete-button:hover {
+    color: darkgray;
 }
