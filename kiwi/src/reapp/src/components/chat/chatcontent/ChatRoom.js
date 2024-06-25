@@ -14,6 +14,7 @@ const ChatRoom = ({ chatNum }) => {
     const [files, setFiles] = useState([]);
     const stompClient = useRef(null);
     const fileInputRef = useRef();
+    const textAreaRef = useRef();
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -56,10 +57,14 @@ const ChatRoom = ({ chatNum }) => {
     }, [chatNum]);
 
     const sendMessage = async () => {
+        if (!message.trim() && files.length === 0) {
+            return; // 메시지가 공백이거나 파일이 없을 때 전송하지 않음
+        }
+
         if (stompClient.current && stompClient.current.connected) {
             const chatMessage = {
                 sender: profile.username,
-                content: message,
+                content: message.trim(),
                 chatNum,
                 files: [],
                 type: 'CHAT'
@@ -87,6 +92,9 @@ const ChatRoom = ({ chatNum }) => {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
+                if (textAreaRef.current) {
+                    textAreaRef.current.style.height = 'auto';
+                }
             } catch (error) {
                 console.error('Error sending message or uploading files:', error);
             }
@@ -96,7 +104,7 @@ const ChatRoom = ({ chatNum }) => {
     };
 
     const handleFileChange = (event) => {
-        setFiles(Array.from(event.target.files));
+        setFiles(prevFiles => [...prevFiles, ...Array.from(event.target.files)]);
     };
 
     const formatTime = (time) => {
@@ -135,6 +143,20 @@ const ChatRoom = ({ chatNum }) => {
         });
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    };
+
+    const handleInput = () => {
+        if (textAreaRef.current) {
+            textAreaRef.current.style.height = 'auto';
+            textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+        }
+    };
+
     return (
         <div className="chat-room-container">
             <div className="chat-messages">
@@ -143,18 +165,30 @@ const ChatRoom = ({ chatNum }) => {
                         <div className="message-sender">
                             {msg.memberNickname}
                         </div>
-                        <div className="message-content">
-                            {msg.chatContent} <small>{formatTime(msg.chatTime)}</small>
-                            {msg.files && msg.files.map((file, fileIndex) => (
-                                <div key={fileIndex}>
-                                    <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
-                                        {file.originalFileName}
-                                    </a>
-                                    {isImage(file.originalFileName) && (
-                                        <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" style={{ maxWidth: '100px' }} />
-                                    )}
-                                </div>
-                            ))}
+                        <div className="message-content-container">
+                            <div className="message-content" style={{ whiteSpace: 'pre-wrap' }}>
+                                {msg.files && msg.files.map((file, fileIndex) => (
+                                    <div key={fileIndex} className="message-file-container">
+                                        <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
+                                            {isImage(file.originalFileName) ? (
+                                                <div className="image-container">
+                                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="uploaded-image" />
+                                                    <div className="download-icon">↓</div>
+                                                </div>
+                                            ) : (
+                                                <div className="file-link-container">
+                                                    <span className="file-link">{file.originalFileName}</span>
+                                                    <span className="file-download-icon">↓</span>
+                                                </div>
+                                            )}
+                                        </a>
+                                    </div>
+                                ))}
+                                {msg.chatContent.split('\n').map((line, i) => (
+                                    <React.Fragment key={i}>{line}<br /></React.Fragment>
+                                ))}
+                            </div>
+                            <small className="message-time">{formatTime(msg.chatTime)}</small>
                         </div>
                     </div>
                 ))}
@@ -170,11 +204,14 @@ const ChatRoom = ({ chatNum }) => {
                         ))}
                     </div>
                 )}
-                <input
-                    type="text"
+                <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onInput={handleInput}
                     placeholder="Enter your message"
+                    rows="1"
+                    ref={textAreaRef}
                 />
                 <input
                     type="file"
