@@ -6,6 +6,9 @@ import {getSessionItem} from "../../jwt/storage";
 import {useLocation} from "react-router-dom";
 import axiosHandler from "../../jwt/axiosHandler";
 
+import PlusIcon from '../../images/svg/shapes/PlusIcon';
+
+
 const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
   const { t } = useTranslation();
 
@@ -175,7 +178,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
   return (
     <>
       <button className="schedule-button" onClick={openPopup}>
-        {/* <PlusIcon className='create-event-button-plus-icon'/> */}
+        <PlusIcon className='create-event-button-plus-icon'/>
         &nbsp;{t('create')}
       </button>
       {isOpen && (
