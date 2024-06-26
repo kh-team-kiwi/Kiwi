@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from "moment";
+import ApprovalModal from './ApprovalModal';
 import '../../styles/components/documents/DocumentDetails.css';
 
 const DocumentDetails = ({ document, onClose }) => {
@@ -15,12 +16,40 @@ const DocumentDetails = ({ document, onClose }) => {
     const [attachments, setAttachments] = useState([]);
     const [employeeNo, setEmployeeNo] = useState('');
     const [author, setAuthor] = useState({ name: '', deptName: '', position: '' });
+    const [approvalModalIsOpen, setApprovalModalIsOpen] = useState(false);
+    const [approvalAction, setApprovalAction] = useState(null);
+    const [approvalReason, setApprovalReason] = useState('');
+    const [selectedApprover, setSelectedApprover] = useState(null);
 
     const [isEditingDoc, setIsEditingDoc] = useState(false);
     const [editedDocDetails, setEditedDocDetails] = useState({
         docTitle: '',
         docContents: '',
     });
+
+    const handleApprovalClick = (approver) => {
+        setSelectedApprover(approver);
+        setApprovalModalIsOpen(true);
+    };
+
+    const handleApprovalSubmit = async () => {
+        const confirmation = window.confirm(`${approvalAction === 1 ? '승인' : '반려'}를 선택하시겠습니까?`);
+        if (!confirmation) {
+            return;
+        }
+
+        try {
+            await axios.post(`http://localhost:8080/documents/${document.docNum}/approve`, {
+                employeeNo: selectedApprover.employeeNo,
+                docConf: approvalAction,
+                docReject: approvalReason
+            });
+            setApprovalModalIsOpen(false);
+            window.location.reload(); // 결재 후 페이지를 새로고침합니다.
+        } catch (error) {
+            console.error("결재 처리 중 오류가 발생했습니다.", error);
+        }
+    };
 
     useEffect(() => {
         const profile = JSON.parse(sessionStorage.getItem('profile'));
@@ -252,7 +281,11 @@ const DocumentDetails = ({ document, onClose }) => {
                             <tr>
                                 {[...Array(8)].map((_, index) => (
                                     <td key={index} className="stamp">
-                                        {approvalLine[index]?.docConf === 1 ? '✔️' : approvalLine[index]?.docConf === -1 ? '❌' : ''}
+                                        {approvalLine[index]?.docConf === 1 ? '✔️' : approvalLine[index]?.docConf === -1 ? '❌' : (
+                                            approvalLine[index]?.employeeNo === employeeNo && (
+                                                <button onClick={() => handleApprovalClick(approvalLine[index])}>결재</button>
+                                            )
+                                        )}
                                     </td>
                                 ))}
                             </tr>
@@ -282,11 +315,11 @@ const DocumentDetails = ({ document, onClose }) => {
                         {docDetails.references && docDetails.references.length > 0 ? (
                             docDetails.references.map((reference, index) => (
                                 <span key={index}>
-                                        <span className="referenceHead"> {reference.employeeName}</span>
-                                        <span className="referenceBody"> {reference.deptName}</span>
-                                        <span className="referenceBody"> {reference.position}</span>
+                                    <span className="referenceHead"> {reference.employeeName}</span>
+                                    <span className="referenceBody"> {reference.deptName}</span>
+                                    <span className="referenceBody"> {reference.position}</span>
                                     {index < docDetails.references.length - 1 ? ', ' : ''}
-                                    </span>
+                                </span>
                             ))
                         ) : (
                             <span>참조자 없음</span>
@@ -385,6 +418,18 @@ const DocumentDetails = ({ document, onClose }) => {
                     <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>
                 </div>
             </div>
+
+            {approvalModalIsOpen && (
+                <ApprovalModal
+                    isOpen={approvalModalIsOpen}
+                    onRequestClose={() => setApprovalModalIsOpen(false)}
+                    onSubmit={handleApprovalSubmit}
+                    approvalAction={approvalAction}
+                    setApprovalAction={setApprovalAction}
+                    approvalReason={approvalReason}
+                    setApprovalReason={setApprovalReason}
+                />
+            )}
         </div>
     );
 };

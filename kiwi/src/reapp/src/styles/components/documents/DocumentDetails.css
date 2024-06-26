@@ -6,8 +6,7 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    /*margin-top: 20px;*/
-    position: relative; /* 상대 위치 지정 */
+    position: relative;
 }
 
 /* 문서 수정, 삭제 버튼 스타일 */
@@ -299,7 +298,7 @@
 
 .approval-comment.approval {
     position: fixed;
-    bottom: 0;
+    bottom: 20px;
     margin-top: 20px;
     width: 900px;
 }

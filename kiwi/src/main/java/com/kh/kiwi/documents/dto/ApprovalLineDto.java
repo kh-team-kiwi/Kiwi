@@ -8,6 +8,9 @@ import java.util.List;
 public class ApprovalLineDto {
     private List<Approver> approvers;
     private List<Reference> references;
+    private String employeeNo;
+    private int docConf;
+    private String docReject;
 
     @Data
     public static class Approver {

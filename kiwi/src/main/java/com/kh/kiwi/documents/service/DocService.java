@@ -182,4 +182,31 @@ public class DocService {
 
         commentRepository.delete(comment);
     }
+//    결재자의 결재프로세스
+    public void approveDoc(Long docNum, ApprovalLineDto approvalLineDto) {
+        Doc doc = docRepository.findByDocNum(docNum);
+        if (doc == null) {
+            throw new EntityNotFoundException("해당 문서를 찾을 수 없습니다.");
+        }
+
+        List<ApprovalLine> approvalLines = approvalLineRepository.findByDocNum(docNum);
+        for (ApprovalLine approvalLine : approvalLines) {
+            if (approvalLine.getEmployeeNo().equals(approvalLineDto.getEmployeeNo())) {
+                approvalLine.setDocConf(approvalLineDto.getDocConf());
+                approvalLine.setDocReject(approvalLineDto.getDocReject());
+                approvalLineRepository.save(approvalLine);
+            }
+        }
+
+        boolean allApproved = approvalLines.stream().allMatch(line -> line.getDocConf() == 1);
+        boolean anyRejected = approvalLines.stream().anyMatch(line -> line.getDocConf() == -1);
+
+        if (allApproved) {
+            doc.setDocStatus(Doc.DocStatus.완료);
+        } else if (anyRejected) {
+            doc.setDocStatus(Doc.DocStatus.반려);
+        }
+        docRepository.save(doc);
+    }
+
 }
