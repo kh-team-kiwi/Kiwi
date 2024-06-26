@@ -214,6 +214,17 @@ const DocumentDetails = ({ document, onClose }) => {
         }
     };
 
+    const isCurrentApprover = (index) => {
+        // 이전 결재자가 아직 결재하지 않았으면 현재 결재자는 결재 불가
+        for (let i = 0; i < index; i++) {
+            if (approvalLine[i]?.docConf === 0) {
+                return false;
+            }
+        }
+        // 현재 로그인한 사용자가 해당 결재자인 경우 결재 가능
+        return approvalLine[index]?.employeeNo === employeeNo;
+    };
+
     if (loading) return <p>로딩중...</p>;
     if (error) return <p>{error}</p>;
     if (!docDetails) return null;
@@ -288,7 +299,7 @@ const DocumentDetails = ({ document, onClose }) => {
                                         ) : approvalLine[index]?.docConf === -1 ? (
                                             <img src={rejectImage} alt="거절"/>
                                         ) : (
-                                            approvalLine[index]?.employeeNo === employeeNo && (
+                                            isCurrentApprover(index) && (
                                                 <button
                                                     onClick={() => handleApprovalClick(approvalLine[index])}>결재</button>
                                             )
@@ -312,8 +323,8 @@ const DocumentDetails = ({ document, onClose }) => {
 
             <table className="referenceTable">
                 <colgroup>
-                    <col style={{width: '10%'}}/>
-                    <col style={{width: '90%'}}/>
+                    <col style={{ width: '10%' }} />
+                    <col style={{ width: '90%' }} />
                 </colgroup>
                 <tbody>
                 <tr>
