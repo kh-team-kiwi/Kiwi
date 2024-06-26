@@ -139,7 +139,7 @@ const EventPopup = ({ event, position, onClose }) => {
   const handleScheduleEdit = async (event) => {
     console.log("handleScheduleEdit : ");
     try {
-      const response = await axiosHandler.post("/api" + location.pathname + "/update/" + getSessionItem("profile").username,{event});
+      const response = await axiosHandler.post("/api" + location.pathname + "/update",{event});
       const data = response.data.data;
       if(data){
         // setEvents(data);
