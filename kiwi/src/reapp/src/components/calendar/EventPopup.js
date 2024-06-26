@@ -110,6 +110,8 @@ const EventPopup = ({ event, position, onClose }) => {
 
   const backgroundColor = blendWithWhite(event.color, 0.85);
 
+  const location = useLocation();
+
   const handleScheduleEdit = async (event) => {
     console.log("handleScheduleEdit : ");
     try {
@@ -122,8 +124,6 @@ const EventPopup = ({ event, position, onClose }) => {
       console.error("Failed to fetch schedule:", error);
     }
   }
-
-  const location = useLocation();
 
   const handleScheduleDelete = async (event) => {
     const scheduleNo = event.scheduleNo;
@@ -157,11 +157,11 @@ const EventPopup = ({ event, position, onClose }) => {
         <div className="event-popup-start-time">
           {formatTime(event.startDate)}
         </div>
-
+{/* 
         <div className="event-popup-time-until-event">
           {getTimeUntilEvent(event.startDate)}
 
-        </div>
+        </div> */}
       </div>
 
       <div className="event-popup-title-container">
