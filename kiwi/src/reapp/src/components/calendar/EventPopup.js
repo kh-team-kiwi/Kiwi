@@ -10,6 +10,7 @@ import DeleteIcon from '../../images/svg/buttons/DeleteIcon';
 import TimeIcon from '../../images/svg/buttons/TimeIcon';
 import axiosHandler from "../../jwt/axiosHandler";
 import {getSessionItem} from "../../jwt/storage";
+import {useLocation} from "react-router-dom";
 
 
 
@@ -147,6 +148,8 @@ const EventPopup = ({ event, position, onClose }) => {
       console.error("Failed to fetch schedule:", error);
     }
   }
+
+  const location = useLocation();
 
   const handleScheduleDelete = async (event) => {
     const scheduleNo = event.scheduleNo;
