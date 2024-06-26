@@ -64,8 +64,8 @@ public class CalendarController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/{team}/calendar/update/{memberId}")
-    public ResponseEntity<?> updateSchedule(@RequestBody CalendarRequestDto dto){
+    @PostMapping("/{team}/calendar/update")
+    public ResponseEntity<?> updateSchedule(@RequestBody Schedule dto){
         ResponseDto<?> result = calendarService.updateSchedule(dto);
         if(!result.isResult())
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);

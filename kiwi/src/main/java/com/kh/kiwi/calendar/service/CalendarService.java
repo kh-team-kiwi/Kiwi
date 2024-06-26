@@ -72,12 +72,11 @@ public class CalendarService {
     }
 
     // 스케쥴 수정
-    public ResponseDto<?> updateSchedule(CalendarRequestDto dto) {
+    public ResponseDto<?> updateSchedule(Schedule dto) {
         try{
             if(calendarRepository.existsById(dto.getScheduleNo())){
-                Schedule newS = new Schedule(dto);
-                calendarRepository.save(newS);
-                return ResponseDto.setSuccess("스케쥴이 수정되었습니다.");
+                Schedule EditedSchedule = calendarRepository.save(dto);
+                return ResponseDto.setSuccessData("스케쥴이 수정되었습니다.",EditedSchedule);
             }
         } catch (Exception e) {
             System.out.println("CalendarService >> updateSchedule : db오류");
