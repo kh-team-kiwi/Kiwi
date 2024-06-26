@@ -83,6 +83,12 @@
       "disclaimer-of-warranties-title": "免责声明",
       "limitation-of-liability-title": "责任限制",
       "governing-law-title": "适用法律"
-    }
+    },
+    "personal-events": "个人事件",
+    "team-events": "团队事件",
+    "description": "描述",
+    "location": "位置",
+    "title": "标题",
+    "cancel": "取消"
   }
   

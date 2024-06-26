@@ -85,6 +85,10 @@
     "governing-law-title": "Governing Law"
   },
   "personal-events": "Personal Events",
-  "team-events": "Team Events"
+  "team-events": "Team Events",
+  "description": "Description",
+  "location": "Location",
+  "title": "Title",
+  "cancel": "Cancel"
 
 }

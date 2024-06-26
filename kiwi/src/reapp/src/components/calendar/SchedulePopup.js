@@ -179,6 +179,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
     <>
       <button className="schedule-button" onClick={openPopup}>
         <PlusIcon className='create-event-button-plus-icon'/>
+        
         &nbsp;{t('create')}
       </button>
       {isOpen && (
@@ -223,7 +224,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
                     <input
                       type="text"
                       name="title"
-                      placeholder="Title"
+                      placeholder={t('title')}
                       className="event-title-input"
                       value={newEvent.title}
                       onChange={handleInputChange}
@@ -272,7 +273,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
                 <div className='event-input-container'>
                   <input
                     name="description"
-                    placeholder="Description"
+                    placeholder={t('description')}
                     value={newEvent.description}
                     onChange={handleInputChange}
                     className='event-description-input'
@@ -292,7 +293,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
                     type="text"
                     name="location"
                     className="event-location-input"
-                    placeholder="Location"
+                    placeholder={t('location')}
                     value={newEvent.location}
                     onChange={handleInputChange}
                   />
@@ -348,9 +349,9 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
 
               </div>
               <div className="event-bottom-container">
-                <button type="button" className="event-cancel-button" onClick={closePopup}>Cancel</button>
+                <button type="button" className="event-cancel-button" onClick={closePopup}>{t('cancel')}</button>
 
-                <button type="button" className="event-create-button" onClick={handleAddEvent}>Create</button>
+                <button type="button" className="event-create-button" onClick={handleAddEvent}>{t('create')}</button>
               </div>
             </form>
           </div>

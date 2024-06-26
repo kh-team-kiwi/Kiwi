@@ -1,15 +1,9 @@
 :root {
-  /* --header-background-color: #F2F7FC;
-  --page-icon: #B5DBFF;
-  --page-icon-active: #55ADFF; */
-
-
   --header-background-color: #e8f6f7;
   --page-icon: #8ab290;
   --page-icon-active: #55755b;
   --secondary: #bfbb9e;
   --secondary-active: #adaa90;
-
 
   --container-background-color: #f7f9fc;
   --text-color: #0e0e0e;
@@ -17,7 +11,6 @@
   --gray: gray;
   --dark-gray: rgb(54, 54, 54);
   
-
   --red: #e45a5a	;
 
   --white: white;
@@ -27,7 +20,9 @@
 
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
-  --light-gray3: rgb(248, 248, 248);
+  --month-tile-offset: rgb(248, 248, 248);
+  --month-tile-today: rgb(235, 232, 232);
+
   --light-gray5: rgb(160, 160, 160);
   --light-gray-field: #e9ebe8;
 
@@ -65,8 +60,7 @@
   --text-color: #dfdfdf;
   --gray: #c9c9c9;
   --dark-gray: #c9c9c9;
-  --page-icon: #8ba8c4;
-  --page-icon-active: #3a7bb8;
+
   --white: #55575f;
   --white-hover: #46474d;
   --white2: #405b74;
@@ -77,6 +71,20 @@
   --shadow: #191a23;
   --day-clicked: #248ff3;
   --dark-blue: #2276c5;
+  --lighter-text-color: rgb(230, 227, 227);
+  --toggle-background:#8a8b8a;
+  --month-tile-offset: #5e5e63;
+  --month-tile-today: #555558;
 
+  --light-gray-field: #9d9e9c;
+
+  --header-background-color: #2b2e2e ;
+  --container-background-color:#3b3e3f;
+  --white: #626464;
+
+  --page-icon: #80a585;
+  --page-icon-active: #4c6851;
+  --secondary: #aaa78e;
+  --secondary-active: #9b9881;
 }
 
