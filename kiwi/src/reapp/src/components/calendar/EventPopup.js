@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../../styles/components/calendar/EventPopup.css';
-import Modal from '../common/Modal'; 
-
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import EditIcon from '../../images/svg/buttons/EditIcon';
 import DescriptionIcon from '../../images/svg/buttons/DescriptionIcon';
@@ -10,8 +8,8 @@ import LocationIcon from '../../images/svg/buttons/LocationIcon';
 import DeleteIcon from '../../images/svg/buttons/DeleteIcon';
 import TimeIcon from '../../images/svg/buttons/TimeIcon';
 import axiosHandler from "../../jwt/axiosHandler";
-import {getSessionItem} from "../../jwt/storage";
-import {useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import EditPopup from '../calendar/EditPopup';
 
 const EventPopup = ({ event, position, onClose }) => {
   const { t, i18n } = useTranslation();
@@ -112,12 +110,12 @@ const EventPopup = ({ event, position, onClose }) => {
 
   const location = useLocation();
 
-  const handleScheduleEdit = async (event) => {
-    console.log("handleScheduleEdit : ");
+  const handleScheduleEdit = async (updatedEvent) => {
+    console.log("handleScheduleEdit : ", updatedEvent);
     try {
-      const response = await axiosHandler.post("/api" + location.pathname + "/update",{event});
+      const response = await axiosHandler.post("/api" + location.pathname + "/update", { updatedEvent });
       const data = response.data.data;
-      if(data){
+      if (data) {
         // setEvents(data);
       }
     } catch (error) {
@@ -130,7 +128,7 @@ const EventPopup = ({ event, position, onClose }) => {
     console.log("handleScheduleDelete : ");
     try {
       const response = await axiosHandler.get("/api" + location.pathname + "/delete/" + scheduleNo);
-      if(response.data){
+      if (response.data) {
         // response.data.result==true 삭제 성공...
       }
     } catch (error) {
@@ -200,32 +198,12 @@ const EventPopup = ({ event, position, onClose }) => {
         )}
       </div>
 
-      <Modal isOpen={isEditModalOpen} onClose={() => setEditModalOpen(false)}>
-        <h2>Edit Event</h2>
-        <form>
-          <label>
-            Title:
-            <input type="text" defaultValue={event.title} />
-          </label>
-          <label>
-            Description:
-            <textarea defaultValue={event.description}></textarea>
-          </label>
-          <label>
-            Location:
-            <input type="text" defaultValue={event.location} />
-          </label>
-          <label>
-            Start Date:
-            <input type="datetime-local" defaultValue={new Date(event.startDate).toISOString().slice(0, 16)} />
-          </label>
-          <label>
-            End Date:
-            <input type="datetime-local" defaultValue={new Date(event.endDate).toISOString().slice(0, 16)} />
-          </label>
-          <button type="submit">Save</button>
-        </form>
-      </Modal>
+      <EditPopup 
+        event={event} 
+        isOpen={isEditModalOpen} 
+        onClose={() => setEditModalOpen(false)}
+        onSave={handleScheduleEdit}
+      />
     </div>
   );
 };
