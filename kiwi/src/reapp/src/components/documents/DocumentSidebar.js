@@ -9,46 +9,35 @@ const DocumentSidebar = ({ handleMenuClick }) => {
         완료: 0,
         반려: 0
     });
-    const [searchTerm, setSearchTerm] = useState('');
-    const [members, setMembers] = useState([]);
-    const [filteredMembers, setFilteredMembers] = useState([]);
+
+    const [employeeNo, setEmployeeNo] = useState('');
 
     useEffect(() => {
-        const fetchCounts = async () => {
-            try {
-                const response = await axios.get('/documents/count-by-status');
-                setCounts(response.data);
-            } catch (error) {
-                console.error("문서 개수를 불러오는데 실패했습니다.", error);
-            }
-        };
+        const profile = JSON.parse(sessionStorage.getItem('profile'));
+        if (profile && profile.username) {
+            const username = profile.username;
 
-        const fetchMembers = async () => {
-            try {
-                const response = await axios.get('/api/members/details');
-                setMembers(response.data);
-                setFilteredMembers(response.data);
-            } catch (error) {
-                console.error("회원 정보를 불러오는데 실패하였습니다.", error);
-            }
-        };
+            axios.get(`/api/members/details/${username}`)
+                .then(response => {
+                    if (response.data) {
+                        const { employeeNo } = response.data;
+                        setEmployeeNo(employeeNo);
 
-        fetchCounts();
-        fetchMembers();
-    }, []);
-
-    const handleSearchChange = (e) => {
-        const term = e.target.value;
-        setSearchTerm(term);
-        if (term) {
-            const filtered = members.filter(member =>
-                member.name.includes(term) || member.deptName.includes(term)
-            );
-            setFilteredMembers(filtered);
-        } else {
-            setFilteredMembers(members);
+                        // Fetch document counts
+                        axios.get(`/documents/count-by-status/${employeeNo}`)
+                            .then(response => {
+                                setCounts(response.data);
+                            })
+                            .catch(error => {
+                                console.error("문서 개수를 불러오는데 실패했습니다.", error);
+                            });
+                    }
+                })
+                .catch(error => {
+                    console.error("사용자의 인사 정보를 가져오는 중 오류가 발생했습니다.", error);
+                });
         }
-    };
+    }, []);
 
     return (
         <div className="sidebar documents-sidebar">

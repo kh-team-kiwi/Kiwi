@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../styles/components/documents/ApprovalModal.css';
 
-const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, approvalAction, setApprovalAction }) => {
+const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, approvalAction, setApprovalAction, approvalReason, setApprovalReason }) => {
     if (!isOpen) return null;
 
     return (
@@ -16,10 +16,15 @@ const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, approvalAction, setAp
                     </label>
                     <label>
                         <input type="radio" value={-1} checked={approvalAction === -1}
-                                  onChange={() => setApprovalAction(-1)}/>
+                               onChange={() => setApprovalAction(-1)}/>
                         반려
                     </label>
                 </div>
+                <textarea
+                    placeholder="사유를 입력하세요."
+                    value={approvalReason}
+                    onChange={(e) => setApprovalReason(e.target.value)}
+                />
                 <h2>결재하시겠습니까?</h2>
                 <div className="modalActions">
                     <button className="confirmButton" onClick={onSubmit}>확인</button>

@@ -29,6 +29,14 @@ const DocumentDetails = ({ document, onClose }) => {
         docContents: '',
     });
 
+    const isAuthorizedViewer = (docDetails, employeeNo) => {
+        if (!docDetails || !employeeNo) return false;
+        return (
+            docDetails.approvalLines.some(line => line.employeeNo === employeeNo) ||
+            docDetails.references.some(ref => ref.employeeNo === employeeNo)
+        );
+    };
+
     const handleApprovalClick = (approver) => {
         setSelectedApprover(approver);
         setApprovalModalIsOpen(true);
@@ -100,6 +108,12 @@ const DocumentDetails = ({ document, onClose }) => {
             setLoading(false);
         }
     }, [document.docNum]);
+
+    useEffect(() => {
+        if (docDetails && !isAuthorizedViewer(docDetails, employeeNo)) {
+            setError('이 문서를 볼 수 있는 권한이 없습니다.');
+        }
+    }, [docDetails, employeeNo]);
 
     const handleAddComment = async () => {
         if (newComment.trim() === '') {
@@ -259,6 +273,12 @@ const DocumentDetails = ({ document, onClose }) => {
                     <td>{docDetails.docStatus}</td>
                     <th>보존 연한 / 보안 등급</th>
                     <td>{docDetails.retentionPeriod} / {docDetails.accessLevel} 등급</td>
+                </tr>
+                <tr>
+                    <th>작성일</th>
+                    <td>{moment(docDetails.docDate).format('YYYY-MM-DD HH:mm')}</td>
+                    <th>완료일</th>
+                    <td>{docDetails.docCompletion ? moment(docDetails.docCompletion).format('YYYY-MM-DD HH:mm') : ''}</td>
                 </tr>
                 </tbody>
             </table>
@@ -436,18 +456,17 @@ const DocumentDetails = ({ document, onClose }) => {
                     <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>
                 </div>
             </div>
-
             {approvalModalIsOpen && (
-                <ApprovalModal
-                    isOpen={approvalModalIsOpen}
-                    onRequestClose={() => setApprovalModalIsOpen(false)}
-                    onSubmit={handleApprovalSubmit}
-                    approvalAction={approvalAction}
-                    setApprovalAction={setApprovalAction}
-                    approvalReason={approvalReason}
-                    setApprovalReason={setApprovalReason}
-                />
-            )}
+            <ApprovalModal
+                isOpen={approvalModalIsOpen}
+                onRequestClose={() => setApprovalModalIsOpen(false)}
+                onSubmit={handleApprovalSubmit}
+                approvalAction={approvalAction}
+                setApprovalAction={setApprovalAction}
+                approvalReason={approvalReason}
+                setApprovalReason={setApprovalReason}
+            />
+        )}
         </div>
     );
 };
