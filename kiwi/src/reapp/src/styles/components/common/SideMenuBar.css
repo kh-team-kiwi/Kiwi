@@ -9,7 +9,7 @@
     border-right: 1px solid var(--light-gray);
     overflow-y: auto;
     padding: 20px;
-    background-color: var(--light-gray4);
+    background-color: var(--light-gray-filed);
 }
 
 .side-menu-bar-inner {

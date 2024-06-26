@@ -29,10 +29,11 @@ public class FileDriveFileController {
 
     @GetMapping("/{teamno}/{driveCode}/files")
     public List<FileDriveFileDTO> getFiles(@PathVariable String teamno, @PathVariable String driveCode, @RequestParam(required = false) String parentPath) {
-        String adjustedParentPath = parentPath != null ? parentPath : driveCode;
-        adjustedParentPath = teamno + "/drive/" + adjustedParentPath;
-        return fileDriveFileService.getFilesByDriveCodeAndPath(driveCode, adjustedParentPath);
+        // parentPath가 null이거나 비어 있으면 빈 문자열로 설정
+        String adjustedParentPath = (parentPath != null) ? parentPath : "";
+        return fileDriveFileService.getFilesByDriveCodeAndPath(driveCode, adjustedParentPath, teamno);
     }
+
 
     @PostMapping("/{driveCode}/files/upload")
     public List<FileDriveFileDTO> uploadFiles(@PathVariable String driveCode, @RequestParam("files") MultipartFile[] files, @RequestParam(required = false) String parentPath, @RequestParam String teamNumber) {

@@ -13,6 +13,9 @@ import Home from "../pages/Home";
 import Error from "../components/common/Error";
 import {TeamContext, TeamProvider} from "../context/TeamContext";
 import TeamLayout from "../pages/TeamLayout";
+import Personal from "../components/teamsettings/Personal";
+import Member from "../components/teamsettings/Member";
+import Team from "../components/teamsettings/Team";
 
 const RootRoutes = () => {
 
@@ -47,11 +50,15 @@ const SecondRouts = () => {
 
                     {/* 팀 관련 경로 그룹화 */}
                     <Route path="/team/:teamno/*" element={<TeamLayout />}>
-                        <Route path='chat' element={<Chat />} />
-                        <Route path='calendar' element={<Calendar />} />
-                        <Route path='drive' element={<Drive />} />
+                        <Route path="chat" element={<Chat />} />
+                        <Route path="calendar" element={<Calendar />} />
+                        <Route path="drive" element={<Drive />} />
                         <Route path="documents" element={<Documents/>}></Route>
-                        <Route path="teamsettings" element={<TeamSettings/>}></Route>
+                        <Route path="teamsettings/*" element={<TeamSettings/>}>
+                            <Route path="personal-manage" element={<Personal />}></Route>
+                            <Route path="member-manage" element={<Member />}></Route>
+                            <Route path="team-manage" element={<Team />}></Route>
+                        </Route>
                     </Route>
                 </Routes>
                 </TeamProvider>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/pages/Page.css';
 import '../styles/pages/TeamSettings.css'
 import SideMenuBar from "../components/common/SideMenuBar";
+import {Outlet} from "react-router-dom";
 
 const TeamSettings = () => {
 
@@ -18,13 +19,17 @@ const TeamSettings = () => {
             name:"팀 관리",
             url:"/team-manage"
         }
-    ]
+    ];
+
+    const [selected, setSelected] = useState({
+        name:"개인설정", url:"/personal-manage"
+    });
 
     return (
         <>
             <SideMenuBar menuItems={menuItems}></SideMenuBar>
             <div className='content-container'>
-
+                <Outlet></Outlet>
             </div>
         </>
     );
