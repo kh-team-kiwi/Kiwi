@@ -3,23 +3,25 @@ import axios from 'axios';
 import FileUploadWithDropzone from './FileUploadWithDropzone';
 import DriveFolderPopup from "./DriveFolderPopup";
 
-const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack, breadcrumbs = [] }) => {
+const DriveFileList = ({ teamNumber, driveCode, parentPath, onViewFolder, onBack, breadcrumbs = [] }) => {
     const [items, setItems] = useState([]);
     const [editFileCode, setEditFileCode] = useState(null);
     const [editFolderCode, setEditFolderCode] = useState(null);
     const [newFileName, setNewFileName] = useState('');
     const [newFolderName, setNewFolderName] = useState('');
-    const fileInputRef = useRef(null); // useRef 훅을 사용하여 참조 생성
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         fetchItems(parentPath);
-    }, [driveCode, parentPath, breadcrumbs]);
+    }, [teamNumber, driveCode, parentPath, breadcrumbs]);
 
     const fetchItems = async (path) => {
+        console.log(`Fetching items for path: ${path}`);
         try {
             const response = await axios.get(`http://localhost:8080/api/drive/${driveCode}/files`, {
                 params: { parentPath: path }
             });
+            console.log('Fetched items:', response.data);
             setItems(response.data);
         } catch (error) {
             console.error('Failed to fetch items', error);
@@ -32,7 +34,7 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
                 ? `http://localhost:8080/api/drive/${driveCode}/folders/${itemCode}`
                 : `http://localhost:8080/api/drive/${driveCode}/files/${itemCode}`;
             await axios.delete(url, { params: { parentPath } });
-            fetchItems(parentPath); // 파일 목록 갱신
+            fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to delete item', error);
         }
@@ -48,7 +50,7 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
             });
             setEditFileCode(null);
             setNewFileName('');
-            fetchItems(parentPath); // 파일 목록 갱신
+            fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to update item name', error);
         }
@@ -64,7 +66,7 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
             });
             setEditFolderCode(null);
             setNewFolderName('');
-            fetchItems(parentPath); // 파일 목록 갱신
+            fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to update folder name', error);
         }
@@ -90,7 +92,7 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', itemName); // 파일 이름으로 다운로드
+            link.setAttribute('download', itemName);
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -113,21 +115,23 @@ const DriveFileList = ({ driveCode, parentPath, driveName, onViewFolder, onBack,
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            fetchItems(parentPath); // 파일 목록 갱신
+            fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to upload file', error);
         }
     };
 
+    const restrictedParentPath = parentPath.startsWith(driveCode) ? parentPath : `${teamNumber}/drive/${driveCode}`;
+
     return (
         <div>
-            <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath}/>
-            <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} />
+            <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(restrictedParentPath)} parentPath={restrictedParentPath}/>
+            <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(restrictedParentPath)} parentPath={restrictedParentPath} />
             <input
                 type="file"
                 style={{ display: 'none' }}
                 onChange={handleFileUpload}
-                ref={fileInputRef} // useRef 훅을 통해 생성된 참조 사용
+                ref={fileInputRef}
             />
             <button onClick={() => fileInputRef.current.click()}>Upload File</button>
             <h1>{breadcrumbs.map(b => b.name).join(' > ')}</h1>

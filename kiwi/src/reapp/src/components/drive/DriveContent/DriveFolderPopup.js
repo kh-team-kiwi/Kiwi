@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../../../styles/components/drive/DrivePopup.css';
 
-const DrivePopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
+const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [folderName, setFolderName] = useState('');
     const [message, setMessage] = useState('');
@@ -85,4 +85,4 @@ const DrivePopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
     );
 };
 
-export default DrivePopup;
+export default DriveFolderPopup;
