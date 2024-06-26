@@ -12,7 +12,8 @@
 
 
   --container-background-color: #f7f9fc;
-  --text-color: #000000;
+  --text-color: #0e0e0e;
+  --lighter-text-color: rgb(58, 58, 58);
   --gray: gray;
   --dark-gray: rgb(54, 54, 54);
   
@@ -29,6 +30,8 @@
   --light-gray3: rgb(248, 248, 248);
   --light-gray5: rgb(160, 160, 160);
   --light-gray-field: #e9ebe8;
+
+  --toggle-background:#e5ebe8;
 
 
   --shadow: rgba(0, 0, 0, 0.1);
