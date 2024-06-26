@@ -2,6 +2,8 @@ package com.kh.kiwi.s3file.controller;
 
 import com.kh.kiwi.s3file.dto.FileDriveFileDTO;
 import com.kh.kiwi.s3file.service.FileDriveFileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/drive")
 public class FileDriveFileController {
-
+    private static final Logger log = LoggerFactory.getLogger(FileDriveFileService.class);
     private final FileDriveFileService fileDriveFileService;
 
     @Autowired
@@ -70,9 +72,13 @@ public class FileDriveFileController {
         if (parentPath == null || parentPath.isEmpty()) {
             parentPath = "";
         }
+
+        log.info("Creating folder with driveCode: {}, folderName: {}, parentPath: {}, teamNumber: {}", driveCode, folderName, parentPath, teamNumber);
+
         fileDriveFileService.createFolder(driveCode, folderName, parentPath, teamNumber);
         return ResponseEntity.ok().build();
     }
+
 
     @DeleteMapping("/{driveCode}/folders/{folderCode}")
     public ResponseEntity<Void> deleteFolder(@PathVariable String driveCode, @PathVariable String folderCode, @RequestParam(required = false) String parentPath) {
