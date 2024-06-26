@@ -58,7 +58,8 @@ const EventPopup = ({ event, position, onClose }) => {
     }
   };
 
-  const formatDate = (date) => {
+  const formatDate = (inputdate) => {
+    const date = new Date(inputdate);
     return date.toLocaleDateString([], { year: '2-digit', month: '2-digit', day: '2-digit' });
   };
 
