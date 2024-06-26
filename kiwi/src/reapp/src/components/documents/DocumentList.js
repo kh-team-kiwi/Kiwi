@@ -13,14 +13,10 @@ const DocumentList = ({ onDocumentClick }) => {
         const profile = JSON.parse(sessionStorage.getItem('profile'));
         if (profile && profile.username) {
             const username = profile.username;
-
             axios.get(`/api/members/details/${username}`)
                 .then(response => {
                     if (response.data) {
-                        const { employeeNo } = response.data;
-                        setEmployeeNo(employeeNo);
-                    } else {
-                        setError('사용자의 인사 정보를 찾을 수 없습니다.');
+                        setEmployeeNo(response.data.employeeNo);
                     }
                 })
                 .catch(error => {
@@ -35,11 +31,11 @@ const DocumentList = ({ onDocumentClick }) => {
         const fetchDocuments = async () => {
             try {
                 const response = await axios.get('/documents/all-documents');
-                const filteredDocuments = response.data.filter(doc =>
+                const filteredDocs = response.data.filter(doc =>
                     doc.approvalLines.some(line => line.employeeNo === employeeNo) ||
                     doc.references.some(ref => ref.employeeNo === employeeNo)
                 );
-                setDocuments(filteredDocuments);
+                setDocuments(filteredDocs);
             } catch (error) {
                 setError('문서를 불러오는데 실패하였습니다.');
             } finally {

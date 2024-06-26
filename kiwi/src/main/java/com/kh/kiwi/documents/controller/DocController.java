@@ -195,7 +195,11 @@ public class DocController {
         Map<String, Long> countMap = docService.getCountByStatus();
         return ResponseEntity.ok(countMap);
     }
-//  결재자의 결재프로세스
+    @GetMapping("/count-by-status/{employeeNo}")
+    public ResponseEntity<Map<String, Long>> getCountByStatus(@PathVariable String employeeNo) {
+        Map<String, Long> countMap = docService.getCountByStatusForUser(employeeNo);
+        return ResponseEntity.ok(countMap);
+    }
     @PostMapping("/{docNum}/approve")
     public ResponseEntity<String> approveDoc(@PathVariable Long docNum, @RequestBody ApprovalLineDto approvalLineDto) {
         try {
@@ -206,4 +210,5 @@ public class DocController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결재 처리 중 오류가 발생했습니다.");
         }
     }
+
 }

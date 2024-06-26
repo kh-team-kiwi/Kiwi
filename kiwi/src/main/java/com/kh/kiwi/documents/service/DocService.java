@@ -121,6 +121,7 @@ public class DocService {
         docRepository.deleteById(id);
     }
 
+
     public List<ApprovalLine> getAllApprovalLines() {
         return approvalLineRepository.findAll();
     }
@@ -182,7 +183,8 @@ public class DocService {
 
         commentRepository.delete(comment);
     }
-//    결재자의 결재프로세스
+
+    //  결재자의 결재프로세스
     public void approveDoc(Long docNum, ApprovalLineDto approvalLineDto) {
         Doc doc = docRepository.findByDocNum(docNum);
         if (doc == null) {
@@ -203,10 +205,32 @@ public class DocService {
 
         if (allApproved) {
             doc.setDocStatus(Doc.DocStatus.완료);
+            doc.setDocCompletion(LocalDateTime.now()); // 완료일 설정
         } else if (anyRejected) {
             doc.setDocStatus(Doc.DocStatus.반려);
         }
         docRepository.save(doc);
     }
+
+    public Map<String, Long> getCountByStatusForUser(String employeeNo) {
+        List<Doc> allDocs = docRepository.findAll();
+        List<Doc> accessibleDocs = allDocs.stream()
+                .filter(doc -> doc.getApprovalLines().stream().anyMatch(line -> line.getEmployeeNo().equals(employeeNo))
+                        || doc.getReferences().stream().anyMatch(ref -> ref.getEmployeeNo().equals(employeeNo)))
+                .collect(Collectors.toList());
+
+        long inProgressCount = accessibleDocs.stream().filter(doc -> doc.getDocStatus() == Doc.DocStatus.진행중).count();
+        long completedCount = accessibleDocs.stream().filter(doc -> doc.getDocStatus() == Doc.DocStatus.완료).count();
+        long rejectedCount = accessibleDocs.stream().filter(doc -> doc.getDocStatus() == Doc.DocStatus.반려).count();
+
+        Map<String, Long> countMap = new HashMap<>();
+        countMap.put("진행중", inProgressCount);
+        countMap.put("완료", completedCount);
+        countMap.put("반려", rejectedCount);
+        countMap.put("전체", inProgressCount + completedCount + rejectedCount);
+
+        return countMap;
+    }
+
 
 }
