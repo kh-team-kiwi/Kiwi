@@ -18,11 +18,11 @@ const DriveFileList = ({ driveCode, parentPath, onViewFolder, onBack, breadcrumb
     }, [teamno, driveCode, parentPath, breadcrumbs]);
 
     const fetchItems = async (path) => {
-        const fullPath = `${teamno}/drive${path ? '/' + path : ''}`;
+        const fullPath = path ? `${teamno}/drive/${path}` : `${teamno}/drive/${driveCode}`;
         console.log(`Fetching items for path: ${fullPath}`);
         try {
             const response = await axios.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files`, {
-                params: { parentPath: fullPath }
+                params: { parentPath: path }
             });
             console.log('Fetched items:', response.data);
             setItems(response.data);

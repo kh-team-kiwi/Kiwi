@@ -27,7 +27,8 @@ public class FileDriveFileController {
 
     @GetMapping("/{teamno}/{driveCode}/files")
     public List<FileDriveFileDTO> getFiles(@PathVariable String teamno, @PathVariable String driveCode, @RequestParam(required = false) String parentPath) {
-        String adjustedParentPath = parentPath != null ? parentPath.replaceFirst("^" + teamno + "/drive/", "") : null;
+        String adjustedParentPath = parentPath != null ? parentPath : driveCode;
+        adjustedParentPath = teamno + "/drive/" + adjustedParentPath;
         return fileDriveFileService.getFilesByDriveCodeAndPath(driveCode, adjustedParentPath);
     }
 

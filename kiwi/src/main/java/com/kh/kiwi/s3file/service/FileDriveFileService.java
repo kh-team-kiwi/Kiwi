@@ -37,18 +37,26 @@ public class FileDriveFileService {
         this.fileDriveRepository = fileDriveRepository;
     }
 
-    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String path) {
-        String actualPath = path != null ? path : driveCode;
-        List<FileDriveFileDTO> allFiles = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, actualPath).stream()
-                .filter(file -> {
-                    String filePathWithoutPrefix = file.getFilePath().replaceFirst("^" + actualPath, "");
-                    int depth = filePathWithoutPrefix.split("/").length;
-                    return depth == 1;
-                })
-                .map(file -> new FileDriveFileDTO(file.getFileCode(), file.getDriveCode(), file.getFileName(), file.getFilePath(), file.isFolder(), file.getUploadTime()))
+    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String parentPath) {
+        if (!fileDriveRepository.existsById(driveCode)) {
+            throw new IllegalArgumentException("Drive does not exist: " + driveCode);
+        }
+
+        log.info("Finding files for driveCode: {} with parentPath: {}", driveCode, parentPath);
+
+        List<FileDriveFileDTO> files = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, parentPath)
+                .stream()
+                .map(file -> new FileDriveFileDTO(
+                        file.getFileCode(),
+                        file.getDriveCode(),
+                        file.getFileName(),
+                        file.getFilePath(),
+                        file.isFolder(),
+                        file.getUploadTime()))
                 .collect(Collectors.toList());
 
-        return allFiles;
+        log.info("Found {} files for driveCode: {} with parentPath: {}", files.size(), driveCode, parentPath);
+        return files;
     }
 
     public FileDriveFileDTO uploadFile(String driveCode, MultipartFile file, String parentPath, String teamNumber) {
