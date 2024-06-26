@@ -282,7 +282,7 @@ const NewDocument = () => {
                 </tr>
                 </tbody>
             </table>
-            <button type="button" className={"document-button"} onClick={() => setShowApprovalLineModal(true)}>결재선 설정
+            <button type="button" className="approval-button" onClick={() => setShowApprovalLineModal(true)}>결재선 설정
             </button>
             <div id="approvalDocumentLine">
                 <table className="cal_table1 approve-write js-approval-line">

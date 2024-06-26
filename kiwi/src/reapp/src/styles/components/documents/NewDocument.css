@@ -4,6 +4,7 @@
 .newDocument {
     padding: 20px;
     font-family: Arial, sans-serif;
+    overflow: scroll;
 }
 
 /* 기본 설정 테이블 스타일 */
@@ -71,7 +72,7 @@
 }
 
 .formGroup textarea {
-    height: 200px;
+    height: 180px;
 }
 
 /* 파일 첨부 스타일링 */
@@ -195,4 +196,11 @@
     font-size: 14px;
     color: #555;
     margin-right: 5px;
+}
+
+.approval-button {
+    background-color: #007bff00;
+    color: #001dff;
+    border: none;
+    cursor: pointer
 }

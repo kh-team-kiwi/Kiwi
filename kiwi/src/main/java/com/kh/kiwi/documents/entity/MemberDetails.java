@@ -18,7 +18,7 @@ public class MemberDetails {
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "GENDER", length = 1)
+    @Column(name = "GENDER", length = 2)
     private String gender;
 
     @Column(name = "BIRTH_DATE")
