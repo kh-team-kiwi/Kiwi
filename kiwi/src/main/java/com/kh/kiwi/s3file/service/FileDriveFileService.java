@@ -195,7 +195,7 @@ public class FileDriveFileService {
         keyBuilder.append(teamNumber).append("/drive/").append(driveCode).append("/");
 
         // parentPath가 존재하는 경우 추가
-        if (parentPath != null && !parentPath.isEmpty()) {
+        if (parentPath != null && !parentPath.isEmpty() && !parentPath.equals(driveCode + "/")) {
             String adjustedParentPath = parentPath;
 
             // parentPath의 시작 부분에 driveCode가 포함되어 있으면 이를 제거
