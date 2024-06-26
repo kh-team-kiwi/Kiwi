@@ -29,6 +29,14 @@ const DocumentDetails = ({ document, onClose }) => {
         docContents: '',
     });
 
+    const isAuthorizedViewer = (docDetails, employeeNo) => {
+        if (!docDetails || !employeeNo) return false;
+        return (
+            docDetails.approvalLines.some(line => line.employeeNo === employeeNo) ||
+            docDetails.references.some(ref => ref.employeeNo === employeeNo)
+        );
+    };
+
     const handleApprovalClick = (approver) => {
         setSelectedApprover(approver);
         setApprovalModalIsOpen(true);
@@ -100,6 +108,12 @@ const DocumentDetails = ({ document, onClose }) => {
             setLoading(false);
         }
     }, [document.docNum]);
+
+    useEffect(() => {
+        if (docDetails && !isAuthorizedViewer(docDetails, employeeNo)) {
+            setError('이 문서를 볼 수 있는 권한이 없습니다.');
+        }
+    }, [docDetails, employeeNo]);
 
     const handleAddComment = async () => {
         if (newComment.trim() === '') {
@@ -453,3 +467,5 @@ const DocumentDetails = ({ document, onClose }) => {
 };
 
 export default DocumentDetails;
+
+
