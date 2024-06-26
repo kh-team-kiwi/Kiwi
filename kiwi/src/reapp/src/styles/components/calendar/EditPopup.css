@@ -13,7 +13,7 @@
 
 .edit-popup-content {
   position: absolute;
-  background-color: white;
+  background-color: var(--white);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -95,11 +95,12 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   height: 35px;
   border-bottom: 1px solid var(--mid-green);
   display: flex;
-  background-color: white;
+  background-color: transparent;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
+
 
 .edit-popup-title-input {
   width: 280px;
@@ -109,6 +110,11 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   outline: none;
   background-color: transparent;
 }
+
+.edit-popup-title-input::placeholder {
+  color: var(--gray);
+}
+
 
 .edit-popup-color-picker {
   display: flex;
@@ -122,7 +128,6 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid white;
 }
 
 .edit-popup-color-dropdown-list {
@@ -132,7 +137,7 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   overflow-y: auto;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background: white;
+  background: var(--white);
   z-index: 10;
   width: 28px;
 }
@@ -142,11 +147,11 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   align-items: center;
   padding: 3px;
   cursor: pointer;
-  width: 30px;
+  width: 20px;
 }
 
 .edit-popup-color-list-item:hover {
-  background-color: #f0f0f0;
+  background-color: var(--white-hover);
 }
 
 .edit-popup-description-container,
@@ -183,6 +188,11 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   margin: 2px 10px;
 }
 
+.edit-popup-description-input::placeholder,
+.edit-popup-location-input::placeholder {
+  color: var(--lighter-text-color);
+}
+
 .edit-popup-duration-container {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -205,7 +215,7 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   padding: 5px;
   border-radius: 10px;
   border: 1px solid var(--mid-green);
-  background-color: white;
+  background-color: var(--white);
 }
 
 .edit-popup-date-input,
@@ -215,6 +225,8 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   border: none;
   font-size: 16px;
   cursor: pointer;
+  background-color: transparent;
+  color: var(--lighter-text-color);
 }
 
 .edit-popup-bottom-container {
@@ -234,8 +246,8 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
 }
 
 .edit-popup-cancel-button {
-  background-color: white;
-  color: gray;
+  background-color: var(--white);
+  color: var(--gray);
   border: 2px solid gray;
 }
 

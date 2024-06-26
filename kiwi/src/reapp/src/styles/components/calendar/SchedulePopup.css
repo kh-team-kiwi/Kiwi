@@ -30,7 +30,7 @@
 
 .popup-content {
   position: absolute;
-  background-color: white;
+  background-color: var(--white);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -83,8 +83,8 @@
 }
 
 .event-cancel-button {
-  background-color: white;
-  color: gray;
+  background-color: var(--white);
+  color: var(--gray);
   border: none;
   border-radius: 20px;
   cursor: pointer;
@@ -199,7 +199,7 @@ padding: 5px;
 border-radius: 5px;
 cursor: pointer;
 border: none;
-background-color: white;
+background-color: var(--white);
 transition: 0.2s;
 }
 
@@ -214,7 +214,7 @@ left: 0;
 overflow-y: auto;
 border: 1px solid #ccc;
 border-radius: 5px;
-background: white;
+background: var(--white);
 z-index: 10;
 width: 28px;
 }
@@ -247,7 +247,7 @@ display: none;
 
 
 .color-list-item:hover {
-background-color: #f0f0f0;
+background-color: var(--white-hover);
 }
 
 
@@ -279,6 +279,7 @@ width: 300px;
 height: 25px;
 margin-left: 10px;
 }
+
 
 .event-location {
 margin-top: 10px;
@@ -328,6 +329,10 @@ gap: 10px;
 
 }
 
+.event-title-input::placeholder {
+  color: var(--gray);
+}
+
 .event-description-input {
   width: 250px;
   height: 30px;
@@ -341,6 +346,11 @@ gap: 10px;
 
 }
 
+.event-description-input::placeholder {
+  color: var(--lighter-text-color);
+}
+
+
 .event-location-input {
   width: 250px;
   height: 30px;
@@ -352,17 +362,16 @@ gap: 10px;
   margin-top: 2px;
   background-color: transparent;
 }
-/* 
+
 .event-location-input::placeholder {
-  color: gray;
-} */
+  color: var(--lighter-text-color);
+}
 
 
 .event-input-container {
   width: 300px;
   height: 35px;
   border-radius: 10px;
-  /* border: 1px solid lightgray; */
   display: flex;
   background-color: var(--light-gray-field);
   align-items: center;
@@ -372,7 +381,6 @@ gap: 10px;
   height: 35px;
   border-bottom: 1px solid var(--mid-green);
   display: flex;
-  background-color: white;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -384,6 +392,9 @@ gap: 10px;
   border: none;
   font-size: 16px;
   cursor: pointer;
+  background-color: transparent;
+  color: var(--lighter-text-color);
+
 
 }
 
@@ -393,6 +404,9 @@ gap: 10px;
   border: none;
   font-size: 16px;
   cursor: pointer;
+  background-color: transparent;
+  color: var(--lighter-text-color);
+  outline: var(--lighter-text-color);
 
 }
 
@@ -402,7 +416,7 @@ gap: 10px;
   padding: 5px;
   border-radius: 10px;
   border: 1px solid var(--mid-green);
-  background-color: white;
+  background-color: var(--white);
 
 }
 
@@ -482,5 +496,6 @@ input[type="radio"]#team:checked ~ .slider-tab-popup {
 .create-event-button-plus-icon {
   width: 26px;
   height: 26px;
-  fill: var(--lighter-text-icon);
+  fill: var(--lighter-text-color);
+
 }

@@ -20,7 +20,7 @@ const SideMenuBar = ({menuItems}) => {
 
     return (
         <div className='side-menu-bar'>
-            <ul className='side-menu-bar-inner'>
+            {/* <ul className='side-menu-bar-inner'>
                 {items.map((item, index)=>(
                         <li key={index} onClick={()=>handleOnClick(item.url)} className='side-menu-bar-item'>
                             {item.name==="개인 설정" ? (<PersonalManageIcon className={`teamsettings-icon`} />) :
@@ -28,7 +28,7 @@ const SideMenuBar = ({menuItems}) => {
                                 (<TeamManageIcon className={} />)} {item.name}
                         </li>
                     ))}
-            </ul>
+            </ul> */}
         </div>
     );
 };

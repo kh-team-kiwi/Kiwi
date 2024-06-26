@@ -179,6 +179,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
     <>
       <button className="schedule-button" onClick={openPopup}>
         <PlusIcon className='create-event-button-plus-icon'/>
+        
         &nbsp;{t('create')}
       </button>
       {isOpen && (
