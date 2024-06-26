@@ -29,7 +29,7 @@ const Documents = () => {
     return (
         <>
             <Sidebar handleMenuClick={handleMenuClick} />
-            <div className="content-container">
+            <div className="doc-container">
                 {view === 'newDocument' && <NewDocument />}
                 {view === 'documentList' && <DocumentList onDocumentClick={handleDocumentClick} />}
                 {view === 'documentInProgress' && <DocumentInProgress onDocumentClick={handleDocumentClick} />}

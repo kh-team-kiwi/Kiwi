@@ -334,7 +334,6 @@ const DocumentDetails = ({ document, onClose }) => {
                 </ul>
             </div>
             <div className="commentSection approval-comment approval">
-                <h3>의견</h3>
                 <p className="top number_comments">
                     <span className="point_color bold">{comments.length}</span>개의 의견
                 </p>
@@ -379,7 +378,6 @@ const DocumentDetails = ({ document, onClose }) => {
                     )}
                 </ul>
                 <div className="comment_write">
-                    <label htmlFor="commentInput" className="blind">의견 입력란</label>
                     <textarea
                         id="approvalDocumentComment" placeholder="의견을 남겨주세요." title="의견을 남겨주세요."
                         className="comment-texarea" value={newComment} onChange={
@@ -387,7 +385,6 @@ const DocumentDetails = ({ document, onClose }) => {
                     <button type="button" className="bt_left" onClick={handleAddComment}>등록</button>
                 </div>
             </div>
-            <button className="backButton" onClick={onClose}>뒤로가기</button>
         </div>
     );
 };
