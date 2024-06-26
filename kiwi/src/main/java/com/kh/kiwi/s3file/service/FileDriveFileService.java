@@ -37,15 +37,58 @@ public class FileDriveFileService {
         this.fileDriveRepository = fileDriveRepository;
     }
 
-    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String parentPath) {
+    public List<FileDriveFileDTO> getFilesByDriveCodeAndPath(String driveCode, String parentPath, String teamNumber) {
         if (!fileDriveRepository.existsById(driveCode)) {
             throw new IllegalArgumentException("Drive does not exist: " + driveCode);
         }
 
-        log.info("Finding files for driveCode: {} with parentPath: {}", driveCode, parentPath);
+        // 기본 경로를 설정
+        String basePath = String.format("%s/drive/%s/", teamNumber, driveCode);
 
-        List<FileDriveFileDTO> files = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, parentPath)
+        // parentPath가 비어 있으면 기본 경로를 사용
+        final String fullPath;
+        if (parentPath == null || parentPath.isEmpty()) {
+            fullPath = basePath;
+        } else {
+            // parentPath가 basePath로 시작하는 경우 중복 제거
+            if (parentPath.startsWith(basePath)) {
+                fullPath = parentPath;
+            } else {
+                // parentPath가 driveCode로 시작하는 경우 중복 제거
+                if (parentPath.startsWith(driveCode)) {
+                    parentPath = parentPath.substring(driveCode.length());
+                    // 슬래시를 포함하지 않은 경우 추가
+                    if (!parentPath.startsWith("/")) {
+                        parentPath = "/" + parentPath;
+                    }
+                }
+                fullPath = basePath + parentPath.substring(1);
+            }
+        }
+
+        log.info("Finding files for driveCode: {} with parentPath: {}", driveCode, fullPath);
+        log.info("Base path: {}", basePath);
+
+        List<FileDriveFileDTO> files = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, fullPath)
                 .stream()
+                .peek(file -> {
+                    // 상대 경로와 필터링 조건 확인을 위한 로그 추가
+                    String relativePath = file.getFilePath().substring(Math.min(fullPath.length(), file.getFilePath().length()));
+                    log.info("File path: {}, Relative path: {}", file.getFilePath(), relativePath);
+                })
+                .filter(file -> {
+                    String relativePath = file.getFilePath().substring(Math.min(fullPath.length(), file.getFilePath().length()));
+                    // parentPath와 filePath가 동일한 경우 제외
+                    if (file.getFilePath().equals(fullPath)) {
+                        return false;
+                    }
+                    // 상대 경로가 '/'로 시작하면 잘라내기
+                    if (relativePath.startsWith("/")) {
+                        relativePath = relativePath.substring(1);
+                    }
+                    // '/'를 포함하지 않거나, 상대 경로가 '/'로 끝나야 함
+                    return !relativePath.contains("/") || relativePath.indexOf('/') == relativePath.length() - 1;
+                })
                 .map(file -> new FileDriveFileDTO(
                         file.getFileCode(),
                         file.getDriveCode(),
@@ -55,9 +98,12 @@ public class FileDriveFileService {
                         file.getUploadTime()))
                 .collect(Collectors.toList());
 
-        log.info("Found {} files for driveCode: {} with parentPath: {}", files.size(), driveCode, parentPath);
+        log.info("Found {} files for driveCode: {} with parentPath: {}", files.size(), driveCode, fullPath);
         return files;
     }
+
+
+
 
     public FileDriveFileDTO uploadFile(String driveCode, MultipartFile file, String parentPath, String teamNumber) {
         if (!fileDriveRepository.existsById(driveCode)) {
