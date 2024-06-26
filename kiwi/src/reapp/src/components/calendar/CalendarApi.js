@@ -38,7 +38,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
     console.log('Selected calendar:', e.target.value);
   };
 
-  const location = useLocation();
+
 
   useEffect(() => {
     const calculateEventPositions = () => {
@@ -71,16 +71,6 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
 
     calculateEventPositions();
   }, [events, currentMonth]);
-
-  useEffect(() => {
-    fetchSchedule();
-  }, [events]);
-
-  const fetchSchedule = async () => {
-    console.log("CalendarApi.js >> fetchSchedule : ");
-    const response = await axiosHandler.post("/api" + location.pathname + "/list/" + getSessionItem("profile").username);
-    console.log(response);
-  }
 
   const handleTileClick = (event, position) => {
     setSelectedEvent(event);

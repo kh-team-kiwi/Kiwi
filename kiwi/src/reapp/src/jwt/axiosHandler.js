@@ -57,6 +57,7 @@ axiosHandler.interceptors.response.use(
                         removeLocalItem("accessToken");
                         removeSessionItem("profile");
                         window.location.replace('/');
+                        return;
                     }
                 })
                 .catch(error => {
@@ -66,6 +67,7 @@ axiosHandler.interceptors.response.use(
                         removeLocalItem("accessToken");
                         removeSessionItem("profile");
                         window.location.replace('/');
+                        return;
                     }
                 });
         }

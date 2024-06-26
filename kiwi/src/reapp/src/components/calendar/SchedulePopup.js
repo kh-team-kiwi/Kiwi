@@ -138,7 +138,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
 
   const handleAddEvent = () => {
     console.log("#### handleAddEvent #####");
-    addSchedule(); // db
+    addSchedule(); // database save
 
     const startDateTime = new Date(`${newEvent.startDate}T${newEvent.startTime}`);
     const endDateTime = new Date(`${newEvent.endDate}T${newEvent.endTime}`);
@@ -156,9 +156,13 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
   };
 
   const addSchedule = async () => {
-    console.log("SchedulePopup.js >> addSchedule : ");
+    console.log("addSchedule : ");
+    try{
     const response = await axiosHandler.post("/api"+location.pathname+"/create/"+getSessionItem("profile").username, newEvent);
     console.log(response);
+    } catch (error) {
+      console.error("Failed to addSchedule:", error);
+    }
   }
   return (
     <>

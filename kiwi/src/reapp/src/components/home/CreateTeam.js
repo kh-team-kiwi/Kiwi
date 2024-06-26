@@ -97,22 +97,26 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       }
 
       console.log("create-team >> input enter evenet : ", inputMember);
-      const res = await axiosHandler.post("/api/auth/member",{memberId:event.target.value});
+      try{
+        const res = await axiosHandler.post("/api/auth/member",{memberId:event.target.value});
 
-      if (res.status === 200 && res.data.result) {
-        console.log("create-team >> return : ", res.data);
-        const data = res.data.data;
-        console.log(data);
-        setFormData(prev => ({
-          ...prev,
-          invitedMembers: [...prev.invitedMembers, data],
-        }));
-        console.log(formData);
-        setInputMember('');
-      } else if(res.status === 200 && !res.data.result) {
-        alert(res.data.message);
-      } else {
-        alert("오류가 발생했습니다.");
+        if (res.status === 200 && res.data.result) {
+          console.log("create-team >> return : ", res.data);
+          const data = res.data.data;
+          console.log(data);
+          setFormData(prev => ({
+            ...prev,
+            invitedMembers: [...prev.invitedMembers, data],
+          }));
+          console.log(formData);
+          setInputMember('');
+        } else if(res.status === 200 && !res.data.result) {
+          alert(res.data.message);
+        } else {
+          alert("오류가 발생했습니다.");
+        }
+      } catch (e) {
+        console.error("create team failed : ",e)
       }
 
     }
