@@ -38,12 +38,13 @@ public class FileDriveService {
     public FileDriveDTO createDrive(FileDriveDTO fileDriveDTO, List<String> userIds) {
         // 드라이브 코드 생성
         String driveCode = UUID.randomUUID().toString();
+        String s3FolderPath = fileDriveDTO.getTeam() + "/drive/" + driveCode + "/";
 
         // S3에 폴더 생성
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .key(driveCode + "/") // 드라이브 코드를 폴더명으로 사용하여 폴더 생성
+                    .key(s3FolderPath) // 폴더 구조를 지정하여 폴더 생성
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromBytes(new byte[0]));
         } catch (Exception e) {
@@ -84,11 +85,17 @@ public class FileDriveService {
 
     @Transactional
     public void deleteDrive(String driveCode) {
+        // 드라이브 정보 조회
+        FileDrive fileDrive = fileDriveRepository.findById(driveCode)
+                .orElseThrow(() -> new RuntimeException("Drive not found"));
+
+        String s3FolderPath = fileDrive.getTeam() + "/drive/" + driveCode + "/";
+
         // S3에서 폴더 삭제
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                     .bucket(bucketName)
-                    .key(driveCode + "/") // 드라이브 코드를 폴더명으로 사용하여 폴더 삭제
+                    .key(s3FolderPath) // 폴더 구조를 지정하여 폴더 삭제
                     .build();
             s3Client.deleteObject(deleteObjectRequest);
         } catch (Exception e) {
