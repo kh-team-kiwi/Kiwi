@@ -3,6 +3,8 @@ import axios from 'axios';
 import moment from "moment";
 import ApprovalModal from './ApprovalModal';
 import '../../styles/components/documents/DocumentDetails.css';
+import approvalImage from '../../images/approval.png';
+import rejectImage from '../../images/reject.png';
 
 const DocumentDetails = ({ document, onClose }) => {
     const [docDetails, setDocDetails] = useState(null);
@@ -212,6 +214,17 @@ const DocumentDetails = ({ document, onClose }) => {
         }
     };
 
+    const isCurrentApprover = (index) => {
+        // 이전 결재자가 아직 결재하지 않았으면 현재 결재자는 결재 불가
+        for (let i = 0; i < index; i++) {
+            if (approvalLine[i]?.docConf === 0) {
+                return false;
+            }
+        }
+        // 현재 로그인한 사용자가 해당 결재자인 경우 결재 가능
+        return approvalLine[index]?.employeeNo === employeeNo;
+    };
+
     if (loading) return <p>로딩중...</p>;
     if (error) return <p>{error}</p>;
     if (!docDetails) return null;
@@ -281,9 +294,14 @@ const DocumentDetails = ({ document, onClose }) => {
                             <tr>
                                 {[...Array(8)].map((_, index) => (
                                     <td key={index} className="stamp">
-                                        {approvalLine[index]?.docConf === 1 ? '✔️' : approvalLine[index]?.docConf === -1 ? '❌' : (
-                                            approvalLine[index]?.employeeNo === employeeNo && (
-                                                <button onClick={() => handleApprovalClick(approvalLine[index])}>결재</button>
+                                        {approvalLine[index]?.docConf === 1 ? (
+                                            <img src={approvalImage} alt="승인"/>
+                                        ) : approvalLine[index]?.docConf === -1 ? (
+                                            <img src={rejectImage} alt="거절"/>
+                                        ) : (
+                                            isCurrentApprover(index) && (
+                                                <button
+                                                    onClick={() => handleApprovalClick(approvalLine[index])}>결재</button>
                                             )
                                         )}
                                     </td>
