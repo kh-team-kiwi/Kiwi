@@ -79,6 +79,7 @@ const NewDocument = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        window.location.reload();
 
         try {
             const formData = new FormData();

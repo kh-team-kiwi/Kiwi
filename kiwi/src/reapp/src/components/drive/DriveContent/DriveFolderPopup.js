@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../../../styles/components/drive/DrivePopup.css';
+import { useParams } from "react-router-dom";
 
 const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
+    const { teamno } = useParams();
     const [isOpen, setIsOpen] = useState(false);
     const [folderName, setFolderName] = useState('');
     const [message, setMessage] = useState('');
@@ -13,7 +15,8 @@ const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
             const adjustedParentPath = parentPath && !parentPath.endsWith('/') ? `${parentPath}/` : parentPath;
             await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
                 folderName,
-                parentPath: adjustedParentPath || driveCode + '/'
+                parentPath: adjustedParentPath || "",
+                teamNumber: teamno
             }, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,7 +69,7 @@ const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
                         <div className="close-button" onClick={closePopup}>
                             {/* Close Button Icon */}
                         </div>
-                        <div className='popup-title'>Create Event</div>
+                        <div className='popup-title'>Create Folder</div>
                         <form className="event-form" onSubmit={handleSubmit}>
                             <input
                                 type="text"

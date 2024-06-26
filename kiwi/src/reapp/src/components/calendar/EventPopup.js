@@ -9,6 +9,9 @@ import DescriptionIcon from '../../images/svg/buttons/DescriptionIcon';
 import LocationIcon from '../../images/svg/buttons/LocationIcon';
 import DeleteIcon from '../../images/svg/buttons/DeleteIcon';
 import TimeIcon from '../../images/svg/buttons/TimeIcon';
+import axiosHandler from "../../jwt/axiosHandler";
+import {getSessionItem} from "../../jwt/storage";
+import {useLocation} from "react-router-dom";
 
 const EventPopup = ({ event, position, onClose }) => {
   const { t, i18n } = useTranslation();
@@ -59,7 +62,8 @@ const EventPopup = ({ event, position, onClose }) => {
     return date.toLocaleDateString([], { year: '2-digit', month: '2-digit', day: '2-digit' });
   };
 
-  const formatTime = (date) => {
+  const formatTime = (inputdate) => {
+    const date = new Date(inputdate);
     let hours = date.getHours();
     let minutes = date.getMinutes();
     const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -104,6 +108,34 @@ const EventPopup = ({ event, position, onClose }) => {
   };
 
   const backgroundColor = blendWithWhite(event.color, 0.85);
+
+  const handleScheduleEdit = async (event) => {
+    console.log("handleScheduleEdit : ");
+    try {
+      const response = await axiosHandler.post("/api" + location.pathname + "/update/" + getSessionItem("profile").username,{event});
+      const data = response.data.data;
+      if(data){
+        // setEvents(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch schedule:", error);
+    }
+  }
+
+  const location = useLocation();
+
+  const handleScheduleDelete = async (event) => {
+    const scheduleNo = event.scheduleNo;
+    console.log("handleScheduleDelete : ");
+    try {
+      const response = await axiosHandler.get("/api" + location.pathname + "/delete/" + scheduleNo);
+      if(response.data){
+        // response.data.result==true 삭제 성공...
+      }
+    } catch (error) {
+      console.error("Failed to fetch schedule:", error);
+    }
+  }
 
   return (
     <div ref={popupRef} className="event-popup-container" style={{ backgroundColor }}>

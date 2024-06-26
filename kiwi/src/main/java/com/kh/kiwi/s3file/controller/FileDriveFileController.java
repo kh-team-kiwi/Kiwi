@@ -25,15 +25,17 @@ public class FileDriveFileController {
         this.fileDriveFileService = fileDriveFileService;
     }
 
-    @GetMapping("/{driveCode}/files")
-    public List<FileDriveFileDTO> getFiles(@PathVariable String driveCode, @RequestParam(required = false) String parentPath) {
-        return fileDriveFileService.getFilesByDriveCodeAndPath(driveCode, parentPath);
+    @GetMapping("/{teamno}/{driveCode}/files")
+    public List<FileDriveFileDTO> getFiles(@PathVariable String teamno, @PathVariable String driveCode, @RequestParam(required = false) String parentPath) {
+        String adjustedParentPath = parentPath != null ? parentPath : driveCode;
+        adjustedParentPath = teamno + "/drive/" + adjustedParentPath;
+        return fileDriveFileService.getFilesByDriveCodeAndPath(driveCode, adjustedParentPath);
     }
 
     @PostMapping("/{driveCode}/files/upload")
-    public List<FileDriveFileDTO> uploadFiles(@PathVariable String driveCode, @RequestParam("files") MultipartFile[] files, @RequestParam(required = false) String parentPath) {
+    public List<FileDriveFileDTO> uploadFiles(@PathVariable String driveCode, @RequestParam("files") MultipartFile[] files, @RequestParam(required = false) String parentPath, @RequestParam String teamNumber) {
         return Arrays.stream(files)
-                .map(file -> fileDriveFileService.uploadFile(driveCode, file, parentPath))
+                .map(file -> fileDriveFileService.uploadFile(driveCode, file, parentPath, teamNumber))
                 .collect(Collectors.toList());
     }
 
@@ -63,10 +65,12 @@ public class FileDriveFileController {
     public ResponseEntity<Void> createFolder(@PathVariable String driveCode, @RequestBody Map<String, String> request) {
         String folderName = request.get("folderName");
         String parentPath = request.get("parentPath");
+        String teamNumber = request.get("teamNumber");
+
         if (parentPath == null || parentPath.isEmpty()) {
-            parentPath = driveCode + "/";
+            parentPath = "";
         }
-        fileDriveFileService.createFolder(driveCode, folderName, parentPath);
+        fileDriveFileService.createFolder(driveCode, folderName, parentPath, teamNumber);
         return ResponseEntity.ok().build();
     }
 
@@ -76,10 +80,8 @@ public class FileDriveFileController {
         return ResponseEntity.ok().build();
     }
 
-
     @PutMapping("/{driveCode}/folders/{folderCode}")
     public void updateFolderName(@PathVariable String driveCode, @PathVariable String folderCode, @RequestBody String newFolderName, @RequestParam(required = false) String parentPath) {
         fileDriveFileService.updateFolderName(driveCode, folderCode, newFolderName.replace("\"", ""), parentPath);
     }
-
 }

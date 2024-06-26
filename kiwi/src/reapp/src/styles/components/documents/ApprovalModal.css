@@ -1,0 +1,76 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.approvalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+
+    height: 200px;
+}
+
+.approvalContent h1 {
+    /*font-size: large;*/
+    margin: 10px 0 0 0;
+    justify-content: left;
+    color: #001dff;
+}
+.approvalContent h2 {
+    /*font-size: large;*/
+    text-align: center;
+    margin: 10px 0 0 0;
+}
+
+.radioGroup {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 30px 0px 50px 0px;
+}
+
+.radioGroup label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.radioGroup input[type="radio"] {
+    margin-right: 8px;
+    display: inline;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: center;
+}
+
+.confirmButton, .cancelButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#cancelButton {
+    background-color: #6c757d;
+}
+
+.confirmButton:hover, .cancelButton:hover {
+    background-color: #0056b3;
+}
+
+.cancelButton:hover {
+    background-color: #5a6268;
+}

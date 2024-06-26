@@ -4,6 +4,9 @@ import CalendarApi from '../components/calendar/CalendarApi';
 
 import '../styles/pages/Page.css';
 import '../styles/pages/Calendar.css';
+import axiosHandler from "../jwt/axiosHandler";
+import {getSessionItem} from "../jwt/storage";
+import {useLocation} from "react-router-dom";
 
 const Calendar = () => {
   const [events, setEvents] = useState({ personal: [], team: [] });
@@ -18,7 +21,6 @@ const Calendar = () => {
   //     };
   //     setEvents(storedEvents);
   //   };
-
   //   fetchEvents();
   // }, []);
 
@@ -57,6 +59,26 @@ const Calendar = () => {
     console.log('Event created:', event);
   };
 
+  const location = useLocation();
+
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
+
+  const fetchSchedule = async () => {
+    console.log("fetchSchedule : ");
+    try {
+      const response = await axiosHandler.post("/api" + location.pathname + "/list/" + getSessionItem("profile").username);
+      const data = response.data.data;
+      console.log(data);
+      if(data){
+        setEvents(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch schedule:", error);
+    }
+  }
+
   return (
     <>
       <CalendarSidebar 
@@ -64,7 +86,7 @@ const Calendar = () => {
         calendars={calendars}
       />
       <div className='content-container'>
-        <CalendarApi events={events[selectedCalendar]} addEvent={addEvent} calendars={calendars} setSelectedCalendar={setSelectedCalendar} selectedCalendar={selectedCalendar}  />
+        <CalendarApi events={events[selectedCalendar]} addEvent={addEvent} calendars={calendars} setSelectedCalendar={setSelectedCalendar} selectedCalendar={selectedCalendar} setEvents={setEvents}  />
       </div>
     </>
   );
