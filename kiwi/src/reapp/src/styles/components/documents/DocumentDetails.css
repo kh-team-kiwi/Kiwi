@@ -401,3 +401,8 @@
 .edit-delete-button:hover {
     color: darkgray;
 }
+
+.stamp img {
+    width: 40px;
+    height: 40px;
+}
