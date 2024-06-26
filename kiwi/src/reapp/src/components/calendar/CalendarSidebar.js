@@ -7,7 +7,7 @@ import TimeIcon from '../../images/svg/buttons/TimeIcon';
 import EmptyIcon from '../../images/empty.png';
 
 
-const CalendarSidebar = ({ events }) => {
+const CalendarSidebar = ({ events, selectedCalendar}) => {
   const { t, i18n } = useTranslation();
 
   const upcomingEvents = events
@@ -123,7 +123,7 @@ const CalendarSidebar = ({ events }) => {
       <div className='calendar-sidebar-top'>
         <TimeIcon className='calendar-sidebar-time-icon'/>
         <div className='calendar-sidebar-title'>
-          {t('personal-events')}
+          {selectedCalendar === 'personal' ? t('personal-events') : t('team-events')}
         </div>
       </div>
 

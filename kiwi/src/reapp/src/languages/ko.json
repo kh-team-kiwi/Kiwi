@@ -83,7 +83,13 @@
     "disclaimer-of-warranties-title": "보증 면책",
     "limitation-of-liability-title": "책임의 제한",
     "governing-law-title": "준거법"
-  }
+  },
+  "personal-events": "개인 이벤트",
+  "team-events": "팀 이벤트",
+  "description": "설명",
+  "location": "위치",
+  "title": "제목",
+  "cancel": "취소"
 
 
 }

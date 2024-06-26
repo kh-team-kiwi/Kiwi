@@ -83,7 +83,13 @@
       "disclaimer-of-warranties-title": "Exclusion de garanties",
       "limitation-of-liability-title": "Limitation de responsabilité",
       "governing-law-title": "Loi applicable"
-    }
+    },
+    "personal-events": "Événements personnels",
+    "team-events": "Événements d'équipe",
+    "description": "Description",
+    "location": "Emplacement",
+    "title": "Titre",
+    "cancel": "Annuler"
   
     
   }

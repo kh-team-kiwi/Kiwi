@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/components/calendar/EditPopup.css';
-import ExitIcon from '../../images/svg/buttons/ExitIcon';
+import { useTranslation } from 'react-i18next';
 
 const EditPopup = ({ event, isOpen, onClose, onSave }) => {
   const [title, setTitle] = useState(event.title);
@@ -10,6 +10,8 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
   const [endDate, setEndDate] = useState(new Date(event.endDate).toISOString().slice(0, 16));
   const [calendar, setCalendar] = useState(event.calendar);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+
 
   const presetColors = [
     '#FF6F61', // Modern Red
@@ -71,8 +73,8 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
                 checked={calendar === 'team'} 
                 onChange={() => setCalendar('team')} 
               />
-              <label htmlFor="edit-popup-personal" className="edit-popup-slide">{'Personal'}</label>
-              <label htmlFor="edit-popup-team" className="edit-popup-slide">{'Team'}</label>
+              <label htmlFor="edit-popup-personal" className="edit-popup-slide">{t('personal')}</label>
+              <label htmlFor="edit-popup-team" className="edit-popup-slide">{t('team')}</label>
               <div className="edit-popup-slider-tab"></div>
             </div>
           </div>
@@ -83,7 +85,7 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
             <input
               type="text"
               name="title"
-              placeholder="Title"
+              placeholder={t('title')}
               className="edit-popup-title-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -123,7 +125,7 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
           <div className='edit-popup-input-container'>
             <input
               name="description"
-              placeholder="Description"
+              placeholder={t('description')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className='edit-popup-description-input'
@@ -140,7 +142,7 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
               type="text"
               name="location"
               className="edit-popup-location-input"
-              placeholder="Location"
+              placeholder={t('location')}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
@@ -189,8 +191,8 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
         </div>
 
         <div className="edit-popup-bottom-container">
-          <button type="button" className="edit-popup-cancel-button" onClick={onClose}>Cancel</button>
-          <button type="submit" className="edit-popup-save-button">Save</button>
+          <button type="button" className="edit-popup-cancel-button" onClick={onClose}>{t('cancel')}</button>
+          <button type="submit" className="edit-popup-save-button">{t('create')}</button>
         </div>
       </form>
 

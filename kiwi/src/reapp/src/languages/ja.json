@@ -83,6 +83,12 @@
       "disclaimer-of-warranties-title": "保証の免責事項",
       "limitation-of-liability-title": "責任の制限",
       "governing-law-title": "準拠法"
-    }
+    },
+    "personal-events": "個人イベント",
+    "team-events": "チームイベント",
+    "description": "説明",
+    "location": "場所",
+    "title": "タイトル",
+    "cancel": "キャンセル"
   }
   
