@@ -33,7 +33,7 @@ const DocumentDetails = ({ document, onClose }) => {
     };
 
     const handleApprovalSubmit = async () => {
-        const confirmation = window.confirm(`${approvalAction === 1 ? '승인' : '반려'}를 선택하시겠습니까?`);
+        const confirmation = window.confirm(`${approvalAction === 1 ? '승인' : '반려'}를 선택하시겠습니까? (수정불가)`);
         if (!confirmation) {
             return;
         }
