@@ -9,7 +9,7 @@ import axiosHandler from "../../jwt/axiosHandler";
 import { useLocation } from "react-router-dom";
 import { getSessionItem } from "../../jwt/storage";
 
-const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar }) => {
+const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar, setEvents }) => {
   const { t, i18n } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -138,7 +138,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <SchedulePopup addEvent={addEvent} onClose={closePopup} calendars={calendars} />
+        <SchedulePopup addEvent={addEvent} onClose={closePopup} calendars={calendars} setEvents={setEvents} />
 
         <div className="slide-controls">
           <div className="radio-wrapper">

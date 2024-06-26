@@ -6,7 +6,7 @@ import {getSessionItem} from "../../jwt/storage";
 import {useLocation} from "react-router-dom";
 import axiosHandler from "../../jwt/axiosHandler";
 
-const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
+const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -140,18 +140,18 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
     console.log("#### handleAddEvent #####");
     addSchedule(); // database save
 
-    const startDateTime = new Date(`${newEvent.startDate}T${newEvent.startTime}`);
-    const endDateTime = new Date(`${newEvent.endDate}T${newEvent.endTime}`);
-    addEvent({
-      title: newEvent.title || 'Untitled',
-      description: newEvent.description,
-      calendar: newEvent.calendar,
-      location: newEvent.location,
-      startDate: startDateTime,
-      endDate: endDateTime,
-      color: newEvent.color
-    });
-    setNewEvent(getInitialEventState());
+    // const startDateTime = new Date(`${newEvent.startDate}T${newEvent.startTime}`);
+    // const endDateTime = new Date(`${newEvent.endDate}T${newEvent.endTime}`);
+    // addEvent({
+    //   title: newEvent.title || 'Untitled',
+    //   description: newEvent.description,
+    //   calendar: newEvent.calendar,
+    //   location: newEvent.location,
+    //   startDate: startDateTime,
+    //   endDate: endDateTime,
+    //   color: newEvent.color
+    // });
+    // setNewEvent(getInitialEventState());
     closePopup();
   };
 
@@ -159,7 +159,15 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [] }) => {
     console.log("addSchedule : ");
     try{
     const response = await axiosHandler.post("/api"+location.pathname+"/create/"+getSessionItem("profile").username, newEvent);
-    console.log(response);
+    const data = response.data.data;
+    if(data){
+      setEvents((prevEvents) => ({
+        ...prevEvents,
+        [data.calendar]: [...prevEvents[data.calendar], data]
+      }));
+    } else{
+      alert("서버 저장에 실패했습니다.");
+    }
     } catch (error) {
       console.error("Failed to addSchedule:", error);
     }
