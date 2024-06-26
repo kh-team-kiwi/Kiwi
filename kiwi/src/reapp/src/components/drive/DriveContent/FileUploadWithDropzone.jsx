@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import '../../../styles/components/drive/FileUploadWithDropzone.css';
+import { useParams } from "react-router-dom";
 
 const FileUploadWithDropzone = ({ driveCode, fetchFiles, parentPath }) => {
+    const { teamno } = useParams();
     const [isDragging, setIsDragging] = useState(false);
     const [showWarning, setShowWarning] = useState(false);
 
@@ -11,7 +13,6 @@ const FileUploadWithDropzone = ({ driveCode, fetchFiles, parentPath }) => {
         setIsDragging(false);
 
         // const folderDetected = acceptedFiles.some(file => file.path && file.path.includes('/'));
-
         const folderDetected = acceptedFiles.some(file =>
             (file.webkitRelativePath && file.webkitRelativePath.includes('/')) ||
             (file.size === 0)
@@ -26,13 +27,14 @@ const FileUploadWithDropzone = ({ driveCode, fetchFiles, parentPath }) => {
         acceptedFiles.forEach(file => {
             formData.append('files', file);
         });
+        formData.append('parentPath', parentPath);
+        formData.append('teamNumber', teamno);
 
         try {
             await axios.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-                params: { parentPath }
             });
             fetchFiles(); // 파일 업로드 후 파일 목록 갱신
         } catch (error) {
