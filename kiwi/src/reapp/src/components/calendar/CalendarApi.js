@@ -17,6 +17,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
 
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -157,6 +158,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
               name="slide" 
               id="personal" 
               value="personal" 
+              className='personal-radio'
               checked={selectedCalendar === 'personal'} 
               onChange={handleCalendarChange} 
             />
@@ -165,11 +167,13 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
               name="slide" 
               id="team" 
               value="team" 
+              className='team-radio'
+
               checked={selectedCalendar === 'team'} 
               onChange={handleCalendarChange} 
             />
-            <label htmlFor="personal" className="slide">{t('personal')}</label>
-            <label htmlFor="team" className="slide">{t('team')}</label>
+            <label htmlFor="personal" className={`slide ${selectedCalendar === 'personal' ? 'active' : ''}`}>{t('personal')}</label>
+            <label htmlFor="team" className={`slide ${selectedCalendar === 'team' ? 'active' : ''}`}>{t('team')}</label>
             <div className="slider-tab"></div>
           </div>
         </div>
