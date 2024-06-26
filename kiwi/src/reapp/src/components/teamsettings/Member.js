@@ -2,8 +2,8 @@ import React from 'react';
 
 const Member = () => {
     return (
-        <div>
-            member
+        <div className='teamsettings-inner'>
+            <div className='teamsettings-hedaer'>멤버 관리</div>
         </div>
     );
 };

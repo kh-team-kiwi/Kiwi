@@ -9,7 +9,7 @@
     border-right: 1px solid var(--light-gray);
     overflow-y: auto;
     padding: 20px;
-    background-color: var(--light-gray-filed);
+    background-color: var(--settings-gray-filed);
 }
 
 .side-menu-bar-inner {
@@ -18,15 +18,39 @@
 }
 
 .side-menu-bar-item {
-    text-align: left;
     margin: 10px 0;
     padding: 10px;
     cursor: pointer;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: var(--white);
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
 
 .side-menu-bar-item:hover {
     background-color: var(--white-hover);
+}
+
+.teamsettings-icon {
+    width: 25px;
+    height: 25px;
+    margin: 4px 10px 0 5px;
+}
+
+.teamsettings-icon path{
+    fill: var(--settings-regular)
+}
+
+.teamsettings-icon.select path{
+    fill: var(--settings-selected)
+}
+
+.teamsettings-item-name {
+    color: var(--settings-regular);
+}
+
+.teamsettings-item-name.select {
+    color: var(--settings-selected)
 }

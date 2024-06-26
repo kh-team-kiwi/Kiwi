@@ -8,6 +8,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class GroupId implements Serializable {
     private String memberId;
     private String team;

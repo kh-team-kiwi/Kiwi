@@ -1,10 +1,9 @@
 package com.kh.kiwi.team.service;
 
 import com.kh.kiwi.auth.dto.MemberDto;
-import com.kh.kiwi.team.dto.ResponseTeamDto;
-import com.kh.kiwi.team.dto.TeamCreateRequest;
-import com.kh.kiwi.team.dto.TeamDto;
+import com.kh.kiwi.team.dto.*;
 import com.kh.kiwi.team.entity.Group;
+import com.kh.kiwi.team.entity.GroupId;
 import com.kh.kiwi.team.entity.Team;
 import com.kh.kiwi.team.mapper.TeamMapper;
 import com.kh.kiwi.team.repository.GroupRepository;
@@ -12,6 +11,7 @@ import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -81,11 +81,6 @@ public class TeamService {
         return teamRepository.findById(teamId);
     }
 
-//    public List<Team> getAllTeams(String memberId) {
-//        // memberId를 사용하는 경우 로직 추가, 필요하지 않다면 아래 코드로 대체 가능
-//        return teamRepository.findAll();
-//    }
-
     public List<Team> getAllTeams(String memberId) {
         List<Group> groups = groupRepository.findAllByMemberId(memberId);
         System.out.println("TeamService > getAllTeams : "+groups);
@@ -96,6 +91,30 @@ public class TeamService {
                 .filter(Optional::isPresent) // Optional이 존재하는지 확인
                 .map(Optional::get) // Optional에서 Team 객체를 추출
                 .collect(Collectors.toList()); // List<Team>으로 수집
+    }
+
+    public ResponseDto<?> leaveTeam(LeaveTeamRequestDto dto){
+
+        try{
+            Optional<Team> searchTeam = teamRepository.findById(dto.getTeam());
+            if(searchTeam.isEmpty()){
+                return ResponseDto.setFailed("존재하지 않는 팀번호 입니다.");
+            }
+            if(searchTeam.get().getTeamAdminMemberId().equals(dto.getMemberId())){
+                return ResponseDto.setFailed("팀 소유자는 탈퇴할 수 없습니다.");
+            }
+            GroupId serchGrop = GroupId.builder().team(dto.getTeam()).memberId(dto.getMemberId()).build();
+            if(groupRepository.existsById(serchGrop)){
+                groupRepository.deleteById(serchGrop);
+            } else {
+                return ResponseDto.setFailed("존재하지 않는 팀원 입니다.");
+            }
+        } catch (Exception e ){
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+        }
+
+        return ResponseDto.setSuccess("성공적으로 팀을 나왔습니다.");
     }
 
 }

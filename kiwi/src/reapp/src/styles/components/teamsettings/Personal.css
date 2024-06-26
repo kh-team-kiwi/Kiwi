@@ -1,0 +1,27 @@
+.teamsettings-inner{
+    height: 100%;
+}
+
+.teamsettings-hedaer {
+    font-size: 30px;
+    padding: 70px;
+}
+
+.unsubscribe-btn-box{
+    position: relative;
+    height: 100%;
+}
+
+.unsubscribe-btn {
+    font-size: 20px;
+    border: none;
+    color: var(--white);
+    background-color: var(--red);
+    width: 200px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -450%);
+    border-radius: 5px;
+}

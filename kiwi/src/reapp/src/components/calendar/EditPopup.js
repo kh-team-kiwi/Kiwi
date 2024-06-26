@@ -190,7 +190,7 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
 
         <div className="edit-popup-bottom-container">
           <button type="button" className="edit-popup-cancel-button" onClick={onClose}>Cancel</button>
-          <button type="submit" className="edit-popup-save-button">Save</button>
+          <button type="submit" className="edit-popup-save-button" onClick={onSave}>Save</button>
         </div>
       </form>
 

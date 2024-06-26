@@ -31,7 +31,9 @@
   --light-gray5: rgb(160, 160, 160);
   --light-gray-field: #e9ebe8;
 
-  --light-gray-filed: #f4f4f4;
+  --settings-gray-filed: #f4f4f4;
+  --settings-regular: #d3d3d3;
+  --settings-selected: black;
 
   --toggle-background:#e5ebe8;
 

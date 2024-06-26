@@ -8,24 +8,24 @@ import TeamManageIcon from "../../images/svg/settings/TeamManageIcon";
 const SideMenuBar = ({menuItems}) => {
 
     const [items, setItems] = useState(menuItems);
-    const [item, setItem] = useState(menuItems[0]);
+    const [selected, setSelected] = useState(menuItems[0]);
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleOnClick = (url) => {
-
-        navigate(location.pathname.slice(0,34)+url);
+    const handleOnClick = (item) => {
+        setSelected(item)
+        navigate(location.pathname.slice(0,34)+item.url);
     }
 
     return (
         <div className='side-menu-bar'>
             <ul className='side-menu-bar-inner'>
                 {items.map((item, index)=>(
-                        <li key={index} onClick={()=>handleOnClick(item.url)} className='side-menu-bar-item'>
-                            {item.name==="개인 설정" ? (<PersonalManageIcon className={`teamsettings-icon`} />) :
-                            item.name==="멤버 관리" ? (<MemberManageIcon className={} />) :
-                                (<TeamManageIcon className={} />)} {item.name}
+                        <li key={index} onClick={()=>handleOnClick(item)} className='side-menu-bar-item'>
+                            {item.name==="개인 설정" ? (<PersonalManageIcon className={`teamsettings-icon ${item.name===selected.name ? 'select' : ''}`} />) :
+                            item.name==="멤버 관리" ? (<MemberManageIcon className={`teamsettings-icon ${item.name===selected.name  ? 'select' : ''}`} />) :
+                                (<TeamManageIcon className={`teamsettings-icon ${item.name===selected.name  ? 'select' : ''}`} />)} <span className={`teamsettings-item-name ${item.name===selected.name  ? 'select' : ''}`}>{item.name}</span>
                         </li>
                     ))}
             </ul>
