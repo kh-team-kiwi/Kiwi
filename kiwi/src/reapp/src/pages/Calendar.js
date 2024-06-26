@@ -86,7 +86,7 @@ const Calendar = () => {
         calendars={calendars}
       />
       <div className='content-container'>
-        <CalendarApi events={events[selectedCalendar]} addEvent={addEvent} calendars={calendars} setSelectedCalendar={setSelectedCalendar} selectedCalendar={selectedCalendar}  />
+        <CalendarApi events={events[selectedCalendar]} addEvent={addEvent} calendars={calendars} setSelectedCalendar={setSelectedCalendar} selectedCalendar={selectedCalendar} setEvents={setEvents}  />
       </div>
     </>
   );

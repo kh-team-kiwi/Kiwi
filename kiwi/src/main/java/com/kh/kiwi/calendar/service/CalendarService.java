@@ -36,12 +36,12 @@ public class CalendarService {
     }
 
     // 스캐쥴 생성
-    public ResponseDto<?> addSchedule(CalendarRequestDto dto) {
+    public ResponseDto<Schedule> addSchedule(CalendarRequestDto dto) {
         try {
             Schedule savedSchedule = null;
             savedSchedule = calendarRepository.save(new Schedule(dto));
             if(savedSchedule != null)
-                return ResponseDto.setSuccess("스케쥴이 저장되었습니다.");
+                return ResponseDto.setSuccessData("스케쥴이 저장되었습니다.",savedSchedule);
             else
                 return ResponseDto.setFailed("저장에 실패했습니다.");
         } catch (Exception e) {
@@ -72,12 +72,11 @@ public class CalendarService {
     }
 
     // 스케쥴 수정
-    public ResponseDto<?> updateSchedule(CalendarRequestDto dto) {
+    public ResponseDto<?> updateSchedule(Schedule dto) {
         try{
             if(calendarRepository.existsById(dto.getScheduleNo())){
-                Schedule newS = new Schedule(dto);
-                calendarRepository.save(newS);
-                return ResponseDto.setSuccess("스케쥴이 수정되었습니다.");
+                Schedule EditedSchedule = calendarRepository.save(dto);
+                return ResponseDto.setSuccessData("스케쥴이 수정되었습니다.",EditedSchedule);
             }
         } catch (Exception e) {
             System.out.println("CalendarService >> updateSchedule : db오류");

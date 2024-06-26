@@ -2,6 +2,10 @@ import React from 'react';
 import '../../styles/components/calendar/CalendarSidebar.css';
 import { useTranslation } from 'react-i18next';
 
+import TimeIcon from '../../images/svg/buttons/TimeIcon';
+
+import EmptyIcon from '../../images/empty.png';
+
 
 const CalendarSidebar = ({ events }) => {
   const { t, i18n } = useTranslation();
@@ -62,7 +66,6 @@ const CalendarSidebar = ({ events }) => {
     };
   };
 
-
   const getTimeUntilEvent = (startDate) => {
     const now = new Date();
     const diffMs = startDate - now;
@@ -83,9 +86,6 @@ const CalendarSidebar = ({ events }) => {
       return `${formatTimeUnit(diffMinutes, 'minute')}`;
     }
   };
-  
-  
-  
 
   const groupEventsByDay = (events) => {
     const groupedEvents = new Map();
@@ -120,71 +120,88 @@ const CalendarSidebar = ({ events }) => {
 
   return (
     <div className="sidebar">
-      <h2>{t('upcoming-events')}</h2>
+      <div className='calendar-sidebar-top'>
+        <TimeIcon className='calendar-sidebar-time-icon'/>
+        <div className='calendar-sidebar-title'>
+          {t('personal-events')}
+        </div>
+      </div>
 
-      {[...groupedEvents.keys()].map((day, index) => (
-        <div key={index}>
-          <div className="event-day-group">
-            <span className="day-label">{day}</span>
-            <span className="date-label"> {groupedEvents.get(day).dateString}</span>
+      {upcomingEvents.length === 0 ? (
+        <div className="calendar-sidebar-no-events-container">
+          
+          <img className='event-empty-icon' src={EmptyIcon} alt='No events' />
+          <div className='event-empty-text'>
+            No events to show
           </div>
-          <ul>
-            {groupedEvents.get(day).events.map((event, eventIndex) => (
-              <li key={eventIndex} className="event-item" style={{ backgroundColor: `rgba(${parseInt(event.color.slice(1, 3), 16)}, ${parseInt(event.color.slice(3, 5), 16)}, ${parseInt(event.color.slice(5, 7), 16)}, 0.25)` }}>
-                
-                <div className="event-time-info">
-                  <div className="event-start-time">
-                    {formatTime(event.startDate)}
-                  </div>
+          <div className='event-empty-subtext'>
+            Upcoming events will be shown here!
+          </div>
 
-                  <div className="time-until-event">
-                    {getTimeUntilEvent(event.startDate)}
 
-                  </div>
-                </div>
-                
-                
-                <div className="event-title-container">
-                  <div
-                    className="event-color-circle"
-                    style={{ backgroundColor: event.color }}
-                  ></div>
-                  <div className="event-title">{event.title}</div>
-                </div>
-
-                <div className="event-description-sidebar">
-                  {event.description}
-                </div>
-                
-                {event.location && (
-                  <div className="event-location-container-sidebar">
-                    <svg className="event-location-icon bi bi-geo-alt-fill" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                    </svg>
-                    <div className="event-location-sidebar">
-                      {event.location}
+        </div>
+      ) : (
+        [...groupedEvents.keys()].map((day, index) => (
+          <div key={index}>
+            <div className="event-day-group">
+              <span className="day-label">{day}</span>
+              <span className="date-label"> {groupedEvents.get(day).dateString}</span>
+            </div>
+            <ul>
+              {groupedEvents.get(day).events.map((event, eventIndex) => (
+                <li key={eventIndex} className="event-item" style={{ backgroundColor: `rgba(${parseInt(event.color.slice(1, 3), 16)}, ${parseInt(event.color.slice(3, 5), 16)}, ${parseInt(event.color.slice(5, 7), 16)}, 0.25)` }}>
+                  
+                  <div className="event-time-info">
+                    <div className="event-start-time">
+                      {formatTime(event.startDate)}
+                    </div>
+                    <div className="time-until-event">
+                      {getTimeUntilEvent(event.startDate)}
                     </div>
                   </div>
-                )}
+                  
+                  <div className="event-title-container">
+                    <div
+                      className="event-color-circle"
+                      style={{ backgroundColor: event.color }}
+                    ></div>
+                    <div className="event-title">{event.title}</div>
+                  </div>
 
-                <div className="event-duration">
-                  {formatDate(event.startDate)}{' '}
-                  {formatTime(event.startDate)}
-                  &nbsp; - &nbsp;
-                  {formatDate(event.startDate) === formatDate(event.endDate) ? (
-                    formatTime(event.endDate)
-                  ) : (
-                    <>
-                      {formatDate(event.endDate)}{' '}
-                      {formatTime(event.endDate)}
-                    </>
+                  <div className="event-description-sidebar">
+                    {event.description}
+                  </div>
+                  
+                  {event.location && (
+                    <div className="event-location-container-sidebar">
+                      <svg className="event-location-icon bi bi-geo-alt-fill" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                      </svg>
+                      <div className="event-location-sidebar">
+                        {event.location}
+                      </div>
+                    </div>
                   )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+
+                  <div className="event-duration">
+                    {formatDate(event.startDate)}{' '}
+                    {formatTime(event.startDate)}
+                    &nbsp; - &nbsp;
+                    {formatDate(event.startDate) === formatDate(event.endDate) ? (
+                      formatTime(event.endDate)
+                    ) : (
+                      <>
+                        {formatDate(event.endDate)}{' '}
+                        {formatTime(event.endDate)}
+                      </>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      )}
     </div>
   );
 };

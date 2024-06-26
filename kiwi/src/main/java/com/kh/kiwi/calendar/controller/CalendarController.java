@@ -2,6 +2,7 @@ package com.kh.kiwi.calendar.controller;
 
 import com.kh.kiwi.calendar.dto.CalendarRequestDto;
 import com.kh.kiwi.calendar.dto.ResponseDto;
+import com.kh.kiwi.calendar.entity.Schedule;
 import com.kh.kiwi.calendar.service.CalendarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,14 +48,15 @@ public class CalendarController {
     public ResponseEntity<?> addSchedule(@PathVariable  String team, @PathVariable String memberId, @RequestBody CalendarRequestDto dto){
         dto.setMemberId(memberId);
         dto.setTeam(team);
-        ResponseDto<?> result = calendarService.addSchedule(dto);
+        ResponseDto<Schedule> result = calendarService.addSchedule(dto);
         if(!result.isResult())
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
 
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<?> deleteSchedule(String scheduleNo){
+    @GetMapping("/{team}/calendar/delete/{scheduleNo}")
+    public ResponseEntity<?> deleteSchedule(@PathVariable String scheduleNo){
         ResponseDto<?> result = calendarService.deleteSchedule(scheduleNo);
         if(!result.isResult())
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
@@ -62,7 +64,8 @@ public class CalendarController {
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<?> updateSchedule(CalendarRequestDto dto){
+    @PostMapping("/{team}/calendar/update")
+    public ResponseEntity<?> updateSchedule(@RequestBody Schedule dto){
         ResponseDto<?> result = calendarService.updateSchedule(dto);
         if(!result.isResult())
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);

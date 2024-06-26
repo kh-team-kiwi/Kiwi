@@ -191,17 +191,16 @@ public class FileDriveFileService {
     private String buildS3Key(String teamNumber, String driveCode, String parentPath, String folderCode) {
         StringBuilder keyBuilder = new StringBuilder();
 
+        // 기본 경로 추가: 팀번호/drive/drive코드/
         keyBuilder.append(teamNumber).append("/drive/").append(driveCode).append("/");
 
+        // parentPath가 존재하는 경우 추가
         if (parentPath != null && !parentPath.isEmpty()) {
             String adjustedParentPath = parentPath;
 
-            if (parentPath.equals(driveCode)) {
-                // parentPath가 드라이브 코드와 동일할 때
-                adjustedParentPath = "";
-            } else if (parentPath.startsWith(driveCode + "/")) {
-                // parentPath가 드라이브 코드로 시작할 때
-                adjustedParentPath = parentPath.substring(driveCode.length() + 1);
+            // parentPath의 시작 부분에 driveCode가 포함되어 있으면 이를 제거
+            if (adjustedParentPath.startsWith(teamNumber + "/drive/" + driveCode + "/")) {
+                adjustedParentPath = adjustedParentPath.substring((teamNumber + "/drive/" + driveCode + "/").length());
             }
 
             adjustedParentPath = adjustedParentPath.replaceAll("^/+", "").replaceAll("/+$", "");
@@ -211,10 +210,15 @@ public class FileDriveFileService {
             }
         }
 
+        // 폴더 코드 추가
         keyBuilder.append(folderCode);
+
+        // 생성된 S3 키 로깅
+        log.info("Generated S3 key: {}", keyBuilder.toString());
 
         return keyBuilder.toString();
     }
+
 
     public void deleteFolder(String driveCode, String folderCode, String parentPath) {
         FileDriveFile folder = fileDriveFileRepository.findById(folderCode).orElseThrow(() -> new RuntimeException("Folder not found"));

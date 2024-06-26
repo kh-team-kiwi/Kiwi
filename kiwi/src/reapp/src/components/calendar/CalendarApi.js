@@ -9,13 +9,14 @@ import axiosHandler from "../../jwt/axiosHandler";
 import { useLocation } from "react-router-dom";
 import { getSessionItem } from "../../jwt/storage";
 
-const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar }) => {
+const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selectedCalendar, setEvents }) => {
   const { t, i18n } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [eventPositions, setEventPositions] = useState(new Map());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [clickPosition, setClickPosition] = useState({ top: 0, left: 0 });
+
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -138,7 +139,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <SchedulePopup addEvent={addEvent} onClose={closePopup} calendars={calendars} />
+        <SchedulePopup addEvent={addEvent} onClose={closePopup} calendars={calendars} setEvents={setEvents} />
 
         <div className="slide-controls">
           <div className="radio-wrapper">
@@ -147,6 +148,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
               name="slide" 
               id="personal" 
               value="personal" 
+              className='personal-radio'
               checked={selectedCalendar === 'personal'} 
               onChange={handleCalendarChange} 
             />
@@ -155,11 +157,13 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
               name="slide" 
               id="team" 
               value="team" 
+              className='team-radio'
+
               checked={selectedCalendar === 'team'} 
               onChange={handleCalendarChange} 
             />
-            <label htmlFor="personal" className="slide">{t('personal')}</label>
-            <label htmlFor="team" className="slide">{t('team')}</label>
+            <label htmlFor="personal" className={`slide ${selectedCalendar === 'personal' ? 'active' : ''}`}>{t('personal')}</label>
+            <label htmlFor="team" className={`slide ${selectedCalendar === 'team' ? 'active' : ''}`}>{t('team')}</label>
             <div className="slider-tab"></div>
           </div>
         </div>
