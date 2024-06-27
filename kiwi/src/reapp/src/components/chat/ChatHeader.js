@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import ChatSearchBar from './ChatSearchBar';
 import InviteUserModal from './chatsidebar/InviteUserModal';
+import LeaveChatModal from './chatsidebar/LeaveChatModal';
 import '../../styles/components/chat/ChatHeader.css';
 
-const ChatHeader = ({ chatName, team, chatNum, onInvite }) => {
+const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat }) => {
     const [showInviteUserModal, setShowInviteUserModal] = useState(false);
+    const [showLeaveChatModal, setShowLeaveChatModal] = useState(false);
 
     const handleInviteClick = () => {
         setShowInviteUserModal(true);
@@ -14,6 +16,14 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite }) => {
         setShowInviteUserModal(false);
     };
 
+    const handleLeaveClick = () => {
+        setShowLeaveChatModal(true);
+    };
+
+    const handleCloseLeaveModal = () => {
+        setShowLeaveChatModal(false);
+    };
+
     return (
         <div className='chat-header'>
             <div className='chat-header-left'>
@@ -21,9 +31,8 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite }) => {
                     {chatName || 'Chat name header'}
                 </div>
             </div>
-
-            <div>
-                <div>
+            <div className='chat-header-middle'>
+                <div className='leave-chat' onClick={handleLeaveClick}>
                     채팅방 나가기
                 </div>
             </div>
@@ -55,6 +64,13 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite }) => {
                     showInviteUserModal={showInviteUserModal}
                     onClose={handleCloseInviteModal}
                     onInvite={onInvite}
+                />
+            )}
+            {showLeaveChatModal && (
+                <LeaveChatModal
+                    chatNum={chatNum}
+                    onClose={handleCloseLeaveModal}
+                    onLeaveChat={onLeaveChat}
                 />
             )}
         </div>

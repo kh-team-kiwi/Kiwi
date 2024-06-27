@@ -5,16 +5,38 @@ import MemberManageIcon from "../../images/svg/settings/MemberManageIcon";
 import PersonalManageIcon from "../../images/svg/settings/PersonalManageIcon";
 import TeamManageIcon from "../../images/svg/settings/TeamManageIcon";
 
-const SideMenuBar = ({menuItems}) => {
+const SideMenuBar = () => {
     const location = useLocation();
-    const [items, setItems] = useState(menuItems);
-    const [selected, setSelected] = useState(items.filter(item=>item.url===location.pathname.slice(34,location.pathname.length))[0]);
+    const items = [
+        {
+            name:"개인 설정",
+            url:"/personal-manage"
+        },
+        {
+            name:"멤버 관리",
+            url:"/member-manage"
+        },
+        {
+            name:"팀 관리",
+            url:"/team-manage"
+        }
+    ];
+    const [selected, setSelected] = useState(
+        items.find(item => location.pathname.endsWith(item.url)) || {}
+    );
     const navigate = useNavigate();
 
     const handleOnClick = (item) => {
         setSelected(item)
         navigate(location.pathname.slice(0,34)+item.url);
     }
+
+    useEffect(() => {
+        const currentItem = items.find(item => location.pathname.endsWith(item.url));
+        if (currentItem) {
+            setSelected(currentItem);
+        }
+    }, [location.pathname]);
 
     return (
         <div className='side-menu-bar'>

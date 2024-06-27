@@ -53,4 +53,11 @@ public class ChatUserService {
 
         chatUsersRepository.save(chatUser);
     }
+
+    public void removeChatUser(int chatNum, String memberId) {
+        ChatUsersId id = new ChatUsersId();
+        id.setChatNum(chatNum);
+        id.setMemberId(memberId);
+        chatUsersRepository.deleteById(id);
+    }
 }

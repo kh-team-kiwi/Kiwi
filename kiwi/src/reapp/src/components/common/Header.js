@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import '../../styles/components/common/Header.css';
 import ErrorImageHandler from "./ErrorImageHandler";
 import {TeamContext} from "../../context/TeamContext";
-import {getSessionItem, setSessionItem} from "../../jwt/storage";
+import {getSessionItem, removeLocalItem, removeSessionItem, setSessionItem} from "../../jwt/storage";
 import axiosHandler from "../../jwt/axiosHandler";
 
 import KoreanFlag from '../../images/svg/flags/KoreanFlag';
@@ -182,6 +182,23 @@ const Header = () => {
     };
   }, [dropdownVisible, notificationDropdownVisible]);
 
+  async function logoutBtn(){
+    try{
+      const response = await axiosHandler.post("/api/auth/logout");
+      if (response.status === 200) {
+        removeLocalItem("accessToken");
+        removeSessionItem("profile");
+        removeSessionItem("teams");
+        removeSessionItem("events");
+        localStorage.getItem("")
+        navigate('/', {replace:true});
+      } else {
+        console.error(response);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <header className='header-container'>
@@ -226,12 +243,12 @@ const Header = () => {
 
 
             <div className='header-create-team-button-container'>
-              <div className='header-create-team-button'>
+              <div className='header-create-team-button' onClick={()=>{navigate('/home')}}>
 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17" className='create-team-icon'>
                   <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
                 </svg>
-                <div>&nbsp;&nbsp;{t('create-team')}</div>
+                <div>&nbsp;&nbsp;{t('go to home!!!')}</div>
               </div>
             </div>
           </div>
@@ -440,7 +457,7 @@ const Header = () => {
               </div>
             </div>
 
-            <div className='header-profile-dropdown-bottom-right' >
+            <div className='header-profile-dropdown-bottom-right' onClick={()=>logoutBtn()} >
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" className='header-logout-icon ' viewBox="0 0 16 16">
                 <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
                 <path fillRule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>

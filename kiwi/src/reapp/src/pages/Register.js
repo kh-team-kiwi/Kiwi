@@ -136,6 +136,7 @@ const Register = () => {
         }
     }, [confirmPwCheck.emptyWhitespacePattern, confirmPwCheck.least8char, confirmPwCheck.specialSymbol, passwordCheck.duplicatePattern, formData.confirmPwd]);
 
+
     useEffect(() => {
         if(tacChecked && formStateCheck(emailCheck) && formStateCheck(usernameCheck) && formStateCheck(passwordCheck) && formStateCheck(confirmPwCheck)) {
             setRegisterBtn(false);
@@ -163,11 +164,13 @@ const Register = () => {
 
         if(target.name==='memberPwd' ){
             const least8char = /^[\w가-힣!@#$%^]{8,16}$/.test(target.value);
-            const specialSymbol = /^(?=.*[!@#$%^]).*$/.test(target.value);
+            let specialSymbol = /^(?=.*[!@#$%^])[a-zA-Z0-9!@#$%^]{8,16}$/.test(target.value);
+            if(!least8char) specialSymbol=false;
             setPasswordCheck(prevState => ({...prevState, least8char: least8char, specialSymbol:specialSymbol}));
         } else if(target.name==='confirmPwd' ) {
             const least8char = /^[\w가-힣!@#$%^]{8,16}$/.test(target.value);
-            const specialSymbol = /^(?=.*[!@#$%^]).*$/.test(target.value);
+            let specialSymbol = /^(?=.*[!@#$%^])[a-zA-Z0-9!@#$%^]{8,16}$/.test(target.value);
+            if(!least8char) specialSymbol=false;
             setConfirmPwCheck(prevState => ({...prevState, least8char: least8char, specialSymbol:specialSymbol}));
         }
 

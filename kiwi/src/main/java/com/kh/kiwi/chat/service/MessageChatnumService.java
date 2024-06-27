@@ -8,6 +8,9 @@ import com.kh.kiwi.chat.entity.FileMessage;
 import com.kh.kiwi.chat.entity.MessageChatnum;
 import com.kh.kiwi.chat.repository.FileMessageRepository;
 import com.kh.kiwi.chat.repository.MessageChatnumRepository;
+import com.kh.kiwi.chat.service.ChatService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class MessageChatnumService {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageChatnumService.class);
 
     @Autowired
     private MessageChatnumRepository messageChatnumRepository;
@@ -46,6 +51,8 @@ public class MessageChatnumService {
     public void saveMessage(ChatMessage message) {
         MessageChatnum messageChatnum = new MessageChatnum();
         messageChatnum.setMessageNum(message.getChatNum() + "-" + System.currentTimeMillis());
+        message.setMessageNum(messageChatnum.getMessageNum());
+
         Chat chat = chatService.getChatById(message.getChatNum());
         messageChatnum.setChat(chat);
 
@@ -87,6 +94,7 @@ public class MessageChatnumService {
             chatMessage.setFiles(fileInfos);
             chatMessage.setChatContent(message.getChatContent());
             chatMessage.setMemberNickname(message.getMember().getMemberNickname());
+            chatMessage.setMessageNum(message.getMessageNum());
             return chatMessage;
         }).collect(Collectors.toList());
     }
@@ -123,5 +131,26 @@ public class MessageChatnumService {
         Member member = memberRepository.findById(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member email: " + email));
         return member.getMemberNickname();
+    }
+
+    public void deleteMessageByIdAndUsername(String messageId, String username) {
+        log.info("Deleting message with ID: {} by user: {}", messageId, username);
+        MessageChatnum message = messageChatnumRepository.findById(messageId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + messageId));
+
+        if (!message.getMember().getMemberId().equals(username)) {
+            throw new IllegalArgumentException("You are not authorized to delete this message");
+        }
+
+        // 파일 삭제 로직 추가 (필요 시)
+        List<FileMessage> fileMessages = fileMessageRepository.findByMessageNum(messageId);
+        for (FileMessage fileMessage : fileMessages) {
+            log.info("Deleting file with path: {}", fileMessage.getFilePath());
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fileMessage.getFilePath()));
+            fileMessageRepository.delete(fileMessage);
+        }
+
+        messageChatnumRepository.delete(message);
+        log.info("Message with ID: {} deleted successfully", messageId);
     }
 }

@@ -15,12 +15,13 @@ public class ChatMessage {
 
     private MessageType type;
     private String content;
-    private String sender; // Member ID
-    private Integer chatNum;
+    private String sender; // 작성자 아이디
+    private Integer chatNum; //채팅방 번호
     private LocalDateTime chatTime;
     private List<FileInfo> files;
     private String chatContent;
     private String memberNickname; // 추가된 필드
+    private String messageNum; // 메세지 번호
 
     @Data
     public static class FileInfo {

@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
-import '../../../styles/components/chat/chatcontent/chatroom.css';
 import { useParams } from "react-router-dom";
 import { getSessionItem } from "../../../jwt/storage";
+import ReactionMenu from './ReactionMenu';
+import MessageDeletePopup from './MessageDeletePopup'; // 추가
+import '../../../styles/components/chat/chatcontent/chatroom.css';
 
 const ChatRoom = ({ chatNum }) => {
     const [profile, setProfile] = useState(null);
@@ -12,6 +14,8 @@ const ChatRoom = ({ chatNum }) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [files, setFiles] = useState([]);
+    const [showDeletePopup, setShowDeletePopup] = useState(false); // 추가
+    const [selectedMessage, setSelectedMessage] = useState(null); // 추가
     const stompClient = useRef(null);
     const fileInputRef = useRef();
     const textAreaRef = useRef();
@@ -58,7 +62,7 @@ const ChatRoom = ({ chatNum }) => {
 
     const sendMessage = async () => {
         if (!message.trim() && files.length === 0) {
-            return; // 메시지가 공백이거나 파일이 없을 때 전송하지 않음
+            return;
         }
 
         if (stompClient.current && stompClient.current.connected) {
@@ -132,12 +136,12 @@ const ChatRoom = ({ chatNum }) => {
         axios({
             url: `http://localhost:8080/api/chat/message/download?fileKey=${filePath}`,
             method: 'GET',
-            responseType: 'blob', // important
+            responseType: 'blob',
         }).then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', fileName); //or any other extension
+            link.setAttribute('download', fileName);
             document.body.appendChild(link);
             link.click();
         });
@@ -155,6 +159,51 @@ const ChatRoom = ({ chatNum }) => {
             textAreaRef.current.style.height = 'auto';
             textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
         }
+    };
+
+    const handleReactionClick = async (reactionKey, message) => {
+        if (reactionKey === 'comment') {
+            const comment = prompt('Enter your comment:');
+            if (comment) {
+                // Handle sending the comment
+                const commentMessage = {
+                    sender: profile.username,
+                    content: comment,
+                    chatNum,
+                    files: [],
+                    type: 'COMMENT',
+                    replyToMessageNum: message.messageNum,
+                };
+
+                if (stompClient.current && stompClient.current.connected) {
+                    stompClient.current.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(commentMessage));
+                }
+            }
+        } else if (reactionKey === 'cross') {
+            setSelectedMessage(message);
+            setShowDeletePopup(true);
+        }
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (selectedMessage) {
+            try {
+                await axios.delete(`http://localhost:8080/api/chat/message/delete/${selectedMessage.messageNum}`, {
+                    data: { username: profile.username }
+                });
+                setMessages(prevMessages => prevMessages.filter(msg => msg.messageNum !== selectedMessage.messageNum));
+            } catch (error) {
+                console.error('Error deleting message:', error);
+            } finally {
+                setShowDeletePopup(false);
+                setSelectedMessage(null);
+            }
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeletePopup(false);
+        setSelectedMessage(null);
     };
 
     return (
@@ -189,6 +238,10 @@ const ChatRoom = ({ chatNum }) => {
                                 ))}
                             </div>
                             <small className="message-time">{formatTime(msg.chatTime)}</small>
+                            <ReactionMenu
+                                onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
+                                isOwnMessage={msg.sender === profile.username} // 메시지의 작성자가 현재 사용자와 동일한지 확인
+                            />
                         </div>
                     </div>
                 ))}
@@ -223,6 +276,13 @@ const ChatRoom = ({ chatNum }) => {
                 <button onClick={() => fileInputRef.current && fileInputRef.current.click()}>Choose Files</button>
                 <button onClick={sendMessage}>Send</button>
             </div>
+            {showDeletePopup && (
+                <MessageDeletePopup
+                    messageContent={selectedMessage.chatContent}
+                    onDeleteConfirm={handleDeleteConfirm}
+                    onCancel={handleDeleteCancel}
+                />
+            )}
         </div>
     );
 };
