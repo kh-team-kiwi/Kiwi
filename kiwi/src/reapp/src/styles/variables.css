@@ -8,6 +8,7 @@
   --container-background-color: #f7f9fc;
   --text-color: #0e0e0e;
   --lighter-text-color: rgb(58, 58, 58);
+  --gray-text: rgb(151, 149, 149); 
   --gray: gray;
   --dark-gray: rgb(54, 54, 54);
   
@@ -31,7 +32,9 @@
   --settings-selected: black;
 
   --toggle-background:#e5ebe8;
+  --light-green-darkmode: #e9f7e3;
 
+  --transparent-white: rgba(255, 255, 255, 0.7);
 
   --shadow: rgba(0, 0, 0, 0.1);
   --day-clicked: #ddefff;
@@ -58,7 +61,7 @@
   --header-background-color: #28292e ;
   --container-background-color:#35363d;
   --text-color: #dfdfdf;
-  --gray: #c9c9c9;
+  --gray: #d4d4d4;
   --dark-gray: #c9c9c9;
 
   --white: #55575f;
@@ -72,11 +75,16 @@
   --day-clicked: #248ff3;
   --dark-blue: #2276c5;
   --lighter-text-color: rgb(230, 227, 227);
+  --gray-text: rgb(202, 199, 199); 
+
   --toggle-background:#8a8b8a;
   --month-tile-offset: #5e5e63;
   --month-tile-today: #555558;
 
   --light-gray-field: #9d9e9c;
+  --light-green-darkmode: #7a7e78;
+  --transparent-white: rgba(255, 255, 255, 0.3);
+
 
   --header-background-color: #2b2e2e ;
   --container-background-color:#3b3e3f;
@@ -86,5 +94,10 @@
   --page-icon-active: #4c6851;
   --secondary: #aaa78e;
   --secondary-active: #9b9881;
+
+  .img-enable-darkmode {
+    filter: brightness(70%);
+  
+  }
 }
 

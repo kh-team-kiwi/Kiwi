@@ -1,6 +1,8 @@
 {
     "darkmode": "深色模式",
     "language": "中文",
+    "language-word": "语言",
+    "account-settings": "账户设置",
     "profile": "个人资料",
     "settings": "设置",
     "notifications": "通知",
@@ -89,6 +91,8 @@
     "description": "描述",
     "location": "位置",
     "title": "标题",
-    "cancel": "取消"
+    "cancel": "取消",
+    "no-events": "没有活动显示",
+    "no-events-explanation": "即将到来的活动将在这里显示！"
   }
   

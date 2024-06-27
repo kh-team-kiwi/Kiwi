@@ -1,6 +1,8 @@
 {
   "darkmode": "다크 모드",
   "language": "한국어",
+  "language-word": "언어",
+  "account-settings": "계정 설정",
   "profile": "프로필",
   "settings": "설정",
   "notifications": "알림",
@@ -89,7 +91,9 @@
   "description": "설명",
   "location": "위치",
   "title": "제목",
-  "cancel": "취소"
+  "cancel": "취소",
+  "no-events": "표시할 이벤트가 없습니다",
+  "no-events-explanation": "다가오는 이벤트가 여기에 표시됩니다!"
 
 
 }

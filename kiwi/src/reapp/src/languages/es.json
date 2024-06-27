@@ -1,6 +1,8 @@
 {
     "darkmode": "Modo oscuro",
     "language": "Español",
+    "language-word": "Idioma",
+    "account-settings": "Configuración de la cuenta",
     "profile": "Perfil",
     "settings": "Configuraciones",
     "notifications": "Notificaciones",
@@ -89,6 +91,8 @@
     "description": "Descripción",
     "location": "Ubicación",
     "title": "Título",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "no-events": "No hay eventos para mostrar",
+    "no-events-explanation": "¡Los próximos eventos se mostrarán aquí!"
   }
   

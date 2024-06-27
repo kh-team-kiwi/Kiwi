@@ -140,6 +140,9 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
   };
 
   const handleAddEvent = () => {
+    if (!newEvent.title.trim()) {
+      return;
+    }
     console.log("#### handleAddEvent #####");
     addSchedule(); // database save
 

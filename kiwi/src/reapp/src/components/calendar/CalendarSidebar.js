@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import TimeIcon from '../../images/svg/buttons/TimeIcon';
 
-import EmptyIcon from '../../images/empty.png';
+import EmptyCalendarIcon from '../../images/emptycalendar.png';
 
 
 const CalendarSidebar = ({ events, selectedCalendar}) => {
@@ -130,12 +130,12 @@ const CalendarSidebar = ({ events, selectedCalendar}) => {
       {upcomingEvents.length === 0 ? (
         <div className="calendar-sidebar-no-events-container">
           
-          <img className='event-empty-icon' src={EmptyIcon} alt='No events' />
+          <img className='event-empty-icon img-enable-darkmode' src={EmptyCalendarIcon} alt='No events' />
           <div className='event-empty-text'>
-            No events to show
+            {t('no-events')}
           </div>
           <div className='event-empty-subtext'>
-            Upcoming events will be shown here!
+          {t('no-events-explanation')}
           </div>
 
 
