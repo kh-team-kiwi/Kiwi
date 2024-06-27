@@ -77,7 +77,8 @@
     font-size: 35px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     transition: all 0.5s cubic-bezier(0.68,-0.55,0.265,1.55);
-    margin-top: 170px;
+    margin-top: 165px;
+    padding-bottom: 5px;
 
 }
 
@@ -103,6 +104,10 @@
     
 }
 
+.home-user-container:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
 .home-user-details {
     display: flex;
     justify-content: center;
@@ -122,11 +127,11 @@
     align-items: center;
     gap: 15px;
     width: 100%;
-    padding-left: 20px;
-    font-size: 20px;
+    padding-left: 15px;
+    font-size: 18px;
     cursor: pointer;
     transition: 0.2s;
-
+    font-weight: 600;
 
 }
 
@@ -155,6 +160,7 @@
     font-size: 20px;
     display: flex;
     width: 100%;
+    font-weight: 600;
 }
 
 .home-user-dropdown-bottom > div {
@@ -165,6 +171,7 @@
     margin-top: 5px;
     cursor: pointer;
     transition: 0.2s;
+    font-size: 18px;
 
 }
 
@@ -178,16 +185,17 @@
     padding-right: 10px;
     padding-left: 10px;
     border-radius: 10px;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .home-logout {
     margin-left: auto;
-    margin-right: 15px;
     padding: 5px;
     border-radius: 10px;
     padding-right: 10px;
     padding-left: 10px;
+    color: var(--red);
+    margin-right: 5px;
 
 }
 
@@ -219,7 +227,7 @@
 .home-team-list > div {
     display: flex;
     height: 100%;
-    padding: 15px;
+    padding: 10px;
     border-bottom: 1px solid lightgray;
     transition: 0.2s;
 
@@ -280,15 +288,15 @@
     height: 24px;
 }
 
-.team-item {
+/* .team-item {
     display: flex;
     padding: 10px;
-}
+} */
 
 .home-team-image {
     background-color: gray;
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border-radius: 10px;
 }
 
@@ -301,11 +309,12 @@
 
 }
 
-.home-team-members {
+.home-team-owner-container {
     display: flex;
+    margin-top: 3px;
 }
-.home-team-member{
-    font-size: 16px;
+.home-team-owner-name{
+    font-size: 17px;
     color: var(--dark-brown);
     padding: 3px;
 }
@@ -368,11 +377,18 @@
     border-radius: 5px;
     line-height: 10px;
     padding: 5px;
+    padding-top: 4px;
 }
 
-.home-team-participant {
+.home-team-count {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
-    padding-top: 3px;
+    margin-top: 5px;
+    color: var(--dark-brown);
+    font-weight: 600;
+}
+
+.team-item {
+    height: 91px;
 }
