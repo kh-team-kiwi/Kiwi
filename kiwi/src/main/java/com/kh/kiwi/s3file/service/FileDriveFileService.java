@@ -115,7 +115,7 @@ public class FileDriveFileService {
         }
 
         String fileCode = UUID.randomUUID().toString();
-        String s3Key = buildS3Key(teamNumber, driveCode, parentPath, fileCode);
+        String s3Key = buildS3Key(teamNumber, driveCode, parentPath, fileCode, false);
 
         // S3에 파일 업로드
         try {
@@ -207,7 +207,7 @@ public class FileDriveFileService {
         }
 
         String folderCode = UUID.randomUUID().toString();
-        String s3Key = buildS3Key(teamNumber, driveCode, parentPath, folderCode + "/");
+        String s3Key = buildS3Key(teamNumber, driveCode, parentPath, folderCode, true);
 
         // 폴더 경로 로그 출력
         log.info("Creating folder in S3 with key: " + s3Key);
@@ -234,19 +234,24 @@ public class FileDriveFileService {
         fileDriveFileRepository.save(folder);
     }
 
-    private String buildS3Key(String teamNumber, String driveCode, String parentPath, String folderCode) {
+    private String buildS3Key(String teamNumber, String driveCode, String parentPath, String code, boolean isFolder) {
         StringBuilder keyBuilder = new StringBuilder();
 
         // 기본 경로 추가: 팀번호/drive/drive코드/
         keyBuilder.append(teamNumber).append("/drive/").append(driveCode).append("/");
 
         // parentPath가 존재하는 경우 추가
-        if (parentPath != null && !parentPath.isEmpty() && !parentPath.equals(driveCode + "/")) {
+        if (parentPath != null && !parentPath.isEmpty() && !parentPath.equals(driveCode)) {
             String adjustedParentPath = parentPath;
 
-            // parentPath의 시작 부분에 driveCode가 포함되어 있으면 이를 제거
+            // parentPath의 시작 부분에 기본 경로가 포함되어 있으면 이를 제거
             if (adjustedParentPath.startsWith(teamNumber + "/drive/" + driveCode + "/")) {
                 adjustedParentPath = adjustedParentPath.substring((teamNumber + "/drive/" + driveCode + "/").length());
+            }
+
+            // parentPath의 시작 부분에 driveCode가 포함되어 있으면 이를 제거
+            if (adjustedParentPath.startsWith(driveCode + "/")) {
+                adjustedParentPath = adjustedParentPath.substring((driveCode + "/").length());
             }
 
             adjustedParentPath = adjustedParentPath.replaceAll("^/+", "").replaceAll("/+$", "");
@@ -256,8 +261,13 @@ public class FileDriveFileService {
             }
         }
 
-        // 폴더 코드 추가
-        keyBuilder.append(folderCode);
+        // 폴더 코드 또는 파일 코드 추가
+        keyBuilder.append(code);
+
+        // 폴더일 경우 슬래시 추가
+        if (isFolder) {
+            keyBuilder.append("/");
+        }
 
         // 생성된 S3 키 로깅
         log.info("Generated S3 key: {}", keyBuilder.toString());
