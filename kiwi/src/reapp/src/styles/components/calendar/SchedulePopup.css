@@ -15,7 +15,7 @@
   }
 }
 
-.popup-container {
+.schedule-popup-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,7 +28,7 @@
   animation: fadeIn 0.2s ease-out; 
 }
 
-.popup-content {
+.schedule-popup-content {
   position: absolute;
   background-color: var(--white);
   padding: 20px;
@@ -319,12 +319,12 @@ gap: 10px;
 }
 
 .event-title-input {
-  width: 280px;
+  width: 270px;
   height: 30px;
   font-size: 20px;
   border: none;
   outline: none;
-
+  margin-left: 10px;
   margin-top: 2px;
   background-color: transparent;
 
@@ -370,7 +370,8 @@ gap: 10px;
 
 
 .event-input-container {
-  width: 300px;
+
+  width: 90%;
   height: 35px;
   border-radius: 10px;
   display: flex;
@@ -431,14 +432,15 @@ gap: 10px;
 .event-duration-input-container {
   display: flex;
   flex-direction: column;
-  width: 260px;
+  width: 270px;
   gap: 5px;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .event-popup-icon {
   fill: var(--green);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+
 
 }
 

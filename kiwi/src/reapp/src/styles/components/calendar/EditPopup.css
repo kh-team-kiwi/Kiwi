@@ -197,15 +197,15 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   padding-top: 10px;
   padding-bottom: 10px;
   display: flex;
-  gap: 5px;
+  gap: 4px;
 }
 
 .edit-popup-duration-input-container {
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 270px;
   gap: 5px;
-  margin-left: 10px;
+  margin-left: 7px;
 }
 
 .edit-popup-start-container,
@@ -218,9 +218,18 @@ input[type="radio"]#edit-popup-team:checked ~ .edit-popup-slider-tab {
   background-color: var(--white);
 }
 
-.edit-popup-date-input,
+.edit-popup-date-input {
+  width: 130px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--lighter-text-color);
+}
+
 .edit-popup-time-input {
-  width: 125px;
+  width: 110px;
   outline: none;
   border: none;
   font-size: 16px;
