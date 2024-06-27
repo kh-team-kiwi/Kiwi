@@ -2,15 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import FileUploadWithDropzone from './FileUploadWithDropzone';
 import DriveFolderPopup from "./DriveFolderPopup";
+import DriveDeletePopup from './DriveDeletePopup';
 import { useParams } from "react-router-dom";
 
-const DriveFileList = ({ driveCode, parentPath, onViewFolder, onBack, breadcrumbs = [] }) => {
+const DriveFileList = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
     const { teamno } = useParams();
     const [items, setItems] = useState([]);
     const [editFileCode, setEditFileCode] = useState(null);
     const [editFolderCode, setEditFolderCode] = useState(null);
     const [newFileName, setNewFileName] = useState('');
     const [newFolderName, setNewFolderName] = useState('');
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -136,6 +138,24 @@ const DriveFileList = ({ driveCode, parentPath, onViewFolder, onBack, breadcrumb
         }
     };
 
+    const handleDeleteDrive = () => {
+        setShowDeletePopup(true);
+    };
+
+    const confirmDeleteDrive = async () => {
+        try {
+            await axios.delete(`http://localhost:8080/api/drive/${driveCode}`);
+            setShowDeletePopup(false);
+            onDeleteDrive(driveCode);
+        } catch (error) {
+            console.error('Failed to delete drive', error);
+        }
+    };
+
+    const cancelDeleteDrive = () => {
+        setShowDeletePopup(false);
+    };
+
     return (
         <div>
             <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} />
@@ -147,6 +167,14 @@ const DriveFileList = ({ driveCode, parentPath, onViewFolder, onBack, breadcrumb
                 ref={fileInputRef}
             />
             <button onClick={() => fileInputRef.current.click()}>파일 업로드</button>
+            <button onClick={handleDeleteDrive}>드라이브 삭제</button>
+            {showDeletePopup && (
+                <DriveDeletePopup
+                    itemName={driveName}
+                    onDeleteConfirm={confirmDeleteDrive}
+                    onCancel={cancelDeleteDrive}
+                />
+            )}
             <h1>{breadcrumbs.map(b => b.name).join(' > ')}</h1>
             {breadcrumbs.length > 1 && (
                 <button onClick={onBack}>뒤로</button>

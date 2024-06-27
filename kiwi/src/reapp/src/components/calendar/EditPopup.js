@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import '../../styles/components/calendar/EditPopup.css';
 import { useTranslation } from 'react-i18next';
+import axiosHandler from "../../jwt/axiosHandler";
+import {useLocation} from "react-router-dom";
 
-const EditPopup = ({ event, isOpen, onClose, onSave }) => {
+const EditPopup = ({ event, isOpen, onClose }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [location, setLocation] = useState(event.location);
@@ -11,6 +13,7 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
   const [calendar, setCalendar] = useState(event.calendar);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const locate = useLocation();
 
 
   const presetColors = [
@@ -40,10 +43,23 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
       calendar,
       color: selectedColor
     };
-    onSave(updatedEvent);
+    //handleScheduleEdit();
   };
 
   if (!isOpen) return null;
+
+  const handleScheduleEdit = async (updatedEvent) => {
+    console.log("handleScheduleEdit : ", updatedEvent);
+    try {
+      const response = await axiosHandler.post("/api" + locate.pathname + "/update", { updatedEvent });
+      const data = response.data.data;
+      if (data) {
+        // setEvents(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch schedule:", error);
+    }
+  }
 
   return (
     <div className="edit-popup-container">
@@ -192,7 +208,7 @@ const EditPopup = ({ event, isOpen, onClose, onSave }) => {
 
         <div className="edit-popup-bottom-container">
           <button type="button" className="edit-popup-cancel-button" onClick={onClose}>Cancel</button>
-          <button type="submit" className="edit-popup-save-button" onClick={onSave}>Save</button>
+          <button type="submit" className="edit-popup-save-button">Save</button>
         </div>
       </form>
 

@@ -110,19 +110,6 @@ const EventPopup = ({ event, position, onClose }) => {
 
   const location = useLocation();
 
-  const handleScheduleEdit = async (updatedEvent) => {
-    console.log("handleScheduleEdit : ", updatedEvent);
-    try {
-      const response = await axiosHandler.post("/api" + location.pathname + "/update", { updatedEvent });
-      const data = response.data.data;
-      if (data) {
-        // setEvents(data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch schedule:", error);
-    }
-  }
-
   const handleScheduleDelete = async (event) => {
     const scheduleNo = event.scheduleNo;
     console.log("handleScheduleDelete : ");
@@ -202,7 +189,6 @@ const EventPopup = ({ event, position, onClose }) => {
         event={event} 
         isOpen={isEditModalOpen} 
         onClose={() => setEditModalOpen(false)}
-        onSave={handleScheduleEdit}
       />
     </div>
   );
