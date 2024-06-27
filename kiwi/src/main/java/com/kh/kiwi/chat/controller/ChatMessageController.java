@@ -2,6 +2,8 @@ package com.kh.kiwi.chat.controller;
 
 import com.kh.kiwi.chat.dto.ChatMessage;
 import com.kh.kiwi.chat.service.MessageChatnumService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -10,11 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/chat/message")
 public class ChatMessageController {
+
+    private static final Logger log = LoggerFactory.getLogger(ChatMessageController.class);
 
     @Autowired
     private MessageChatnumService messageChatnumService;
@@ -45,5 +50,12 @@ public class ChatMessageController {
     @GetMapping("/download")
     public byte[] downloadFile(@RequestParam String fileKey) {
         return messageChatnumService.downloadFile(fileKey);
+    }
+
+    @DeleteMapping("/delete/{messageId}")
+    public void deleteMessage(@PathVariable String messageId, @RequestBody Map<String, String> payload) {
+        String username = payload.get("username");
+        log.info("Received request to delete message with ID: {} by user: {}", messageId, username);
+        messageChatnumService.deleteMessageByIdAndUsername(messageId, username);
     }
 }

@@ -71,6 +71,8 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
     };
 
     calculateEventPositions();
+    console.log('Events updated:', events);
+
   }, [events, currentMonth]);
 
   const handleTileClick = (event, position) => {
