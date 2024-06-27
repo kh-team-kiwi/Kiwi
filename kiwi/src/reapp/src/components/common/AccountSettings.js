@@ -22,11 +22,20 @@ const AccountSettings = ({ isOpen, onClose }) => {
       <div className="account-settings-modal">
         <h2>Account Settings</h2>
         <div className="account-settings-profile-picture">
-          {profilePicture && <img src={profilePicture} alt="Profile Preview" className="account-settings-profile-preview" />}
-        </div>
-        <div className="account-settings-form-group">
-          <label>Profile Picture:</label>
-          <input type="file" onChange={handleProfilePictureChange} />
+          {profilePicture ? (
+            <img src={profilePicture} alt="Profile Preview" className="account-settings-profile-preview" />
+          ) : (
+            <div className="account-settings-placeholder"></div>
+          )}
+          <button className="account-settings-upload-button" onClick={() => document.getElementById('fileInput').click()}>
+            Upload
+          </button>
+          <input
+            id="fileInput"
+            type="file"
+            style={{ display: 'none' }}
+            onChange={handleProfilePictureChange}
+          />
         </div>
         <div className="account-settings-form-group">
           <label>Name:</label>

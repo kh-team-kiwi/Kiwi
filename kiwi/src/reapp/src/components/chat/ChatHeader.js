@@ -22,6 +22,11 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite }) => {
                 </div>
             </div>
 
+            <div>
+                <div>
+                    채팅방 나가기
+                </div>
+            </div>
             <div className='chat-header-right'>
                 <div className='member-invite' onClick={handleInviteClick}>
                     <svg className='icon-color' width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
