@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import '../../styles/components/common/AccountSettings.css';
+import {getSessionItem} from "../../jwt/storage";
 
 const AccountSettings = ({ isOpen, onClose }) => {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [name, setName] = useState('');
+  const [profilePicture, setProfilePicture] = useState(getSessionItem("profile").filepath);
+  const [name, setName] = useState(getSessionItem("profile").name);
   const [password, setPassword] = useState('');
 
   const handleProfilePictureChange = (e) => {
@@ -16,6 +17,8 @@ const AccountSettings = ({ isOpen, onClose }) => {
   };
 
   if (!isOpen) return null;
+
+
 
   return (
     <div className="account-settings-overlay">
@@ -44,12 +47,25 @@ const AccountSettings = ({ isOpen, onClose }) => {
           <button onClick={handleSave}>Save</button>
         </div>
         <div className="account-settings-form-group">
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <button onClick={handleSave}>Save</button>
+          <div>Password:</div>
+          <div>
+            <input type="password" placeholder='Current password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+          </div>
+          <div>
+            <input type="password" placeholder='Modify password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+          </div>
+          <div>
+            <input type="password" placeholder='Confirm password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+          </div>
+          <button onClick={handleSave} disabled>Save</button>
         </div>
-        <div>
-          <button onClick={""}>Delete Account</button>
+        <div className="account-settings-form-group">
+          <div>Delete Account</div>
+          <div>
+            <input type="password" placeholder='input password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+          </div>
+          <button onClick={""}>Delete</button>
+          <p>Are you sure you want to leave?<br/>You can't go back.</p>
         </div>
         <button onClick={onClose}>Cancel</button>
       </div>
