@@ -24,4 +24,9 @@
     left: 50%;
     transform: translate(-50%, -450%);
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.unsubscribe-btn:hover {
+    background-color: var(--red-hover);
 }

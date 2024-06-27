@@ -3,19 +3,26 @@ import '../../styles/components/teamsettings/Personal.css'
 import {TeamContext} from "../../context/TeamContext";
 import axiosHandler from "../../jwt/axiosHandler";
 import {getSessionItem} from "../../jwt/storage";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const Personal = () => {
     const { teamno } = useParams();
+    const navigate = useNavigate();
 
     const handleLeaveTeam = async () => {
         const dto = {
-            memberId : getSessionItem("profile").memberId,
-            team : {teamno}
+            memberId : getSessionItem("profile").username,
+            team : teamno
         }
         try{
-            const res = axiosHandler.post("api/team/leaveTeam",{dto});
-
+            console.log(dto);
+            const res = await axiosHandler.post("/api/team/leaveTeam",dto);
+            if(res.data.results){
+                alert(res.data.message);
+                navigate("/home");
+            } else {
+                alert(res.data.message);
+            }
         } catch (e) {
             console.error("handleLeaveTeam failed : ",e)
         }

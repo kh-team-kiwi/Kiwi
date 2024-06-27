@@ -21,10 +21,6 @@ const TeamSettings = () => {
         }
     ];
 
-    const [selected, setSelected] = useState({
-        name:"개인설정", url:"/personal-manage"
-    });
-
     return (
         <>
             <SideMenuBar menuItems={menuItems}></SideMenuBar>
