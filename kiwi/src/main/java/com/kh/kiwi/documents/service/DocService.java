@@ -84,6 +84,8 @@ public class DocService {
         if (doc.getAccessLevel() == null) {
             doc.setAccessLevel(Doc.AccessLevel.C);
         }
+        doc.setDocDate(LocalDateTime.now());
+
 
         docRepository.save(doc);
     }

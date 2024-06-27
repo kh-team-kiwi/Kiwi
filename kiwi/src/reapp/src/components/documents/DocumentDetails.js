@@ -20,9 +20,7 @@ const DocumentDetails = ({ document, onClose }) => {
     const [author, setAuthor] = useState({ name: '', deptName: '', position: '' });
     const [approvalModalIsOpen, setApprovalModalIsOpen] = useState(false);
     const [approvalAction, setApprovalAction] = useState(null);
-    const [approvalReason, setApprovalReason] = useState('');
     const [selectedApprover, setSelectedApprover] = useState(null);
-
     const [isEditingDoc, setIsEditingDoc] = useState(false);
     const [editedDocDetails, setEditedDocDetails] = useState({
         docTitle: '',
@@ -52,7 +50,6 @@ const DocumentDetails = ({ document, onClose }) => {
             await axios.post(`http://localhost:8080/documents/${document.docNum}/approve`, {
                 employeeNo: selectedApprover.employeeNo,
                 docConf: approvalAction,
-                docReject: approvalReason
             });
             setApprovalModalIsOpen(false);
             window.location.reload(); // 결재 후 페이지를 새로고침합니다.
@@ -463,8 +460,6 @@ const DocumentDetails = ({ document, onClose }) => {
                 onSubmit={handleApprovalSubmit}
                 approvalAction={approvalAction}
                 setApprovalAction={setApprovalAction}
-                approvalReason={approvalReason}
-                setApprovalReason={setApprovalReason}
             />
         )}
         </div>
