@@ -1,6 +1,8 @@
 {
     "darkmode": "ダークモード",
     "language": "日本語",
+    "language-word": "言語",
+    "account-settings": "アカウント設定",
     "profile": "プロフィール",
     "settings": "設定",
     "notifications": "通知",
@@ -89,6 +91,8 @@
     "description": "説明",
     "location": "場所",
     "title": "タイトル",
-    "cancel": "キャンセル"
+    "cancel": "キャンセル",
+    "no-events": "表示するイベントはありません",
+    "no-events-explanation": "ここに今後のイベントが表示されます！"
   }
   

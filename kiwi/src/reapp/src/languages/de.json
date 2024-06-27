@@ -1,6 +1,8 @@
 {
     "darkmode": "Dunkelmodus",
     "language": "Deutsch",
+    "language-word": "Sprache",
+    "account-settings": "Kontoeinstellungen",
     "profile": "Profil",
     "settings": "Einstellungen",
     "notifications": "Benachrichtigungen",
@@ -89,7 +91,9 @@
     "description": "Beschreibung",
     "location": "Ort",
     "title": "Titel",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "no-events": "Keine Ereignisse anzuzeigen",
+    "no-events-explanation": "Kommende Ereignisse werden hier angezeigt!"
     
     
   }

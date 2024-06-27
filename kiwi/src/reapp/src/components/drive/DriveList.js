@@ -21,15 +21,6 @@ const DriveList = ({ onView, refresh }) => {
         }
     };
 
-    const handleDelete = async (driveCode) => {
-        try {
-            await axios.delete(`http://localhost:8080/api/drive/${driveCode}`);
-            fetchDrives(); // 리스트 갱신
-        } catch (error) {
-            console.error('Failed to delete drive', error);
-        }
-    };
-
     const handleUpdate = async (driveCode, newName) => {
         try {
             await axios.put(`http://localhost:8080/api/drive/${driveCode}`, { driveName: newName });
@@ -71,7 +62,6 @@ const DriveList = ({ onView, refresh }) => {
                             <>
                                 {drive.driveName} ({drive.team})
                                 <button onClick={() => handleEdit(drive.driveCode, drive.driveName)}>Edit</button>
-                                <button onClick={() => handleDelete(drive.driveCode)}>Delete</button>
                                 <button onClick={() => onView(drive.driveCode, drive.driveName)}>View Files</button>
                             </>
                         )}

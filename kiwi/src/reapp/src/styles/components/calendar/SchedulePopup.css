@@ -145,6 +145,7 @@ color: var(--lighter-text-color);
 padding-right: 15px;
 font-weight: 550;
 transition: 0.2s;
+cursor: pointer;
 }
 
 .schedule-button:hover {
@@ -347,7 +348,7 @@ gap: 10px;
 }
 
 .event-description-input::placeholder {
-  color: var(--lighter-text-color);
+  color: var(--gray);
 }
 
 
@@ -364,7 +365,7 @@ gap: 10px;
 }
 
 .event-location-input::placeholder {
-  color: var(--lighter-text-color);
+  color: var(--gray);
 }
 
 
@@ -387,7 +388,7 @@ gap: 10px;
 }
 
 .event-date-input {
-  width: 125px;
+  width: 130px;
   outline: none;
   border: none;
   font-size: 16px;
@@ -399,7 +400,7 @@ gap: 10px;
 }
 
 .event-time-input {
-  width: 115px;
+  width: 110px;
   outline: none;
   border: none;
   font-size: 16px;
@@ -412,7 +413,7 @@ gap: 10px;
 
 .event-start-container, .event-end-container {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   padding: 5px;
   border-radius: 10px;
   border: 1px solid var(--mid-green);
@@ -424,13 +425,13 @@ gap: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
   display: flex;
-  gap: 5px;
+  gap: 4px;
 }
 
 .event-duration-input-container {
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 260px;
   gap: 5px;
   margin-left: 10px;
 }

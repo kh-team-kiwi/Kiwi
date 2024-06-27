@@ -154,9 +154,13 @@
 }
 
 .event-empty-icon {
-  width: 100px;
+  width: 150px;
   margin-top: 5px;
+
 }
+
+
+
 
 .event-empty-text {
   font-weight: 600;
@@ -165,6 +169,8 @@
   justify-content: center;
   text-align: center;
   margin-bottom: 5px;
+  margin-top: 20px;
+  color: var(--lighter-text-color);
 }
 
 .event-empty-subtext {
@@ -173,4 +179,6 @@
   font-size: 16px;
   align-items: center;
   text-align: center;
+  color: var(--gray-text);
+
 }

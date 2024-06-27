@@ -196,34 +196,37 @@
  .header-notification-button {
     margin-right: 30px;
     margin-top: 5px;
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 13px;
     transition: 0.1s;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    /* background: var(--page-icon); */
 
  }
 
  .header-notification-button:hover {
-    background-color: var(--white-hover2);
+    /* background: var(--page-icon-active); */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
  }
 
  .header-notification-icon {
-    fill: var(--light-gray5);
+    fill: rgb(173, 171, 171);
+    width: 17px;
+     height: 17px;
 
  }
 
 
  .header-team-container {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: var(--transparent-white);
     border-radius: 10px;
     display: inline-flex;
     align-items: center;
-    color: var(--dark-brown);
+    color: var(--lighter-text-color);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     justify-content: left;
     position: absolute;
@@ -247,7 +250,7 @@
     overflow-y: hidden;
 }
 .header-team-container:hover {
-    background-color: white;
+    background-color: var(--white);
 
 }
 
@@ -356,18 +359,23 @@
 
 .header-create-team-button-container {
     margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .header-create-team-button {
     display: flex;
+    justify-content: center;
     align-items: center;
     padding-top: 5px;
     padding-bottom: 5px;
     transition: 0.2s;
     font-weight: 550;
     border-radius: 10px;
-    padding-left: 40px;
     cursor: pointer;
+    padding-right: 10px;
+    padding-left: 5px;
 }
 
 .header-create-team-button > div {
@@ -395,7 +403,7 @@
 }
 
 .header-team-details.selected {
-    background-color: var(--light-green);
+    background-color: var(--light-green-darkmode);
   }
 
 .header-tick-icon {
@@ -703,4 +711,8 @@
 
 .header-text-bold {
     font-weight: 600;
+}
+
+.header-user-icon {
+    fill: var(--gray);
 }
