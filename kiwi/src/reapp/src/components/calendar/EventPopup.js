@@ -197,6 +197,7 @@ const EventPopup = ({ event, position, onClose, setEvents }) => {
         isOpen={isEditModalOpen} 
         onClose={() => setEditModalOpen(false)}
         setEvents={setEvents}
+        onCloseClose={onClose}
       />
     </div>
   );

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import axiosHandler from "../../jwt/axiosHandler";
 import {useLocation} from "react-router-dom";
 
-const EditPopup = ({ event, isOpen, onClose, setEvents }) => {
+const EditPopup = ({ event, isOpen, onClose, setEvents,onCloseClose }) => {
 
   const parseDateWithoutTimezone = (dateString) => {
     const [datePart, timePart] = dateString.split('T');
@@ -68,6 +68,7 @@ const EditPopup = ({ event, isOpen, onClose, setEvents }) => {
         }));
 
         onClose();
+        onCloseClose();
       } else {
         alert(response.data.message);
       }
