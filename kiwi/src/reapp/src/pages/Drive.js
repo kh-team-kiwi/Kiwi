@@ -59,6 +59,15 @@ const Drive = () => {
         return breadcrumbs.map(b => b.name).join(' > ');
     };
 
+    const handleDriveDeleted = (driveCode) => {
+        setRefresh(!refresh);
+        if (selectedDrive === driveCode) {
+            setSelectedDrive(null);
+            setSelectedDriveName('');
+            setBreadcrumbs([]);
+        }
+    };
+
     return (
         <>
             <DriveSidebar onView={handleViewDrive} refresh={refresh} />
@@ -84,6 +93,7 @@ const Drive = () => {
                             onViewFolder={handleViewFolder}
                             onBack={handleBack}
                             breadcrumbs={breadcrumbs}
+                            onDeleteDrive={handleDriveDeleted}
                         />
                     </div>
                 )}

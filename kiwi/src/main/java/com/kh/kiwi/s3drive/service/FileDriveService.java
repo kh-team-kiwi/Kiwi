@@ -5,6 +5,8 @@ import com.kh.kiwi.s3drive.entity.DriveUsers;
 import com.kh.kiwi.s3drive.entity.FileDrive;
 import com.kh.kiwi.s3drive.repository.DriveUsersRepository;
 import com.kh.kiwi.s3drive.repository.FileDriveRepository;
+import com.kh.kiwi.s3file.entity.FileDriveFile;
+import com.kh.kiwi.s3file.repository.FileDriveFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,15 +26,17 @@ public class FileDriveService {
     private final S3Client s3Client;
     private final FileDriveRepository fileDriveRepository;
     private final DriveUsersRepository driveUsersRepository;
+    private final FileDriveFileRepository fileDriveFileRepository;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
 
     @Autowired
-    public FileDriveService(S3Client s3Client, FileDriveRepository fileDriveRepository, DriveUsersRepository driveUsersRepository) {
+    public FileDriveService(S3Client s3Client, FileDriveRepository fileDriveRepository, DriveUsersRepository driveUsersRepository, FileDriveFileRepository fileDriveFileRepository) {
         this.s3Client = s3Client;
         this.fileDriveRepository = fileDriveRepository;
         this.driveUsersRepository = driveUsersRepository;
+        this.fileDriveFileRepository = fileDriveFileRepository;
     }
 
     public FileDriveDTO createDrive(FileDriveDTO fileDriveDTO, List<String> userIds) {
@@ -90,6 +94,22 @@ public class FileDriveService {
                 .orElseThrow(() -> new RuntimeException("Drive not found"));
 
         String s3FolderPath = fileDrive.getTeam() + "/drive/" + driveCode + "/";
+
+        // 드라이브 내 모든 파일 삭제
+        List<FileDriveFile> files = fileDriveFileRepository.findByDriveCodeAndFilePathStartingWith(driveCode, s3FolderPath);
+        for (FileDriveFile file : files) {
+            try {
+                DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(file.getFilePath())
+                        .build();
+                s3Client.deleteObject(deleteObjectRequest);
+                fileDriveFileRepository.delete(file);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to delete file in S3", e);
+            }
+        }
 
         // S3에서 폴더 삭제
         try {
