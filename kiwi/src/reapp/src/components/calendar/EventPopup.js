@@ -115,8 +115,15 @@ const EventPopup = ({ event, position, onClose, setEvents }) => {
     console.log("handleScheduleDelete : ");
     try {
       const response = await axiosHandler.get("/api" + location.pathname + "/delete/" + scheduleNo);
-      if (response.data) {
-        // response.data.result==true 삭제 성공...
+      if (response.data.result) {
+        setEvents((prevEvents) => ({
+          ...prevEvents,
+          [event.calendar]: prevEvents[event.calendar]
+              .filter(item => item.scheduleNo !== event.scheduleNo)
+        }));
+        onClose();
+      }else {
+        alert(response.data.message);
       }
     } catch (error) {
       console.error("Failed to fetch schedule:", error);
@@ -126,7 +133,7 @@ const EventPopup = ({ event, position, onClose, setEvents }) => {
   return (
     <div ref={popupRef} className="event-popup-container" style={{ backgroundColor }}>
       <div className='event-popup-top'>
-        <div className='event-popup-delete-container'>
+        <div className='event-popup-delete-container' onClick={()=>handleScheduleDelete(event)}>
           <DeleteIcon className='event-popup-delete' />
         </div>
         <div className='event-popup-edit-container' onClick={() => setEditModalOpen(true)}>
