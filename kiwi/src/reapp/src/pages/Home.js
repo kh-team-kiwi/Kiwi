@@ -125,16 +125,25 @@ const Home = () => {
     const user = getSessionItem("profile");
     /* 로그아웃 */
     async function logoutBtn(){
-
-        const response = await axiosHandler.post("/api/auth/logout");
-        if (response.status === 200) {
-            removeLocalItem("accessToken");
-            removeSessionItem("profile");
-            removeSessionItem("teams");
-            removeSessionItem("events");
-            localStorage.getItem("")
-            navigate('/', {replace:true});
+        try{
+            const response = await axiosHandler.post("/api/auth/logout");
+            if (response.status === 200) {
+                removeLocalItem("accessToken");
+                removeSessionItem("profile");
+                removeSessionItem("teams");
+                removeSessionItem("events");
+                localStorage.getItem("")
+                navigate('/', {replace:true});
+            } else {
+                console.error(response);
+            }
+        } catch (e) {
+            console.error(e);
         }
+    }
+
+    function handleTeamsettings(team){
+        navigate(`/team/${team}/teamsettings/personal-manage`);
     }
 
     return (
@@ -232,7 +241,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className='home-team-buttons'>
-                        <button className='home-team-settings'>
+                        <button className='home-team-settings' onClick={()=>handleTeamsettings(team.team)}>
                             <SettingsIcon className="home-settings-icon"/>
                         </button>
                         <button className='home-team-launch'
