@@ -102,7 +102,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     };
 
     return (
-        <div className="modal-overlay">
+        <div className={`modal-overlay ${showCreateChatModal ? 'show' : ''}`}>
             <div className="modal-content">
                 <h2>채팅방 생성</h2>
                 <div className="formGroup">

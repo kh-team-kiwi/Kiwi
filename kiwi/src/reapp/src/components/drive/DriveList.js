@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { getSessionItem } from "../../../src/jwt/storage";
 
 const DriveList = ({ onView, refresh }) => {
     const { teamno } = useParams();
     const [drives, setDrives] = useState([]);
     const [editDriveCode, setEditDriveCode] = useState(null);
     const [newName, setNewName] = useState('');
+    const [profile, setProfile] = useState(null);
+    const [username, setUsername] = useState('');
 
     useEffect(() => {
-        fetchDrives();
-    }, [refresh]);
+        const storedProfile = getSessionItem("profile");
+        setProfile(storedProfile);
+        if (storedProfile && storedProfile.username) {
+            setUsername(storedProfile.username);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (teamno && username) {
+            fetchDrives();
+        }
+    }, [refresh, teamno, username]);
 
     const fetchDrives = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/drive/list/${teamno}`);
+            const response = await axios.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
             setDrives(response.data);
         } catch (error) {
             console.error('Failed to fetch drives', error);

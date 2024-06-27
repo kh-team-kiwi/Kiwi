@@ -87,6 +87,14 @@ public class FileDriveService {
                 .collect(Collectors.toList());
     }
 
+    public List<FileDriveDTO> listDrivesByUserAndTeam(String memberId, String team) {
+        List<DriveUsers> driveUsers = driveUsersRepository.findByMemberIdAndTeam(memberId, team);
+        List<String> driveCodes = driveUsers.stream().map(DriveUsers::getDriveCode).collect(Collectors.toList());
+        return fileDriveRepository.findAllById(driveCodes).stream()
+                .map(fileDrive -> new FileDriveDTO(fileDrive.getDriveCode(), fileDrive.getDriveName(), fileDrive.getTeam()))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void deleteDrive(String driveCode) {
         // 드라이브 정보 조회

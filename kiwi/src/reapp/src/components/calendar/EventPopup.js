@@ -11,7 +11,7 @@ import axiosHandler from "../../jwt/axiosHandler";
 import { useLocation } from "react-router-dom";
 import EditPopup from '../calendar/EditPopup';
 
-const EventPopup = ({ event, position, onClose }) => {
+const EventPopup = ({ event, position, onClose, setEvents }) => {
   const { t, i18n } = useTranslation();
   const popupRef = useRef(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -189,6 +189,7 @@ const EventPopup = ({ event, position, onClose }) => {
         event={event} 
         isOpen={isEditModalOpen} 
         onClose={() => setEditModalOpen(false)}
+        setEvents={setEvents}
       />
     </div>
   );

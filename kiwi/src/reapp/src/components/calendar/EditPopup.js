@@ -50,8 +50,8 @@ const EditPopup = ({ event, isOpen, onClose, setEvents }) => {
       title,
       description,
       location,
-      startDate: new Date(startDate).toISOString(),
-      endDate: new Date(endDate).toISOString(),
+      startDate: startDate,
+      endDate: endDate,
       calendar,
       color: selectedColor
     };

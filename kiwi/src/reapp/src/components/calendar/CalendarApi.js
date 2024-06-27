@@ -199,6 +199,7 @@ const CalendarApi = ({ events, addEvent, calendars, setSelectedCalendar, selecte
           event={selectedEvent}
           position={clickPosition}
           onClose={closePopup}
+          setEvents={setEvents}
         />
       )}
     </div>
