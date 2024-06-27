@@ -21,6 +21,15 @@ public class ChatUsers {
     @Column(name = "chat_admin", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int chatAdmin;
 
+    public ChatUsers() {
+    }
+
+    public ChatUsers(int chatNum, String memberId) {
+        this.id = new ChatUsersId(chatNum, memberId);
+        this.chatTime = LocalDateTime.now();
+        this.chatAdmin = 0; // Default value
+    }
+
     @Embeddable
     public static class ChatUsersId {
         @Column(name = "chat_num", nullable = false)
@@ -28,6 +37,14 @@ public class ChatUsers {
 
         @Column(name = "member_id", nullable = false, length = 320)
         private String memberId;
+
+        public ChatUsersId() {
+        }
+
+        public ChatUsersId(int chatNum, String memberId) {
+            this.chatNum = chatNum;
+            this.memberId = memberId;
+        }
 
         // Getters and Setters
         public int getChatNum() {

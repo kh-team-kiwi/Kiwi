@@ -23,4 +23,9 @@ public class ChatUserController {
     public List<Member> getUsersByTeam(@RequestParam String team) {
         return chatUserService.getUsersInTeam(team);
     }
+
+    @PostMapping("/{chatNum}/invite")
+    public void inviteUserToChat(@PathVariable int chatNum, @RequestBody Member member) {
+        chatUserService.addChatUser(chatNum, member.getMemberId());
+    }
 }
