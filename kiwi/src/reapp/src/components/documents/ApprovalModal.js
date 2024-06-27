@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../styles/components/documents/ApprovalModal.css';
 
-const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, approvalAction, setApprovalAction, approvalReason, setApprovalReason }) => {
+const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, approvalAction, setApprovalAction }) => {
     if (!isOpen) return null;
 
     return (
