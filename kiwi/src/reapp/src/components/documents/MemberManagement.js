@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MemberForm from './MemberForm';
 import '../../styles/components/documents/MemberManagement.css';
+import axiosHandler from "../../jwt/axiosHandler";
 
 const MemberManagement = () => {
     const [members, setMembers] = useState([]);
@@ -15,7 +16,7 @@ const MemberManagement = () => {
 
     const fetchMembers = async () => {
         try {
-            const response = await axios.get('/api/members/details');
+            const response = await axiosHandler.get('/api/members/details');
             setMembers(response.data);
         } catch (error) {
             console.error("회원 정보를 불러오는데 실패하였습니다.", error);
@@ -25,10 +26,10 @@ const MemberManagement = () => {
     const handleSave = async (member) => {
         try {
             if (selectedMember) {
-                await axios.put(`/api/members/details/${member.employeeNo}`, member);
+                await axiosHandler.put(`/api/members/details/${member.employeeNo}`, member);
                 setMessage('수정되었습니다.'); // 수정 메시지 설정
             } else {
-                await axios.post('/api/members/details', member);
+                await axiosHandler.post('/api/members/details', member);
                 setMessage('생성되었습니다.'); // 생성 메시지 설정
             }
             fetchMembers();
@@ -41,7 +42,7 @@ const MemberManagement = () => {
 
     const handleDelete = async (employeeNo) => {
         try {
-            await axios.delete(`/api/members/details/${employeeNo}`);
+            await axiosHandler.delete(`/api/members/details/${employeeNo}`);
             fetchMembers();
             setSelectedMember(null);
             setMessage('삭제되었습니다.');

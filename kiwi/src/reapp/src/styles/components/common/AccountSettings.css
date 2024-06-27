@@ -1,0 +1,62 @@
+.account-settings-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+  }
+  
+  .account-settings-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .account-settings-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .account-settings-profile-picture {
+    margin-right: 20px;
+  }
+  
+  .account-settings-profile-preview {
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .account-settings-placeholder {
+    width: 50px;
+    height: 50px;
+    background: gray;
+    border-radius: 50%;
+  }
+  
+  .account-settings-info p {
+    margin: 0;
+  }
+  
+  .account-settings-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .account-settings-actions {
+    margin-top: 20px;
+  }
+  
+  button {
+    margin-right: 10px;
+  }
+  

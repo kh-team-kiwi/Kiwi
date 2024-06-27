@@ -11,6 +11,9 @@ import Logo from '../components/common/Logo';
 
 import EmptyIcon from '../images/empty.png';
 
+import AccountSettings from '../components/common/AccountSettings';
+
+
 
 import '../styles/pages/Home.css';
 import {getSessionItem, removeLocalItem, removeSessionItem, setSessionItem} from "../jwt/storage";
@@ -38,6 +41,11 @@ const Home = () => {
     const [hideCreateTeam, setHideCreateTeam] = useState(false);
 
     const [teamName, setTeamName] = useState('');
+
+    const [accountSettingsOpen, setAccountSettingsOpen] = useState(false);
+
+    const openAccountSettings = () => setAccountSettingsOpen(true);
+    const closeAccountSettings = () => setAccountSettingsOpen(false);
   
     const toggleTeamView = () => {
         const teamCount = teams.length;
@@ -134,6 +142,8 @@ const Home = () => {
             <Logo/>
 
             <ToggleLanguageButton/>
+                <AccountSettings isOpen={accountSettingsOpen} onClose={closeAccountSettings} />
+
 
                 <div className={`home-user-container ${userDropdown ? 'active' : ''}`}>
                     <div className='home-user-details'  onClick={toggleUserDropdown}>
@@ -159,9 +169,9 @@ const Home = () => {
                                 {t('notifications')}
                             </div>
 
-                            <div className='home-user-dropdown-settings' >
+                            <div className='home-user-dropdown-settings'onClick={openAccountSettings} >
                                 <SettingsIcon className='home-user-dropdown-icon' />
-                                {t('settings')}
+                                {t('account-settings')}
                             </div>
                             </div>
 
@@ -206,17 +216,22 @@ const Home = () => {
     ) : (
         <div className="home-team-list" >
             {teams.map(team => (
-                <div key={team.team} className="team-item" onClick={()=>navigate(`/team/${team.team}`)}>
+                <div key={team.team} className="team-item">
                     <img className='home-team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
                     <div className='home-team-info'>
                         <div>
                             <div className='home-team-name'>{team.teamName}</div>
-                            <u className='home-team-num'>{team.team}</u>
-                            <div className='home-team-members'><span className='home-team-owner'>{t('owner')}</span><span className='home-team-member'>&nbsp;{team.teamAdminMemberId}</span></div>
+                            {/* <u className='home-team-num'>{team.team}</u> */}
+                            <div className='home-team-owner-container'>
+                                <span className='home-team-owner'>{t('owner')}</span>
+                                <span className='home-team-owner-name'>&nbsp;{team.teamAdminMemberId}</span>
+                            </div>
+                            <div className='home-team-count'>{t('members')}:&nbsp;{team.teamCount}</div>
+
+
                         </div>
                     </div>
                     <div className='home-team-buttons'>
-                        <div className='home-team-count'>{"participant : "}{team.teamCount}</div>
                         <button className='home-team-settings'>
                             <SettingsIcon className="home-settings-icon"/>
                         </button>

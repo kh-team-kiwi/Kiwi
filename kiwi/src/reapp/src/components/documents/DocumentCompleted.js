@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import axiosHandler from "../../jwt/axiosHandler";
 
 const DocumentCompleted = ({ onDocumentClick }) => {
     const [documents, setDocuments] = useState([]);
@@ -33,7 +34,7 @@ const DocumentCompleted = ({ onDocumentClick }) => {
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const response = await axios.get('/documents/completed');
+                const response = await axiosHandler.get('/documents/completed');
                 const filteredDocuments = response.data.filter(doc =>
                     doc.approvalLines.some(line => line.employeeNo === employeeNo) ||
                     doc.references.some(ref => ref.employeeNo === employeeNo)

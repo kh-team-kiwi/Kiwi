@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import '../../styles/components/documents/NewDocument.css';
+import axiosHandler from "../../jwt/axiosHandler";
 
 const NewDocument = () => {
     const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
@@ -123,7 +124,7 @@ const NewDocument = () => {
                 formData.append('attachment', newDocument.attachment);
             }
 
-            const response = await axios.post('/documents', formData, {
+            const response = await axiosHandler.post('/documents', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

@@ -20,11 +20,6 @@ const ApprovalModal = ({ isOpen, onRequestClose, onSubmit, approvalAction, setAp
                         반려
                     </label>
                 </div>
-                <textarea
-                    placeholder="사유를 입력하세요."
-                    value={approvalReason}
-                    onChange={(e) => setApprovalReason(e.target.value)}
-                />
                 <h2>결재하시겠습니까?</h2>
                 <div className="modalActions">
                     <button className="confirmButton" onClick={onSubmit}>확인</button>

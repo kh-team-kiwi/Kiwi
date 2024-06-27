@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import '../../styles/components/documents/ApprovalLineModal.css';
+import axiosHandler from "../../jwt/axiosHandler";
 
 const ApprovalLineModal = ({ onSave, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -16,7 +16,7 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     const fetchMembers = async () => {
         try {
             // 백엔드 API 호출을 통해 멤버 목록을 가져옵니다.
-            const response = await axios.get('/api/members/details');
+            const response = await axiosHandler.get('/api/members/details');
             const fetchedMembers = response.data.map(member => ({
                 id: member.employeeNo, // 유니크한 식별자 사용
                 name: member.name,
