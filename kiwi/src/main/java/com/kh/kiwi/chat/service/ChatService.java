@@ -6,6 +6,8 @@ import com.kh.kiwi.chat.entity.ChatUsers;
 import com.kh.kiwi.chat.entity.ChatUsers.ChatUsersId;
 import com.kh.kiwi.chat.repository.ChatRepository;
 import com.kh.kiwi.chat.repository.ChatUsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
+    private static final Logger log = LoggerFactory.getLogger(ChatService.class);
+
     @Autowired
     private ChatRepository chatRepository;
     @Autowired
@@ -36,6 +41,16 @@ public class ChatService {
 
     public List<Chat> getChatsByTeam(String team) {
         return chatRepository.findByTeam(team);
+    }
+
+    public List<Chat> getChatsByTeamAndMember(String team, String memberId) {
+        log.info("Fetching chat rooms for team: {} and member: {}", team, memberId);
+        List<ChatUsers> chatUsersList = chatUsersRepository.findByMemberId(memberId);
+        List<Integer> chatNums = chatUsersList.stream()
+                .map(chatUser -> chatUser.getId().getChatNum())
+                .collect(Collectors.toList());
+        log.info("Chat rooms the user belongs to: {}", chatNums);
+        return chatRepository.findByTeamAndChatNumIn(team, chatNums);
     }
 
     public Chat createChatWithUsers(CreateChatRequest request) {
@@ -80,7 +95,7 @@ public class ChatService {
     }
 
     private void createS3Folder(String team, Integer chatNum) {
-        String folderName =  team + "/chat/" + chatNum + "/";
+        String folderName = team + "/chat/" + chatNum + "/";
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(folderName)

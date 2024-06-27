@@ -22,8 +22,8 @@ public class ChatController {
     }
 
     @GetMapping
-    public List<Chat> getChatsByTeam(@RequestParam String team) {
-        return chatService.getChatsByTeam(team);
+    public List<Chat> getChatsByTeam(@RequestParam String team, @RequestParam String memberId) {
+        return chatService.getChatsByTeamAndMember(team, memberId);
     }
 
     @PostMapping("/createWithUsers")

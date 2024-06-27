@@ -10,7 +10,7 @@ import '../styles/pages/Chat.css';
 import { useParams } from "react-router-dom";
 
 const Chat = () => {
-        const { teamno } = useParams();
+    const { teamno } = useParams();
     const [selectedChatNum, setSelectedChatNum] = useState(null);
     const [selectedChatName, setSelectedChatName] = useState("");
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
@@ -54,11 +54,21 @@ const Chat = () => {
         }
     };
 
+    const handleInvite = async (member) => {
+        try {
+            const response = await axios.post(`/api/chat/${selectedChatNum}/invite`, { memberId: member.id });
+            console.log('사용자 초대 성공:', response.data);
+            setRefreshChatList(prev => !prev); // Refresh chat list or chat members
+        } catch (error) {
+            console.error('사용자 초대 중 오류 발생:', error);
+        }
+    };
+
     return (
         <>
             <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} />
             <div className='content-container-chat'>
-                <ChatHeader chatName={selectedChatName} />
+                <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} />
                 <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
                 {selectedChatNum ? (
                     <ChatRoom chatNum={selectedChatNum} />
