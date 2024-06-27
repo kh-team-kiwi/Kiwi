@@ -28,4 +28,9 @@ public class ChatUserController {
     public void inviteUserToChat(@PathVariable int chatNum, @RequestBody Member member) {
         chatUserService.addChatUser(chatNum, member.getMemberId());
     }
+
+    @PostMapping("/{chatNum}/leave")
+    public void leaveChat(@PathVariable int chatNum, @RequestBody Member member) {
+        chatUserService.removeChatUser(chatNum, member.getMemberId());
+    }
 }

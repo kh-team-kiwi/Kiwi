@@ -2,10 +2,12 @@ package com.kh.kiwi.team.service;
 
 import com.kh.kiwi.auth.dto.MemberDto;
 import com.kh.kiwi.team.dto.*;
+import com.kh.kiwi.team.entity.Company;
 import com.kh.kiwi.team.entity.Group;
 import com.kh.kiwi.team.entity.GroupId;
 import com.kh.kiwi.team.entity.Team;
 import com.kh.kiwi.team.mapper.TeamMapper;
+import com.kh.kiwi.team.repository.CompanyRepository;
 import com.kh.kiwi.team.repository.GroupRepository;
 import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final GroupRepository groupRepository;
     private final TeamMapper teamMapper;
+    private final CompanyRepository companyRepository;
 
     @Transactional
     public ResponseTeamDto createTeam(String memberId, TeamCreateRequest tcdto) {
@@ -42,7 +45,10 @@ public class TeamService {
         group.setMemberId(team.getTeamAdminMemberId());
         group.setRole("OWNER");
 
-        try{
+        // Company entity 생성 및 저장
+        Company company = new Company(team.getTeamName());
+        try {
+            companyRepository.save(company);
             teamRepository.save(team);
             groupRepository.save(group);
 
@@ -55,10 +61,10 @@ public class TeamService {
                 groupRepository.save(invite);
             });
 
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             return ResponseTeamDto.setFailed("데이터베이스 연결에 실패했습니다.");
         }
-        return ResponseTeamDto.setSuccessData("팀생성에 성공했습니다.",team);
+        return ResponseTeamDto.setSuccessData("팀생성에 성공했습니다.", team);
     }
 
     public ResponseTeamDto deleteTeam(Team dto, String teamno) {

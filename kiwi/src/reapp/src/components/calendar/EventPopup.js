@@ -130,10 +130,15 @@ const EventPopup = ({ event, position, onClose, setEvents }) => {
     }
   }
 
+  const handleEditPopupClose = () => {
+    setEditModalOpen(false);
+    onClose();
+  };
+
   return (
     <div ref={popupRef} className="event-popup-container" style={{ backgroundColor }}>
       <div className='event-popup-top'>
-        <div className='event-popup-delete-container' onClick={()=>handleScheduleDelete(event)}>
+        <div className='event-popup-delete-container' onClick={() => handleScheduleDelete(event)}>
           <DeleteIcon className='event-popup-delete' />
         </div>
         <div className='event-popup-edit-container' onClick={() => setEditModalOpen(true)}>
@@ -195,9 +200,8 @@ const EventPopup = ({ event, position, onClose, setEvents }) => {
       <EditPopup 
         event={event} 
         isOpen={isEditModalOpen} 
-        onClose={() => setEditModalOpen(false)}
+        onClose={handleEditPopupClose}
         setEvents={setEvents}
-        onCloseClose={onClose}
       />
     </div>
   );

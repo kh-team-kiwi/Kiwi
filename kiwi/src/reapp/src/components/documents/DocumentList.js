@@ -49,7 +49,7 @@ const DocumentList = ({ onDocumentClick }) => {
         }
     }, [employeeNo]);
 
-    if (loading) return <p>문서를 불러오는 중...</p>;
+    if (loading) return <p>문서를 작성해주세요...</p>;
     if (error) return <p>{error}</p>;
 
     return (

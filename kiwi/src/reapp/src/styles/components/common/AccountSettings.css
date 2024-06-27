@@ -17,42 +17,44 @@
     border-radius: 5px;
     max-width: 500px;
     width: 100%;
-  }
-  
-  .account-settings-profile {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+    position: relative;
   }
   
   .account-settings-profile-picture {
-    margin-right: 20px;
-  }
-  
-  .account-settings-profile-preview {
-    display: block;
+    position: relative;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
+    margin: 0 auto 20px auto;
+    text-align: center;
   }
   
+  .account-settings-profile-preview,
   .account-settings-placeholder {
     width: 50px;
     height: 50px;
-    background: gray;
     border-radius: 50%;
+    background-color: gray;
+    display: inline-block;
   }
   
-  .account-settings-info p {
-    margin: 0;
+  .account-settings-upload-button {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .account-settings-upload-button:hover {
+    background-color: #0056b3;
   }
   
   .account-settings-form-group {
     margin-bottom: 15px;
   }
-  
-  .account-settings-actions {
-    margin-top: 20px;
-  }
-  
