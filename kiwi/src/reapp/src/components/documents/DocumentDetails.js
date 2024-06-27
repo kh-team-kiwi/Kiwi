@@ -222,7 +222,7 @@ const DocumentDetails = ({ document, onClose }) => {
     const handleDeleteDoc = async () => {
         try {
             await axios.delete(`http://localhost:8080/documents/${document.docNum}`);
-            onClose(); // 문서 삭제 후 페이지를 닫음
+            window.location.reload();
         } catch (error) {
             setError('문서 삭제에 실패하였습니다.');
         }

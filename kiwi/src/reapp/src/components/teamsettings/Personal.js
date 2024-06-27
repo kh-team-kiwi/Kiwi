@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import '../../styles/components/teamsettings/Personal.css'
 import {TeamContext} from "../../context/TeamContext";
 import axiosHandler from "../../jwt/axiosHandler";
@@ -9,17 +9,18 @@ const Personal = () => {
     const { teamno } = useParams();
     const navigate = useNavigate();
 
+
+
     const handleLeaveTeam = async () => {
         const dto = {
             memberId : getSessionItem("profile").username,
             team : teamno
         }
         try{
-            console.log(dto);
             const res = await axiosHandler.post("/api/team/leaveTeam",dto);
-            if(res.data.results){
+            if(res.data.result){
                 alert(res.data.message);
-                navigate("/home");
+                navigate('/home',{replace:true});
             } else {
                 alert(res.data.message);
             }
