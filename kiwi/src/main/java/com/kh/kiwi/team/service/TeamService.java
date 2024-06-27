@@ -13,6 +13,8 @@ import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -121,6 +123,10 @@ public class TeamService {
         }
 
         return ResponseDto.setSuccess("성공적으로 팀을 나왔습니다.");
+    }
+
+    public String getRole(String teamno, String memberId) {
+        return groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build()).get().getRole();
     }
 
 }

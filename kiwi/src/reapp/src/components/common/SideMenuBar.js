@@ -1,26 +1,57 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import '../../styles/components/common/SideMenuBar.css';
 import {useLocation, useNavigate} from "react-router-dom";
 import MemberManageIcon from "../../images/svg/settings/MemberManageIcon";
 import PersonalManageIcon from "../../images/svg/settings/PersonalManageIcon";
 import TeamManageIcon from "../../images/svg/settings/TeamManageIcon";
+import {getSessionItem} from "../../jwt/storage";
+import {TeamContext} from "../../context/TeamContext";
 
 const SideMenuBar = () => {
+
     const location = useLocation();
-    const items = [
-        {
-            name:"개인 설정",
-            url:"/personal-manage"
-        },
-        {
-            name:"멤버 관리",
-            url:"/member-manage"
-        },
-        {
-            name:"팀 관리",
-            url:"/team-manage"
+    const {role} = useContext(TeamContext);
+
+    const getItems = () => {
+        console.log(role)
+        switch (role) {
+            case 'MEMBER':
+                return [{
+                    name: "개인 설정",
+                    url: "/personal-manage"
+                }];
+            case 'ADMIN':
+                return [
+                    {
+                        name: "개인 설정",
+                        url: "/personal-manage"
+                    },
+                    {
+                        name: "멤버 관리",
+                        url: "/member-manage"
+                    }
+                ];
+            case 'OWNER':
+                return [
+                    {
+                        name: "개인 설정",
+                        url: "/personal-manage"
+                    },
+                    {
+                        name: "멤버 관리",
+                        url: "/member-manage"
+                    },
+                    {
+                        name: "팀 관리",
+                        url: "/team-manage"
+                    }
+                ];
+            default:
+                return [];
         }
-    ];
+    };
+
+    const [items, setItems] = useState(getItems());
     const [selected, setSelected] = useState(
         items.find(item => location.pathname.endsWith(item.url)) || {}
     );

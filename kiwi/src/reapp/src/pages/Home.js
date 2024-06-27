@@ -92,7 +92,7 @@ const Home = () => {
         };
     }, []);
 
-    const [teams, setTeams] = useContext(TeamContext);
+    const {teams, setTeams} = useContext(TeamContext);
 
     const fetchTeams = async () => {
         const memberId = getSessionItem("profile").username;
@@ -102,6 +102,8 @@ const Home = () => {
                 console.log("home.js > fetchTeams : ",res.data);
                 setTeams(res.data);
                 setSessionItem("teams",res.data);
+            } else {
+                console.log(res);
             }
         } catch (error) {
             console.error('Error fetching teams:', error);

@@ -19,7 +19,7 @@ import ChineseFlag from '../../images/svg/flags/ChineseFlag';
 
 
 const Header = () => {
-  const [teams, setTeams] = useContext(TeamContext);
+  const { teams, setTeams, joinTeam} = useContext(TeamContext);
   const { teamno } = useParams();
 
   const [activePage, setActivePage] = useState(null);
@@ -53,14 +53,32 @@ const Header = () => {
       if (res.status === 200) {
         setTeams(res.data);
         setSessionItem("teams", res.data);
+      } else {
+        console.log(res);
       }
     } catch (error) {
       console.error('Error fetching teams:', error);
     }
   };
 
+  async function fetchRole(){
+    const memberId = getSessionItem("profile").username;
+    try {
+      const res = await axiosHandler.get(`/api/team/getRole/team/${teamno}/member/${memberId}`);
+      if(res.status===200){
+        console.log(res)
+        joinTeam(res.data);
+      } else {
+        console.log(res);
+      }
+    } catch (e) {
+      console.error('Error fetchRole:', e);
+    }
+  }
+
   useEffect(() => {
     fetchTeams();
+    fetchRole();
   }, []);
 
   useEffect(() => {

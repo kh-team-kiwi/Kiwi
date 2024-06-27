@@ -36,4 +36,9 @@ public class TeamController {
         return teamService.leaveTeam(dto);
     }
 
+    @GetMapping("/getRole/team/{teamno}/member/{memberId}")
+    public String getRole(@PathVariable String teamno, @PathVariable String memberId) {
+        return teamService.getRole(teamno,memberId);
+    }
+
 }
