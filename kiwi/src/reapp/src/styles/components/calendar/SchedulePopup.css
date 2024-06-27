@@ -15,7 +15,7 @@
   }
 }
 
-.popup-container {
+.schedule-popup-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,7 +28,7 @@
   animation: fadeIn 0.2s ease-out; 
 }
 
-.popup-content {
+.schedule-popup-content {
   position: absolute;
   background-color: var(--white);
   padding: 20px;

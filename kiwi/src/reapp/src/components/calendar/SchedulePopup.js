@@ -186,8 +186,8 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
         &nbsp;{t('create')}
       </button>
       {isOpen && (
-        <div className="popup-container">
-          <div className="popup-content" ref={popupRef}>
+        <div className="schedule-popup-container">
+          <div className="schedule-popup-content" ref={popupRef}>
             {/* <div className="close-button" onClick={closePopup}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M18.71 5.29a1 1 0 0 0-1.42 0L12 10.59 7.71 6.29a1 1 0 0 0-1.42 1.42L10.59 12 6.29 16.29a1 1 0 0 0 1.42 1.42L12 13.41l4.29 4.3a1 1 0 0 0 1.42-1.42L13.41 12l4.3-4.29a1 1 0 0 0 0-1.42z"/>
