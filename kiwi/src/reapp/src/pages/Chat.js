@@ -64,12 +64,24 @@ const Chat = () => {
         }
     };
 
+    const handleLeaveChat = async (chatNum) => {
+        try {
+            const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId: '로그인된 유저의 ID' });
+            console.log('채팅방 나가기 성공:', response.data);
+            setSelectedChatNum(null);
+            setSelectedChatName("");
+            setRefreshChatList(prev => !prev); // Refresh chat list
+        } catch (error) {
+            console.error('채팅방 나가기 중 오류 발생:', error);
+        }
+    };
+
     return (
         <>
             <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} />
             <div className='content-container-chat'>
                 {selectedChatNum && (
-                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} />
+                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} />
                 )}
                 {!selectedChatNum && (
                     <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
