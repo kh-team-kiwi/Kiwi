@@ -122,8 +122,10 @@ const Home = () => {
         if (response.status === 200) {
             removeLocalItem("accessToken");
             removeSessionItem("profile");
+            removeSessionItem("teams");
+            removeSessionItem("events");
             localStorage.getItem("")
-            navigate('/');
+            navigate('/', {replace:true});
         }
     }
 

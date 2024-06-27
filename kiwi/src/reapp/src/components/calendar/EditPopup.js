@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import axiosHandler from "../../jwt/axiosHandler";
 import {useLocation} from "react-router-dom";
 
-const EditPopup = ({ event, isOpen, onClose }) => {
+const EditPopup = ({ event, isOpen, onClose, setEvents }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [location, setLocation] = useState(event.location);
@@ -14,7 +14,6 @@ const EditPopup = ({ event, isOpen, onClose }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const locate = useLocation();
-
 
   const presetColors = [
     '#FF6F61', // Modern Red
@@ -31,34 +30,46 @@ const EditPopup = ({ event, isOpen, onClose }) => {
 
   const [selectedColor, setSelectedColor] = useState(event.color);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
+    console.log("handleSave : ");
+
     const updatedEvent = {
       ...event,
       title,
       description,
       location,
-      startDate: new Date(startDate).toISOString(),
-      endDate: new Date(endDate).toISOString(),
+      startDate: startDate,
+      endDate: endDate,
       calendar,
       color: selectedColor
     };
-    //handleScheduleEdit();
+    console.log("before",updatedEvent);
+    try {
+      const response = await axiosHandler.post("/api" + locate.pathname + "/update", updatedEvent);
+      if (response.data.result) {
+        const data = response.data.data;
+        console.log("after",data);
+        setEvents((prevEvents) => ({
+          ...prevEvents,
+          [data.calendar]: prevEvents[data.calendar].map(event =>
+              event.scheduleNo === data.scheduleNo ? data : event)
+        }));
+
+        onClose();
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error("Failed to fetch schedule:", error);
+    }
+
   };
 
   if (!isOpen) return null;
 
   const handleScheduleEdit = async (updatedEvent) => {
-    console.log("handleScheduleEdit : ", updatedEvent);
-    try {
-      const response = await axiosHandler.post("/api" + locate.pathname + "/update", { updatedEvent });
-      const data = response.data.data;
-      if (data) {
-        // setEvents(data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch schedule:", error);
-    }
+
   }
 
   return (
