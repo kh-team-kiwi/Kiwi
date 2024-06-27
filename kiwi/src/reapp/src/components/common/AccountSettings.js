@@ -23,29 +23,34 @@ const AccountSettings = ({ isOpen, onClose }) => {
         <h2>Account Settings</h2>
         <div className="account-settings-profile-picture">
           {profilePicture ? (
-            <img src={profilePicture} alt="Profile Preview" className="account-settings-profile-preview" />
+              <img src={profilePicture} alt="Profile Preview" className="account-settings-profile-preview"/>
           ) : (
-            <div className="account-settings-placeholder"></div>
+              <div className="account-settings-placeholder"></div>
           )}
-          <button className="account-settings-upload-button" onClick={() => document.getElementById('fileInput').click()}>
+          <button className="account-settings-upload-button"
+                  onClick={() => document.getElementById('fileInput').click()}>
             Upload
           </button>
           <input
-            id="fileInput"
-            type="file"
-            style={{ display: 'none' }}
-            onChange={handleProfilePictureChange}
+              id="fileInput"
+              type="file"
+              style={{display: 'none'}}
+              onChange={handleProfilePictureChange}
           />
         </div>
         <div className="account-settings-form-group">
           <label>Name:</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+          <button onClick={handleSave}>Save</button>
         </div>
         <div className="account-settings-form-group">
           <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <button onClick={handleSave}>Save</button>
         </div>
-        <button onClick={handleSave}>Save</button>
+        <div>
+          <button onClick={""}>Delete Account</button>
+        </div>
         <button onClick={onClose}>Cancel</button>
       </div>
     </div>

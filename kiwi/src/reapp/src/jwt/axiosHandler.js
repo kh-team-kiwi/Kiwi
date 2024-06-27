@@ -30,46 +30,45 @@ axiosHandler.interceptors.request.use(
 
 // 응답 인터셉터 추가
 axiosHandler.interceptors.response.use(
-    response => {
+    (response) => {
         // 응답 데이터 가공 등 작업
         return response;
     },
-    error => {
-
+    async (error) => {
         const originalRequest = error.config;
 
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
 
-            axios.post('/api/auth/reissue', { withCredentials: true })
-                .then(response => {
+            try {
+                const response = await axios.post('/api/auth/reissue', { withCredentials: true });
+                const accessToken = response.headers['access'];
+                console.log('axiosHandler.interceptors.response : ' + accessToken);
 
-                    const accessToken = response.headers['access'];
-                    console.log("axiosHandler.interceptors.response : "+ accessToken);
-
-                    if (accessToken) {
-                        setLocalItem('accessToken', accessToken);
-                        // 새로운 액세스 토큰을 얻은 후 원래 요청을 재시도
-                        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-                        return axiosHandler(originalRequest);
-                    } else {
-                        console.error('Access Token not found in response headers')
-                        alert("서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.");
-                        removeLocalItem("accessToken");
-                        removeSessionItem("profile");
-                        window.location.replace('/');
-                        return;
-                    }
-                })
-                .catch(error => {
-                    if (error.response && error.response.status === 400) {
-                        console.error('Refresh Token is invalid')
-                        alert("토큰이 만료 되었습니다. 다시 로그인해 주세요.");
-                        removeLocalItem("accessToken");
-                        removeSessionItem("profile");
-                        window.location.replace('/');
-                        return;
-                    }
-                });
+                if (accessToken) {
+                    setLocalItem('accessToken', accessToken);
+                    // 새로운 액세스 토큰을 얻은 후 원래 요청을 재시도
+                    originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                    return axiosHandler(originalRequest);
+                } else {
+                    console.error('Access Token not found in response headers');
+                    alert('서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.');
+                    removeLocalItem('accessToken');
+                    removeSessionItem('profile');
+                    window.location.replace('/');
+                    return Promise.reject(new Error('Access Token not found'));
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 400) {
+                    console.error('Refresh Token is invalid');
+                    alert('토큰이 만료 되었습니다. 다시 로그인해 주세요.');
+                    removeLocalItem('accessToken');
+                    removeSessionItem('profile');
+                    window.location.replace('/');
+                    return Promise.reject(new Error('Refresh Token is invalid'));
+                }
+                return Promise.reject(error);
+            }
         }
 
         return Promise.reject(error);
