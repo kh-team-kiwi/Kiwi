@@ -62,6 +62,8 @@ public class MessageChatnumService {
 
         messageChatnum.setChatTime(LocalDateTime.now());
         messageChatnum.setChatContent(message.getContent());
+        messageChatnum.setChatRef(message.getReplyToMessageNum() != null);
+        messageChatnum.setChatRefMessageNum(message.getReplyToMessageNum());
 
         messageChatnumRepository.save(messageChatnum);
 
@@ -95,6 +97,11 @@ public class MessageChatnumService {
             chatMessage.setChatContent(message.getChatContent());
             chatMessage.setMemberNickname(message.getMember().getMemberNickname());
             chatMessage.setMessageNum(message.getMessageNum());
+            if (message.getChatRef()) {
+                MessageChatnum refMessage = messageChatnumRepository.findById(message.getChatRefMessageNum())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + message.getChatRefMessageNum()));
+                chatMessage.setReplyTo(refMessage.getMember().getMemberNickname(), refMessage.getChatContent(), refMessage.getChatTime());
+            }
             return chatMessage;
         }).collect(Collectors.toList());
     }

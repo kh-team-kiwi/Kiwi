@@ -175,3 +175,18 @@ a {
 .file-preview button:hover {
     color: darkred;
 }
+
+.reply-original {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f9f9f9;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.reply-content {
+    margin-top: 5px;
+    font-size: 1em;
+    color: #333;
+}

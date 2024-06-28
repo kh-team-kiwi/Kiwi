@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../../styles/components/chat/chatcontent/reactionMenu.css';
 
 const ReactionMenu = ({ onClickReaction, isOwnMessage }) => {
