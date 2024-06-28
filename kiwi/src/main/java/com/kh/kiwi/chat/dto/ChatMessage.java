@@ -10,23 +10,18 @@ public class ChatMessage {
     public enum MessageType {
         CHAT,
         JOIN,
-        LEAVE,
-        COMMENT // 댓글 타입 추가
+        LEAVE
     }
 
     private MessageType type;
     private String content;
-    private String sender; // Member ID
-    private Integer chatNum;
+    private String sender; // 작성자 아이디
+    private Integer chatNum; //채팅방 번호
     private LocalDateTime chatTime;
     private List<FileInfo> files;
     private String chatContent;
     private String memberNickname; // 추가된 필드
-    private Boolean chatRef = false; // 댓글 여부
-    private String chatRefMessageNum; // 참조 메시지 번호
-    private String replyToMessageNum; // 참조 메시지 작성자
-    private String replyToMessageSender; // 참조 메시지 작성자
-    private String replyToMessageContent; // 참조 메시지 내용
+    private String messageNum; // 메세지 번호
 
     @Data
     public static class FileInfo {
