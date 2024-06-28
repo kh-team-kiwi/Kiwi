@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TeamService {
 
+
     private final TeamRepository teamRepository;
     private final GroupRepository groupRepository;
     private final TeamMapper teamMapper;
