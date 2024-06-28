@@ -16,4 +16,7 @@ public class MemberDto {
     private String username;
 
     private String filepath;
+
+    public MemberDto(String memberId, String memberNickname, String role) {
+    }
 }
