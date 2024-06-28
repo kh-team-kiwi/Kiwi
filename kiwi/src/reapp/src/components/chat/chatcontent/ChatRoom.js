@@ -27,10 +27,17 @@ const ChatRoom = ({ chatNum }) => {
     }, []);
 
     useEffect(() => {
+        if (!profile) return;
+
         const fetchMessages = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
-                setMessages(response.data);
+                const messagesWithUnreadCounts = await Promise.all(response.data.map(async (msg) => {
+                    const unreadCount = await fetchUnreadCount(chatNum, msg.messageNum);
+                    return { ...msg, unreadCount };
+                }));
+                setMessages(messagesWithUnreadCounts);
+                markMessagesAsRead(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -44,9 +51,11 @@ const ChatRoom = ({ chatNum }) => {
         client.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             stompClient.current = client;
-            client.subscribe(`/topic/chat/${chatNum}`, (msg) => {
+            client.subscribe(`/topic/chat/${chatNum}`, async (msg) => {
                 const newMessage = JSON.parse(msg.body);
-                setMessages(prevMessages => [...prevMessages, newMessage]);
+                const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
+                setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
+                markMessageAsRead(newMessage, profile.username);
             });
         }, (error) => {
             console.error('Connection error', error);
@@ -59,7 +68,47 @@ const ChatRoom = ({ chatNum }) => {
                 });
             }
         };
-    }, [chatNum]);
+    }, [chatNum, profile]);
+
+    const fetchUnreadCount = async (chatNum, messageNum) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching unread count:', error);
+            return 0;
+        }
+    };
+
+    const markMessagesAsRead = async (messages) => {
+        for (let msg of messages) {
+            await markMessageAsRead(msg, profile.username);
+        }
+    };
+
+    const markMessageAsRead = async (message, memberId) => {
+        if (!memberId) {
+            console.error('Member ID is null. Cannot mark message as read.');
+            return;
+        }
+
+        try {
+            await axios.post('http://localhost:8080/api/chat/message/read', {
+                messageNum: message.messageNum,
+                memberId: memberId
+            });
+
+            // Update the unread count immediately
+            const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
+            setMessages(prevMessages =>
+                prevMessages.map(msg =>
+                    msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
+                )
+            );
+        } catch (error) {
+            console.error('Error marking message as read:', error);
+        }
+    };
 
     const sendMessage = async () => {
         if (!message.trim() && files.length === 0) {
@@ -204,7 +253,7 @@ const ChatRoom = ({ chatNum }) => {
                             {msg.memberNickname}
                         </div>
                         <div className="message-content-container">
-                            <div className="message-content" style={{ whiteSpace: 'pre-wrap' }}>
+                            <div className="message-content">
                                 {msg.replyTo ? (
                                     <div className="reply-container">
                                         <div className="reply-original">
@@ -238,6 +287,7 @@ const ChatRoom = ({ chatNum }) => {
                                 ))}
                             </div>
                             <small className="message-time">{formatTime(msg.chatTime)}</small>
+                            <small className="unread-count">Unread: {msg.unreadCount}</small>
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
                                 isOwnMessage={msg.sender === profile.username} // 메시지의 작성자가 현재 사용자와 동일한지 확인

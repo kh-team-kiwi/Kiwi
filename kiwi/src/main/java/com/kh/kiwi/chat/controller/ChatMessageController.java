@@ -1,10 +1,12 @@
 package com.kh.kiwi.chat.controller;
 
 import com.kh.kiwi.chat.dto.ChatMessage;
+import com.kh.kiwi.chat.dto.MessageReadDto;
 import com.kh.kiwi.chat.service.MessageChatnumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +59,21 @@ public class ChatMessageController {
         String username = payload.get("username");
         log.info("Received request to delete message with ID: {} by user: {}", messageId, username);
         messageChatnumService.deleteMessageByIdAndUsername(messageId, username);
+    }
+
+    @PostMapping("/read")
+    public ResponseEntity<?> markMessageAsRead(@RequestBody MessageReadDto messageReadDto) {
+        if (messageReadDto.getMemberId() == null || messageReadDto.getMemberId().isEmpty()) {
+            return ResponseEntity.badRequest().body("Member ID is null or empty");
+        }
+
+        messageChatnumService.markMessageAsRead(messageReadDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/unreadCount/{chatNum}/{messageNum}")
+    public ResponseEntity<Integer> getUnreadCount(@PathVariable int chatNum, @PathVariable String messageNum) {
+        int unreadCount = messageChatnumService.getUnreadCount(chatNum, messageNum);
+        return ResponseEntity.ok(unreadCount);
     }
 }

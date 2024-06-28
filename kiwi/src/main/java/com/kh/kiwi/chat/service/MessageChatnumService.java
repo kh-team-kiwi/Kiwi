@@ -3,11 +3,12 @@ package com.kh.kiwi.chat.service;
 import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
 import com.kh.kiwi.chat.dto.ChatMessage;
-import com.kh.kiwi.chat.entity.Chat;
-import com.kh.kiwi.chat.entity.FileMessage;
-import com.kh.kiwi.chat.entity.MessageChatnum;
+import com.kh.kiwi.chat.dto.MessageReadDto;
+import com.kh.kiwi.chat.entity.*;
+import com.kh.kiwi.chat.repository.ChatUsersRepository;
 import com.kh.kiwi.chat.repository.FileMessageRepository;
 import com.kh.kiwi.chat.repository.MessageChatnumRepository;
+import com.kh.kiwi.chat.repository.MessageReadRepository;
 import com.kh.kiwi.chat.service.ChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,10 @@ public class MessageChatnumService {
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
+    @Autowired
+    private MessageReadRepository messageReadRepository;
+    @Autowired
+    private ChatUsersRepository chatUsersRepository;
 
     public void saveMessage(ChatMessage message) {
         MessageChatnum messageChatnum = new MessageChatnum();
@@ -159,5 +164,27 @@ public class MessageChatnumService {
 
         messageChatnumRepository.delete(message);
         log.info("Message with ID: {} deleted successfully", messageId);
+    }
+    public void markMessageAsRead(MessageReadDto messageReadDto) {
+        MessageReadId id = new MessageReadId(messageReadDto.getMessageNum(), messageReadDto.getMemberId());
+        if (!messageReadRepository.existsById(id)) {
+            MessageRead messageRead = new MessageRead();
+            messageRead.setId(id);
+            messageRead.setReadTime(LocalDateTime.now());
+            messageReadRepository.save(messageRead);
+        }
+    }
+    public int getChatRoomMemberCount(int chatNum) {
+        return chatUsersRepository.countMembersByIdChatNum(chatNum);
+    }
+
+    public int getMessageReadCount(String messageNum) {
+        return messageReadRepository.countByIdMessageNum(messageNum);
+    }
+
+    public int getUnreadCount(int chatNum, String messageNum) {
+        int totalMembers = getChatRoomMemberCount(chatNum);
+        int readMembers = getMessageReadCount(messageNum);
+        return totalMembers - readMembers;
     }
 }

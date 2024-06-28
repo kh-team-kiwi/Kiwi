@@ -2,10 +2,9 @@ package com.kh.kiwi.chat.repository;
 
 import com.kh.kiwi.chat.entity.ChatUsers;
 import com.kh.kiwi.chat.entity.ChatUsers.ChatUsersId;
-import jakarta.transaction.Transactional;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,8 +12,11 @@ public interface ChatUsersRepository extends JpaRepository<ChatUsers, ChatUsersI
     List<ChatUsers> findByIdChatNum(int chatNum);
 
     @Query("SELECT cu FROM ChatUsers cu WHERE cu.id.memberId = :memberId")
-    List<ChatUsers> findByMemberId(@Param("memberId") String memberId);
+    List<ChatUsers> findByMemberId(String memberId);
 
     @Transactional
     void deleteByIdChatNum(int chatNum);
+
+    @Query("SELECT COUNT(cu) FROM ChatUsers cu WHERE cu.id.chatNum = :chatNum")
+    int countMembersByIdChatNum(int chatNum);
 }

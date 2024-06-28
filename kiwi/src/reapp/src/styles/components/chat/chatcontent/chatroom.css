@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
+    position: relative; /* ReactionMenu 위치를 상대적으로 설정하기 위함 */
 }
 
 .message-sender {
@@ -91,9 +92,11 @@
     margin-bottom: 5px; /* 파일 사이에 간격 추가 */
     transition: background-color 0.3s;
 }
+
 a {
     text-decoration-line: none ;
 }
+
 .file-link {
     color: black;
 }
