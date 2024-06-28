@@ -16,6 +16,7 @@ const ChatRoom = ({ chatNum }) => {
     const [files, setFiles] = useState([]);
     const [showDeletePopup, setShowDeletePopup] = useState(false); // 추가
     const [selectedMessage, setSelectedMessage] = useState(null); // 추가
+    const [replyingTo, setReplyingTo] = useState(null); // 추가
     const stompClient = useRef(null);
     const fileInputRef = useRef();
     const textAreaRef = useRef();
@@ -71,7 +72,8 @@ const ChatRoom = ({ chatNum }) => {
                 content: message.trim(),
                 chatNum,
                 files: [],
-                type: 'CHAT'
+                type: replyingTo ? 'COMMENT' : 'CHAT',
+                replyToMessageNum: replyingTo ? replyingTo.messageNum : null
             };
 
             try {
@@ -93,6 +95,7 @@ const ChatRoom = ({ chatNum }) => {
 
                 setMessage('');
                 setFiles([]);
+                setReplyingTo(null); // 댓글 작성 후 초기화
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
@@ -163,22 +166,7 @@ const ChatRoom = ({ chatNum }) => {
 
     const handleReactionClick = async (reactionKey, message) => {
         if (reactionKey === 'comment') {
-            const comment = prompt('Enter your comment:');
-            if (comment) {
-                // Handle sending the comment
-                const commentMessage = {
-                    sender: profile.username,
-                    content: comment,
-                    chatNum,
-                    files: [],
-                    type: 'COMMENT',
-                    replyToMessageNum: message.messageNum,
-                };
-
-                if (stompClient.current && stompClient.current.connected) {
-                    stompClient.current.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(commentMessage));
-                }
-            }
+            setReplyingTo(message); // 댓글 대상 메시지 설정
         } else if (reactionKey === 'cross') {
             setSelectedMessage(message);
             setShowDeletePopup(true);
@@ -236,6 +224,12 @@ const ChatRoom = ({ chatNum }) => {
                                 {msg.chatContent.split('\n').map((line, i) => (
                                     <React.Fragment key={i}>{line}<br /></React.Fragment>
                                 ))}
+                                {msg.replyToMessageNum && (
+                                    <div className="reply-info">
+                                        <strong>{msg.replyToMessageSender}</strong>에게 댓글<br/>
+                                        <em>{msg.replyToMessageContent}</em>
+                                    </div>
+                                )}
                             </div>
                             <small className="message-time">{formatTime(msg.chatTime)}</small>
                             <ReactionMenu
@@ -255,6 +249,12 @@ const ChatRoom = ({ chatNum }) => {
                                 <button onClick={() => removeFile(index)}>X</button>
                             </div>
                         ))}
+                    </div>
+                )}
+                {replyingTo && (
+                    <div className="replying-to-info">
+                        <span><strong>{replyingTo.memberNickname}</strong>에게 댓글</span><br/>
+                        <span>{replyingTo.chatContent}</span>
                     </div>
                 )}
                 <textarea
