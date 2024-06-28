@@ -93,7 +93,8 @@
   "title": "제목",
   "cancel": "취소",
   "no-events": "표시할 이벤트가 없습니다",
-  "no-events-explanation": "다가오는 이벤트가 여기에 표시됩니다!"
+  "no-events-explanation": "다가오는 이벤트가 여기에 표시됩니다!",
+  "save": "저장"
 
 
 }

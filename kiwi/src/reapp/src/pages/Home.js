@@ -13,6 +13,7 @@ import EmptyIcon from '../images/empty.png';
 
 import AccountSettings from '../components/common/AccountSettings';
 
+import Popup from '../components/common/CongratulationsPopup';
 
 
 import '../styles/pages/Home.css';
@@ -32,6 +33,13 @@ import LogoutIcon from '../images/svg/buttons/LogoutIcon';
 
 
 const Home = () => {
+    const [isPopupOpen, setPopupOpen] = useState(false);
+
+    const openPopup = () => {
+        console.log('testt')
+        setPopupOpen(true)};
+    const closePopup = () => setPopupOpen(false);
+
     const { t } = useTranslation();
     const [userDropdown, setUserDropdown] = useState(false);
     const [welcomeStyle, setWelcomeStyle] = useState({ marginTop: '180px' });
@@ -167,7 +175,7 @@ const Home = () => {
                             <DownArrow />
                         </div>
                     </div>
-
+                    <Popup isOpen={isPopupOpen} onClose={closePopup} />
                     {userDropdown && (
                         <>
                         <div className='home-user-dropdown'>
@@ -187,7 +195,7 @@ const Home = () => {
                             </div>
 
                             <div className='home-user-dropdown-bottom'>
-                                <div className='home-help' >
+                                <div className='home-help' onClick={openPopup} >
                                     <HelpIcon className='home-user-dropdown-icon' />
 
                                     {t('help')}

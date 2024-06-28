@@ -93,6 +93,7 @@
   "title": "Title",
   "cancel": "Cancel",
   "no-events": "No events to show",
-  "no-events-explanation": "Upcoming events will be shown here!"
+  "no-events-explanation": "Upcoming events will be shown here!",
+  "save": "Save"
 
 }

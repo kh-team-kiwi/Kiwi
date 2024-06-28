@@ -93,6 +93,7 @@
     "title": "タイトル",
     "cancel": "キャンセル",
     "no-events": "表示するイベントはありません",
-    "no-events-explanation": "ここに今後のイベントが表示されます！"
+    "no-events-explanation": "ここに今後のイベントが表示されます！",
+    "save": "保存"
   }
   
