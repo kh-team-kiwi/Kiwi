@@ -90,7 +90,6 @@ const Login = () => {
             }
         })
             .then(response => {
-                console.log(response.data);
                 setSessionItem("profile", response.data.data);
                 window.location.replace("/home");
             })

@@ -5,14 +5,16 @@ import ErrorImage from '../../images/default-image.png';
 import PlusIcon from '../../images/svg/shapes/PlusIcon';
 import ThinUpArrow from '../../images/svg/shapes/ThinUpArrow';
 import EditIcon from '../../images/svg/buttons/EditIcon';
+import {getSessionItem, setSessionItem} from "../../jwt/storage";
+import axiosHandler from "../../jwt/axiosHandler";
 
 const AccountSettings = ({ isOpen, onClose }) => {
-  const [name, setName] = useState('Name');
+  const [name, setName] = useState(getSessionItem('profile').name);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isPasswordSectionExpanded, setIsPasswordSectionExpanded] = useState(false);
   const [isDeleteSectionExpanded, setIsDeleteSectionExpanded] = useState(false);
   const { t, i18n } = useTranslation();
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(getSessionItem('profile').filepath);
   const [password, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -34,9 +36,16 @@ const AccountSettings = ({ isOpen, onClose }) => {
     setIsEditingName(!isEditingName);
   };
 
-  const handleSave = () => {
-    console.log('Changes saved:', { profilePicture, name, password });
-    onClose();
+  const handleSave = async () => {
+    try{
+      // const res = await axiosHandler.get(`api/auth/profileUpdate/${name}`);
+      // setSessionItem('profile',res.data.data);
+      onClose();
+      window.location.reload();
+    } catch (e) {
+      if(e.data) alert(e.data.message);
+      console.log("AccountSettings save failed : ",e);
+    }
   };
 
   if (!isOpen) return null;
@@ -78,7 +87,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
               </div>
             </div>
             <div className="account-settings-email">
-              Example@gmail.com
+              {getSessionItem('profile').username}
             </div>
           </div>
         </div>
@@ -93,43 +102,45 @@ const AccountSettings = ({ isOpen, onClose }) => {
               <ThinUpArrow className={`account-settings-arrow ${isPasswordSectionExpanded ? 'down' : ''}`}/>
             </div>
             {isPasswordSectionExpanded && (
-              <div className="account-settings-password-inputs">
-                <div className='account-settings-password-text'>
-                Type in your current password
+                <div className="account-settings-password-inputs">
+                  <div className='account-settings-password-text'>
+                    Type in your current password
+                  </div>
+                  <input
+                      type="password"
+                      placeholder="Current Password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="account-settings-input"
+                  />
+                  <div className='account-settings-password-text'>
+                    Choose your new password
+                  </div>
+                  <input
+                      type="password"
+                      placeholder="New Password"
+                      value={confirmPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="account-settings-input"
+                  />
+                  <input
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={newPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="account-settings-input"
+                  />
+                  <button className="account-settings-change-password-button"
+                          onClick={() => console.log('Password Changed')}>
+                    Change password
+                  </button>
                 </div>
-                <input
-                  type="password"
-                  placeholder="Current Password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="account-settings-input"
-                />
-                <input
-                  type="password"
-                  placeholder="Confirm Password"
-                  value={newPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="account-settings-input"
-                />
-                <div className='account-settings-password-text'>
-                  Choose your new password
-                </div>
-                <input
-                  type="password"
-                  placeholder="New Password"
-                  value={confirmPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="account-settings-input"
-                />
-                <button className="account-settings-change-password-button" onClick={() => console.log('Password Changed')}>
-                  Change password
-                </button>
-              </div>
             )}
           </div>
           <div className={`account-settings-delete-account-container ${isDeleteSectionExpanded ? 'expanded' : ''}`}>
-            <div className="account-settings-delete-account" onClick={() => setIsDeleteSectionExpanded(!isDeleteSectionExpanded)}>
-              Delete Account
+            <div className="account-settings-delete-account"
+                 onClick={() => setIsDeleteSectionExpanded(!isDeleteSectionExpanded)}>
+            Delete Account
               <ThinUpArrow className={`account-settings-arrow ${isDeleteSectionExpanded ? 'down' : ''}`}/>
 
             </div>

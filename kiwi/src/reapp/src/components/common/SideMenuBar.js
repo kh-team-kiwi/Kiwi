@@ -11,7 +11,6 @@ const SideMenuBar = () => {
 
     const location = useLocation();
     const {role} = useContext(TeamContext);
-
     const getItems = () => {
         console.log(role)
         switch (role) {
@@ -63,11 +62,11 @@ const SideMenuBar = () => {
     }
 
     useEffect(() => {
-        const currentItem = items.find(item => location.pathname.endsWith(item.url));
-        if (currentItem) {
-            setSelected(currentItem);
-        }
-    }, [location.pathname]);
+        const updatedItems = getItems();
+        setItems(updatedItems);
+        const currentItem = updatedItems.find(item => location.pathname.endsWith(item.url)) || {};
+        setSelected(currentItem);
+    }, [location.pathname,role]);
 
     return (
         <div className='side-menu-bar'>

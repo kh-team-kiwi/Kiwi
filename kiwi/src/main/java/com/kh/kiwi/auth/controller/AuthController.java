@@ -55,4 +55,10 @@ public class AuthController {
         ResponseDto<?> result = authService.member(requestBody.getMemberId());
         return result;
     }
+
+    @PostMapping("/api/auth/imageUpload")
+    public ResponseDto<?> imageUpload(@RequestBody LoginDto requestBody) {
+        ResponseDto<?> result = authService.imageUpload();
+        return result;
+    }
 }

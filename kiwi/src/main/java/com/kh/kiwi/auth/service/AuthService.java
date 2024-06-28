@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @RequiredArgsConstructor
 @Service
@@ -14,6 +15,8 @@ public class AuthService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberRepository memberRepository;
+
+    private final S3Client s3Client;
 
     public ResponseDto<?> signup(SignupDto dto){
 
@@ -93,6 +96,11 @@ public class AuthService {
             return ResponseDto.setSuccessData("초대 가능한 이메일 입니다.",memberDto);
         }
         return  ResponseDto.setFailed("초대 불가능한 이메일입니다.");
+    }
+
+    public ResponseDto<?> imageUpload(){
+        ResponseDto<?> result = null;
+        return result;
     }
 
 }

@@ -30,6 +30,7 @@ import NotificationIcon from '../images/svg/account/NotificationIcon';
 import SettingsIcon from '../images/svg/buttons/SettingsIcon';
 import HelpIcon from '../images/svg/buttons/HelpIcon';
 import LogoutIcon from '../images/svg/buttons/LogoutIcon';
+import ToastMessage from "../components/toast/ToastMessage";
 
 
 const Home = () => {
@@ -137,17 +138,14 @@ const Home = () => {
     async function logoutBtn(){
         try{
             const response = await axiosHandler.post("/api/auth/logout");
-            if (response.status === 200) {
-                removeLocalItem("accessToken");
-                removeSessionItem("profile");
-                removeSessionItem("teams");
-                removeSessionItem("events");
-                localStorage.getItem("")
-                navigate('/', {replace:true});
-            } else {
-                console.error(response);
-            }
+            removeLocalItem("accessToken");
+            removeSessionItem("profile");
+            removeSessionItem("teams");
+            removeSessionItem("events");
+            localStorage.getItem("")
+            navigate('/', {replace:true});
         } catch (e) {
+            if(e.data) alert(e.data.message);
             console.error(e);
         }
     }
@@ -279,9 +277,7 @@ const Home = () => {
                 </div>
             }
 
-
-
-
+            <ToastMessage />
         </div>
         
     );

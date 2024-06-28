@@ -47,7 +47,6 @@ const SecondRouts = () => {
                     <Route path="/register" element={<Register/>}></Route>
                     <Route path="/home" element={<Home/>}></Route>
                     <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
-
                     {/* 팀 관련 경로 그룹화 */}
                     <Route path="/team/:teamno/*" element={<TeamLayout />}>
                         <Route path="chat" element={<Chat />} />

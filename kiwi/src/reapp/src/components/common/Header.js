@@ -46,7 +46,7 @@ const Header = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
 
 
-  const fetchTeams = async () => {
+  const fetchData = async () => {
     const memberId = getSessionItem("profile").username;
     try {
       const res = await axiosHandler.get("/api/team/list/" + memberId);
@@ -59,10 +59,7 @@ const Header = () => {
     } catch (error) {
       console.error('Error fetching teams:', error);
     }
-  };
 
-  async function fetchRole(){
-    const memberId = getSessionItem("profile").username;
     try {
       const res = await axiosHandler.get(`/api/team/getRole/team/${teamno}/member/${memberId}`);
       if(res.status===200){
@@ -74,11 +71,10 @@ const Header = () => {
     } catch (e) {
       console.error('Error fetchRole:', e);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchTeams();
-    fetchRole();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -347,7 +343,7 @@ const Header = () => {
           </div>
 
 
-        </div>
+      </div>
 
       {languageOptionsVisible && (
         <div className='header-language-dropdown-list' ref={languageDropdownRef}>
@@ -412,10 +408,10 @@ const Header = () => {
             </div>
             <div className='header-profile-dropdown-profile-info-container'>
               <div className='header-profile-dropdown-name' >
-                Username
+                {getSessionItem('profile').name}
               </div>
               <div className='header-profile-dropdown-email' >
-                Username@gmail.com
+                {getSessionItem('profile').username}
               </div>
             </div>
           </div>

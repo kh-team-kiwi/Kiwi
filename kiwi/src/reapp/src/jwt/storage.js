@@ -1,3 +1,5 @@
+import axiosHandler from "./axiosHandler";
+
 function getItem(storage, key) {
     const jsonStr = storage.getItem(key);
     if (!jsonStr) return null;
@@ -26,6 +28,9 @@ export function removeLocalItem(key) {
 }
 
 export function getSessionItem(key) {
+    if(key==='profile'&&getItem(sessionStorage, key)===null){
+        reFetchProfile();
+    }
     return getItem(sessionStorage, key);
 }
 
@@ -35,4 +40,13 @@ export function setSessionItem(key, value) {
 
 export function removeSessionItem(key) {
     removeItem(sessionStorage, key);
+}
+
+const reFetchProfile = async () => {
+    try{
+        const res = await axiosHandler.post('/api/auth/loginfo');
+        setSessionItem("profile", res.data.data);
+    } catch (e) {
+        console.error("reFetchProfile failed : ",e)
+    }
 }
