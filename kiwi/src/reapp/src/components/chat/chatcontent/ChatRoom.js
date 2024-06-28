@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { getSessionItem } from "../../../jwt/storage";
 import ReactionMenu from './ReactionMenu';
-import MessageDeletePopup from './MessageDeletePopup'; // 추가
+import MessageDeletePopup from './MessageDeletePopup';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
 
 const ChatRoom = ({ chatNum }) => {
@@ -14,8 +14,9 @@ const ChatRoom = ({ chatNum }) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [files, setFiles] = useState([]);
-    const [showDeletePopup, setShowDeletePopup] = useState(false); // 추가
-    const [selectedMessage, setSelectedMessage] = useState(null); // 추가
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [selectedMessage, setSelectedMessage] = useState(null);
+    const [replyingTo, setReplyingTo] = useState(null); // 댓글 작성 대상 상태 추가
     const stompClient = useRef(null);
     const fileInputRef = useRef();
     const textAreaRef = useRef();
@@ -71,7 +72,9 @@ const ChatRoom = ({ chatNum }) => {
                 content: message.trim(),
                 chatNum,
                 files: [],
-                type: 'CHAT'
+                type: 'CHAT',
+                replyToMessageNum: replyingTo ? replyingTo.messageNum : null, // 댓글 대상 메시지 번호 추가
+                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null // 댓글 대상 정보 추가
             };
 
             try {
@@ -93,6 +96,7 @@ const ChatRoom = ({ chatNum }) => {
 
                 setMessage('');
                 setFiles([]);
+                setReplyingTo(null); // 댓글 작성 후 초기화
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
@@ -163,22 +167,7 @@ const ChatRoom = ({ chatNum }) => {
 
     const handleReactionClick = async (reactionKey, message) => {
         if (reactionKey === 'comment') {
-            const comment = prompt('Enter your comment:');
-            if (comment) {
-                // Handle sending the comment
-                const commentMessage = {
-                    sender: profile.username,
-                    content: comment,
-                    chatNum,
-                    files: [],
-                    type: 'COMMENT',
-                    replyToMessageNum: message.messageNum,
-                };
-
-                if (stompClient.current && stompClient.current.connected) {
-                    stompClient.current.send(`/app/chat.sendMessage/${chatNum}`, {}, JSON.stringify(commentMessage));
-                }
-            }
+            setReplyingTo(message); // 댓글 대상 메시지 설정
         } else if (reactionKey === 'cross') {
             setSelectedMessage(message);
             setShowDeletePopup(true);
@@ -216,6 +205,20 @@ const ChatRoom = ({ chatNum }) => {
                         </div>
                         <div className="message-content-container">
                             <div className="message-content" style={{ whiteSpace: 'pre-wrap' }}>
+                                {msg.replyTo ? (
+                                    <div className="reply-container">
+                                        <div className="reply-original">
+                                            <strong>{msg.replyTo.memberNickname}에게</strong><br/> {msg.replyTo.chatContent} <small>{formatTime(msg.replyTo.chatTime)}</small>
+                                        </div>
+                                        <div className="reply-content">
+                                            {msg.chatContent}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    msg.chatContent.split('\n').map((line, i) => (
+                                        <React.Fragment key={i}>{line}<br /></React.Fragment>
+                                    ))
+                                )}
                                 {msg.files && msg.files.map((file, fileIndex) => (
                                     <div key={fileIndex} className="message-file-container">
                                         <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
@@ -233,9 +236,6 @@ const ChatRoom = ({ chatNum }) => {
                                         </a>
                                     </div>
                                 ))}
-                                {msg.chatContent.split('\n').map((line, i) => (
-                                    <React.Fragment key={i}>{line}<br /></React.Fragment>
-                                ))}
                             </div>
                             <small className="message-time">{formatTime(msg.chatTime)}</small>
                             <ReactionMenu
@@ -247,6 +247,12 @@ const ChatRoom = ({ chatNum }) => {
                 ))}
             </div>
             <div className="chat-input-container">
+                {replyingTo && (
+                    <div className="replying-to">
+                        <strong>{replyingTo.memberNickname}:</strong> {replyingTo.chatContent}
+                        <button onClick={() => setReplyingTo(null)}>취소</button>
+                    </div>
+                )}
                 {files.length > 0 && (
                     <div className="file-preview-container">
                         {files.map((file, index) => (
@@ -262,7 +268,7 @@ const ChatRoom = ({ chatNum }) => {
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                     onInput={handleInput}
-                    placeholder="Enter your message"
+                    placeholder="메시지를 입력하세요"
                     rows="1"
                     ref={textAreaRef}
                 />
@@ -273,8 +279,8 @@ const ChatRoom = ({ chatNum }) => {
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                 />
-                <button onClick={() => fileInputRef.current && fileInputRef.current.click()}>Choose Files</button>
-                <button onClick={sendMessage}>Send</button>
+                <button onClick={() => fileInputRef.current && fileInputRef.current.click()}>파일 선택</button>
+                <button onClick={sendMessage}>전송</button>
             </div>
             {showDeletePopup && (
                 <MessageDeletePopup
