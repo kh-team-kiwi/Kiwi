@@ -8,9 +8,6 @@ import com.kh.kiwi.chat.entity.FileMessage;
 import com.kh.kiwi.chat.entity.MessageChatnum;
 import com.kh.kiwi.chat.repository.FileMessageRepository;
 import com.kh.kiwi.chat.repository.MessageChatnumRepository;
-import com.kh.kiwi.chat.service.ChatService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,8 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class MessageChatnumService {
-
-    private static final Logger log = LoggerFactory.getLogger(MessageChatnumService.class);
 
     @Autowired
     private MessageChatnumRepository messageChatnumRepository;
@@ -51,8 +46,6 @@ public class MessageChatnumService {
     public void saveMessage(ChatMessage message) {
         MessageChatnum messageChatnum = new MessageChatnum();
         messageChatnum.setMessageNum(message.getChatNum() + "-" + System.currentTimeMillis());
-        message.setMessageNum(messageChatnum.getMessageNum());
-
         Chat chat = chatService.getChatById(message.getChatNum());
         messageChatnum.setChat(chat);
 
@@ -62,6 +55,8 @@ public class MessageChatnumService {
 
         messageChatnum.setChatTime(LocalDateTime.now());
         messageChatnum.setChatContent(message.getContent());
+        messageChatnum.setChatRef(message.getType() == ChatMessage.MessageType.COMMENT); // 댓글 여부 설정
+        messageChatnum.setChatRefMessageNum(message.getChatRefMessageNum()); // 참조 메시지 번호 설정
 
         messageChatnumRepository.save(messageChatnum);
 
@@ -87,16 +82,54 @@ public class MessageChatnumService {
             ).collect(Collectors.toList());
 
             ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setType(ChatMessage.MessageType.CHAT);
+            chatMessage.setType(message.getChatRef() ? ChatMessage.MessageType.COMMENT : ChatMessage.MessageType.CHAT);
             chatMessage.setSender(message.getMember().getMemberId());
             chatMessage.setChatNum(message.getChat().getChatNum());
             chatMessage.setChatTime(message.getChatTime());
             chatMessage.setFiles(fileInfos);
             chatMessage.setChatContent(message.getChatContent());
             chatMessage.setMemberNickname(message.getMember().getMemberNickname());
-            chatMessage.setMessageNum(message.getMessageNum());
+            chatMessage.setChatRef(message.getChatRef());
+            chatMessage.setChatRefMessageNum(message.getChatRefMessageNum());
+
+            if (message.getChatRefMessageNum() != null) {
+                MessageChatnum originalMessage = messageChatnumRepository.findById(message.getChatRefMessageNum()).orElse(null);
+                if (originalMessage != null) {
+                    chatMessage.setReplyToMessageSender(originalMessage.getMember().getMemberNickname());
+                    chatMessage.setReplyToMessageContent(originalMessage.getChatContent());
+                }
+            }
             return chatMessage;
         }).collect(Collectors.toList());
+    }
+
+    public ChatMessage getMessageByMessageNum(String messageNum) {
+        MessageChatnum messageChatnum = messageChatnumRepository.findById(messageNum)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + messageNum));
+        List<FileMessage> fileMessages = fileMessageRepository.findByMessageNum(messageChatnum.getMessageNum());
+        List<ChatMessage.FileInfo> fileInfos = fileMessages.stream().map(fileMessage ->
+                new ChatMessage.FileInfo(fileMessage.getFileName(), fileMessage.getFileCode(), fileMessage.getFilePath())
+        ).collect(Collectors.toList());
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setType(messageChatnum.getChatRef() ? ChatMessage.MessageType.COMMENT : ChatMessage.MessageType.CHAT);
+        chatMessage.setSender(messageChatnum.getMember().getMemberId());
+        chatMessage.setChatNum(messageChatnum.getChat().getChatNum());
+        chatMessage.setChatTime(messageChatnum.getChatTime());
+        chatMessage.setFiles(fileInfos);
+        chatMessage.setChatContent(messageChatnum.getChatContent());
+        chatMessage.setMemberNickname(messageChatnum.getMember().getMemberNickname());
+        chatMessage.setChatRef(messageChatnum.getChatRef());
+        chatMessage.setChatRefMessageNum(messageChatnum.getChatRefMessageNum());
+
+        if (messageChatnum.getChatRefMessageNum() != null) {
+            MessageChatnum originalMessage = messageChatnumRepository.findById(messageChatnum.getChatRefMessageNum()).orElse(null);
+            if (originalMessage != null) {
+                chatMessage.setReplyToMessageSender(originalMessage.getMember().getMemberNickname());
+                chatMessage.setReplyToMessageContent(originalMessage.getChatContent());
+            }
+        }
+        return chatMessage;
     }
 
     public List<ChatMessage.FileInfo> uploadFiles(MultipartFile[] files, String team, String chatNum) throws IOException {
@@ -133,24 +166,12 @@ public class MessageChatnumService {
         return member.getMemberNickname();
     }
 
-    public void deleteMessageByIdAndUsername(String messageId, String username) {
-        log.info("Deleting message with ID: {} by user: {}", messageId, username);
-        MessageChatnum message = messageChatnumRepository.findById(messageId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + messageId));
-
-        if (!message.getMember().getMemberId().equals(username)) {
-            throw new IllegalArgumentException("You are not authorized to delete this message");
+    public void deleteMessageByIdAndUsername(String messageNum, String username) {
+        MessageChatnum messageChatnum = messageChatnumRepository.findById(messageNum)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + messageNum));
+        if (!messageChatnum.getMember().getMemberId().equals(username)) {
+            throw new IllegalArgumentException("User not authorized to delete this message");
         }
-
-        // 파일 삭제 로직 추가 (필요 시)
-        List<FileMessage> fileMessages = fileMessageRepository.findByMessageNum(messageId);
-        for (FileMessage fileMessage : fileMessages) {
-            log.info("Deleting file with path: {}", fileMessage.getFilePath());
-            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fileMessage.getFilePath()));
-            fileMessageRepository.delete(fileMessage);
-        }
-
-        messageChatnumRepository.delete(message);
-        log.info("Message with ID: {} deleted successfully", messageId);
+        messageChatnumRepository.delete(messageChatnum);
     }
 }
