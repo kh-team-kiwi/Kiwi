@@ -93,6 +93,7 @@
     "title": "标题",
     "cancel": "取消",
     "no-events": "没有活动显示",
-    "no-events-explanation": "即将到来的活动将在这里显示！"
+    "no-events-explanation": "即将到来的活动将在这里显示！",
+    "save": "保存"
   }
   

@@ -93,7 +93,8 @@
     "title": "Titel",
     "cancel": "Abbrechen",
     "no-events": "Keine Ereignisse anzuzeigen",
-    "no-events-explanation": "Kommende Ereignisse werden hier angezeigt!"
+    "no-events-explanation": "Kommende Ereignisse werden hier angezeigt!",
+    "save": "Speichern"
     
     
   }

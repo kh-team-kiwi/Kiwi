@@ -93,7 +93,9 @@
     "title": "Titre",
     "cancel": "Annuler",
     "no-events": "Aucun événement à afficher",
-    "no-events-explanation": "Les événements à venir seront affichés ici !"
+    "no-events-explanation": "Les événements à venir seront affichés ici !",
+    "save": "Sauvegarder"
+
   
     
   }
