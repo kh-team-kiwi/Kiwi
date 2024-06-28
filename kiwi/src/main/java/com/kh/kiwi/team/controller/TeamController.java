@@ -1,5 +1,6 @@
 package com.kh.kiwi.team.controller;
 
+import com.kh.kiwi.auth.dto.MemberDto;
 import com.kh.kiwi.team.dto.*;
 import com.kh.kiwi.team.entity.Team;
 import com.kh.kiwi.team.service.TeamService;
@@ -18,7 +19,7 @@ public class TeamController {
 
     @PostMapping("/create")
     public ResponseTeamDto createTeam(@RequestParam String memberId, @RequestBody TeamCreateRequest dto) {
-        return teamService.createTeam(memberId,dto);
+        return teamService.createTeam(memberId, dto);
     }
 
     @GetMapping("/{teamId}")
@@ -31,8 +32,13 @@ public class TeamController {
         return teamService.getAllTeams(memberId);
     }
 
+    @GetMapping("/{teamId}/members")
+    public ResponseDto<List<MemberDto>> getTeamMembers(@PathVariable String teamId) {
+        return teamService.getTeamMembers(teamId);
+    }
+
     @PostMapping("/leaveTeam")
-    public ResponseDto<?> leaveTeam(@RequestBody LeaveTeamRequestDto dto){
+    public ResponseDto<?> leaveTeam(@RequestBody LeaveTeamRequestDto dto) {
         return teamService.leaveTeam(dto);
     }
 
@@ -41,4 +47,13 @@ public class TeamController {
         return teamService.getRole(teamno,memberId);
     }
 
+    @PostMapping("/updateRole")
+    public ResponseDto<?> updateMemberRole(@RequestParam String teamId, @RequestParam String memberId, @RequestParam String role) {
+        return teamService.updateMemberRole(teamId, memberId, role);
+    }
+
+    @PostMapping("/removeMember")
+    public ResponseDto<?> removeMember(@RequestParam String teamId, @RequestParam String memberId) {
+        return teamService.removeMember(teamId, memberId);
+    }
 }

@@ -8,12 +8,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto {
-    // memberRole
     private String role;
-    // memberNickname
     private String name;
-    // memberId
     private String username;
-
     private String filepath;
+
+    // 새로운 생성자 추가
+    public MemberDto(String role, String name, String username) {
+        this.role = role;
+        this.name = name;
+        this.username = username;
+    }
 }
