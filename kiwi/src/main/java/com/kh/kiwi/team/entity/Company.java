@@ -1,10 +1,14 @@
 package com.kh.kiwi.team.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 @Entity
 @Table(name = "company")
@@ -13,14 +17,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "COMPANY_NUM")
-    private Integer companyNum;
+    private String companyNum;
 
-    @Column(name = "COMPANY", nullable = false)
+    @Column(name = "company")
     private String companyName;
 
-    public Company(String companyName) {
+    public Company(String companyNum, String companyName) {
+        this.companyNum = companyNum;
         this.companyName = companyName;
+    }
+
+    @Query("SELECT c FROM Company c WHERE c.companyNum = :companyNum")
+    Company findByCompanyNum(@Param("companyNum") String companyNum) {
+        return null;
     }
 }

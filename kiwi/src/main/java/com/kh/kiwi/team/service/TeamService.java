@@ -15,9 +15,6 @@ import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
 
     private final TeamRepository teamRepository;
     private final GroupRepository groupRepository;
@@ -53,10 +49,11 @@ public class TeamService {
         group.setRole("OWNER");
 
         // Company entity 생성 및 저장
-        Company company = new Company(team.getTeamName());
+        Company company = new Company(team.getTeam(), team.getTeamName());
+
         try {
-            companyRepository.save(company);
-            teamRepository.save(team);
+            teamRepository.save(team); // 팀 정보를 먼저 저장합니다.
+            companyRepository.save(company); // 그 다음에 회사 정보를 저장합니다.
             groupRepository.save(group);
 
             invitedMembers.forEach(member -> {
@@ -69,6 +66,7 @@ public class TeamService {
             });
 
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseTeamDto.setFailed("데이터베이스 연결에 실패했습니다.");
         }
         return ResponseTeamDto.setSuccessData("팀생성에 성공했습니다.", team);
@@ -187,5 +185,4 @@ public class TeamService {
     public String getRole(String teamno, String memberId) {
         return groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build()).get().getRole();
     }
-
 }
