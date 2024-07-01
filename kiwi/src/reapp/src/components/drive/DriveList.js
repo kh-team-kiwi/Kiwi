@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { getSessionItem } from "../../../src/jwt/storage";
+import "../../styles/components/drive/DriveList.css";
+import DriveDeletePopup from './DriveContent/DriveDeletePopup';
+
+import OptionsIcon from '../../images/svg/buttons/OptionsIcon';
+import EditIcon from '../../images/svg/buttons/EditIcon';
+import DeleteIcon from '../../images/svg/buttons/DeleteIcon';
+import ExitIcon from '../../images/svg/buttons/ExitIcon';
+import CheckIcon from '../../images/svg/buttons/CheckIcon';
+import SharedIcon from '../../images/svg/buttons/SharedIcon';
 
 const DriveList = ({ onView, refresh }) => {
     const { teamno } = useParams();
@@ -10,6 +19,10 @@ const DriveList = ({ onView, refresh }) => {
     const [newName, setNewName] = useState('');
     const [profile, setProfile] = useState(null);
     const [username, setUsername] = useState('');
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [driveToDelete, setDriveToDelete] = useState(null);
+    const [openDropdown, setOpenDropdown] = useState(null);
+    const [selectedDrive, setSelectedDrive] = useState(null);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -37,15 +50,17 @@ const DriveList = ({ onView, refresh }) => {
     const handleUpdate = async (driveCode, newName) => {
         try {
             await axios.put(`http://localhost:8080/api/drive/${driveCode}`, { driveName: newName });
-            fetchDrives(); // 리스트 갱신
+            fetchDrives();
         } catch (error) {
             console.error('Failed to update drive', error);
         }
     };
 
-    const handleEdit = (driveCode, currentName) => {
+    const handleEdit = (e, driveCode, currentName) => {
+        e.stopPropagation();
         setEditDriveCode(driveCode);
         setNewName(currentName);
+        setOpenDropdown(null); 
     };
 
     const handleEditSubmit = (e, driveCode) => {
@@ -55,32 +70,103 @@ const DriveList = ({ onView, refresh }) => {
         setNewName('');
     };
 
+    const handleDeleteDrive = (e, drive) => {
+        e.stopPropagation();
+        setDriveToDelete(drive);
+        setShowDeletePopup(true);
+        setOpenDropdown(null); 
+    };
+
+    const confirmDeleteDrive = async () => {
+        if (driveToDelete) {
+            try {
+                await axios.delete(`http://localhost:8080/api/drive/${driveToDelete.driveCode}`);
+                setShowDeletePopup(false);
+                setDriveToDelete(null);
+                fetchDrives();
+            } catch (error) {
+                console.error('Failed to delete drive', error);
+            }
+        }
+    };
+
+    const cancelDeleteDrive = () => {
+        setShowDeletePopup(false);
+        setDriveToDelete(null);
+    };
+
+    const toggleDropdown = (e, driveCode) => {
+        e.stopPropagation();
+        setOpenDropdown(openDropdown === driveCode ? null : driveCode);
+    };
+
+    const handleViewDrive = (driveCode, driveName) => {
+        setSelectedDrive(driveCode);
+        onView(driveCode, driveName);
+    };
+
     return (
         <div>
-            <h2>Drive List</h2>
+            <div className='drive-list-shared-header'>
+                <SharedIcon className='drive-list-shared-icon' />
+                <div>
+                    Shared Drives - {drives.length}
+                </div>
+            </div>
             <ul>
                 {drives.map((drive) => (
-                    <li key={drive.driveCode}>
+                    <li 
+                        key={drive.driveCode} 
+                        onClick={() => handleViewDrive(drive.driveCode, drive.driveName)}
+                    >
                         {editDriveCode === drive.driveCode ? (
-                            <form onSubmit={(e) => handleEditSubmit(e, drive.driveCode)}>
-                                <input
-                                    type="text"
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
-                                />
-                                <button type="submit">Save</button>
-                                <button onClick={() => setEditDriveCode(null)}>Cancel</button>
+                            <form className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`} onSubmit={(e) => handleEditSubmit(e, drive.driveCode)}>
+                                <div className='drive-list-edit-container'>
+                                    <input className='drive-list-edit-input'
+                                        type="text"
+                                        value={newName}
+                                        onChange={(e) => setNewName(e.target.value)}
+                                    />
+                                    <button className='drive-list-save-button' type="submit">
+                                        <CheckIcon className='drive-list-check-icon' />
+                                    </button>
+                                </div>
+                                <div className='drive-list-exit-button' onClick={(e) => { e.stopPropagation(); setEditDriveCode(null); }}>
+                                    <ExitIcon />
+                                </div>
                             </form>
                         ) : (
-                            <>
-                                {drive.driveName} ({drive.team})
-                                <button onClick={() => handleEdit(drive.driveCode, drive.driveName)}>Edit</button>
-                                <button onClick={() => onView(drive.driveCode, drive.driveName)}>View Files</button>
-                            </>
+                            <div className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`}>
+                                <div className='drive-list-item-name'>
+                                    {drive.driveName}
+                                </div>
+                                <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>
+                                    <OptionsIcon className='drive-list-options-icon'/>
+                                </div>
+                                {openDropdown === drive.driveCode && (
+                                    <div className="drive-list-options">
+                                        <button onClick={(e) => handleEdit(e, drive.driveCode, drive.driveName)}>
+                                            <EditIcon className='drive-list-edit-icon' />
+                                            <div>Edit</div>
+                                        </button>
+                                        <button onClick={(e) => handleDeleteDrive(e, drive)}>
+                                            <DeleteIcon className='drive-list-delete-icon' />
+                                            <div className='drive-list-delete-text'>Delete</div>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </li>
                 ))}
             </ul>
+            {showDeletePopup && (
+                <DriveDeletePopup
+                    itemName={driveToDelete.driveName}
+                    onDeleteConfirm={confirmDeleteDrive}
+                    onCancel={cancelDeleteDrive}
+                />
+            )}
         </div>
     );
 };

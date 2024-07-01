@@ -1,1 +1,22 @@
 @import '../../variables.css';
+
+.drive-sidebar-create-button {
+    height: 40px;
+    background-color: var(--white);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: var(--lighter-text-color);
+    padding-right: 15px;
+    font-weight: 550;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.drive-sidebar-plus-icon {
+    width: 24px;
+    height: 24px;
+}

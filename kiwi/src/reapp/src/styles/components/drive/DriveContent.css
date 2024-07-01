@@ -1,0 +1,75 @@
+.drive-content-header {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding-left: 10px;
+}
+
+.drive-content-container {
+    padding: 10px;
+}
+
+.drive-content-header-right {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    height: 50px;
+    align-items: center;
+}
+
+.drive-content-path {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.list-view .drive-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.grid-view {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.grid-view .drive-item {
+    width: calc(25% - 10px);
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.drive-content-view-option {
+    display: flex;
+    height: 35px;
+    background-color: white;
+    border-radius: 17.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.drive-content-list-view, .drive-content-grid-view {
+    width: 40px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.drive-content-list-view.active {
+    background-color: #ddd;
+    border-top-left-radius: 17.5px; 
+    border-bottom-left-radius: 17.5px;
+    transition: 0.2s;
+}
+
+.drive-content-grid-view.active {
+    background-color: #ddd;
+    border-top-right-radius: 17.5px; 
+    border-bottom-right-radius: 17.5px;
+    transition: 0.2s;
+
+}
