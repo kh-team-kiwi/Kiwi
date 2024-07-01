@@ -1,101 +1,147 @@
-.modal-overlay {
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    75% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+    90% {
+        transform: scale(0.98);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.create-drive-modal-overlay {
     position: fixed;
-    top: 0;
+    top: 150px; 
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
-.modal-content {
+.create-drive-modal-content {
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 600px;
+    padding: 15px;
+    border-radius: 15px;
+    width: 400px;
     max-width: 90%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: bounceIn 0.2s ease-out; 
+    overflow-y: auto; 
 }
 
-.formGroup {
+.create-drive-form-group {
     margin-bottom: 20px;
 }
 
-.formGroup label {
+.create-drive-form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
 
-.formGroup input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.container {
+.create-drive-tab-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    margin-bottom: 10px;
 }
 
-.memberList, .selectedLists {
+.create-drive-tab {
     flex: 1;
-    margin: 0 10px;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-bottom: none;
+}
+
+.create-drive-tab.active {
+    background: #fff;
+    border-bottom: 1px solid transparent;
+    font-weight: 600;
+    
+}
+
+.create-drive-container {
+    width: 100%;
+}
+
+.create-list {
+    flex: 1;
     background: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 10px;
     max-height: 300px;
     overflow-y: auto;
+    box-sizing: border-box; 
 }
 
-.memberItem, .adminItem {
+.create-drive-member-list-container {
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+.create-drive-member-list, .create-drive-admins-list {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+.create-drive-search-input {
+    width: 100%; 
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box; 
+    font-size: 18px;
+    outline: none;
+    background-color: #f9f9f9;
+}
+
+.create-drive-member-item {
     padding: 8px;
     margin: 4px 0;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.3s;
-}
-
-.memberItem:hover, .adminItem:hover {
-    background: #efefef;
-}
-
-.selected {
-    background: #d3eafd;
-}
-
-.arrows {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    transition: 0.2s;
 }
 
-.arrows button {
+.create-drive-admin-item {
     padding: 8px;
     margin: 4px 0;
-    border: none;
-    background: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+
 }
 
-.arrows button:hover {
-    background: #0056b3;
+
+
+.create-drive-selected {
+    background: #e6f3fd;
 }
 
-.modalActions {
+.create-drive-modal-bottom {
     margin-top: 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .create-drive-button {
@@ -105,10 +151,127 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s;
     margin-left: 10px;
 }
 
 .create-drive-button:hover {
     background: #218838;
+}
+
+.create-drive-header {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-drive-profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: gray;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.create-drive-profile-info {
+    margin-left: 5px;
+}
+
+.create-drive-profile-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.create-drive-profile-email {
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.create-drive-create-button {
+    background-color: var(--green);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 90px;
+    height: 40px;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+}
+
+.create-drive-create-button:hover {
+    background-color: var(--green-hover);
+}
+
+.create-drive-cancel-button {
+    background-color: var(--white);
+    color: var(--gray);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 90px;
+    height: 40px;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+    border: 2px solid gray;
+}
+
+.create-drive-cancel-button:hover {
+    background-color: rgba(5, 5, 5, 0.1);
+}
+
+.create-drive-drive-name {
+    font-size: 22px;
+    outline: none;
+    border-radius: 10px;
+    border: none;
+    padding: 5px;
+}
+
+.create-drive-drive-name-container {
+    border-bottom: 2px solid var(--green);
+}
+
+.create-drive-you-tag {
+    background-color: var(--green);
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-top: 1px;
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+.create-drive-joined-tag {
+    background-color: var(--green);
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-top: 1px;
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+
+.create-drive-remove-button {
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.create-drive-remove-button:hover {
+    background-color:rgba(0, 0, 0, 0.1)
 }

@@ -2,20 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../../styles/components/drive/CreateDriveModal.css';
 import { getSessionItem } from "../../../jwt/storage";
+import ErrorImageHandler from "../../common/ErrorImageHandler";
+import ExitIcon from '../../../images/svg/buttons/ExitIcon';
+
 
 const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     const [profile, setProfile] = useState(null);
     const [driveName, setDriveName] = useState('');
     const [members, setMembers] = useState([]);
-    const [selectedMember, setSelectedMember] = useState(null);
-    const [admins, setAdmins] = useState([]);
+    const [joinedMembers, setJoinedMembers] = useState([]);
     const [nameError, setNameError] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [activeTab, setActiveTab] = useState('invite');
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
         setProfile(storedProfile);
         if (storedProfile) {
-            setAdmins([{ id: storedProfile.username, name: storedProfile.name, email: storedProfile.username, role: storedProfile.role }]);
+            setJoinedMembers([{ id: storedProfile.username, name: storedProfile.name, email: storedProfile.username, role: storedProfile.role }]);
         }
     }, []);
 
@@ -29,7 +33,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
         try {
             const response = await axios.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
             const fetchedMembers = response.data
-                .filter(member => member.memberId !== profile.username) // 현재 사용자 제외
+                .filter(member => member.memberId !== profile.username)
                 .map(member => ({
                     id: member.memberId,
                     name: member.memberNickname,
@@ -45,28 +49,22 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     const handleDriveNameChange = (event) => {
         const name = event.target.value;
         setDriveName(name);
-        setNameError(!name.trim()); // 드라이브 이름이 공백이거나 띄어쓰기만 있을 때 에러 표시
+        setNameError(!name.trim());
     };
 
     const handleMemberClick = (member) => {
-        setSelectedMember(member);
-    };
-
-    const handleAddAdmin = () => {
-        if (selectedMember && !admins.some(admin => admin.id === selectedMember.id)) {
-            setAdmins([...admins, selectedMember]);
-            setMembers(members.filter(member => member.id !== selectedMember.id));
-            setSelectedMember(null);
+        if (joinedMembers.some(joinedMember => joinedMember.id === member.id)) {
+            setJoinedMembers(joinedMembers.filter(joinedMember => joinedMember.id !== member.id));
+        } else {
+            setJoinedMembers([...joinedMembers, member]);
         }
     };
 
-    const handleRemoveAdmin = (admin) => {
-        if (admin.id === profile.username) {
-            // 자기 자신은 제거하지 않음
+    const handleRemoveJoinedMember = (joinedMember) => {
+        if (joinedMember.id === profile.username) {
             return;
         }
-        setAdmins(admins.filter(a => a.id !== admin.id));
-        setMembers([...members, admin]);
+        setJoinedMembers(joinedMembers.filter(a => a.id !== joinedMember.id));
     };
 
     const handleSave = async () => {
@@ -80,7 +78,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                 driveName,
                 team
             },
-            userIds: admins.map(admin => admin.id)
+            userIds: joinedMembers.map(joinedMember => joinedMember.id)
         };
 
         try {
@@ -92,54 +90,106 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
         }
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filteredMembers = members.filter(member =>
+        member.email.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h2>드라이브 생성</h2>
-                <div className="formGroup">
-                    <label>드라이브 이름</label>
-                    <input
-                        type="text"
-                        value={driveName}
-                        onChange={handleDriveNameChange}
-                        placeholder="드라이브 이름을 입력하세요"
-                    />
-                    {nameError && <p className="error-text">드라이브 이름을 올바르게 입력하세요.</p>}
+        <div className="create-drive-modal-overlay">
+            <div className="create-drive-modal-content">
+                <div className='create-drive-header'>Create Shared Drive</div>
+                <div className="create-drive-form-group">
+                    <div className='create-drive-drive-name-container'>
+                        <input
+                            type="text"
+                            value={driveName}
+                            onChange={handleDriveNameChange}
+                            placeholder="Drive Name"
+                            className='create-drive-drive-name'
+                        />
+
+                    </div>
+
                 </div>
-                <div className="container">
-                    <div className="memberList">
-                        <h3>참여 가능한 멤버</h3>
-                        {members.map((member) => (
-                            <div
-                                key={member.id}
-                                className={`memberItem ${selectedMember === member ? 'selected' : ''}`}
-                                onClick={() => handleMemberClick(member)}
-                            >
-                                {member.name} ({member.email}:{member.role})
-                            </div>
-                        ))}
+                <div className="create-drive-tab-container">
+                    <div 
+                        className={`create-drive-tab ${activeTab === 'invite' ? 'active' : ''}`} 
+                        onClick={() => setActiveTab('invite')}
+                    >
+                        Invite Members
                     </div>
-                    <div className="arrows">
-                        <button onClick={handleAddAdmin}>→초대</button>
+                    <div 
+                        className={`create-drive-tab ${activeTab === 'joined' ? 'active' : ''}`} 
+                        onClick={() => setActiveTab('joined')}
+                    >
+                        Joined Members
                     </div>
-                    <div className="selectedLists">
-                        <div className="adminsList">
-                            <h3>초대된 인원</h3>
-                            {admins.map((admin) => (
+                </div>
+                <div className="create-drive-container">
+                    {activeTab === 'invite' && (
+                        <div className='create-drive-member-list-container'>
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Search members by email"
+                                className="create-drive-search-input"
+                            />
+                          <div className="create-drive-member-list">
+                            {filteredMembers.map((member) => (
                                 <div
-                                    key={admin.id}
-                                    className="adminItem"
-                                    onClick={() => handleRemoveAdmin(admin)}
+                                    key={member.id}
+                                    className={`create-drive-member-item ${joinedMembers.some(joinedMember => joinedMember.id === member.id) ? 'create-drive-selected' : ''}`}
+                                    onClick={() => handleMemberClick(member)}
                                 >
-                                    {admin.name} ({admin.email}:{admin.role}){admin.id === profile.username && " (자신)"}
+                                    <img className='create-drive-profile-image' src='' alt={''} onError={ErrorImageHandler}></img>
+                                    <div className='create-drive-profile-info'>
+                                        <div className='create-drive-profile-name'>
+                                            {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) &&<span className="create-drive-joined-tag">Joined</span>}
+                                        </div>
+                                        <div className='create-drive-profile-email'>
+                                            {member.email}
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
-                    </div>
+                        </div>
+                       
+                    )}
+                    {activeTab === 'joined' && (
+                        <div className="create-drive-selected-list">
+                            <div className="create-drive-admins-list">
+                                {joinedMembers.map((joinedMember) => (
+                                    <div key={joinedMember.id} className="create-drive-admin-item">
+                                        <img className='create-drive-profile-image' src='' alt={''} onError={ErrorImageHandler}></img>
+
+                                        <div className='create-drive-profile-info'>
+                                            <div className='create-drive-profile-name'>
+                                                {joinedMember.name} {joinedMember.id === profile.username && <span className="create-drive-you-tag">You</span>}
+                                            </div>
+                                            <div className='create-drive-profile-email'>
+                                                {joinedMember.email}
+                                            </div>
+                                        </div>
+                                        {joinedMember.id !== profile.username && (
+                                            <div className='create-drive-remove-button' onClick={() => handleRemoveJoinedMember(joinedMember)}>
+                                                <ExitIcon/>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <div className="modalActions">
-                    <button className="create-drive-button" onClick={handleSave} disabled={!driveName.trim()}>저장</button>
-                    <button className="create-drive-button" onClick={onClose}>취소</button>
+                <div className="create-drive-modal-bottom">
+                    <button className="create-drive-cancel-button" onClick={onClose}>Cancel</button>
+                    <button className="create-drive-create-button" onClick={handleSave} disabled={!driveName.trim()}>Create</button>
                 </div>
             </div>
         </div>

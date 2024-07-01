@@ -9,7 +9,7 @@
     background-color: var(--white);
     padding: 10px;
     box-sizing: border-box;
-    z-index: 999;
+    z-index: 1100;
     border-right: 1px solid var(--light-gray);
     overflow-y: auto;
 

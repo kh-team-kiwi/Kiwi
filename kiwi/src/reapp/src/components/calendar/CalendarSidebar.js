@@ -11,23 +11,28 @@ const CalendarSidebar = ({ events, selectedCalendar}) => {
   const { t, i18n } = useTranslation();
 
   const upcomingEvents = events
-    .map(event => ({
-      ...event,
-      startDate: new Date(event.startDate),
-      endDate: new Date(event.endDate)
-    }))
-    .filter(event => event.startDate >= new Date())
-    .sort((a, b) => a.startDate - b.startDate);
+  .map(event => ({
+    ...event,
+    startDate: new Date(event.startDate),
+    endDate: new Date(event.endDate)
+  }))
+  .filter(event => {
+    const now = new Date();
+    // console.log(`Event start date: ${event.startDate}`);
+    // console.log(`Current date: ${now}`);
+    return event.startDate >= now;
+  })
+  .sort((a, b) => a.startDate - b.startDate);
 
-  const getDaySuffix = (day) => {
-    if (day > 3 && day < 21) return 'th';
-    switch (day % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-    }
-  };
+const getDaySuffix = (day) => {
+  if (day > 3 && day < 21) return 'th';
+  switch (day % 10) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+};
 
   const formatDateWithSuffix = (date) => {
     const day = date.getDate();

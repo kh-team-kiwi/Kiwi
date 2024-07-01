@@ -5,7 +5,12 @@ import DriveFolderPopup from "./DriveFolderPopup";
 import DriveDeletePopup from './DriveDeletePopup';
 import { useParams } from "react-router-dom";
 
-const DriveFileList = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
+import '../../../styles/components/drive/DriveContent.css'
+
+import ListIcon from '../../../images/svg/buttons/ListIcon'
+import GridIcon from '../../../images/svg/buttons/GridIcon'
+
+const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
     const { teamno } = useParams();
     const [items, setItems] = useState([]);
     const [editFileCode, setEditFileCode] = useState(null);
@@ -14,6 +19,8 @@ const DriveFileList = ({ driveCode, driveName, parentPath, onViewFolder, onBack,
     const [newFolderName, setNewFolderName] = useState('');
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const fileInputRef = useRef(null);
+    const [viewMode, setViewMode] = useState('list'); // Default to list view
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchItems(parentPath);
@@ -156,32 +163,58 @@ const DriveFileList = ({ driveCode, driveName, parentPath, onViewFolder, onBack,
         setShowDeletePopup(false);
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filteredItems = items.filter(item => 
+        item.fileName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div>
-            <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} />
-            <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} />
-            <input
-                type="file"
-                style={{ display: 'none' }}
-                onChange={handleFileUpload}
-                ref={fileInputRef}
-            />
-            <button onClick={() => fileInputRef.current.click()}>파일 업로드</button>
-            <button onClick={handleDeleteDrive}>드라이브 삭제</button>
-            {showDeletePopup && (
-                <DriveDeletePopup
-                    itemName={driveName}
-                    onDeleteConfirm={confirmDeleteDrive}
-                    onCancel={cancelDeleteDrive}
-                />
-            )}
-            <h1>{breadcrumbs.map(b => b.name).join(' > ')}</h1>
+        <div className='drive-content-container'>
+            <div className='drive-content-header'>
+                <div className='drive-content-path'>{breadcrumbs.map(b => b.name).join(' > ')}</div>
+                <div className='drive-content-header-right'>
+                    <input 
+                        type="text" 
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Search files"
+                        className='drive-content-search-input'
+                    />
+                    <div className='drive-content-view-option'>
+                        <div 
+                            className={`drive-content-list-view ${viewMode === 'list' ? 'active' : ''}`} 
+                            onClick={() => setViewMode('list')}
+                        >
+                            <ListIcon />
+                        </div>
+                        <div 
+                            className={`drive-content-grid-view ${viewMode === 'grid' ? 'active' : ''}`} 
+                            onClick={() => setViewMode('grid')}
+                        >
+                            <GridIcon />
+                        </div>
+                    </div>
+                    <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} />
+                    <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} />
+                    <input
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={handleFileUpload}
+                        ref={fileInputRef}
+                    />
+                    <button onClick={() => fileInputRef.current.click()}>Upload</button>
+                </div>
+            </div>
+
             {breadcrumbs.length > 1 && (
                 <button onClick={onBack}>뒤로</button>
             )}
-            <ul>
-                {items.map((item) => (
-                    <li key={item.fileCode}>
+            <div className={viewMode === 'list' ? 'list-view' : 'grid-view'}>
+                {filteredItems.map((item) => (
+                    <div key={item.fileCode} className='drive-item'>
                         {editFileCode === item.fileCode ? (
                             <form onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
                                 <input
@@ -207,7 +240,7 @@ const DriveFileList = ({ driveCode, driveName, parentPath, onViewFolder, onBack,
                                 {item.folder ? (
                                     <strong>{item.fileName} (폴더)</strong>
                                 ) : (
-                                    <>{item.fileName} ({item.filePath})</>
+                                    <>{item.fileName}</>
                                 )}
                                 {item.folder ? (
                                     <>
@@ -224,11 +257,11 @@ const DriveFileList = ({ driveCode, driveName, parentPath, onViewFolder, onBack,
                                 )}
                             </>
                         )}
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
 
-export default DriveFileList;
+export default DriveContent;
