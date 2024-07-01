@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -16,15 +19,29 @@ public class NotificationService{
     private final EmitterRepository emitterRepository;
 
     private static final Long DEFAULT_TIMEOUT = 600L * 1000 * 60;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public SseEmitter subscribe(String memberId){
         SseEmitter emitter = createEmitter(memberId);
         sendToClient(memberId, "EventStream Created. [memberId=" + memberId + "]", "sse 접속 성공");
+
+//        // 주기적으로 빈 이벤트 또는 주석 보내기
+//        scheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                System.out.println("보내기!!!");
+//                emitter.send(SseEmitter.event().comment("heartbeat"));
+//                sendToClient(memberId, "EventStream Created. [memberId=" + memberId + "]", "sse 접속 성공");
+//            } catch (IOException e) {
+//                emitter.completeWithError(e);
+//            }
+//        }, 10, 3, TimeUnit.SECONDS); // 30초마다 전송
+
         return emitter;
     }
 
     // 사용자 정의 알림을 보내는 메소드
     public <T> void customNotify(String memberId, T data, String comment, String type) {
+        System.out.println("customNotify "+memberId+"/"+data+"/"+comment+"/"+type);
         sendToClient(memberId, data, comment, type);  // 클라이언트에게 알림 전송
     }
 
@@ -44,11 +61,15 @@ public class NotificationService{
                         .name("sse")  // 이벤트 이름 설정
                         .data(data)  // 데이터 설정
                         .comment(comment));  // 주석 설정
+                System.out.println("sendToClient "+memberId+"/"+data+"/"+comment);
             } catch (IOException e) {
+                System.out.println("Error sending event: " +e.getMessage());
                 // 전송 중 오류 발생 시 처리
                 emitterRepository.deleteById(memberId);  // 저장소에서 Emitter 삭제
                 emitter.completeWithError(e);  // Emitter를 오류 상태로 완료
             }
+        } else {
+            System.out.println("Emitter not found for memberId: " + memberId);
         }
     }
 
@@ -64,10 +85,13 @@ public class NotificationService{
                         .data(data)  // 데이터 설정
                         .comment(comment));  // 주석 설정
             } catch (IOException e) {
+                System.out.println("Error sending event: " +e.getMessage());
                 // 전송 중 오류 발생 시 처리
                 emitterRepository.deleteById(memberId);  // 저장소에서 Emitter 삭제
                 emitter.completeWithError(e);  // Emitter를 오류 상태로 완료
             }
+        } else {
+            System.out.println("Emitter not found for memberId: " + memberId);
         }
     }
 

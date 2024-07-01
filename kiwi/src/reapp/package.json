@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
     "create-react-app": "^5.0.1",
+    "event-source-polyfill": "^1.0.31",
     "http-proxy-middleware": "^3.0.0",
     "i18next": "^23.11.5",
     "jwt-decode": "^4.0.0",

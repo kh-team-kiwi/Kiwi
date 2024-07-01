@@ -276,10 +276,9 @@ const Home = () => {
                     <CreateTeam onCreateTeam={handleCreateTeam} toggleTeamView={toggleTeamView}/>
                 </div>
             }
-
             <ToastMessage />
         </div>
-        
+
     );
 };
 

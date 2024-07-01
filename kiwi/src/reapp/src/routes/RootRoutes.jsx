@@ -16,6 +16,7 @@ import TeamLayout from "../pages/TeamLayout";
 import Personal from "../components/teamsettings/Personal";
 import Member from "../components/teamsettings/Member";
 import Team from "../components/teamsettings/Team";
+import ToastMessage from "../components/toast/ToastMessage";
 
 const RootRoutes = () => {
 
