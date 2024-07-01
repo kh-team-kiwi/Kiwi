@@ -72,22 +72,25 @@ public class MessageChatnumService {
 
         messageChatnumRepository.save(messageChatnum);
 
+        log.debug("Saved message: {}", messageChatnum);
+
         // 파일 메시지가 있는 경우 저장
         if (message.getFiles() != null && !message.getFiles().isEmpty()) {
             for (ChatMessage.FileInfo fileInfo : message.getFiles()) {
                 FileMessage fileMessage = new FileMessage();
-                fileMessage.setFileCode(fileInfo.getFileCode()); // UUID로 변형된 파일 이름
+                fileMessage.setFileCode(fileInfo.getFileCode());
                 fileMessage.setMessageNum(messageChatnum.getMessageNum());
-                fileMessage.setFileName(fileInfo.getOriginalFileName()); // 원래 파일 이름
+                fileMessage.setFileName(fileInfo.getOriginalFileName());
                 fileMessage.setFilePath(fileInfo.getFilePath());
                 fileMessageRepository.save(fileMessage);
+                log.debug("Saved file message: {}", fileMessage);
             }
         }
     }
 
     public List<ChatMessage> getMessagesByChatNum(Integer chatNum) {
         List<MessageChatnum> messages = messageChatnumRepository.findByChat_ChatNum(chatNum);
-        return messages.stream().map(message -> {
+        List<ChatMessage> chatMessages = messages.stream().map(message -> {
             List<FileMessage> fileMessages = fileMessageRepository.findByMessageNum(message.getMessageNum());
             List<ChatMessage.FileInfo> fileInfos = fileMessages.stream().map(fileMessage ->
                     new ChatMessage.FileInfo(fileMessage.getFileName(), fileMessage.getFileCode(), fileMessage.getFilePath())
@@ -109,6 +112,9 @@ public class MessageChatnumService {
             }
             return chatMessage;
         }).collect(Collectors.toList());
+
+        log.debug("Fetched messages: {}", chatMessages);
+        return chatMessages;
     }
 
     public List<ChatMessage.FileInfo> uploadFiles(MultipartFile[] files, String team, String chatNum) throws IOException {
@@ -118,6 +124,7 @@ public class MessageChatnumService {
             String fileCode = UUID.randomUUID().toString();
             String filePath = uploadFileToS3(file, team, chatNum, fileCode);
             fileInfos.add(new ChatMessage.FileInfo(originalFileName, fileCode, filePath));
+            log.debug("Uploaded file: {}", fileInfos.get(fileInfos.size() - 1));
         }
         return fileInfos;
     }
@@ -136,6 +143,7 @@ public class MessageChatnumService {
     }
 
     public byte[] downloadFile(String fileKey) {
+        log.debug("Downloading file from S3 with key: {}", fileKey);
         return s3Client.getObjectAsBytes(builder -> builder.bucket(bucketName).key(fileKey)).asByteArray();
     }
 
@@ -165,6 +173,7 @@ public class MessageChatnumService {
         messageChatnumRepository.delete(message);
         log.info("Message with ID: {} deleted successfully", messageId);
     }
+
     public void markMessageAsRead(MessageReadDto messageReadDto) {
         MessageReadId id = new MessageReadId(messageReadDto.getMessageNum(), messageReadDto.getMemberId());
         if (!messageReadRepository.existsById(id)) {
@@ -172,19 +181,36 @@ public class MessageChatnumService {
             messageRead.setId(id);
             messageRead.setReadTime(LocalDateTime.now());
             messageReadRepository.save(messageRead);
+            log.debug("Marked message as read: {}", messageReadDto);
+        } else {
+            log.debug("Message already read: {}", messageReadDto);
         }
     }
+
     public int getChatRoomMemberCount(int chatNum) {
-        return chatUsersRepository.countMembersByIdChatNum(chatNum);
+        int count = chatUsersRepository.countMembersByIdChatNum(chatNum);
+        log.debug("Chat room member count for chatNum {}: {}", chatNum, count);
+        return count;
     }
 
     public int getMessageReadCount(String messageNum) {
-        return messageReadRepository.countByIdMessageNum(messageNum);
+        int count = messageReadRepository.countByIdMessageNum(messageNum);
+        log.debug("Message read count for messageNum {}: {}", messageNum, count);
+        return count;
     }
 
     public int getUnreadCount(int chatNum, String messageNum) {
         int totalMembers = getChatRoomMemberCount(chatNum);
         int readMembers = getMessageReadCount(messageNum);
-        return totalMembers - readMembers;
+        int unreadCount = totalMembers - readMembers;
+        log.debug("Unread count for chatNum {}, messageNum {}: {}", chatNum, messageNum, unreadCount);
+        return unreadCount;
+    }
+
+    public boolean isMessageAlreadyRead(String messageNum, String memberId) {
+        MessageReadId id = new MessageReadId(messageNum, memberId);
+        boolean exists = messageReadRepository.existsById(id);
+        log.debug("Check if message already read for messageNum {}, memberId {}: {}", messageNum, memberId, exists);
+        return exists;
     }
 }
