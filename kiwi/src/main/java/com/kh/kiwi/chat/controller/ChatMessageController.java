@@ -34,6 +34,7 @@ public class ChatMessageController {
         message.setMemberNickname(memberNickname);
         message.setChatContent(message.getContent());
         messageChatnumService.saveMessage(message);
+        log.debug("Message sent: {}", message);
         return message;
     }
 
@@ -41,16 +42,19 @@ public class ChatMessageController {
     public List<ChatMessage.FileInfo> uploadFiles(@RequestParam("files") MultipartFile[] files,
                                                   @RequestParam("team") String team,
                                                   @RequestParam("chatNum") String chatNum) throws IOException {
+        log.debug("Uploading files for chatNum: {}", chatNum);
         return messageChatnumService.uploadFiles(files, team, chatNum);
     }
 
     @GetMapping("/messages/{chatNum}")
     public List<ChatMessage> getMessagesByChatNum(@PathVariable Integer chatNum) {
+        log.debug("Fetching messages for chatNum: {}", chatNum);
         return messageChatnumService.getMessagesByChatNum(chatNum);
     }
 
     @GetMapping("/download")
     public byte[] downloadFile(@RequestParam String fileKey) {
+        log.debug("Downloading file with key: {}", fileKey);
         return messageChatnumService.downloadFile(fileKey);
     }
 
@@ -63,6 +67,7 @@ public class ChatMessageController {
 
     @PostMapping("/read")
     public ResponseEntity<?> markMessageAsRead(@RequestBody MessageReadDto messageReadDto) {
+        log.debug("Marking message as read: {}", messageReadDto);
         if (messageReadDto.getMemberId() == null || messageReadDto.getMemberId().isEmpty()) {
             return ResponseEntity.badRequest().body("Member ID is null or empty");
         }
@@ -73,7 +78,20 @@ public class ChatMessageController {
 
     @GetMapping("/unreadCount/{chatNum}/{messageNum}")
     public ResponseEntity<Integer> getUnreadCount(@PathVariable int chatNum, @PathVariable String messageNum) {
+        log.debug("Fetching unread count for chatNum: {}, messageNum: {}", chatNum, messageNum);
         int unreadCount = messageChatnumService.getUnreadCount(chatNum, messageNum);
         return ResponseEntity.ok(unreadCount);
+    }
+
+    @MessageMapping("/chat.readMessage/{chatNum}")
+    @SendTo("/topic/chat/{chatNum}")
+    public MessageReadDto broadcastMessageRead(MessageReadDto messageReadDto) {
+        log.debug("Broadcasting message read: {}", messageReadDto);
+        if (!messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId())) {
+            messageChatnumService.markMessageAsRead(messageReadDto);
+            return messageReadDto;
+        }
+        log.debug("Message already read: {}", messageReadDto);
+        return null; // 이미 읽은 메시지인 경우 null 반환
     }
 }
