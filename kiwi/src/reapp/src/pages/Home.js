@@ -177,10 +177,6 @@ const Home = () => {
                     {userDropdown && (
                         <>
                         <div className='home-user-dropdown'>
-                            <div className='home-user-dropdown-profile' >
-                                <ProfileIconCircle className='home-user-dropdown-icon' />
-                                {t('profile')}
-                            </div>
                             <div>
                                 <NotificationIcon className='home-user-dropdown-icon' />
                                 {t('notifications')}
