@@ -77,7 +77,7 @@ public class ChatMessageController {
             messageChatnumService.markMessageAsRead(messageReadDto);
             messageChatnumService.broadcastMessageRead(messageReadDto);
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(Map.of("isAlreadyRead", isAlreadyRead));
     }
 
     @GetMapping("/unreadCount/{chatNum}/{messageNum}")
