@@ -19,4 +19,5 @@
 .drive-sidebar-plus-icon {
     width: 24px;
     height: 24px;
+    fill: var(--lighter-text-color);
 }

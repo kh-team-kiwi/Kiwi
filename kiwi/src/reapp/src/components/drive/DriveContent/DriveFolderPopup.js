@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import '../../../styles/components/drive/DrivePopup.css';
+import '../../../styles/components/drive/DriveFolderPopup.css';
 import { useParams } from "react-router-dom";
 
-const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
+import CreateFolderIcon from '../../../images/svg/buttons/CreateFolderIcon'
+
+const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, parentPath }) => {
     const { teamno } = useParams();
     const [isOpen, setIsOpen] = useState(false);
     const [folderName, setFolderName] = useState('');
@@ -23,7 +25,7 @@ const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
                 },
             });
             setFolderName('');
-            fetchFiles(); // 폴더 생성 후 파일 목록 갱신
+            fetchFiles(); 
             closePopup();
         } catch (error) {
             console.error('Failed to create folder', error);
@@ -50,6 +52,7 @@ const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
 
     const openPopup = () => {
         setIsOpen(true);
+        if (onCloseDropdown) onCloseDropdown(); // Close the dropdown when opening the popup
     };
 
     const closePopup = () => {
@@ -59,18 +62,17 @@ const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
 
     return (
         <>
-            <button className="schedule-button" onClick={openPopup}>
-                {/* Button Icon */}
-                Folder Create
-            </button>
+            <div className='drive-content-new-dropdown-item' onClick={openPopup}>
+                <CreateFolderIcon className='drive-content-create-folder-icon'/>
+                Create Folder
+            </div>
             {isOpen && (
-                <div className="popup-container">
-                    <div className="popup-content" ref={popupRef}>
-                        <div className="close-button" onClick={closePopup}>
-                            {/* Close Button Icon */}
+                <div className="drive-folder-popup-container">
+                    <div className="drive-folder-popup-content" ref={popupRef}>
+                        <div className="drive-folder-popup-close-button" onClick={closePopup}>
                         </div>
-                        <div className='popup-title'>Create Folder</div>
-                        <form className="event-form" onSubmit={handleSubmit}>
+                        <div className='drive-folder-popup-title'>Create Folder</div>
+                        <form className="drive-folder-popup-event-form" onSubmit={handleSubmit}>
                             <input
                                 type="text"
                                 name="folderName"
@@ -78,9 +80,12 @@ const DriveFolderPopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
                                 value={folderName}
                                 onChange={(e) => setFolderName(e.target.value)}
                             />
-                            <button type="submit" className="create-button">Create</button>
-                            <button type="button" className="cancel-button" onClick={closePopup}>Cancel</button>
+                            <div className='drive-folder-popup-bottom'>
+                                <button type="button" className="drive-folder-popup-cancel-button" onClick={closePopup}>Cancel</button>
+                                <button type="submit" className="drive-folder-popup-create-button">Create</button>
+                            </div>
                         </form>
+
                     </div>
                 </div>
             )}

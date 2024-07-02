@@ -4,7 +4,7 @@ import InviteUserModal from './chatsidebar/InviteUserModal';
 import LeaveChatModal from './chatsidebar/LeaveChatModal';
 import '../../styles/components/chat/ChatHeader.css';
 
-const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat }) => {
+const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat, memberCount }) => {
     const [showInviteUserModal, setShowInviteUserModal] = useState(false);
     const [showLeaveChatModal, setShowLeaveChatModal] = useState(false);
 
@@ -50,7 +50,7 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat }) => {
                     </svg>
 
                     <span>
-                        5
+                        {memberCount}
                     </span>
                 </div>
 

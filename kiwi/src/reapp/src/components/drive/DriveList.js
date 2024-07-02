@@ -11,6 +11,8 @@ import DeleteIcon from '../../images/svg/buttons/DeleteIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import CheckIcon from '../../images/svg/buttons/CheckIcon';
 import SharedIcon from '../../images/svg/buttons/SharedIcon';
+import DriveIcon from '../../images/svg/buttons/DriveIcon';
+
 
 const DriveList = ({ onView, refresh }) => {
     const { teamno } = useParams();
@@ -110,7 +112,7 @@ const DriveList = ({ onView, refresh }) => {
             <div className='drive-list-shared-header'>
                 <SharedIcon className='drive-list-shared-icon' />
                 <div>
-                    Shared Drives - {drives.length}
+                    Shared Drive - {drives.length}
                 </div>
             </div>
             <ul>
@@ -138,6 +140,8 @@ const DriveList = ({ onView, refresh }) => {
                         ) : (
                             <div className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`}>
                                 <div className='drive-list-item-name'>
+                                    <DriveIcon className='drive-list-drive-icon'/>
+
                                     {drive.driveName}
                                 </div>
                                 <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>

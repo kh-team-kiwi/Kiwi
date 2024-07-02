@@ -4,6 +4,7 @@ import CreateDriveModal from "./DriveContent/CreateDriveModal";
 
 import PlusIcon from '../../images/svg/shapes/PlusIcon';
 
+
 import '../../styles/components/drive/DriveSidebar.css'
 
 
@@ -26,7 +27,7 @@ const DriveSidebar = ({ onView, refresh, teamno, onDriveCreated }) => {
         <div className='sidebar'>
             <button className="drive-sidebar-create-button" onClick={handleOpenCreateDriveModal}>
                 <PlusIcon className='drive-sidebar-plus-icon'/>
-                Create
+                Create Drive
             </button>
             {showCreateDriveModal && (
                 <CreateDriveModal

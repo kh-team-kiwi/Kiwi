@@ -27,7 +27,7 @@ const ChatRoom = ({ chatNum }) => {
     }, []);
 
     useEffect(() => {
-        if (!profile) return;
+        if (!profile) return; // profile이 설정된 경우에만 실행
 
         const fetchMessages = async () => {
             try {
@@ -37,7 +37,7 @@ const ChatRoom = ({ chatNum }) => {
                     return { ...msg, unreadCount };
                 }));
                 setMessages(messagesWithUnreadCounts);
-                markMessagesAsRead(response.data);
+                markMessagesAsRead(messagesWithUnreadCounts);
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -53,15 +53,15 @@ const ChatRoom = ({ chatNum }) => {
             stompClient.current = client;
             client.subscribe(`/topic/chat/${chatNum}`, async (msg) => {
                 const newMessage = JSON.parse(msg.body);
-                if (newMessage.memberId) { // 메시지 읽음 상태 변경 메시지
+                if (newMessage.memberId) {
                     setMessages((prevMessages) =>
                         prevMessages.map((message) =>
                             message.messageNum === newMessage.messageNum
-                                ? { ...message, unreadCount: message.unreadCount - 1 }
+                                ? { ...message, unreadCount: Math.max(0, message.unreadCount - 1) }
                                 : message
                         )
                     );
-                } else { // 새 메시지
+                } else {
                     const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
                     setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
                     markMessageAsRead(newMessage, profile.username);
@@ -91,8 +91,15 @@ const ChatRoom = ({ chatNum }) => {
     };
 
     const markMessagesAsRead = async (messages) => {
+        if (!profile) {
+            console.error('Profile is null. Cannot mark messages as read.');
+            return;
+        }
+
         for (let msg of messages) {
-            await markMessageAsRead(msg, profile.username);
+            if (msg.unreadCount > 0) {
+                await markMessageAsRead(msg, profile.username);
+            }
         }
     };
 
@@ -103,25 +110,30 @@ const ChatRoom = ({ chatNum }) => {
         }
 
         try {
-            await axios.post('http://localhost:8080/api/chat/message/read', {
+            const response = await axios.post('http://localhost:8080/api/chat/message/read', {
                 messageNum: message.messageNum,
                 memberId: memberId
             });
 
-            if (stompClient.current && stompClient.current.connected) {
-                stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
-                    messageNum: message.messageNum,
-                    memberId: memberId,
-                    chatNum: chatNum
-                }));
-            }
+            const { isAlreadyRead } = response.data;
 
-            const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
-            setMessages(prevMessages =>
-                prevMessages.map(msg =>
-                    msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
-                )
-            );
+            if (response.status === 200 && !isAlreadyRead) {
+                // 메시지를 읽음으로 표시하고 STOMP 메시지를 전송합니다.
+                if (stompClient.current && stompClient.current.connected) {
+                    stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
+                        messageNum: message.messageNum,
+                        memberId: memberId,
+                        chatNum: chatNum
+                    }));
+                }
+
+                const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
+                setMessages(prevMessages =>
+                    prevMessages.map(msg =>
+                        msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
+                    )
+                );
+            }
         } catch (error) {
             console.error('Error marking message as read:', error);
         }

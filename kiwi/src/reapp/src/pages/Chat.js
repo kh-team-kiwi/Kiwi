@@ -8,6 +8,7 @@ import CreateChatModal from '../components/chat/chatsidebar/CreateChatModal';
 import '../styles/pages/Page.css';
 import '../styles/pages/Chat.css';
 import { useParams } from "react-router-dom";
+import { getSessionItem } from "../jwt/storage";
 
 const Chat = () => {
     const { teamno } = useParams();
@@ -15,14 +16,29 @@ const Chat = () => {
     const [selectedChatName, setSelectedChatName] = useState("");
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
     const [refreshChatList, setRefreshChatList] = useState(false);
+    const [memberCount, setMemberCount] = useState(0);
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        const storedProfile = getSessionItem("profile");
+        setProfile(storedProfile);
+    }, []);
 
     const handleApprovalLineSave = (line) => {
         setShowCreateChatModal(false);
     };
 
-    const handleChatSelect = (chatNum, chatName) => {
+    const handleChatSelect = async (chatNum, chatName) => {
         setSelectedChatNum(chatNum);
         setSelectedChatName(chatName);
+
+        // Fetch member count
+        try {
+            const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            setMemberCount(response.data.length);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
     };
 
     const handleCreateChat = () => {
@@ -65,12 +81,17 @@ const Chat = () => {
     };
 
     const handleLeaveChat = async (chatNum) => {
+        const memberId = profile?.username; // 프로필에서 로그인된 사용자의 ID를 가져옵니다.
+        if (!memberId) {
+            console.error('로그인된 사용자의 ID를 찾을 수 없습니다.');
+            return;
+        }
         try {
-            const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId: '로그인된 유저의 ID' });
+            const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId });
             console.log('채팅방 나가기 성공:', response.data);
-            setSelectedChatNum(null);
-            setSelectedChatName("");
-            setRefreshChatList(prev => !prev); // Refresh chat list
+            setSelectedChatNum(null); // 선택된 채팅방 초기화
+            setSelectedChatName(""); // 선택된 채팅방 이름 초기화
+            setRefreshChatList(prev => !prev); // 채팅방 목록 새로고침
         } catch (error) {
             console.error('채팅방 나가기 중 오류 발생:', error);
         }
@@ -81,7 +102,7 @@ const Chat = () => {
             <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} />
             <div className='content-container-chat'>
                 {selectedChatNum && (
-                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} />
+                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} memberCount={memberCount} />
                 )}
                 {!selectedChatNum && (
                     <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>

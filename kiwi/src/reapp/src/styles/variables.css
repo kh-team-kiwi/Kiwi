@@ -19,6 +19,8 @@
   --white2: white;
   --white-hover: rgb(241, 241, 241);
   --white-hover2: rgb(247, 247, 247);
+  --darker-white-hover: rgb(216, 216, 216);
+
 
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
@@ -97,6 +99,8 @@
   --page-icon-active: #4c6851;
   --secondary: #aaa78e;
   --secondary-active: #9b9881;
+
+  --sidebar-selected:rgb(141, 141, 141);
 
   .img-enable-darkmode {
     filter: brightness(70%);
