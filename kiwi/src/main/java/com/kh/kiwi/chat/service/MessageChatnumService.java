@@ -48,8 +48,10 @@ public class MessageChatnumService {
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
+
     @Autowired
     private MessageReadRepository messageReadRepository;
+
     @Autowired
     private ChatUsersRepository chatUsersRepository;
 
@@ -200,8 +202,8 @@ public class MessageChatnumService {
     }
 
     public int getUnreadCount(int chatNum, String messageNum) {
-        int totalMembers = chatUsersRepository.countMembersByIdChatNum(chatNum);
-        int readMembers = messageReadRepository.countByIdMessageNum(messageNum);
+        int totalMembers = getChatRoomMemberCount(chatNum);
+        int readMembers = getMessageReadCount(messageNum);
         int unreadCount = totalMembers - readMembers;
         log.debug("Unread count for chatNum {}, messageNum {}: {}", chatNum, messageNum, unreadCount);
         return unreadCount;
@@ -212,5 +214,11 @@ public class MessageChatnumService {
         boolean exists = messageReadRepository.existsById(id);
         log.debug("Check if message already read for messageNum {}, memberId {}: {}", messageNum, memberId, exists);
         return exists;
+    }
+
+    public void broadcastMessageRead(MessageReadDto messageReadDto) {
+        // STOMP 클라이언트에 메시지 읽음 상태를 브로드캐스트합니다.
+        // 클라이언트에게 메시지 읽음 상태를 전송합니다.
+        // 이를 위해 STOMP 클라이언트에 메시지를 보내는 로직을 구현합니다.
     }
 }

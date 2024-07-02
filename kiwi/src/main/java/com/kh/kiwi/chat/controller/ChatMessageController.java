@@ -72,7 +72,11 @@ public class ChatMessageController {
             return ResponseEntity.badRequest().body("Member ID is null or empty");
         }
 
-        messageChatnumService.markMessageAsRead(messageReadDto);
+        boolean isAlreadyRead = messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId());
+        if (!isAlreadyRead) {
+            messageChatnumService.markMessageAsRead(messageReadDto);
+            messageChatnumService.broadcastMessageRead(messageReadDto);
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -86,10 +90,6 @@ public class ChatMessageController {
     @MessageMapping("/chat.readMessage/{chatNum}")
     @SendTo("/topic/chat/{chatNum}")
     public MessageReadDto broadcastMessageRead(MessageReadDto messageReadDto) {
-        if (!messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId())) {
-            messageChatnumService.markMessageAsRead(messageReadDto);
-        }
         return messageReadDto;
     }
-
 }

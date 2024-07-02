@@ -110,25 +110,30 @@ const ChatRoom = ({ chatNum }) => {
         }
 
         try {
-            await axios.post('http://localhost:8080/api/chat/message/read', {
+            const response = await axios.post('http://localhost:8080/api/chat/message/read', {
                 messageNum: message.messageNum,
                 memberId: memberId
             });
 
-            if (stompClient.current && stompClient.current.connected) {
-                stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
-                    messageNum: message.messageNum,
-                    memberId: memberId,
-                    chatNum: chatNum
-                }));
-            }
+            if (response.status === 200) {
+                if (!response.data.isAlreadyRead) {
+                    // 메시지를 읽음으로 표시하고 STOMP 메시지를 전송합니다.
+                    if (stompClient.current && stompClient.current.connected) {
+                        stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
+                            messageNum: message.messageNum,
+                            memberId: memberId,
+                            chatNum: chatNum
+                        }));
+                    }
 
-            const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
-            setMessages(prevMessages =>
-                prevMessages.map(msg =>
-                    msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
-                )
-            );
+                    const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
+                    setMessages(prevMessages =>
+                        prevMessages.map(msg =>
+                            msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
+                        )
+                    );
+                }
+            }
         } catch (error) {
             console.error('Error marking message as read:', error);
         }
