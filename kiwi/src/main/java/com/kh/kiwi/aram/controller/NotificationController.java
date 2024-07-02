@@ -25,18 +25,18 @@ public class NotificationController {
         return notificationService.subscribe(memberId);
     }
 
-    @GetMapping(value = "/test/{memberId}")
-    public String subscribe2(@PathVariable(value="memberId") String memberId){
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                System.out.println("보내기!!!");
-                notificationService.customNotify(memberId , "aaa", "bbb", "sse");
-            } catch (Exception e) {
-                System.out.println("보내기!!!");
-                e.printStackTrace();
-            }
-        }, 3, 1, TimeUnit.SECONDS); // 30초마다 전송
-        notificationService.customNotify(memberId , "aaa", "bbb", "sse");
-        return null;
-    }
+//    @GetMapping(value = "/test/{memberId}")
+//    public String subscribe2(@PathVariable(value="memberId") String memberId){
+//        scheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                System.out.println("보내기!!!");
+//                notificationService.customNotify(memberId , "aaa", "bbb", "sse");
+//            } catch (Exception e) {
+//                System.out.println("보내기!!!");
+//                e.printStackTrace();
+//            }
+//        }, 3, 1, TimeUnit.SECONDS); // 30초마다 전송
+//        notificationService.customNotify(memberId , "aaa", "bbb", "sse");
+//        return null;
+//    }
 }

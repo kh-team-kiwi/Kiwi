@@ -16,8 +16,8 @@ const ToastMessage = () =>{
 
         console.log("ToastMessage : EventSource created");
 
-        eventSource.onopen = async () => {
-            await  console.log(eventSource.readyState);
+        eventSource.onopen = () => {
+            console.log(eventSource.readyState);
             console.log("EventSource connection opened");
         };
 
@@ -32,8 +32,8 @@ const ToastMessage = () =>{
             toast(`Event: ${e.data}`);
         });
 
-        eventSource.onerror = async (e) => {
-            await console.error("EventSource failed:", e);
+        eventSource.onerror = (e) => {
+            console.error("EventSource failed:", e);
             //eventSource.close();
         };
 
