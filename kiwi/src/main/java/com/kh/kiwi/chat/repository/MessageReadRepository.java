@@ -19,4 +19,7 @@ public interface MessageReadRepository extends JpaRepository<MessageRead, Messag
     @Transactional
     @Query("DELETE FROM MessageRead mr WHERE mr.id.messageNum = :messageNum")
     void deleteByIdMessageNum(String messageNum);
+
+    @Transactional
+    void deleteByIdMemberId(String memberId);
 }

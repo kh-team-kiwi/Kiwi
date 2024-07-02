@@ -5,6 +5,7 @@ import com.kh.kiwi.auth.repository.MemberRepository;
 import com.kh.kiwi.chat.entity.ChatUsers;
 import com.kh.kiwi.chat.entity.ChatUsers.ChatUsersId;
 import com.kh.kiwi.chat.repository.ChatUsersRepository;
+import com.kh.kiwi.chat.repository.MessageReadRepository;
 import com.kh.kiwi.team.entity.Group;
 import com.kh.kiwi.team.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class ChatUserService {
 
     @Autowired
     private GroupRepository groupRepository;
+    @Autowired
+    private MessageReadRepository messageReadRepository;
 
     public List<Member> getUsersInTeam(String team) {
         logger.debug("Fetching users in team: {}", team);
@@ -67,7 +70,12 @@ public class ChatUserService {
         ChatUsersId id = new ChatUsersId();
         id.setChatNum(chatNum);
         id.setMemberId(memberId);
+
+        // chat_users 테이블에서 사용자 제거
         chatUsersRepository.deleteById(id);
-        logger.debug("User removed from chat: {} with memberId: {}", chatNum, memberId);
+
+        // message_read 테이블에서 해당 사용자의 읽은 메시지 기록 제거
+        messageReadRepository.deleteByIdMemberId(memberId);
+        logger.debug("User removed from chat and message read records deleted: {} with memberId: {}", chatNum, memberId);
     }
 }

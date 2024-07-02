@@ -89,9 +89,9 @@ const Chat = () => {
         try {
             const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId });
             console.log('채팅방 나가기 성공:', response.data);
-            setSelectedChatNum(null);
-            setSelectedChatName("");
-            setRefreshChatList(prev => !prev); // Refresh chat list
+            setSelectedChatNum(null); // 선택된 채팅방 초기화
+            setSelectedChatName(""); // 선택된 채팅방 이름 초기화
+            setRefreshChatList(prev => !prev); // 채팅방 목록 새로고침
         } catch (error) {
             console.error('채팅방 나가기 중 오류 발생:', error);
         }
