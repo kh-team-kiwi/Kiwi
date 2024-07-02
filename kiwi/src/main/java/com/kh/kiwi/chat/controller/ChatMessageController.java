@@ -86,12 +86,7 @@ public class ChatMessageController {
     @MessageMapping("/chat.readMessage/{chatNum}")
     @SendTo("/topic/chat/{chatNum}")
     public MessageReadDto broadcastMessageRead(MessageReadDto messageReadDto) {
-        log.debug("Broadcasting message read: {}", messageReadDto);
-        if (!messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId())) {
-            messageChatnumService.markMessageAsRead(messageReadDto);
-            return messageReadDto;
-        }
-        log.debug("Message already read: {}", messageReadDto);
-        return null; // 이미 읽은 메시지인 경우 null 반환
+        messageChatnumService.markMessageAsRead(messageReadDto);
+        return messageReadDto;
     }
 }
