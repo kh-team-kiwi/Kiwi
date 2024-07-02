@@ -72,8 +72,12 @@ public class ChatMessageController {
             return ResponseEntity.badRequest().body("Member ID is null or empty");
         }
 
-        messageChatnumService.markMessageAsRead(messageReadDto);
-        return ResponseEntity.ok().build();
+        boolean isAlreadyRead = messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId());
+        if (!isAlreadyRead) {
+            messageChatnumService.markMessageAsRead(messageReadDto);
+            messageChatnumService.broadcastMessageRead(messageReadDto);
+        }
+        return ResponseEntity.ok().body(Map.of("isAlreadyRead", isAlreadyRead));
     }
 
     @GetMapping("/unreadCount/{chatNum}/{messageNum}")
@@ -86,12 +90,6 @@ public class ChatMessageController {
     @MessageMapping("/chat.readMessage/{chatNum}")
     @SendTo("/topic/chat/{chatNum}")
     public MessageReadDto broadcastMessageRead(MessageReadDto messageReadDto) {
-        log.debug("Broadcasting message read: {}", messageReadDto);
-        if (!messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId())) {
-            messageChatnumService.markMessageAsRead(messageReadDto);
-            return messageReadDto;
-        }
-        log.debug("Message already read: {}", messageReadDto);
-        return null; // 이미 읽은 메시지인 경우 null 반환
+        return messageReadDto;
     }
 }

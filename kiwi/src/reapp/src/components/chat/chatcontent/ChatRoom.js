@@ -16,7 +16,7 @@ const ChatRoom = ({ chatNum }) => {
     const [files, setFiles] = useState([]);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
-    const [replyingTo, setReplyingTo] = useState(null);
+    const [replyingTo, setReplyingTo] = useState(null); // 댓글 작성 대상 상태 추가
     const stompClient = useRef(null);
     const fileInputRef = useRef();
     const textAreaRef = useRef();
@@ -27,7 +27,7 @@ const ChatRoom = ({ chatNum }) => {
     }, []);
 
     useEffect(() => {
-        if (!profile) return;
+        if (!profile) return; // profile이 설정된 경우에만 실행
 
         const fetchMessages = async () => {
             try {
@@ -37,7 +37,7 @@ const ChatRoom = ({ chatNum }) => {
                     return { ...msg, unreadCount };
                 }));
                 setMessages(messagesWithUnreadCounts);
-                markMessagesAsRead(response.data);
+                markMessagesAsRead(messagesWithUnreadCounts);
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -53,7 +53,7 @@ const ChatRoom = ({ chatNum }) => {
             stompClient.current = client;
             client.subscribe(`/topic/chat/${chatNum}`, async (msg) => {
                 const newMessage = JSON.parse(msg.body);
-                if (newMessage && newMessage.memberId) { // 메시지 읽음 상태 변경 메시지
+                if (newMessage.memberId) {
                     setMessages((prevMessages) =>
                         prevMessages.map((message) =>
                             message.messageNum === newMessage.messageNum
@@ -61,7 +61,7 @@ const ChatRoom = ({ chatNum }) => {
                                 : message
                         )
                     );
-                } else if (newMessage) { // 새 메시지
+                } else {
                     const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
                     setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
                     markMessageAsRead(newMessage, profile.username);
@@ -91,8 +91,15 @@ const ChatRoom = ({ chatNum }) => {
     };
 
     const markMessagesAsRead = async (messages) => {
+        if (!profile) {
+            console.error('Profile is null. Cannot mark messages as read.');
+            return;
+        }
+
         for (let msg of messages) {
-            await markMessageAsRead(msg, profile.username);
+            if (msg.unreadCount > 0) {
+                await markMessageAsRead(msg, profile.username);
+            }
         }
     };
 
@@ -108,20 +115,25 @@ const ChatRoom = ({ chatNum }) => {
                 memberId: memberId
             });
 
-            if (stompClient.current && stompClient.current.connected && response.data !== null) {
-                stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
-                    messageNum: message.messageNum,
-                    memberId: memberId,
-                    chatNum: chatNum
-                }));
-            }
+            const { isAlreadyRead } = response.data;
 
-            const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
-            setMessages(prevMessages =>
-                prevMessages.map(msg =>
-                    msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
-                )
-            );
+            if (response.status === 200 && !isAlreadyRead) {
+                // 메시지를 읽음으로 표시하고 STOMP 메시지를 전송합니다.
+                if (stompClient.current && stompClient.current.connected) {
+                    stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
+                        messageNum: message.messageNum,
+                        memberId: memberId,
+                        chatNum: chatNum
+                    }));
+                }
+
+                const unreadCount = await fetchUnreadCount(message.chatNum, message.messageNum);
+                setMessages(prevMessages =>
+                    prevMessages.map(msg =>
+                        msg.messageNum === message.messageNum ? { ...msg, unreadCount } : msg
+                    )
+                );
+            }
         } catch (error) {
             console.error('Error marking message as read:', error);
         }
@@ -139,7 +151,8 @@ const ChatRoom = ({ chatNum }) => {
                 chatNum,
                 files: [],
                 type: 'CHAT',
-                replyToMessageNum: replyingTo ? replyingTo.messageNum : null
+                replyToMessageNum: replyingTo ? replyingTo.messageNum : null, // 댓글 대상 메시지 번호 추가
+                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null // 댓글 대상 정보 추가
             };
 
             try {
@@ -161,18 +174,13 @@ const ChatRoom = ({ chatNum }) => {
 
                 setMessage('');
                 setFiles([]);
-                setReplyingTo(null);
+                setReplyingTo(null); // 댓글 작성 후 초기화
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
                 if (textAreaRef.current) {
                     textAreaRef.current.style.height = 'auto';
                 }
-
-                // 메시지를 전송한 후, 작성자가 해당 메시지를 읽은 것으로 처리
-                const messageNum = `${chatNum}-${Date.now()}`;
-                markMessageAsRead({ messageNum, chatNum }, profile.username);
-
             } catch (error) {
                 console.error('Error sending message or uploading files:', error);
             }
@@ -237,7 +245,7 @@ const ChatRoom = ({ chatNum }) => {
 
     const handleReactionClick = async (reactionKey, message) => {
         if (reactionKey === 'comment') {
-            setReplyingTo(message);
+            setReplyingTo(message); // 댓글 대상 메시지 설정
         } else if (reactionKey === 'cross') {
             setSelectedMessage(message);
             setShowDeletePopup(true);
@@ -311,7 +319,7 @@ const ChatRoom = ({ chatNum }) => {
                             <small className="unread-count">Unread: {msg.unreadCount}</small>
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
-                                isOwnMessage={msg.sender === profile.username}
+                                isOwnMessage={msg.sender === profile.username} // 메시지의 작성자가 현재 사용자와 동일한지 확인
                             />
                         </div>
                     </div>

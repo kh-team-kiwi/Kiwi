@@ -135,10 +135,6 @@
 
 }
 
-.home-user-dropdown-profile {
-    margin-top: 4px;
-}
-
 .home-user-dropdown-settings {
     margin-bottom: 5px;
 }
@@ -208,7 +204,7 @@
 }
 
 .home-user-container.active {
-    height: 196px;
+    height: 166px;
     background: white;
     transition: 0.2s;
 

@@ -1,5 +1,6 @@
 package com.kh.kiwi.team.service;
 
+import com.kh.kiwi.aram.service.NotificationService;
 import com.kh.kiwi.auth.dto.MemberDto;
 import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
@@ -30,6 +31,8 @@ public class TeamService {
     private final TeamMapper teamMapper;
     private final CompanyRepository companyRepository;
     private final MemberRepository memberRepository;
+
+    private final NotificationService notificationService;
 
     @Transactional
     public ResponseTeamDto createTeam(String memberId, TeamCreateRequest tcdto) {
@@ -64,6 +67,10 @@ public class TeamService {
                         .build();
                 groupRepository.save(invite);
             });
+
+            for (MemberDto member : invitedMembers) {
+                notificationService.customNotify(member.getUsername(),"팀에 초대되었습니다.","INVITE","sse" );
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
