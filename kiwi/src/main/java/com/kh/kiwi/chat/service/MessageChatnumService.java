@@ -200,8 +200,8 @@ public class MessageChatnumService {
     }
 
     public int getUnreadCount(int chatNum, String messageNum) {
-        int totalMembers = getChatRoomMemberCount(chatNum);
-        int readMembers = getMessageReadCount(messageNum);
+        int totalMembers = chatUsersRepository.countMembersByIdChatNum(chatNum);
+        int readMembers = messageReadRepository.countByIdMessageNum(messageNum);
         int unreadCount = totalMembers - readMembers;
         log.debug("Unread count for chatNum {}, messageNum {}: {}", chatNum, messageNum, unreadCount);
         return unreadCount;

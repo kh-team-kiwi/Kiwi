@@ -37,7 +37,7 @@ const ChatRoom = ({ chatNum }) => {
                     return { ...msg, unreadCount };
                 }));
                 setMessages(messagesWithUnreadCounts);
-                markMessagesAsRead(messagesWithUnreadCounts); // 수정: messages 대신 messagesWithUnreadCounts 사용
+                markMessagesAsRead(messagesWithUnreadCounts);
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -53,15 +53,15 @@ const ChatRoom = ({ chatNum }) => {
             stompClient.current = client;
             client.subscribe(`/topic/chat/${chatNum}`, async (msg) => {
                 const newMessage = JSON.parse(msg.body);
-                if (newMessage.memberId) { // 메시지 읽음 상태 변경 메시지
+                if (newMessage.memberId) {
                     setMessages((prevMessages) =>
                         prevMessages.map((message) =>
                             message.messageNum === newMessage.messageNum
-                                ? { ...message, unreadCount: Math.max(0, message.unreadCount -1) }
+                                ? { ...message, unreadCount: Math.max(0, message.unreadCount - 1) }
                                 : message
                         )
                     );
-                } else { // 새 메시지
+                } else {
                     const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
                     setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
                     markMessageAsRead(newMessage, profile.username);
@@ -91,8 +91,12 @@ const ChatRoom = ({ chatNum }) => {
     };
 
     const markMessagesAsRead = async (messages) => {
+        if (!profile) {
+            console.error('Profile is null. Cannot mark messages as read.');
+            return;
+        }
+
         for (let msg of messages) {
-            // 메시지가 이미 읽음 상태가 아닌 경우에만 읽음 처리
             if (msg.unreadCount > 0) {
                 await markMessageAsRead(msg, profile.username);
             }
