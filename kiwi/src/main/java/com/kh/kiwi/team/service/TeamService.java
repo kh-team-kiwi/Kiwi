@@ -16,7 +16,9 @@ import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -134,22 +136,6 @@ public class TeamService {
         }
     }
 
-    public ResponseTeamDto deleteTeam(Team dto, String teamno) {
-        try {
-            if (!teamRepository.existsByTeamName(dto.getTeamName())) {
-                return ResponseTeamDto.setFailed("데이터 베이스에 해당 팀이 존재하지 않습니다.");
-            }
-        } catch (Exception e) {
-            return ResponseTeamDto.setFailed("데이터베이스 연결에 실패했습니다.");
-        }
-        try {
-            teamRepository.delete(dto);
-        } catch (Exception e) {
-            return ResponseTeamDto.setFailed("데이터베이스 연결에 실패했습니다.");
-        }
-        return ResponseTeamDto.setSuccessData("팀 삭제를 성공했습니다.", dto);
-    }
-
     public Optional<Team> getTeamById(String teamId) {
         return teamRepository.findById(teamId);
     }
@@ -191,5 +177,42 @@ public class TeamService {
 
     public String getRole(String teamno, String memberId) {
         return groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build()).get().getRole();
+    }
+
+    public ResponseDto<?> updateTeamName(String team, String teamName, String memberId){
+        try{
+            Optional<Team> searchTeam = teamRepository.findById(team);
+            if (searchTeam.isEmpty()) {
+                return ResponseDto.setFailed("팀 이름 변경에 실패했습니다. 존재하지 않는 팀입니다.");
+            } else {
+                Team newTeam = searchTeam.get();
+                newTeam.setTeamName(teamName);
+                teamRepository.save(newTeam);
+                return ResponseDto.setSuccess("팀 이름을 변경했습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 팀 이름 변경에 실패했습니다.");
+        }
+    }
+
+    @Transactional
+    public ResponseDto<?> deleteTeam(String team, String memberId) {
+        try{
+            if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
+                groupRepository.deleteAllByTeam(team);
+                teamRepository.deleteById(team);
+                return ResponseDto.setSuccess("성공적으로 삭제되었습니다.");
+            } else {
+                return ResponseDto.setFailed("조건이 일치하지 않아 삭제에 실패했습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 팀 삭제에 실패했습니다.");
+        }
+    }
+
+    public void uploadProfile(MultipartFile[] files, String teamId, String memberId) {
+
     }
 }

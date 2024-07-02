@@ -1,4 +1,79 @@
-.teamsettings-hedaer {
+.teamsettings-header {
     font-size: 30px;
     padding: 70px;
+}
+
+.teamsettings-team-section {
+    padding: 0 70px;
+}
+
+.teamsettings-team-section > div {
+    margin-bottom: 10px;
+}
+
+.teamsettings-team-section input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--settings-selected);
+    border-radius: 4px;
+}
+
+.teamsettings-team-section button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--page-icon);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.teamsettings-team-section button:hover {
+    background-color: var(--page-icon-active);
+}
+
+.teamsettings-team-delete p {
+    font-weight: bold;
+}
+
+.teamsettings-team-delete button {
+    background-color: var(--red);
+}
+
+.teamsettings-team-delete button:hover {
+    background-color: var(--red-hover);
+}
+
+.teamsettings-team-delete p {
+    margin-bottom: 20px;
+    color: #555;
+}
+.teamsettings-team-profile{
+    width: 150px;
+    height: 150px;
+    background-color: var(--settings-gray-filed);
+    border-radius: 7px;
+}
+.teamsettings-team-icon {
+    width: 150px;
+    height: 150px;
+    fill: var(--light-gray);
+    cursor: pointer;
+}
+
+.teamsettings-team-icon:hover {
+    filter: brightness(0.7) contrast(1.5);
+}
+.teamsettings-team-profile-x{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: 130px;
+    fill: var(--page-icon);
+    cursor: pointer;
+}
+.teamsettings-team-profile-box{
+    position: relative;
 }

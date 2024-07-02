@@ -4,7 +4,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 import MemberManageIcon from "../../images/svg/settings/MemberManageIcon";
 import PersonalManageIcon from "../../images/svg/settings/PersonalManageIcon";
 import TeamManageIcon from "../../images/svg/settings/TeamManageIcon";
-import {getSessionItem} from "../../jwt/storage";
 import {TeamContext} from "../../context/TeamContext";
 
 const SideMenuBar = () => {
@@ -12,7 +11,6 @@ const SideMenuBar = () => {
     const location = useLocation();
     const {role} = useContext(TeamContext);
     const getItems = () => {
-        console.log(role)
         switch (role) {
             case 'MEMBER':
                 return [{
@@ -50,7 +48,7 @@ const SideMenuBar = () => {
         }
     };
 
-    const [items, setItems] = useState(getItems());
+    const [items, setItems] = useState([]);
     const [selected, setSelected] = useState(
         items.find(item => location.pathname.endsWith(item.url)) || {}
     );

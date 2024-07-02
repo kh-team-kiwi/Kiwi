@@ -6,8 +6,10 @@ import com.kh.kiwi.team.entity.Team;
 import com.kh.kiwi.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -56,5 +58,23 @@ public class TeamController {
     @PostMapping("/removeMember")
     public ResponseDto<?> removeMember(@RequestParam String teamId, @RequestParam String memberId) {
         return teamService.removeMember(teamId, memberId);
+    }
+
+    @PostMapping("/update/team/{team}/teamsettings/team-manage/{teamName}")
+    public ResponseDto<?> updateTeamName(@PathVariable String team, @PathVariable String teamName, @RequestBody String member) {
+        return teamService.updateTeamName(team,teamName, member);
+    }
+
+    @PostMapping("/delete/team/{team}/teamsettings/team-manage")
+    public ResponseDto<?> deleteTeam(@PathVariable String team, @RequestBody Map<String, String> requestBody) {
+        String memberId = requestBody.get("memberId");
+        return teamService.deleteTeam(team, memberId);
+    }
+
+    @PostMapping("/upload/profile")
+    public ResponseDto<?> uploadProfile(@RequestParam("profile") MultipartFile[] files,
+                                        @RequestParam("team") String team,
+                                        @RequestParam("memberId") String memberId) {
+        return teamService.uploadProfile(files, team, memberId);
     }
 }

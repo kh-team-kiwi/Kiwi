@@ -30,7 +30,7 @@ const Personal = () => {
     }
     return (
         <div className='teamsettings-inner'>
-            <div className='teamsettings-hedaer'>팀 탈퇴</div>
+            <div className='teamsettings-header'>팀 탈퇴</div>
             <div className={'unsubscribe-btn-box'}>
                 <button className='unsubscribe-btn' onClick={()=>handleLeaveTeam()}>팀 탈퇴하기</button>
             </div>

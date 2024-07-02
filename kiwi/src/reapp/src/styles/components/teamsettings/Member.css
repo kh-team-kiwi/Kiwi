@@ -1,4 +1,74 @@
-.teamsettings-hedaer {
+.teamsettings-header {
     font-size: 30px;
     padding: 70px;
+}
+.teamsettings-team-table-header{
+    padding: 0 70px;
+}
+.teamsettings-team-table-header-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 2px solid var(--settings-selected);
+}
+.teamsettings-team-table-header-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+.teamsettings-team-table-wrapper{
+    padding: 0 70px 70px;
+}
+.teamsettings-team-table{
+    width: 100%;
+}
+.teamsettings-team-table thead tr {
+    height: 30px;
+}
+.teamsettings-team-table tbody tr {
+    height: 60px;
+}
+.teamsettings-team-table th:nth-child(1){
+    width: 30px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.teamsettings-team-table th:nth-child(2){
+    width: 70px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.teamsettings-team-table th:nth-child(3){
+    vertical-align: middle;
+    text-align: left;
+}
+
+.teamsettings-team-table th:nth-child(4){
+    width: 100px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.teamsettings-team-table .odd-column {
+  background-color: var(--settings-gray-filed);
+}
+
+.teamsettings-team-table td:first-child {
+    text-align: center;
+}
+
+.teamsettings-team-table td:nth-child(2) {
+    text-align: center;
+}
+
+.teamsettings-team-table td {
+    vertical-align: middle;
+}
+
+.teamsettigs-team-member-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
 }

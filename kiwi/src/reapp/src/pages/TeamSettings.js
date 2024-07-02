@@ -7,9 +7,9 @@ import {Outlet} from "react-router-dom";
 const TeamSettings = () => {
     return (
         <>
-            <SideMenuBar></SideMenuBar>
+            <SideMenuBar/>
             <div className='content-container'>
-                <Outlet></Outlet>
+                <Outlet/>
             </div>
         </>
     );
