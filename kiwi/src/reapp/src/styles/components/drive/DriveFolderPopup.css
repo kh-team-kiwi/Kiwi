@@ -1,0 +1,126 @@
+@import '../../variables.css';
+
+@keyframes bounceIn {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    75% {
+      transform: scale(1.04);
+      opacity: 1;
+    }
+    90% {
+      transform: scale(0.98);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+
+.drive-folder-popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.2s ease-out; 
+
+}
+
+.drive-folder-popup-content {
+    background: var(--white);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 300px;
+    max-width: 80%;
+    text-align: center;
+    margin-bottom: 300px;
+    animation: bounceIn 0.2s ease-out; 
+
+}
+
+.drive-folder-popup-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.drive-folder-popup-event-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.drive-folder-popup-event-form input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid var(--light-gray);
+    border-radius: 5px;
+    font-size: 18px;
+    outline: none;
+    background-color: var(--white);
+}
+
+.drive-folder-popup-event-form input[type="text"]::placeholder {
+  color: var(--gray);
+}
+
+
+.drive-folder-popup-create-button {
+    background-color: var(--green);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 90px;
+    height: 40px;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+  
+  }
+  
+  .drive-folder-popup-create-button:hover {
+    background-color: var(--green-hover);
+  }
+  
+  .drive-folder-popup-cancel-button {
+    background-color: var(--white);
+    color: var(--gray);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 90px;
+    height: 40px;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+    border: 2px solid gray;
+  
+  }
+  
+  .drive-folder-popup-cancel-button:hover {
+    background-color: rgba(5, 5, 5, 0.1);
+    
+  }
+  
+.drive-folder-popup-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.drive-folder-popup-bottom {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
