@@ -172,6 +172,9 @@ public class MessageChatnumService {
             fileMessageRepository.delete(fileMessage);
         }
 
+        // message_read 테이블의 관련 항목 삭제
+        messageReadRepository.deleteByIdMessageNum(messageId);
+
         messageChatnumRepository.delete(message);
         log.info("Message with ID: {} deleted successfully", messageId);
     }

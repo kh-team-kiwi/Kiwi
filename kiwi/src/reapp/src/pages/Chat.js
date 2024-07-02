@@ -15,14 +15,23 @@ const Chat = () => {
     const [selectedChatName, setSelectedChatName] = useState("");
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
     const [refreshChatList, setRefreshChatList] = useState(false);
+    const [memberCount, setMemberCount] = useState(0);
 
     const handleApprovalLineSave = (line) => {
         setShowCreateChatModal(false);
     };
 
-    const handleChatSelect = (chatNum, chatName) => {
+    const handleChatSelect = async (chatNum, chatName) => {
         setSelectedChatNum(chatNum);
         setSelectedChatName(chatName);
+
+        // Fetch member count
+        try {
+            const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            setMemberCount(response.data.length);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
     };
 
     const handleCreateChat = () => {
@@ -81,7 +90,7 @@ const Chat = () => {
             <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} />
             <div className='content-container-chat'>
                 {selectedChatNum && (
-                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} />
+                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} memberCount={memberCount} />
                 )}
                 {!selectedChatNum && (
                     <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
