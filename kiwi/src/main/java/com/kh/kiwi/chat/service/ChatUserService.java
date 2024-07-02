@@ -14,8 +14,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class ChatUserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatUserService.class);
 
     @Autowired
     private MemberRepository memberRepository;
@@ -27,6 +32,7 @@ public class ChatUserService {
     private GroupRepository groupRepository;
 
     public List<Member> getUsersInTeam(String team) {
+        logger.debug("Fetching users in team: {}", team);
         List<Group> groupMembers = groupRepository.findByTeam(team);
         List<String> memberIds = groupMembers.stream()
                 .map(Group::getMemberId)
@@ -35,6 +41,7 @@ public class ChatUserService {
     }
 
     public List<Member> getUsersInChat(int chatNum) {
+        logger.debug("Fetching users in chat: {}", chatNum);
         List<ChatUsers> chatUsers = chatUsersRepository.findByIdChatNum(chatNum);
         return chatUsers.stream()
                 .map(chatUser -> memberRepository.findById(chatUser.getId().getMemberId()).orElse(null))
@@ -42,6 +49,7 @@ public class ChatUserService {
     }
 
     public void addChatUser(int chatNum, String memberId) {
+        logger.debug("Adding user to chat: {} with memberId: {}", chatNum, memberId);
         ChatUsersId id = new ChatUsersId();
         id.setChatNum(chatNum);
         id.setMemberId(memberId);
@@ -55,9 +63,11 @@ public class ChatUserService {
     }
 
     public void removeChatUser(int chatNum, String memberId) {
+        logger.debug("Removing user from chat: {} with memberId: {}", chatNum, memberId);
         ChatUsersId id = new ChatUsersId();
         id.setChatNum(chatNum);
         id.setMemberId(memberId);
         chatUsersRepository.deleteById(id);
+        logger.debug("User removed from chat: {} with memberId: {}", chatNum, memberId);
     }
 }

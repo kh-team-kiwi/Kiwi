@@ -8,6 +8,7 @@ import CreateChatModal from '../components/chat/chatsidebar/CreateChatModal';
 import '../styles/pages/Page.css';
 import '../styles/pages/Chat.css';
 import { useParams } from "react-router-dom";
+import { getSessionItem } from "../jwt/storage";
 
 const Chat = () => {
     const { teamno } = useParams();
@@ -16,6 +17,12 @@ const Chat = () => {
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
     const [refreshChatList, setRefreshChatList] = useState(false);
     const [memberCount, setMemberCount] = useState(0);
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        const storedProfile = getSessionItem("profile");
+        setProfile(storedProfile);
+    }, []);
 
     const handleApprovalLineSave = (line) => {
         setShowCreateChatModal(false);
@@ -74,8 +81,13 @@ const Chat = () => {
     };
 
     const handleLeaveChat = async (chatNum) => {
+        const memberId = profile?.username; // 프로필에서 로그인된 사용자의 ID를 가져옵니다.
+        if (!memberId) {
+            console.error('로그인된 사용자의 ID를 찾을 수 없습니다.');
+            return;
+        }
         try {
-            const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId: '로그인된 유저의 ID' });
+            const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId });
             console.log('채팅방 나가기 성공:', response.data);
             setSelectedChatNum(null);
             setSelectedChatName("");
