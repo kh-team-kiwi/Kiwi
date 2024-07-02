@@ -86,7 +86,11 @@ public class ChatMessageController {
     @MessageMapping("/chat.readMessage/{chatNum}")
     @SendTo("/topic/chat/{chatNum}")
     public MessageReadDto broadcastMessageRead(MessageReadDto messageReadDto) {
-        messageChatnumService.markMessageAsRead(messageReadDto);
+        // 메시지를 읽은 사용자인지 확인
+        if (!messageChatnumService.isMessageAlreadyRead(messageReadDto.getMessageNum(), messageReadDto.getMemberId())) {
+            messageChatnumService.markMessageAsRead(messageReadDto);
+        }
         return messageReadDto;
     }
+
 }

@@ -27,7 +27,7 @@ const ChatRoom = ({ chatNum }) => {
     }, []);
 
     useEffect(() => {
-        if (!profile) return;
+        if (!profile) return; // profile이 설정된 경우에만 실행
 
         const fetchMessages = async () => {
             try {
@@ -37,7 +37,7 @@ const ChatRoom = ({ chatNum }) => {
                     return { ...msg, unreadCount };
                 }));
                 setMessages(messagesWithUnreadCounts);
-                markMessagesAsRead(response.data);
+                markMessagesAsRead(messagesWithUnreadCounts); // 수정: messages 대신 messagesWithUnreadCounts 사용
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -57,7 +57,7 @@ const ChatRoom = ({ chatNum }) => {
                     setMessages((prevMessages) =>
                         prevMessages.map((message) =>
                             message.messageNum === newMessage.messageNum
-                                ? { ...message, unreadCount: message.unreadCount - 1 }
+                                ? { ...message, unreadCount: Math.max(0, message.unreadCount -1) }
                                 : message
                         )
                     );
@@ -92,7 +92,10 @@ const ChatRoom = ({ chatNum }) => {
 
     const markMessagesAsRead = async (messages) => {
         for (let msg of messages) {
-            await markMessageAsRead(msg, profile.username);
+            // 메시지가 이미 읽음 상태가 아닌 경우에만 읽음 처리
+            if (msg.unreadCount > 0) {
+                await markMessageAsRead(msg, profile.username);
+            }
         }
     };
 
