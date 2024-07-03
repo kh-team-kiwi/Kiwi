@@ -8,6 +8,12 @@ import ReactionMenu from './ReactionMenu';
 import MessageDeletePopup from './MessageDeletePopup';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
 
+import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
+import SendIcon from '../../../images/svg/buttons/SendIcon';
+
+import ErrorImageHandler from "../../common/ErrorImageHandler";
+
+
 const ChatRoom = ({ chatNum }) => {
     const [profile, setProfile] = useState(null);
     const { teamno } = useParams();
@@ -16,10 +22,9 @@ const ChatRoom = ({ chatNum }) => {
     const [files, setFiles] = useState([]);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
-    const [replyingTo, setReplyingTo] = useState(null); // 댓글 작성 대상 상태 추가
+    const [replyingTo, setReplyingTo] = useState(null);
     const stompClient = useRef(null);
     const fileInputRef = useRef();
-    const textAreaRef = useRef();
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -27,7 +32,7 @@ const ChatRoom = ({ chatNum }) => {
     }, []);
 
     useEffect(() => {
-        if (!profile) return; // profile이 설정된 경우에만 실행
+        if (!profile) return;
 
         const fetchMessages = async () => {
             try {
@@ -118,7 +123,6 @@ const ChatRoom = ({ chatNum }) => {
             const { isAlreadyRead } = response.data;
 
             if (response.status === 200 && !isAlreadyRead) {
-                // 메시지를 읽음으로 표시하고 STOMP 메시지를 전송합니다.
                 if (stompClient.current && stompClient.current.connected) {
                     stompClient.current.send(`/app/chat.readMessage/${chatNum}`, {}, JSON.stringify({
                         messageNum: message.messageNum,
@@ -151,8 +155,8 @@ const ChatRoom = ({ chatNum }) => {
                 chatNum,
                 files: [],
                 type: 'CHAT',
-                replyToMessageNum: replyingTo ? replyingTo.messageNum : null, // 댓글 대상 메시지 번호 추가
-                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null // 댓글 대상 정보 추가
+                replyToMessageNum: replyingTo ? replyingTo.messageNum : null,
+                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null
             };
 
             try {
@@ -174,12 +178,9 @@ const ChatRoom = ({ chatNum }) => {
 
                 setMessage('');
                 setFiles([]);
-                setReplyingTo(null); // 댓글 작성 후 초기화
+                setReplyingTo(null);
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
-                }
-                if (textAreaRef.current) {
-                    textAreaRef.current.style.height = 'auto';
                 }
             } catch (error) {
                 console.error('Error sending message or uploading files:', error);
@@ -236,16 +237,9 @@ const ChatRoom = ({ chatNum }) => {
         }
     };
 
-    const handleInput = () => {
-        if (textAreaRef.current) {
-            textAreaRef.current.style.height = 'auto';
-            textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-        }
-    };
-
     const handleReactionClick = async (reactionKey, message) => {
         if (reactionKey === 'comment') {
-            setReplyingTo(message); // 댓글 대상 메시지 설정
+            setReplyingTo(message);
         } else if (reactionKey === 'cross') {
             setSelectedMessage(message);
             setShowDeletePopup(true);
@@ -275,20 +269,27 @@ const ChatRoom = ({ chatNum }) => {
 
     return (
         <div className="chat-room-container">
-            <div className="chat-messages">
+            <div className="chat-room-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className="message-container">
-                        <div className="message-sender">
+                    <div key={index} className="chat-room-message-container">
+                        <div className="chat-room-message-sender">
+                            <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
+                            <div className='chat-room-message-name'>
                             {msg.memberNickname}
+
+                            </div>
+                            <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
+
+
                         </div>
-                        <div className="message-content-container">
-                            <div className="message-content">
+                        <div className="chat-room-message-content-container">
+                            <div className="chat-room-message-content">
                                 {msg.replyTo ? (
-                                    <div className="reply-container">
-                                        <div className="reply-original">
+                                    <div className="chat-room-reply-container">
+                                        <div className="chat-room-reply-original">
                                             <strong>{msg.replyTo.memberNickname}에게</strong><br/> {msg.replyTo.chatContent} <small>{formatTime(msg.replyTo.chatTime)}</small>
                                         </div>
-                                        <div className="reply-content">
+                                        <div className="chat-room-reply-content">
                                             {msg.chatContent}
                                         </div>
                                     </div>
@@ -298,68 +299,73 @@ const ChatRoom = ({ chatNum }) => {
                                     ))
                                 )}
                                 {msg.files && msg.files.map((file, fileIndex) => (
-                                    <div key={fileIndex} className="message-file-container">
+                                    <div key={fileIndex} className="chat-room-message-file-container">
                                         <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
                                             {isImage(file.originalFileName) ? (
-                                                <div className="image-container">
-                                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="uploaded-image" />
-                                                    <div className="download-icon">↓</div>
+                                                <div className="chat-room-image-container">
+                                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
+                                                    <div className="chat-room-download-icon">↓</div>
                                                 </div>
                                             ) : (
-                                                <div className="file-link-container">
-                                                    <span className="file-link">{file.originalFileName}</span>
-                                                    <span className="file-link">↓</span>
+                                                <div className="chat-room-file-link-container">
+                                                    <span className="chat-room-file-link">{file.originalFileName}</span>
+                                                    <span className="chat-room-file-link">↓</span>
                                                 </div>
                                             )}
                                         </a>
                                     </div>
                                 ))}
                             </div>
-                            <small className="message-time">{formatTime(msg.chatTime)}</small>
-                            <small className="unread-count">Unread: {msg.unreadCount}</small>
+                            {/* <small className="chat-room-message-time">{formatTime(msg.chatTime)}</small> */}
+                            <small className="chat-room-unread-count"> {msg.unreadCount}</small>
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
-                                isOwnMessage={msg.sender === profile.username} // 메시지의 작성자가 현재 사용자와 동일한지 확인
+                                isOwnMessage={msg.sender === profile.username}
                             />
                         </div>
                     </div>
                 ))}
             </div>
-            <div className="chat-input-container">
+            <div className="chat-room-bottom-container">
                 {replyingTo && (
-                    <div className="replying-to">
+                    <div className="chat-room-replying-to">
                         <strong>{replyingTo.memberNickname}:</strong> {replyingTo.chatContent}
                         <button onClick={() => setReplyingTo(null)}>취소</button>
                     </div>
                 )}
                 {files.length > 0 && (
-                    <div className="file-preview-container">
+                    <div className="chat-room-file-preview-container">
                         {files.map((file, index) => (
-                            <div key={index} className="file-preview">
+                            <div key={index} className="chat-room-file-preview">
                                 <span>{file.name}</span>
                                 <button onClick={() => removeFile(index)}>X</button>
                             </div>
                         ))}
                     </div>
                 )}
-                <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onInput={handleInput}
-                    placeholder="메시지를 입력하세요"
-                    rows="1"
-                    ref={textAreaRef}
-                />
-                <input
-                    type="file"
-                    multiple
-                    onChange={handleFileChange}
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
-                />
-                <button onClick={() => fileInputRef.current && fileInputRef.current.click()}>파일 선택</button>
-                <button onClick={sendMessage}>전송</button>
+                <div className="chat-room-input-container">
+                    <div onClick={() => fileInputRef.current && fileInputRef.current.click()} className="chat-room-file-upload-button">
+                        <PaperclipIcon className='chat-room-paperclip-icon'/>
+                    </div>
+                    <input
+                        type="file"
+                        multiple
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                    />
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Send a message"
+                        className="chat-room-message-input"
+                    />
+                    <div onClick={sendMessage} className="chat-room-send-button">
+                        <SendIcon className='chat-room-send-icon' />
+                    </div>
+                </div>
             </div>
             {showDeletePopup && (
                 <MessageDeletePopup

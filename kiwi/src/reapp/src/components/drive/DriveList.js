@@ -109,9 +109,9 @@ const DriveList = ({ onView, refresh }) => {
 
     return (
         <div>
-            <div>
+            {/* <div>
                 My Drive
-            </div>
+            </div> */}
             <div className='drive-list-shared-header'>
                 <SharedIcon className='drive-list-shared-icon' />
                 <div>

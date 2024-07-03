@@ -1,69 +1,72 @@
 .chat-room-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 60px); 
     justify-content: space-between;
 }
 
-.chat-messages {
+.chat-room-messages {
     flex-grow: 1;
     overflow-y: auto;
     padding: 10px;
     display: flex;
-    flex-direction: column; /* 메시지가 위에서 아래로 정렬되도록 설정 */
+    flex-direction: column;
 }
 
-.message-container {
+.chat-room-message-container {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    position: relative; /* ReactionMenu 위치를 상대적으로 설정하기 위함 */
+    position: relative;
 }
 
-.message-sender {
-    background-color: #e0ffe0; /* 연한 초록색 배경 */
-    border-radius: 10px; /* 둥근 모서리 */
+.chat-room-message-sender {
     padding: 10px;
-    max-width: fit-content; /* 메시지가 너무 길 경우를 대비한 최대 너비 설정 */
-    word-wrap: break-word; /* 긴 단어가 있을 경우 줄 바꿈 */
-    font-weight: bold;
-    margin-bottom: 5px; /* 메시지와 파일 사이에 간격 추가 */
-}
-
-.message-content-container {
+    max-width: fit-content;
+    word-wrap: break-word;
+    margin-bottom: 5px;
     display: flex;
-    align-items: flex-end; /* 시간 표시를 아래쪽에 정렬 */
 }
 
-.message-content {
-    background-color: #e0ffe0; /* 연한 초록색 배경 */
-    border-radius: 10px; /* 둥근 모서리 */
+.chat-room-message-content-container {
+    display: flex;
+    align-items: flex-end;
+}
+
+.chat-room-message-content {
+    background-color: #abf8ab;
+    border-radius: 10px;
     padding: 10px;
-    max-width: fit-content; /* 메시지가 너무 길 경우를 대비한 최대 너비 설정 */
-    word-wrap: break-word; /* 긴 단어가 있을 경우 줄 바꿈 */
-    white-space: pre-wrap; /* 줄바꿈을 인식하도록 설정 */
-    margin-right: 10px; /* 시간과 간격 추가 */
+    max-width: fit-content;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    margin-right: 10px;
+    margin-left: 55px;
+    margin-top: -30px;
+    min-width: 30px;
 }
 
-.message-file-container {
-    margin-bottom: 5px; /* 파일 사이에 간격 추가 */
+.chat-room-message-file-container {
+    margin-bottom: 5px;
 }
 
-.message-time {
-    align-self: flex-end; /* 시간을 오른쪽 아래로 정렬 */
+.chat-room-message-time {
+    font-size: 14px;
+    padding-left: 10px;
+    padding-top: 3px;
 }
 
-.uploaded-image {
+.chat-room-uploaded-image {
     max-width: 100px;
     transition: filter 0.3s;
 }
 
-.image-container {
+.chat-room-image-container {
     position: relative;
     display: inline-block;
 }
 
-.download-icon {
+.chat-room-download-icon {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -74,86 +77,59 @@
     display: none;
 }
 
-.image-container:hover .download-icon {
+.chat-room-image-container:hover .chat-room-download-icon {
     display: block;
 }
 
-.uploaded-image:hover {
+.chat-room-uploaded-image:hover {
     filter: brightness(70%);
     cursor: pointer;
 }
 
-.file-link-container {
-    background-color: #e0ffe0; /* 연한 초록색 배경 */
-    border-radius: 10px; /* 둥근 모서리 */
+.chat-room-file-link-container {
+    background-color: #e0ffe0;
+    border-radius: 10px;
     padding: 10px;
     display: flex;
     align-items: center;
-    margin-bottom: 5px; /* 파일 사이에 간격 추가 */
+    margin-bottom: 5px;
     transition: background-color 0.3s;
 }
 
-a {
-    text-decoration-line: none ;
-}
-
-.file-link {
+.chat-room-file-link {
     color: black;
 }
 
-.file-link-container:hover .file-link {
-    text-decoration: underline; /* 마우스 올렸을 때 밑줄 표시 */
+.chat-room-file-link-container:hover .chat-room-file-link {
+    text-decoration: underline;
 }
 
-.file-download-icon {
+.chat-room-file-download-icon {
     margin-left: 5px;
     color: blue;
     cursor: pointer;
 }
 
-.file-link-container:hover {
-    background-color: #c4fbc4; /* 어두운 초록색 배경 */
+.chat-room-file-link-container:hover {
+    background-color: #c4fbc4;
 }
 
-.chat-input-container {
+.chat-room-bottom-container {
     display: flex;
-    flex-direction: column; /* 인풋 필드들이 세로로 정렬되도록 설정 */
+    flex-direction: column;
     padding: 10px;
     background: #f1f1f1;
     border-top: 1px solid #ccc;
 }
 
-.chat-input-container textarea {
-    margin-bottom: 10px; /* 인풋 필드들 사이에 마진 추가 */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
 
-.chat-input-container input[type="file"] {
-    margin-bottom: 10px; /* 인풋 필드들 사이에 마진 추가 */
-}
-
-.chat-input-container button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.chat-input-container button:hover {
-    background-color: #0056b3;
-}
-
-.file-preview-container {
+.chat-room-file-preview-container {
     display: flex;
-    flex-direction: column; /* 파일 프리뷰들이 세로로 정렬되도록 설정 */
+    flex-direction: column;
     margin-bottom: 10px;
 }
 
-.file-preview {
+.chat-room-file-preview {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -163,11 +139,11 @@ a {
     margin-bottom: 5px;
 }
 
-.file-preview span {
+.chat-room-file-preview span {
     flex-grow: 1;
 }
 
-.file-preview button {
+.chat-room-file-preview button {
     border: none;
     background: transparent;
     cursor: pointer;
@@ -175,21 +151,86 @@ a {
     font-weight: bold;
 }
 
-.file-preview button:hover {
+.chat-room-file-preview button:hover {
     color: darkred;
 }
 
-.reply-original {
+.chat-room-reply-original {
     border: 1px solid #ccc;
     padding: 10px;
     margin-top: 5px;
     background-color: #f9f9f9;
     font-size: 0.9em;
     color: #555;
+    border-radius: 10px;
 }
 
-.reply-content {
+.chat-room-reply-content {
     margin-top: 5px;
     font-size: 1em;
     color: #333;
+}
+
+
+
+.chat-room-input-container {
+    display: flex;
+    background: white;
+    height: 45px;
+    align-items: center;
+    padding-left: 10px;
+    border-radius: 10px;
+
+}
+
+.chat-room-input-container input {
+    width: 100%;
+    background: transparent;
+    outline: none;
+    font-size: 18px;
+    border: none;
+    margin-left: 5px;
+}
+
+.chat-room-paperclip-icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--lighter-text-color);
+}
+
+.chat-room-file-upload-button {
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+
+.chat-room-send-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.chat-room-send-button {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.chat-room-message-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.chat-room-unread-count {
+    font-weight: 600;
+    font-size: 13px;
 }

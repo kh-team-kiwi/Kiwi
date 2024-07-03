@@ -1,6 +1,6 @@
 @import '../variables.css';
 
-.content-container-chat {
+/* .content-container-chat {
     display: flex;
     flex-direction: column;
     height: calc(100% - 60px);
@@ -11,4 +11,4 @@
     left: 250px;
     right: 250px;
     overflow-y: auto;
-}
+} */
