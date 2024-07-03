@@ -103,9 +103,9 @@ public class WebSecurityConfig {
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/signup","/api/auth/duplicate","/api/auth/reissue").permitAll()
+                        .requestMatchers("/api/auth/signup","/api/auth/duplicate","/api/auth/reissue").permitAll() // login
+                        .requestMatchers("/api/transfer/**").permitAll() // image transfer
                         .requestMatchers("/api/drive/**","/api/drive/create").permitAll() // refresh
-                        .requestMatchers("/**").permitAll() // refresh
                         .requestMatchers(new AntPathRequestMatcher("/api/admin")).hasRole("JADMIN")
                         .anyRequest().authenticated());
         return http.build();

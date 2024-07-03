@@ -17,6 +17,7 @@
     margin-bottom: 10px;
     border: 1px solid var(--settings-selected);
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .teamsettings-team-section button {

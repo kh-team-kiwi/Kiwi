@@ -79,9 +79,9 @@ const Header = () => {
 
   useEffect(() => {
     if (teams.length > 0) {
-      const team = teams.find(team => team.team === teamno);
-      if (team) {
-        setSelectedTeam(team);
+      const findTeam = teams.find(team => team.team === teamno);
+      if (findTeam) {
+        setSelectedTeam(findTeam);
       } else {
         setSelectedTeam({});
       }
