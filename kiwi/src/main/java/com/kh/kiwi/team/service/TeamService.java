@@ -61,6 +61,7 @@ public class TeamService {
         group.setTeam(team.getTeam());
         group.setMemberId(team.getTeamAdminMemberId());
         group.setRole("OWNER");
+        group.setStatus("JOINED");
 
         // Company entity 생성 및 저장
         Company company = new Company(team.getTeam(), team.getTeamName());
@@ -75,6 +76,7 @@ public class TeamService {
                         .team(team.getTeam())
                         .memberId(member.getUsername())
                         .role("MEMBER")
+                        .status("JOINED")
                         .build();
                 groupRepository.save(invite);
             });

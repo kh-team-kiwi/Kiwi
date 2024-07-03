@@ -22,4 +22,5 @@ public class Group {
     * MEMBER/ADMIN/OWNER
     * */
     private String role;
+    private String status;
 }
