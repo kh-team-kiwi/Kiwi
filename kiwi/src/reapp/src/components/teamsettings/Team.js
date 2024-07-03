@@ -11,11 +11,13 @@ const Team = () => {
     const location = useLocation();
     const [name, setName] = useState('');
     const [profile, setProfile] = useState();
+    const [file, setFile] = useState();
     const navigate = useNavigate();
     const { teamno } = useParams();
 
     const handleProfilePictureChange = (e) => {
         setProfile(URL.createObjectURL(e.target.files[0]));
+        setFile(e.target.files[0]);
     };
     
     const handleProfileCancle =()=>{
@@ -56,11 +58,14 @@ const Team = () => {
     }
 
     const handleTeamProfile = async () => {
+        if(profile===undefined) return alert('등록된 이미지가 없습니다.');
         const formData = new FormData();
-        formData.append('profile', profile[0]);
+        formData.append('profile', file);
         formData.append('team', teamno);
         formData.append('memberId',getSessionItem('profile').username);
-
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
         try {
             const res = await axiosHandler.post('/api/team/upload/profile', formData,
                 {headers: { 'Content-Type': 'multipart/form-data' }});
@@ -108,7 +113,7 @@ const Team = () => {
                                 </svg>
                             </>)}
                     </div>
-                    <button onClick={() => handleTeamProfile()}>아이콘 변경하기</button>
+                    <button onClick={() => handleTeamProfile()}>팀 아이콘 변경하기</button>
                     <input
                         id="fileInput"
                         type="file"

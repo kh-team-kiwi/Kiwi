@@ -1,5 +1,6 @@
 package com.kh.kiwi.documents.service;
 
+import com.kh.kiwi.auth.dto.ResponseDto;
 import com.kh.kiwi.documents.dto.MemberDetailsDTO;
 import com.kh.kiwi.documents.entity.MemberDetails;
 import com.kh.kiwi.documents.repository.MemberDetailsRepository;
@@ -104,5 +105,15 @@ public class MemberDetailsService {
         memberDetails.setMemberId(memberDetailsDTO.getMemberId());
 
         return memberDetails;
+    }
+    public ResponseDto<?> memberDetails(String employeeNo){
+        System.out.println(employeeNo);
+        MemberDetails memberDetails = memberDetailsRepository.findByEmployeeNo(employeeNo);
+        System.out.println(memberDetails);
+        if(memberDetails != null) {
+            MemberDetailsDTO memberDetailsDTO = MemberDetailsDTO.builder().companyNum(memberDetails.getCompanyNum()).employeeNo(memberDetails.getEmployeeNo()).build();
+            return ResponseDto.setSuccessData("사원정보 불러오기를 성공하였습니다.", memberDetailsDTO);
+        }
+        return ResponseDto.setFailed("사원정보 불러오기를 실패하였습니다.");
     }
 }

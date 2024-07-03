@@ -14,14 +14,19 @@ import com.kh.kiwi.team.repository.CompanyRepository;
 import com.kh.kiwi.team.repository.GroupRepository;
 import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import javax.swing.text.html.Option;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,8 +38,12 @@ public class TeamService {
     private final TeamMapper teamMapper;
     private final CompanyRepository companyRepository;
     private final MemberRepository memberRepository;
-
     private final NotificationService notificationService;
+
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
+    private final S3Client s3Client;
+    private final String preFilePath = "http://localhost:8080/api/transfer/download?fileKey=";
 
     @Transactional
     public ResponseTeamDto createTeam(String memberId, TeamCreateRequest tcdto) {
@@ -212,7 +221,31 @@ public class TeamService {
         }
     }
 
-    public void uploadProfile(MultipartFile[] files, String teamId, String memberId) {
+    public ResponseDto<?> uploadProfile(MultipartFile[] files, String team, String memberId) throws IOException {
+        String fileCode = UUID.randomUUID().toString();
+        String fileKey = team+"/profile/"+fileCode; //
 
+        try{
+            Optional<Team> searchTeam = teamRepository.findById(team);
+            if (searchTeam.isEmpty()) {
+                return ResponseDto.setFailed("팀을 조회할 수 없습니다.");
+            }
+
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fileKey)
+                    .build();
+
+            s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromInputStream(files[0].getInputStream(), files[0].getSize()));
+
+            searchTeam.get().setTeamFilepath(preFilePath+fileKey);
+            teamRepository.save(searchTeam.get());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("오류가 발생해 저장을 실패했습니다.");
+        }
+
+        return ResponseDto.setSuccess("성공적으로 프로필을 저장했습니다.");
     }
 }

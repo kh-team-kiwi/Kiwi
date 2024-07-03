@@ -19,7 +19,7 @@ const NewDocument = () => {
         content: '',
         attachment: null,
         name: '',
-        memberId: '', // 변경된 필드 이름 사용
+        memberId: '',
         docDate: new Date().toISOString()
     });
 
@@ -91,7 +91,7 @@ const NewDocument = () => {
                 docTitle: newDocument.title,
                 docContents: newDocument.content,
                 name: newDocument.name,
-                employeeNo: newDocument.memberId,
+                employeeNo: "1@admin",
                 docDate: new Date().toISOString().slice(0, 19),
                 docStatus: "진행중"
             };

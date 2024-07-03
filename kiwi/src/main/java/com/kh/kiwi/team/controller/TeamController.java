@@ -5,9 +5,12 @@ import com.kh.kiwi.team.dto.*;
 import com.kh.kiwi.team.entity.Team;
 import com.kh.kiwi.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +22,7 @@ public class TeamController {
 
 
     private final TeamService teamService;
+
 
     @PostMapping("/create")
     public ResponseTeamDto createTeam(@RequestParam String memberId, @RequestBody TeamCreateRequest dto) {
@@ -71,10 +75,11 @@ public class TeamController {
         return teamService.deleteTeam(team, memberId);
     }
 
-//    @PostMapping("/upload/profile")
-//    public ResponseDto<?> uploadProfile(@RequestParam("profile") MultipartFile[] files,
-//                                        @RequestParam("team") String team,
-//                                        @RequestParam("memberId") String memberId) {
-//        return teamService.uploadProfile(files, team, memberId);
-//    }
+    @PostMapping("/upload/profile")
+    public ResponseDto<?> uploadProfile(@RequestParam("profile") MultipartFile[] files,
+                                        @RequestParam("team") String team,
+                                        @RequestParam("memberId") String memberId) throws IOException {
+        return teamService.uploadProfile(files, team, memberId);
+    }
+
 }
