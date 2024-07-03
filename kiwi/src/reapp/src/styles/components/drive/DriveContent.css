@@ -43,16 +43,11 @@
     background-color: var(--white-hover);
 }
 
-.grid-view {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
 
 .grid-view .drive-item {
     width: calc(25% - 10px);
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -82,18 +77,13 @@
 }
 
 .drive-content-grid-view.active {
-    background-color: #ddd;
+    background-color: var(--sidebar-selected);
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     transition: 0.2s;
 }
 
 .drive-file-name {
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.drive-folder-name {
     font-size: 18px;
     font-weight: 600;
 }
@@ -116,11 +106,13 @@
     font-size: 18px;
     outline: none;
     background-color: transparent;
+    color: var(--lighter-text-color);
 }
 
 .drive-content-search-input::placeholder {
     color: var(--gray);
 }
+
 
 .drive-clear-search-button {
     background: none;
@@ -133,7 +125,7 @@
 }
 
 .highlight {
-    background-color: yellow;
+    background-color: var(--yellow);
 }
 
 .search-results-count {
@@ -149,6 +141,7 @@
 
 .file-upload-time {
     font-size: 18px;
+    color: var(--lighter-text-color);
 }
 
 .drive-content-list-header {
@@ -168,13 +161,13 @@
 }
 
 .drive-content-shared-folder-icon {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
 }
 
-.drive-content-default-file-icon {
-    width: 30px;
-    height: 30px;
+.drive-content-file-icon {
+    width: 35px;
+    height: 35px;
 }
 
 .drive-content-file-name {
@@ -183,6 +176,7 @@
     gap: 10px;
     font-size: 18px;
     font-weight: 600;
+    color: var(--lighter-text-color);
 }
 
 .list-view .drive-item {
@@ -206,10 +200,7 @@
     flex: 2;
 }
 
-.list-view .file-upload-time {
-    flex: 1;
-    text-align: right;
-}
+
 
 .drive-item-right {
     display: flex;
@@ -228,6 +219,8 @@
 .drive-content-icon {
     width: 24px;
     height: 24px;
+    fill: var(--lighter-text-color);
+
 }
 
 .drive-content-icon-container {
@@ -320,7 +313,7 @@
     border-radius: 10px;
     margin-right: 10px;
     transition: 0.2s;
-
+    cursor: pointer;
 }
 
 .drive-content-back-button:hover {
@@ -366,7 +359,7 @@
 .drive-content-new-dropdown-menu {
     display: block;
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     min-width: 100px;
@@ -447,6 +440,73 @@
     position: relative;
 }
 
+.drive-options-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--lighter-text-color);
+    width: 30px;
+    border-radius: 5px;
+}
+
+
+
+.drive-options-button:hover {
+    background-color: var(--white-hover);
+    
+}
+
+
+
+.grid-view {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.drive-grid-item {
+    flex: 0 0 calc(25% - 10px);
+    max-width: 200px; 
+    height: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+}
+
+.drive-grid-icon {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drive-content-file-name {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.drive-grid-options {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .options-button {
     border: none;
     background: none;
@@ -457,21 +517,21 @@
 }
 
 .options-menu {
-    display: none; 
+    display: none;
     position: absolute;
     bottom: 100%;
     right: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: var(--white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 10px;
     overflow: hidden;
+    min-width: 120px;
 }
 
 .options-button:hover + .options-menu,
 .options-menu:hover {
-    display: block; 
+    display: block;
 }
 
 .options-menu button {
@@ -485,8 +545,70 @@
     font-size: 14px;
     font-weight: 600;
     color: var(--lighter-text-color);
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .options-menu button:hover {
     background-color: var(--white-hover);
+}
+
+.drive-content-file-icon {
+    width: 35px;
+    height: 35px;
+}
+
+.drive-content-grid-file-icon {
+    width: 120px;
+    height: 120px;
+}
+
+.drive-grid-details {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.drive-grid-edit {
+    display: flex;
+}
+
+.drive-grid-options-dropdown {
+    display: flex;
+    width: 100%;
+}
+
+.drive-content-no-files-container {
+    font-size: 18px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.drive-content-empty-icon {
+    max-width: 250px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+}
+
+.drive-content-empty-title {
+    margin-top: 10px;
+    color: var(--lighter-text-color);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.drive-content-empty-description {
+    margin-top: 10px;
+    color: var(--gray-text);
+    font-size: 18px;
+    font-weight: 600;
+    width: 500px;
+    text-align: center;
 }

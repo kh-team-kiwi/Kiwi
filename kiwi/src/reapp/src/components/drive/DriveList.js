@@ -109,6 +109,9 @@ const DriveList = ({ onView, refresh }) => {
 
     return (
         <div>
+            {/* <div>
+                My Drive
+            </div> */}
             <div className='drive-list-shared-header'>
                 <SharedIcon className='drive-list-shared-icon' />
                 <div>
@@ -151,7 +154,7 @@ const DriveList = ({ onView, refresh }) => {
                                     <div className="drive-list-options">
                                         <button onClick={(e) => handleEdit(e, drive.driveCode, drive.driveName)}>
                                             <EditIcon className='drive-list-edit-icon' />
-                                            <div>Edit</div>
+                                            <div className='drive-list-edit'>Edit</div>
                                         </button>
                                         <button onClick={(e) => handleDeleteDrive(e, drive)}>
                                             <DeleteIcon className='drive-list-delete-icon' />

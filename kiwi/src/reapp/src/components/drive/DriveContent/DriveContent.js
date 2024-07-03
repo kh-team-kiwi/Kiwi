@@ -5,25 +5,24 @@ import DriveFolderPopup from "./DriveFolderPopup";
 import DriveDeletePopup from './DriveDeletePopup';
 import { useParams } from "react-router-dom";
 
-import '../../../styles/components/drive/DriveContent.css'
+import EmptyDriveIcon from '../../../images/emptydrive.png';
 
-import ExitIcon from '../../../images/svg/buttons/ExitIcon'
-import DownloadIcon from '../../../images/svg/buttons/DownloadIcon'
-import EditIcon from '../../../images/svg/buttons/EditIcon'
-import DeleteIcon from '../../../images/svg/buttons/DeleteIcon'
-import CheckIcon from '../../../images/svg/buttons/CheckIcon'
-import BackIcon from '../../../images/svg/buttons/BackIcon'
-import RightArrowIcon from '../../../images/svg/shapes/ThinRightArrow'
+import '../../../styles/components/drive/DriveContent.css';
+
+import ExitIcon from '../../../images/svg/buttons/ExitIcon';
+import DownloadIcon from '../../../images/svg/buttons/DownloadIcon';
+import EditIcon from '../../../images/svg/buttons/EditIcon';
+import DeleteIcon from '../../../images/svg/buttons/DeleteIcon';
+import CheckIcon from '../../../images/svg/buttons/CheckIcon';
+import BackIcon from '../../../images/svg/buttons/BackIcon';
+import RightArrowIcon from '../../../images/svg/shapes/ThinRightArrow';
 import PlusIcon from '../../../images/svg/shapes/PlusIcon';
 import UploadFileIcon from '../../../images/svg/buttons/UploadFileIcon';
 
+import ListIcon from '../../../images/svg/buttons/ListIcon';
+import GridIcon from '../../../images/svg/buttons/GridIcon';
 
-
-import ListIcon from '../../../images/svg/buttons/ListIcon'
-import GridIcon from '../../../images/svg/buttons/GridIcon'
-
-import SharedFolderIcon from '../../../images/svg/SharedFolderIcon'
-import DefaultFileIcon from '../../../images/svg/DefaultFileIcon'
+import FileIcon from './FileIcon';  
 
 const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
     const { teamno } = useParams();
@@ -34,7 +33,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     const [newFolderName, setNewFolderName] = useState('');
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const fileInputRef = useRef(null);
-    const [viewMode, setViewMode] = useState('list'); 
+    const [viewMode, setViewMode] = useState('list');
     const [searchQuery, setSearchQuery] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'fileName', direction: 'ascending' });
     const [newDropdownVisible, setNewDropdownVisible] = useState(false);
@@ -195,7 +194,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     const highlightText = (text, query) => {
         if (!query) return text;
         const parts = text.split(new RegExp(`(${query})`, 'gi'));
-        return parts.map((part, index) => 
+        return parts.map((part, index) =>
             part.toLowerCase() === query.toLowerCase() ? <span key={index} className='highlight'>{part}</span> : part
         );
     };
@@ -203,17 +202,17 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     const sortedItems = [...items].sort((a, b) => {
         const { key, direction } = sortConfig;
         let comparison = 0;
-    
+
         if (key === 'fileName') {
             comparison = a.fileName.localeCompare(b.fileName);
         } else if (key === 'uploadTime') {
             comparison = new Date(a.uploadTime) - new Date(b.uploadTime);
         }
-    
+
         return direction === 'ascending' ? comparison : -comparison;
     });
 
-    const filteredItems = sortedItems.filter(item => 
+    const filteredItems = sortedItems.filter(item =>
         item.fileName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -227,170 +226,258 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         setSortConfig({ key, direction });
     };
 
-
-    
+    const toggleOptionsMenu = (event, itemCode) => {
+        event.stopPropagation();
+        const menu = document.getElementById(`options-menu-${itemCode}`);
+        if (menu) {
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+    };
 
     return (
         <div className='drive-content-container'>
             <div className='drive-content-header'>
                 <div className='drive-content-header-left'>
                     <div className='drive-content-new-dropdown'>
-                        <div onClick={toggleDropdown} className='drive-content-new-dropdown-button'> <PlusIcon className='drive-content-plus-icon'/> New</div>
+                        <div onClick={toggleDropdown} className='drive-content-new-dropdown-button'> <PlusIcon className='drive-content-plus-icon' /> New</div>
                         {newDropdownVisible && (
                             <div className='drive-content-new-dropdown-menu'>
-                                <div onClick={() => fileInputRef.current.click()} className='drive-content-new-dropdown-item'> <UploadFileIcon className='drive-content-upload-file-icon'/> Upload File</div>
-                                <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} className='drive-content-new-dropdown-item'/>
+                                <div onClick={() => fileInputRef.current.click()} className='drive-content-new-dropdown-item'> <UploadFileIcon className='drive-content-upload-file-icon' /> Upload File</div>
+                                <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} className='drive-content-new-dropdown-item' />
                             </div>
                         )}
                     </div>
                     <div className='drive-content-path-container'>
                         {breadcrumbs.length > 1 && (
-                            <div className='drive-content-back-button' onClick={onBack}><BackIcon className='drive-content-back-icon'/></div>
+                            <div className='drive-content-back-button' onClick={onBack}><BackIcon className='drive-content-back-icon' /></div>
                         )}
                         <div className='drive-content-path'>
                             {breadcrumbs.map((b, index) => (
                                 <span key={index} className='drive-content-breadcrumb-item'>
                                     {b.name}
-                                    {index < breadcrumbs.length - 1 && <RightArrowIcon className='drive-content-arrow-icon'/>}
+                                    {index < breadcrumbs.length - 1 && <RightArrowIcon className='drive-content-arrow-icon' />}
                                 </span>
                             ))}
+                        </div>
                     </div>
-
-                    </div>
-
-                  
                 </div>
                 <div className='drive-content-header-right'>
-    {searchQuery && (
-        <span className='search-results-count'>{filteredItems.length} results</span>
-    )}
-    <div className='drive-content-search-wrapper'>
-        <input 
-            type="text" 
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="Search files"
-            className='drive-content-search-input'
-        />
-        {searchQuery && <button onClick={clearSearch} className='drive-clear-search-button'> <ExitIcon/> </button>}
-    </div>
+                    {searchQuery && (
+                        <span className='search-results-count'>{filteredItems.length} results</span>
+                    )}
+                    <div className='drive-content-search-wrapper'>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Search files"
+                            className='drive-content-search-input'
+                        />
+                        {searchQuery && <button onClick={clearSearch} className='drive-clear-search-button'> <ExitIcon /> </button>}
+                    </div>
 
-    <div className='drive-content-view-option'>
-        <div 
-            className={`drive-content-list-view ${viewMode === 'list' ? 'active' : ''}`} 
-            onClick={() => setViewMode('list')}
-        >
-            <ListIcon className='drive-content-view-icon'/>
-        </div>
-        <div 
-            className={`drive-content-grid-view ${viewMode === 'grid' ? 'active' : ''}`} 
-            onClick={() => setViewMode('grid')}
-        >
-            <GridIcon className='drive-content-view-icon'/>
-        </div>
-    </div>
-    
+                    <div className='drive-content-view-option'>
+                        <div
+                            className={`drive-content-list-view ${viewMode === 'list' ? 'active' : ''}`}
+                            onClick={() => setViewMode('list')}
+                        >
+                            <ListIcon className='drive-content-view-icon' />
+                        </div>
+                        <div
+                            className={`drive-content-grid-view ${viewMode === 'grid' ? 'active' : ''}`}
+                            onClick={() => setViewMode('grid')}
+                        >
+                            <GridIcon className='drive-content-view-icon' />
+                        </div>
 
-    <input
-        type="file"
-        style={{ display: 'none' }}
-        onChange={handleFileUpload}
-        ref={fileInputRef}
-    />
-</div>
+                        <input
+                            type="file"
+                            style={{ display: 'none' }}
+                            onChange={handleFileUpload}
+                            ref={fileInputRef}
+                        />
+                    </div>
+                </div>
             </div>
 
-
-            <div className={viewMode === 'list' ? 'list-view' : 'grid-view'}>
-                {viewMode === 'list' && (
+            {viewMode === 'list' ? (
+                <div className='list-view'>
                     <div className='drive-content-list-header'>
-                        <span className='column-header' onClick={() => handleSort('fileName')}>
+                        <span className='column-header' onClick={() => handleSort('fileName')} style={{cursor: 'pointer'}}>
                             File Name {sortConfig.key === 'fileName' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
                         </span>
-                        <span className='column-header' onClick={() => handleSort('uploadTime')}>
+                        <span className='column-header' onClick={() => handleSort('uploadTime')} style={{cursor: 'pointer'}}>
                             Upload Time {sortConfig.key === 'uploadTime' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
                         </span>
                     </div>
-                )}
-                {filteredItems.map((item) => (
-                    <div
-                        key={item.fileCode}
-                        className='drive-item'
-                        onClick={item.folder ? () => onViewFolder(item.filePath, item.fileName) : undefined}
-                        style={{ cursor: item.folder ? 'pointer' : 'default' }}
-                    >
-                        {editFileCode === item.fileCode ? (
-                            <form className='drive-content-item' onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
-                                <div className='drive-content-edit-container'>
-                                    <input className='drive-content-edit-input'
-                                        type="text"
-                                        value={newFileName}
-                                        onChange={(e) => setNewFileName(e.target.value)}
-                                    />
-                                    <button className='drive-content-save-button' type="submit">
-                                        <CheckIcon className='drive-content-check-icon' />
-                                    </button>
-                                </div>
-                                <div className='drive-content-exit-button' onClick={() => setEditFileCode(null)}><ExitIcon /></div>
-                            </form>
-                        ) : editFolderCode === item.fileCode ? (
-                            <form className='drive-content-item' onSubmit={(e) => { e.preventDefault(); handleUpdateFolderName(item.fileCode); e.stopPropagation(); }} onClick={(e) => e.stopPropagation()}>
-                                <div className='drive-content-edit-container'>
-                                    <input className='drive-content-edit-input'
-                                        type="text"
-                                        value={newFolderName}
-                                        onChange={(e) => setNewFolderName(e.target.value)}
-                                        onClick={(e) => e.stopPropagation()}
-                                    />
-                                    <button className='drive-content-save-button' type="submit">
-                                        <CheckIcon className='drive-content-check-icon' />
-                                    </button>
-                                </div>
-                                <div className='drive-content-exit-button' onClick={(e) => { e.stopPropagation(); setEditFolderCode(null); }}><ExitIcon /></div>
-                            </form>
-                        ) : (
-                            <>
-                                <div className='drive-item-details'>
-                                    <span className='drive-content-file-name'>
-                                        {item.folder ? (
-                                            <>
-                                                <SharedFolderIcon className='drive-content-shared-folder-icon' />
-                                                <div>{highlightText(item.fileName, searchQuery)}</div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <DefaultFileIcon className='drive-content-default-file-icon' />
-                                                <div>{highlightText(item.fileName, searchQuery)}</div>
-                                            </>
-                                        )}
-                                    </span>
-                                    <span className='file-upload-time'>
-                                        {new Date(item.uploadTime).toLocaleString('default', {
-                                            year: 'numeric',
-                                            month: 'numeric',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
-                                    </span>
-                                </div>
-                                {item.folder ? (
-                                    <div className='drive-item-right'>
-                                        <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, true); }}><EditIcon className='drive-content-icon'/></div>
-                                        <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}><DeleteIcon className='drive-content-delete-icon'/></div>
-                                    </div>
+                    {filteredItems.length === 0 ? (
+                    <div className='img-enable-darkmode drive-content-no-files-container'>
+                            <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
+                            <div className='drive-content-empty-title'> 
+                                No files to show
+                            </div>
+                            <div className='drive-content-empty-description'> 
+                            It looks like you haven't uploaded any files yet. Start by clicking the "New" button to upload your files or create new folders.
+                            </div>
+
+                        </div>
+                    ) : (
+                        filteredItems.map((item) => (
+                            <div
+                                key={item.fileCode}
+                                className='drive-item'
+                                onClick={item.folder ? () => onViewFolder(item.filePath, item.fileName) : undefined}
+                                style={{ cursor: item.folder ? 'pointer' : 'default' }}
+                            >
+                                {editFileCode === item.fileCode ? (
+                                    <form className='drive-content-item' onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
+                                        <div className='drive-content-edit-container'>
+                                            <input className='drive-content-edit-input'
+                                                type="text"
+                                                value={newFileName}
+                                                onChange={(e) => setNewFileName(e.target.value)}
+                                            />
+                                            <button className='drive-content-save-button' type="submit">
+                                                <CheckIcon className='drive-content-check-icon' />
+                                            </button>
+                                        </div>
+                                        <div className='drive-content-exit-button' onClick={() => setEditFileCode(null)}><ExitIcon /></div>
+                                    </form>
+                                ) : editFolderCode === item.fileCode ? (
+                                    <form className='drive-content-item' onSubmit={(e) => { e.preventDefault(); handleUpdateFolderName(item.fileCode); e.stopPropagation(); }} onClick={(e) => e.stopPropagation()}>
+                                        <div className='drive-content-edit-container'>
+                                            <input className='drive-content-edit-input'
+                                                type="text"
+                                                value={newFolderName}
+                                                onChange={(e) => setNewFolderName(e.target.value)}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                            <button className='drive-content-save-button' type="submit">
+                                                <CheckIcon className='drive-content-check-icon' />
+                                            </button>
+                                        </div>
+                                        <div className='drive-content-exit-button' onClick={(e) => { e.stopPropagation(); setEditFolderCode(null); }}><ExitIcon /></div>
+                                    </form>
                                 ) : (
-                                    <div className='drive-item-right'>
-                                        <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleDownload(item.fileCode, item.fileName); }}><DownloadIcon className='drive-content-icon'/></div>
-                                        <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, false); }}><EditIcon className='drive-content-icon'/></div>
-                                        <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}><DeleteIcon className='drive-content-delete-icon'/></div>
+                                    <>
+                                        <div className='drive-item-details'>
+                                            <span className='drive-content-file-name'>
+                                                {item.folder ? (
+                                                    <>
+                                                        <FileIcon fileName={item.fileName} isFolder={true} viewMode={viewMode} />
+                                                        <div>{highlightText(item.fileName, searchQuery)}</div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <FileIcon fileName={item.fileName} isFolder={false} viewMode={viewMode} />
+                                                        <div>{highlightText(item.fileName, searchQuery)}</div>
+                                                    </>
+                                                )}
+                                            </span>
+                                            <span className='file-upload-time'>
+                                                {new Date(item.uploadTime).toLocaleString('default', {
+                                                    year: 'numeric',
+                                                    month: 'numeric',
+                                                    day: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}
+                                            </span>
+                                        </div>
+                                        {item.folder ? (
+                                            <div className='drive-item-right'>
+                                                <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, true); }}><EditIcon className='drive-content-icon' /></div>
+                                                <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}><DeleteIcon className='drive-content-delete-icon' /></div>
+                                            </div>
+                                        ) : (
+                                            <div className='drive-item-right'>
+                                                <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleDownload(item.fileCode, item.fileName); }}><DownloadIcon className='drive-content-icon' /></div>
+                                                <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, false); }}><EditIcon className='drive-content-icon' /></div>
+                                                <div className='drive-content-icon-container' onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}><DeleteIcon className='drive-content-delete-icon' /></div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        ))
+                    )}
+                </div>
+            ) : (
+                <div className='grid-view'>
+                    {filteredItems.length === 0 ? (
+                    <div className='img-enable-darkmode drive-content-no-files-container'>
+                        <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
+                        <div className='drive-content-empty-title'> 
+                            No files to show
+                        </div>
+                        <div className='drive-content-empty-description'> 
+                            It looks like you haven't uploaded any files here. Click on the "New" button to upload your files or create new folders.
+                            </div>
+
+                    </div>
+                    ) : (
+                        filteredItems.map((item) => (
+                            <div
+                                key={item.fileCode}
+                                className='drive-grid-item'
+                                onClick={item.folder ? () => onViewFolder(item.filePath, item.fileName) : undefined}
+                                style={{ cursor: item.folder ? 'pointer' : 'default' }}
+                            >
+                                <div className='drive-grid-icon'>
+                                    <FileIcon fileName={item.fileName} isFolder={item.folder} viewMode={viewMode} />
+                                </div>
+                                {editFileCode === item.fileCode ? (
+                                    <form className='drive-grid-edit' onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
+                                        <div className='drive-content-edit-container'>
+                                            <input className='drive-content-edit-input'
+                                                type="text"
+                                                value={newFileName}
+                                                onChange={(e) => setNewFileName(e.target.value)}
+                                            />
+                                            <button className='drive-content-save-button' type="submit">
+                                                <CheckIcon className='drive-content-check-icon' />
+                                            </button>
+                                        </div>
+                                        <div className='drive-content-exit-button' onClick={() => setEditFileCode(null)}><ExitIcon /></div>
+                                    </form>
+                                ) : editFolderCode === item.fileCode ? (
+                                    <form className='drive-grid-edit' onSubmit={(e) => { e.preventDefault(); handleUpdateFolderName(item.fileCode); e.stopPropagation(); }} onClick={(e) => e.stopPropagation()}>
+                                        <div className='drive-content-edit-container'>
+                                            <input className='drive-content-edit-input'
+                                                type="text"
+                                                value={newFolderName}
+                                                onChange={(e) => setNewFolderName(e.target.value)}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                            <button className='drive-content-save-button' type="submit">
+                                                <CheckIcon className='drive-content-check-icon' />
+                                            </button>
+                                        </div>
+                                        <div className='drive-content-exit-button' onClick={(e) => { e.stopPropagation(); setEditFolderCode(null); }}><ExitIcon /></div>
+                                    </form>
+                                ) : (
+                                    <div className='drive-grid-details'>
+                                        <div className='drive-content-file-name'>
+                                            <div>
+                                            {highlightText(item.fileName, searchQuery)}
+
+                                            </div>
+                                        </div>
+                                        <div className='drive-grid-options'>
+                                            <button className='drive-options-button' onClick={(e) => toggleOptionsMenu(e, item.fileCode)}>⋮</button>
+                                            <div className='options-menu' id={`options-menu-${item.fileCode}`}>
+                                                <button className='drive-grid-options-dropdown' onClick={(e) => { e.stopPropagation(); handleDownload(item.fileCode, item.fileName); }}> <DownloadIcon className='drive-content-icon'/> Download</button>
+                                                <button onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, item.folder); }}> <EditIcon className='drive-content-icon'/> Edit</button>
+                                                <button onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}> <DeleteIcon className='drive-content-delete-icon'/> Delete</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
-                            </>
-                        )}
-                    </div>
-                ))}
-            </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
         </div>
     );
 };

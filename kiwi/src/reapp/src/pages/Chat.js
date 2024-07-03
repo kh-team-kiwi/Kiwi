@@ -99,14 +99,11 @@ const Chat = () => {
 
     return (
         <>
-            <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} />
+            <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
             <div className='content-container-chat'>
-                {selectedChatNum && (
-                    <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} memberCount={memberCount} />
-                )}
-                {!selectedChatNum && (
-                    <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
-                )}
+
+                <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} memberCount={memberCount} />
+
                 {selectedChatNum ? (
                     <ChatRoom chatNum={selectedChatNum} />
                 ) : (

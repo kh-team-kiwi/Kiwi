@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import { getSessionItem } from "../../../jwt/storage";
+import '../../../styles/components/chat/chatsidebar/ChatList.css';
+
+import ExitIcon from '../../../images/svg/buttons/ExitIcon';
+import SearchIcon from '../../../images/svg/buttons/SearchIcon';
 
 const ChatList = ({ onChatSelect, team, refreshChatList }) => {
     const [chats, setChats] = useState([]);
     const [profile, setProfile] = useState(null);
     const [username, setUsername] = useState('');
+    const [selectedChat, setSelectedChat] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
         console.log(`useEffect: storedProfile=${JSON.stringify(storedProfile)}`);
         setProfile(storedProfile);
         if (storedProfile && storedProfile.username) {
-            setUsername(storedProfile.username); // Set username from profile
+            setUsername(storedProfile.username); 
             console.log(`useEffect: username set to ${storedProfile.username}`);
         }
     }, []);
@@ -23,7 +28,7 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
             console.log(`Fetching chat rooms for team: ${team} and member: ${username}`);
             axios.get(`http://localhost:8080/api/chat?team=${team}&memberId=${username}`)
                 .then(response => {
-                    console.log('Fetched chat rooms:', response.data); // Log fetched chat rooms
+                    console.log('Fetched chat rooms:', response.data); 
                     setChats(response.data);
                 })
                 .catch(error => {
@@ -32,13 +37,56 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
         }
     }, [team, refreshChatList, username]);
 
+    const handleChatSelect = (chatNum, chatName) => {
+        setSelectedChat(chatNum);
+        onChatSelect(chatNum, chatName);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const clearSearch = () => {
+        setSearchQuery('');
+    };
+
+    const highlightText = (text, query) => {
+        if (!query) return text;
+        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+        return parts.map((part, index) =>
+            part.toLowerCase() === query.toLowerCase() ? <span key={index} className='chat-list-highlight'>{part}</span> : part
+        );
+    };
+
+    const filteredChats = chats.filter(chat =>
+        chat.chatName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div>
-            <h2>Chat Rooms</h2>
-            <ul>
-                {chats.map(chat => (
-                    <li key={chat.chatNum} onClick={() => onChatSelect(chat.chatNum, chat.chatName)}>
-                        {chat.chatName}
+        <div className="chat-list-container">
+            <div className="chat-list-search-container">
+                <SearchIcon className="chat-list-search-icon" />
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Search Chat"
+                    className="chat-list-search-input"
+                />
+                {searchQuery && (
+                    <button className="chat-list-clear-search-button" onClick={clearSearch}>
+                        <ExitIcon />
+                    </button>
+                )}
+            </div>
+            <ul className="chat-list-ul">
+                {filteredChats.map(chat => (
+                    <li 
+                        key={chat.chatNum} 
+                        onClick={() => handleChatSelect(chat.chatNum, chat.chatName)}
+                        className={`chat-list-item ${selectedChat === chat.chatNum ? 'chat-list-selected' : ''}`}
+                    >
+                        <div className="chat-list-item-name">{highlightText(chat.chatName, searchQuery)}</div>
                     </li>
                 ))}
             </ul>

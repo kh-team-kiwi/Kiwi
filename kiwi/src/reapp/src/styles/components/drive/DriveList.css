@@ -52,6 +52,7 @@
 .drive-list-edit-icon {
     width: 18px;
     height: 18px;
+    fill: var(--lighter-text-color);
 
 }
 .drive-list-delete-icon {
@@ -103,6 +104,7 @@
     border: none;
     outline: none;
     font-size: 16px;
+    color: var(--lighter-text-color);
 }
 
 .drive-list-save-button {
@@ -136,6 +138,7 @@
 .drive-list-check-icon {
     width: 22px;
     height: 22px;
+    fill: var(--lighter-text-color);
 }
 
 .drive-list-edit-container {
@@ -167,5 +170,9 @@
 }
 
 .drive-list-shared-header {
+    color: var(--lighter-text-color);
+}
+
+.drive-list-edit {
     color: var(--lighter-text-color);
 }

@@ -43,6 +43,7 @@
   --day-clicked: #ddefff;
   --dark-blue: #2b98ff;
   --light-gray4: #e7e5e5;
+  --yellow: yellow;
 
   --sidebar-selected: rgb(238, 238, 238);
 
@@ -89,6 +90,8 @@
   --light-gray-field: #9d9e9c;
   --light-green-darkmode: #7a7e78;
   --transparent-white: rgba(255, 255, 255, 0.3);
+
+  --yellow: rgb(138, 138, 0);
 
 
   --header-background-color: #2b2e2e ;
