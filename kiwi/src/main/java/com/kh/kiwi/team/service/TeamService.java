@@ -4,6 +4,8 @@ import com.kh.kiwi.aram.service.NotificationService;
 import com.kh.kiwi.auth.dto.MemberDto;
 import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
+import com.kh.kiwi.documents.entity.MemberDetails;
+import com.kh.kiwi.documents.repository.MemberDetailsRepository;
 import com.kh.kiwi.team.dto.*;
 import com.kh.kiwi.team.entity.Company;
 import com.kh.kiwi.team.entity.Group;
@@ -23,6 +25,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,6 +41,7 @@ public class TeamService {
     private final TeamMapper teamMapper;
     private final CompanyRepository companyRepository;
     private final MemberRepository memberRepository;
+    private final MemberDetailsRepository memberDetailsRepository;
     private final NotificationService notificationService;
 
     @Value("${aws.s3.bucket}")
@@ -66,10 +70,30 @@ public class TeamService {
         // Company entity 생성 및 저장
         Company company = new Company(team.getTeam(), team.getTeamName());
 
+        // MemberDetails entity 생성 및 저장
+        MemberDetails memberDetails = new MemberDetails();
+        memberDetails.setCompanyNum(company.getCompanyNum());
+        memberDetails.setMemberId(memberId);
+        memberDetails.setEmployeeNo(company.getCompanyNum() + "@" + memberId.split("@")[0]);
+        memberDetails.setName("수정해주세요");
+        memberDetails.setGender("남자");
+        memberDetails.setBirthDate(LocalDate.parse("2000-01-01"));
+        memberDetails.setEmpDate(LocalDate.parse("2000-01-01"));
+        memberDetails.setQuitDate(null);
+        memberDetails.setPhone("010-0000-0000");
+        memberDetails.setAddress("서울시 강남구");
+        memberDetails.setDeptName("테스트부서");
+        memberDetails.setTitle("사원");
+        memberDetails.setPosition("팀원");
+        memberDetails.setDocSecurity(9);
+        memberDetails.setDayOff(null);
+        memberDetails.setUsedDayOff(null);
+
         try {
             teamRepository.save(team); // 팀 정보를 먼저 저장합니다.
             companyRepository.save(company); // 그 다음에 회사 정보를 저장합니다.
             groupRepository.save(group);
+            memberDetailsRepository.save(memberDetails); // 그 다음에 사원 정보를 저장합니다.
 
             invitedMembers.forEach(member -> {
                 Group invite = Group.builder()
@@ -82,7 +106,7 @@ public class TeamService {
             });
 
             for (MemberDto member : invitedMembers) {
-                notificationService.customNotify(member.getUsername(),"팀에 초대되었습니다.","INVITE","sse" );
+                notificationService.customNotify(member.getUsername(), "팀에 초대되었습니다.", "INVITE", "sse");
             }
 
         } catch (Exception e) {

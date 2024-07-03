@@ -37,8 +37,8 @@ const DocumentSidebar = ({ handleMenuClick }) => {
                     console.error("사용자의 인사 정보를 가져오는 중 오류가 발생했습니다.", error);
                 });
         }
-    }, []);
 
+    }, []);
     return (
         <div className="sidebar documents-sidebar">
             <button type='button' className="newDoc document-btn" onClick={() => handleMenuClick('newDocument')}>작성하기</button>

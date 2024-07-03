@@ -12,7 +12,7 @@ public interface MemberDetailsRepository extends JpaRepository<MemberDetails, St
 
     MemberDetails findByEmployeeNo(String employeeNo);
 
-    List<MemberDetails> findByCompanyNum(int companyNum);
+    List<MemberDetails> findByCompanyNum(String companyNum);
 
     List<MemberDetails> findByMemberId(String memberId);
 

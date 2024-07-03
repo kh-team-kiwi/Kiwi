@@ -39,20 +39,15 @@ public class MemberDetailsService {
         return optionalMemberDetails.map(MemberDetailsDTO::new).orElse(null);
     }
 
-    // MemberDetailsService에 수정된 메서드
     public MemberDetailsDTO getMemberDetailsByMemberId(String memberId) {
         List<MemberDetails> memberDetailsList = memberDetailsRepository.findByMemberId(memberId);
         return memberDetailsList.stream().findFirst().map(MemberDetailsDTO::new).orElse(null);
     }
 
     public void updateMemberDetails(String employeeNo, MemberDetailsDTO memberDetailsDTO) {
+        System.out.println("Updating details for employeeNo: " + employeeNo);
         MemberDetails existingMemberDetails = memberDetailsRepository.findById(employeeNo)
                 .orElseThrow(() -> new RuntimeException("Member details not found for employeeNo: " + employeeNo));
-
-        // 회사 번호가 유효한지 확인하고 처리
-        if (memberDetailsDTO.getCompanyNum() <= 0) {
-            throw new RuntimeException("Invalid company number: " + memberDetailsDTO.getCompanyNum());
-        }
 
         existingMemberDetails.setName(memberDetailsDTO.getName());
         existingMemberDetails.setGender(memberDetailsDTO.getGender());
@@ -68,12 +63,11 @@ public class MemberDetailsService {
         existingMemberDetails.setDocSecurity(memberDetailsDTO.getDocSecurity());
         existingMemberDetails.setDayOff(memberDetailsDTO.getDayOff());
         existingMemberDetails.setUsedDayOff(memberDetailsDTO.getUsedDayOff());
-        existingMemberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum()); // 이 값이 유효한지 확인
+        existingMemberDetails.setCompanyNum(memberDetailsDTO.getCompanyNum() != null ? memberDetailsDTO.getCompanyNum() : existingMemberDetails.getCompanyNum());
         existingMemberDetails.setMemberId(memberDetailsDTO.getMemberId());
 
         memberDetailsRepository.save(existingMemberDetails);
     }
-
 
     public void deleteMemberDetails(String employeeNo) {
         memberDetailsRepository.deleteById(employeeNo);
@@ -84,15 +78,10 @@ public class MemberDetailsService {
         memberDetails.setEmployeeNo(memberDetailsDTO.getEmployeeNo());
         memberDetails.setName(memberDetailsDTO.getName());
         memberDetails.setGender(memberDetailsDTO.getGender());
-
-        // Use LocalDate.parse for date conversion
         memberDetails.setBirthDate(LocalDate.parse(memberDetailsDTO.getBirthDate()));
         memberDetails.setEmpDate(LocalDate.parse(memberDetailsDTO.getEmpDate()));
-
-        // Handle null case for quitDate
         memberDetails.setQuitDate(memberDetailsDTO.getQuitDate() != null && !memberDetailsDTO.getQuitDate().isEmpty() ?
                 LocalDate.parse(memberDetailsDTO.getQuitDate()) : null);
-
         memberDetails.setPhone(memberDetailsDTO.getPhone());
         memberDetails.setAddress(memberDetailsDTO.getAddress());
         memberDetails.setDeptName(memberDetailsDTO.getDeptName());
@@ -106,6 +95,7 @@ public class MemberDetailsService {
 
         return memberDetails;
     }
+
     public ResponseDto<?> memberDetails(String employeeNo){
         System.out.println(employeeNo);
         MemberDetails memberDetails = memberDetailsRepository.findByEmployeeNo(employeeNo);

@@ -2,14 +2,16 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-    /*max-width: 800px;*/
-    /*margin: 20px auto;*/
     padding: 20px;
     height: 100%;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
+}
+
+.form-group-companyNum {
+    display: block;
 }
 
 .member-form label {

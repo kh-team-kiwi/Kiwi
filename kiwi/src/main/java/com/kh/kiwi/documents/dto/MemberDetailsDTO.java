@@ -25,10 +25,10 @@ public class MemberDetailsDTO {
     private String deptName;
     private String title;
     private String position;
-    private int docSecurity; // TINYINT에 맞게 int로 변경
+    private int docSecurity;
     private Integer dayOff;
     private Double usedDayOff;
-    private int companyNum;
+    private String companyNum;
     private String memberId;
 
     public MemberDetailsDTO(MemberDetails memberDetails) {

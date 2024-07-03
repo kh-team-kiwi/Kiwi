@@ -56,7 +56,7 @@ public class MemberDetails {
     private Double usedDayOff;
 
     @Column(name = "COMPANY_NUM", nullable = false)
-    private Integer companyNum;
+    private String companyNum;
 
     @Column(name = "MEMBER_ID", length = 320, nullable = false)
     private String memberId;
