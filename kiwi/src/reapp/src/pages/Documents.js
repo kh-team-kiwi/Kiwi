@@ -9,6 +9,8 @@ import MemberManagement from '../components/documents/MemberManagement';
 import DocumentDetails from '../components/documents/DocumentDetails';
 import '../styles/components/documents/DocCommon.css';
 import '../styles/components/documents/Documents.css';
+import axiosHandler from "../jwt/axiosHandler";
+import {setSessionItem} from "../jwt/storage";
 
 const Documents = () => {
     const [view, setView] = useState('documentList');
@@ -25,6 +27,21 @@ const Documents = () => {
         setSelectedDocument(document);
         setView('documentDetails');
     };
+
+    function memberDetailsInfo (jwt) {
+        axiosHandler.post('api/members/details', {},{
+            headers: {
+                'authorization': `Bearer ${jwt}`
+            }
+        })
+            .then(response => {
+                setSessionItem("profile", response.data.data);
+                window.location.replace("/home");
+            })
+            .catch(error => {
+                console.error('Error fetching profile:', error);
+            });
+    }
 
     return (
         <>

@@ -1,5 +1,6 @@
 package com.kh.kiwi.documents.controller;
 
+import com.kh.kiwi.auth.dto.ResponseDto;
 import com.kh.kiwi.documents.dto.MemberDetailsDTO;
 import com.kh.kiwi.documents.service.MemberDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +66,11 @@ public class MemberDetailsController {
     public ResponseEntity<List<MemberDetailsDTO>> getAllMembers() {
         List<MemberDetailsDTO> memberDetailsList = memberDetailsService.getAllMembers();
         return ResponseEntity.ok(memberDetailsList);
+    }
+
+    @PostMapping("/api/members/details/")
+    public ResponseDto<?> memberDetails(@RequestBody MemberDetailsDTO requestBody) {
+        ResponseDto<?> result = memberDetailsService.memberDetails(requestBody.getEmployeeNo());
+        return result;
     }
 }

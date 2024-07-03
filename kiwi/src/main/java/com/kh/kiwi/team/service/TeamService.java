@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +25,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TeamService {
+public class
+TeamService {
 
     private final TeamRepository teamRepository;
     private final GroupRepository groupRepository;
@@ -212,7 +212,8 @@ public class TeamService {
         }
     }
 
-    public void uploadProfile(MultipartFile[] files, String teamId, String memberId) {
+    public ResponseDto<?> uploadProfile(MultipartFile[] files, String teamId, String memberId) {
 
+        return null;
     }
 }

@@ -28,7 +28,6 @@ const Login = () => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [initialLoad, setInitialLoad] = useState(true);
 
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -89,15 +88,16 @@ const Login = () => {
                 'authorization': `Bearer ${jwt}`
             }
         })
-            .then(response => {
-                setSessionItem("profile", response.data.data);
-                window.location.replace("/home");
-            })
-            .catch(error => {
-                console.error('Error fetching profile:', error);
-            });
-    }
+        .then(response => {
+            setSessionItem("profile", response.data.data);
+            window.location.replace("/home");
+        })
+        .catch(error => {
+            console.error('Error fetching profile:', error);
+        });
 
+    }
+//login.js / storage.js / ResponseDto / AuthService
     const handleJoinNowClick = () => {
         setIsAnimating(true);
         setTimeout(() => {

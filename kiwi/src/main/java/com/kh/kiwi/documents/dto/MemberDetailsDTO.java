@@ -1,8 +1,16 @@
 package com.kh.kiwi.documents.dto;
 
 import com.kh.kiwi.documents.entity.MemberDetails;
-import lombok.Data;
+import lombok.*;
 
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class MemberDetailsDTO {
 
@@ -23,10 +31,6 @@ public class MemberDetailsDTO {
     private int companyNum;
     private String memberId;
 
-    public MemberDetailsDTO() {
-        // 기본 생성자
-    }
-
     public MemberDetailsDTO(MemberDetails memberDetails) {
         this.employeeNo = memberDetails.getEmployeeNo();
         this.name = memberDetails.getName();
@@ -44,5 +48,8 @@ public class MemberDetailsDTO {
         this.usedDayOff = memberDetails.getUsedDayOff();
         this.companyNum = memberDetails.getCompanyNum();
         this.memberId = memberDetails.getMemberId();
+    }
+
+    public MemberDetailsDTO(String employeeNo, String name, String gender, LocalDate birthDate, LocalDate empDate, LocalDate quitDate, String phone, String address, String deptName, String title, String position, int docSecurity, Integer dayOff, Double usedDayOff, Integer companyNum, String memberId) {
     }
 }

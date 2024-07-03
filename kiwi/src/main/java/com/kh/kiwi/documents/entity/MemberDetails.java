@@ -1,6 +1,7 @@
 package com.kh.kiwi.documents.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -59,5 +60,6 @@ public class MemberDetails {
 
     @Column(name = "MEMBER_ID", length = 320, nullable = false)
     private String memberId;
+
 
 }
