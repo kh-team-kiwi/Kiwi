@@ -131,7 +131,7 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
                 <input type="text" name="docSecurity" value={formData.docSecurity} onChange={handleChange}/>
             </div>
             <div className="form-group-companyNum">
-                <label>회사번호</label>
+                <label>회사번호(readonly)</label>
                 <input type="text" name="companyNum" value={formData.companyNum} onChange={handleChange} readOnly required/>
             </div>
             <div className="form-actions">
