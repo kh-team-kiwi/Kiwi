@@ -49,6 +49,7 @@
     font-size: 1.5em;
     margin-bottom: 20px;
     font-weight: bold;
+    color: var(--lighter-text-color);
 }
 
 .drive-folder-popup-event-form {
@@ -66,6 +67,7 @@
     font-size: 18px;
     outline: none;
     background-color: var(--white);
+    color: var(--lighter-text-color);
 }
 
 .drive-folder-popup-event-form input[type="text"]::placeholder {

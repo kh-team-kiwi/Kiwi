@@ -10,7 +10,7 @@ import axios from "axios";
 const Team = () => {
     const location = useLocation();
     const [name, setName] = useState('');
-    const [profile, setProfile] = useState([]);
+    const [profile, setProfile] = useState();
     const navigate = useNavigate();
     const { teamno } = useParams();
 

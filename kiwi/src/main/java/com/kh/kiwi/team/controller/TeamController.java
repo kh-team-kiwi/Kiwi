@@ -71,10 +71,10 @@ public class TeamController {
         return teamService.deleteTeam(team, memberId);
     }
 
-    @PostMapping("/upload/profile")
-    public ResponseDto<?> uploadProfile(@RequestParam("profile") MultipartFile[] files,
-                                        @RequestParam("team") String team,
-                                        @RequestParam("memberId") String memberId) {
-        return teamService.uploadProfile(files, team, memberId);
-    }
+//    @PostMapping("/upload/profile")
+//    public ResponseDto<?> uploadProfile(@RequestParam("profile") MultipartFile[] files,
+//                                        @RequestParam("team") String team,
+//                                        @RequestParam("memberId") String memberId) {
+//        return teamService.uploadProfile(files, team, memberId);
+//    }
 }
