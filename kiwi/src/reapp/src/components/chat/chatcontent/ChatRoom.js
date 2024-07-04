@@ -25,6 +25,8 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
     const fileInputRef = useRef();
     const messageEndRef = useRef(null);
     const firstUnreadMessageRef = useRef(null);
+    const [isUserScrolling, setIsUserScrolling] = useState(false);
+    const scrollTimeout = useRef(null);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -79,7 +81,9 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                     const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
                     setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
                     markMessageAsRead(newMessage, profile.username);
-                    scrollToBottom();
+                    if (!isUserScrolling) {
+                        scrollToBottom();
+                    }
                 }
             });
         }, (error) => {
@@ -97,7 +101,9 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
     useEffect(() => {
         // 메시지가 업데이트될 때마다 항상 최신 메시지 위치로 스크롤
-        scrollToBottom();
+        if (!isUserScrolling) {
+            scrollToBottom();
+        }
     }, [messages]);
 
     const fetchUnreadCount = async (chatNum, messageNum) => {
@@ -309,6 +315,22 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
             messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
+
+    const handleScroll = () => {
+        setIsUserScrolling(true);
+        clearTimeout(scrollTimeout.current);
+        scrollTimeout.current = setTimeout(() => {
+            setIsUserScrolling(false);
+        }, 1000); // 사용자가 스크롤을 멈춘 후 1초 후에 자동 스크롤 재활성화
+    };
+
+    useEffect(() => {
+        const chatRoomMessagesElement = document.querySelector('.chat-room-messages');
+        chatRoomMessagesElement.addEventListener('scroll', handleScroll);
+        return () => {
+            chatRoomMessagesElement.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <div className="chat-room-container">
