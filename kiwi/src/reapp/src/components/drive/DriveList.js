@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { getSessionItem } from "../../../src/jwt/storage";
+import { getSessionItem } from "../../jwt/storage";
 import "../../styles/components/drive/DriveList.css";
 import DriveDeletePopup from './DriveContent/DriveDeletePopup';
 
@@ -12,7 +11,7 @@ import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import CheckIcon from '../../images/svg/buttons/CheckIcon';
 import SharedIcon from '../../images/svg/buttons/SharedIcon';
 import DriveIcon from '../../images/svg/buttons/DriveIcon';
-
+import axiosHandler from "../../jwt/axiosHandler";
 
 const DriveList = ({ onView, refresh }) => {
     const { teamno } = useParams();
@@ -42,7 +41,7 @@ const DriveList = ({ onView, refresh }) => {
 
     const fetchDrives = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
+            const response = await axiosHandler.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
             setDrives(response.data);
         } catch (error) {
             console.error('Failed to fetch drives', error);
@@ -51,7 +50,7 @@ const DriveList = ({ onView, refresh }) => {
 
     const handleUpdate = async (driveCode, newName) => {
         try {
-            await axios.put(`http://localhost:8080/api/drive/${driveCode}`, { driveName: newName });
+            await axiosHandler.put(`http://localhost:8080/api/drive/${driveCode}`, { driveName: newName });
             fetchDrives();
         } catch (error) {
             console.error('Failed to update drive', error);
@@ -62,7 +61,7 @@ const DriveList = ({ onView, refresh }) => {
         e.stopPropagation();
         setEditDriveCode(driveCode);
         setNewName(currentName);
-        setOpenDropdown(null); 
+        setOpenDropdown(null);
     };
 
     const handleEditSubmit = (e, driveCode) => {
@@ -76,13 +75,13 @@ const DriveList = ({ onView, refresh }) => {
         e.stopPropagation();
         setDriveToDelete(drive);
         setShowDeletePopup(true);
-        setOpenDropdown(null); 
+        setOpenDropdown(null);
     };
 
     const confirmDeleteDrive = async () => {
         if (driveToDelete) {
             try {
-                await axios.delete(`http://localhost:8080/api/drive/${driveToDelete.driveCode}`);
+                await axiosHandler.delete(`http://localhost:8080/api/drive/${driveToDelete.driveCode}`);
                 setShowDeletePopup(false);
                 setDriveToDelete(null);
                 fetchDrives();
@@ -109,9 +108,6 @@ const DriveList = ({ onView, refresh }) => {
 
     return (
         <div>
-            {/* <div>
-                My Drive
-            </div> */}
             <div className='drive-list-shared-header'>
                 <SharedIcon className='drive-list-shared-icon' />
                 <div>
@@ -120,17 +116,17 @@ const DriveList = ({ onView, refresh }) => {
             </div>
             <ul>
                 {drives.map((drive) => (
-                    <li 
-                        key={drive.driveCode} 
+                    <li
+                        key={drive.driveCode}
                         onClick={() => handleViewDrive(drive.driveCode, drive.driveName)}
                     >
                         {editDriveCode === drive.driveCode ? (
                             <form className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`} onSubmit={(e) => handleEditSubmit(e, drive.driveCode)}>
                                 <div className='drive-list-edit-container'>
                                     <input className='drive-list-edit-input'
-                                        type="text"
-                                        value={newName}
-                                        onChange={(e) => setNewName(e.target.value)}
+                                           type="text"
+                                           value={newName}
+                                           onChange={(e) => setNewName(e.target.value)}
                                     />
                                     <button className='drive-list-save-button' type="submit">
                                         <CheckIcon className='drive-list-check-icon' />
@@ -144,7 +140,6 @@ const DriveList = ({ onView, refresh }) => {
                             <div className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`}>
                                 <div className='drive-list-item-name'>
                                     <DriveIcon className='drive-list-drive-icon'/>
-
                                     {drive.driveName}
                                 </div>
                                 <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>

@@ -1,3 +1,9 @@
+@import '../../../variables.css';
+
+.chat-users-container {
+    padding: 10px;
+}
+
 .chat-users-list {
     list-style-type: none;
     padding: 0;
@@ -7,30 +13,29 @@
 .chat-user-item {
     display: flex;
     align-items: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.chat-user-item:hover {
-    background-color: var(--white-hover);
+    margin-bottom: 10px;
 }
 
 .chat-user-profile-pic {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 20px;
     margin-right: 10px;
-    object-fit: cover;
-}
-
-.chat-user-name {
-    font-size: 16px;
-    color: var(--main-text-color);
-    font-weight: 600;
+    background-color: gray;
 }
 
 .chat-users-name {
-    margin-left: 5px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.chat-users-role {
+    margin-top: 20px;
+}
+
+.chat-users-role h4 {
+    margin: 10px 0;
+    color: var(--main-text-color);
+    font-size: 18px;
+    font-weight: 600;
 }

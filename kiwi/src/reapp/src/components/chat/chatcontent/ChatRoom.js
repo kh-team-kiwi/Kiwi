@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import axios from 'axios';
+import axiosHandler from "../../../jwt/axiosHandler";
 import { useParams } from "react-router-dom";
 import { getSessionItem } from "../../../jwt/storage";
 import ReactionMenu from './ReactionMenu';
 import MessageDeletePopup from './MessageDeletePopup';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
-
 import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
+const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
-const ChatRoom = ({ chatNum }) => {
     const [profile, setProfile] = useState(null);
     const { teamno } = useParams();
-    const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [files, setFiles] = useState([]);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -25,6 +23,8 @@ const ChatRoom = ({ chatNum }) => {
     const [replyingTo, setReplyingTo] = useState(null);
     const stompClient = useRef(null);
     const fileInputRef = useRef();
+    const messageEndRef = useRef(null);
+    const firstUnreadMessageRef = useRef(null);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -36,15 +36,24 @@ const ChatRoom = ({ chatNum }) => {
 
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
+                const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
                 const messagesWithUnreadCounts = await Promise.all(response.data.map(async (msg) => {
                     const unreadCount = await fetchUnreadCount(chatNum, msg.messageNum);
                     return { ...msg, unreadCount };
                 }));
                 setMessages(messagesWithUnreadCounts);
                 markMessagesAsRead(messagesWithUnreadCounts);
+
+                const firstUnreadResponse = await axiosHandler.get(`http://localhost:8080/api/chat/message/firstUnread/${chatNum}/${profile.username}`);
+                if (firstUnreadResponse.status === 200 && firstUnreadResponse.data) {
+                    const firstUnreadMessage = firstUnreadResponse.data;
+                    firstUnreadMessageRef.current = firstUnreadMessage.messageNum;
+                }
+
+                // 진입 시에만 읽지 않은 메시지 위치로 스크롤
+                scrollToUnreadOrBottom();
             } catch (error) {
-                console.error('Error fetching messages:', error);
+                console.error('메시지 가져오기 오류:', error);
             }
         };
 
@@ -54,7 +63,7 @@ const ChatRoom = ({ chatNum }) => {
         const client = Stomp.over(socket);
 
         client.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
+            console.log('연결됨: ' + frame);
             stompClient.current = client;
             client.subscribe(`/topic/chat/${chatNum}`, async (msg) => {
                 const newMessage = JSON.parse(msg.body);
@@ -70,34 +79,40 @@ const ChatRoom = ({ chatNum }) => {
                     const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
                     setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
                     markMessageAsRead(newMessage, profile.username);
+                    scrollToBottom();
                 }
             });
         }, (error) => {
-            console.error('Connection error', error);
+            console.error('연결 오류', error);
         });
 
         return () => {
             if (stompClient.current) {
                 stompClient.current.disconnect(() => {
-                    console.log('Disconnected');
+                    console.log('연결 끊김');
                 });
             }
         };
     }, [chatNum, profile]);
 
+    useEffect(() => {
+        // 메시지가 업데이트될 때마다 항상 최신 메시지 위치로 스크롤
+        scrollToBottom();
+    }, [messages]);
+
     const fetchUnreadCount = async (chatNum, messageNum) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
+            const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
             return response.data;
         } catch (error) {
-            console.error('Error fetching unread count:', error);
+            console.error('읽지 않은 메시지 수 가져오기 오류:', error);
             return 0;
         }
     };
 
     const markMessagesAsRead = async (messages) => {
         if (!profile) {
-            console.error('Profile is null. Cannot mark messages as read.');
+            console.error('프로필이 null입니다. 메시지를 읽음으로 표시할 수 없습니다.');
             return;
         }
 
@@ -110,12 +125,12 @@ const ChatRoom = ({ chatNum }) => {
 
     const markMessageAsRead = async (message, memberId) => {
         if (!memberId) {
-            console.error('Member ID is null. Cannot mark message as read.');
+            console.error('멤버 ID가 null입니다. 메시지를 읽음으로 표시할 수 없습니다.');
             return;
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/chat/message/read', {
+            const response = await axiosHandler.post('http://localhost:8080/api/chat/message/read', {
                 messageNum: message.messageNum,
                 memberId: memberId
             });
@@ -139,7 +154,7 @@ const ChatRoom = ({ chatNum }) => {
                 );
             }
         } catch (error) {
-            console.error('Error marking message as read:', error);
+            console.error('메시지를 읽음으로 표시하는 중 오류:', error);
         }
     };
 
@@ -167,7 +182,7 @@ const ChatRoom = ({ chatNum }) => {
                     formData.append('chatNum', chatNum);
                     formData.append('messageNum', `${chatNum}-${Date.now()}`);
 
-                    const response = await axios.post('http://localhost:8080/api/chat/message/upload', formData, {
+                    const response = await axiosHandler.post('http://localhost:8080/api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     });
 
@@ -182,11 +197,12 @@ const ChatRoom = ({ chatNum }) => {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
+                scrollToBottom();
             } catch (error) {
-                console.error('Error sending message or uploading files:', error);
+                console.error('메시지 전송 또는 파일 업로드 중 오류:', error);
             }
         } else {
-            console.error('There is no underlying STOMP connection');
+            console.error('기본 STOMP 연결이 없습니다.');
         }
     };
 
@@ -196,7 +212,13 @@ const ChatRoom = ({ chatNum }) => {
 
     const formatTime = (time) => {
         const date = new Date(time);
-        return `${date.getHours()}:${date.getMinutes()}`;
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // '0'은 '12'로 변경
+        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+        return `${hours}:${minutesStr} ${ampm}`;
     };
 
     const removeFile = (index) => {
@@ -216,7 +238,7 @@ const ChatRoom = ({ chatNum }) => {
 
     const handleDownload = (event, filePath, fileName) => {
         event.preventDefault();
-        axios({
+        axiosHandler({
             url: `http://localhost:8080/api/chat/message/download?fileKey=${filePath}`,
             method: 'GET',
             responseType: 'blob',
@@ -227,6 +249,8 @@ const ChatRoom = ({ chatNum }) => {
             link.setAttribute('download', fileName);
             document.body.appendChild(link);
             link.click();
+        }).catch((error) => {
+            console.error('파일 다운로드 중 오류:', error);
         });
     };
 
@@ -249,12 +273,12 @@ const ChatRoom = ({ chatNum }) => {
     const handleDeleteConfirm = async () => {
         if (selectedMessage) {
             try {
-                await axios.delete(`http://localhost:8080/api/chat/message/delete/${selectedMessage.messageNum}`, {
+                await axiosHandler.delete(`http://localhost:8080/api/chat/message/delete/${selectedMessage.messageNum}`, {
                     data: { username: profile.username }
                 });
                 setMessages(prevMessages => prevMessages.filter(msg => msg.messageNum !== selectedMessage.messageNum));
             } catch (error) {
-                console.error('Error deleting message:', error);
+                console.error('메시지 삭제 중 오류:', error);
             } finally {
                 setShowDeletePopup(false);
                 setSelectedMessage(null);
@@ -267,20 +291,41 @@ const ChatRoom = ({ chatNum }) => {
         setSelectedMessage(null);
     };
 
+    const scrollToUnreadOrBottom = () => {
+        if (firstUnreadMessageRef.current) {
+            const firstUnreadElement = document.getElementById(firstUnreadMessageRef.current);
+            if (firstUnreadElement) {
+                firstUnreadElement.scrollIntoView({ behavior: 'auto' });
+                return;
+            }
+        }
+        if (messageEndRef.current) {
+            messageEndRef.current.scrollIntoView({ behavior: 'auto' });
+        }
+    };
+
+    const scrollToBottom = () => {
+        if (messageEndRef.current) {
+            messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <div className="chat-room-container">
             <div className="chat-room-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className="chat-room-message-container">
+                    <div key={index} className="chat-room-message-container" id={msg.messageNum}>
+                        {msg.messageNum === firstUnreadMessageRef.current && (
+                            <div className="chat-room-unread-indicator">
+                                읽지 않은 메시지
+                            </div>
+                        )}
                         <div className="chat-room-message-sender">
                             <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
                             <div className='chat-room-message-name'>
-                            {msg.memberNickname}
-
+                                {msg.memberNickname}
                             </div>
                             <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
-
-
                         </div>
                         <div className="chat-room-message-content-container">
                             <div className="chat-room-message-content">
@@ -300,7 +345,7 @@ const ChatRoom = ({ chatNum }) => {
                                 )}
                                 {msg.files && msg.files.map((file, fileIndex) => (
                                     <div key={fileIndex} className="chat-room-message-file-container">
-                                        <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
+                                        <a href="#" onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
                                             {isImage(file.originalFileName) ? (
                                                 <div className="chat-room-image-container">
                                                     <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
@@ -316,7 +361,6 @@ const ChatRoom = ({ chatNum }) => {
                                     </div>
                                 ))}
                             </div>
-                            {/* <small className="chat-room-message-time">{formatTime(msg.chatTime)}</small> */}
                             <small className="chat-room-unread-count"> {msg.unreadCount}</small>
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
@@ -325,6 +369,7 @@ const ChatRoom = ({ chatNum }) => {
                         </div>
                     </div>
                 ))}
+                <div ref={messageEndRef}></div>
             </div>
             <div className="chat-room-bottom-container">
                 {replyingTo && (
@@ -359,7 +404,7 @@ const ChatRoom = ({ chatNum }) => {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Send a message"
+                        placeholder="메시지 보내기"
                         className="chat-room-message-input"
                     />
                     <div onClick={sendMessage} className="chat-room-send-button">

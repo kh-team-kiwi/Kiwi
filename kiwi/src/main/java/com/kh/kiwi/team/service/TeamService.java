@@ -75,7 +75,7 @@ public class TeamService {
         memberDetails.setCompanyNum(company.getCompanyNum());
         memberDetails.setMemberId(memberId);
         memberDetails.setEmployeeNo(company.getCompanyNum() + "@" + memberId.split("@")[0]);
-        memberDetails.setName("수정해주세요");
+        memberDetails.setName(company.getCompanyName()+"팀 담당자 (이름 수정)");
         memberDetails.setGender("남자");
         memberDetails.setBirthDate(LocalDate.parse("2000-01-01"));
         memberDetails.setEmpDate(LocalDate.parse("2000-01-01"));
