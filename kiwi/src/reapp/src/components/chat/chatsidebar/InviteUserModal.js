@@ -53,10 +53,10 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
+        <div className="invite-user-modal-overlay">
+            <div className="invite-user-modal-content">
                 <h2>유저 초대</h2>
-                <div className="searchBox">
+                <div className="invite-user-searchBox">
                     <input
                         type="text"
                         value={searchTerm}
@@ -64,8 +64,8 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                         placeholder="닉네임 검색"
                     />
                 </div>
-                <div className="container">
-                    <div className="memberList">
+                <div className="invite-user-container">
+                    <div className="invite-user-member-list">
                         {members
                             .filter(
                                 (member) =>
@@ -75,16 +75,16 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                             .map((member) => (
                                 <div
                                     key={member.id}
-                                    className={`memberItem ${selectedMember === member ? "selected" : ""}`}
+                                    className={`invite-user-member-item ${selectedMember === member ? "selected" : ""}`}
                                     onClick={() => handleMemberClick(member)}
                                 >
                                     {member.name} ({member.email}:{member.role})
                                 </div>
                             ))}
                     </div>
-                    <div className="modalActions">
-                        <button className="invite-button" onClick={handleInvite}>초대</button>
-                        <button className="cancel-button" onClick={onClose}>취소</button>
+                    <div className="invite-user-modal-actions">
+                        <button className="invite-user-invite-button" onClick={handleInvite}>초대</button>
+                        <button className="invite-user-cancel-button" onClick={onClose}>취소</button>
                     </div>
                 </div>
             </div>

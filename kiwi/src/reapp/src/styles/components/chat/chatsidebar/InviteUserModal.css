@@ -24,6 +24,8 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    z-index: 3000;
+
 }
 
 .invite-user-modal-content {
@@ -35,6 +37,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     animation: bounceIn 0.2s ease-out; 
     overflow-y: auto; 
+
 }
 
 .invite-user-form-group {
