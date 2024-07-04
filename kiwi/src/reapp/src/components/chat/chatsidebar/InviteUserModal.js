@@ -3,6 +3,9 @@ import axios from "axios";
 import '../../../styles/components/chat/chatsidebar/InviteUserModal.css';
 import { getSessionItem } from "../../../jwt/storage";
 
+import ErrorImageHandler from "../../common/ErrorImageHandler";
+
+
 const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite }) => {
     const [profile, setProfile] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -29,7 +32,8 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                     id: member.memberId,
                     name: member.memberNickname,
                     email: member.memberId,
-                    role: member.memberRole
+                    role: member.memberRole,
+                    profilePic: member.profilePic // Assuming profilePic is a part of the response
                 }));
             setMembers(fetchedMembers);
         } catch (error) {
@@ -52,10 +56,18 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
         }
     };
 
+    const highlightText = (text, query) => {
+        if (!query) return text;
+        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+        return parts.map((part, index) =>
+            part.toLowerCase() === query.toLowerCase() ? <span key={index} className="highlight">{part}</span> : part
+        );
+    };
+
     return (
         <div className="invite-user-modal-overlay">
             <div className="invite-user-modal-content">
-                <h2>유저 초대</h2>
+                <h2>Invite Users</h2>
                 <div className="invite-user-searchBox">
                     <input
                         type="text"
@@ -69,8 +81,8 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                         {members
                             .filter(
                                 (member) =>
-                                    member.name.includes(searchTerm) ||
-                                    member.email.includes(searchTerm)
+                                    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    member.email.toLowerCase().includes(searchTerm.toLowerCase())
                             )
                             .map((member) => (
                                 <div
@@ -78,13 +90,21 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                                     className={`invite-user-member-item ${selectedMember === member ? "selected" : ""}`}
                                     onClick={() => handleMemberClick(member)}
                                 >
-                                    {member.name} ({member.email}:{member.role})
+                                    <img className='invite-user-profile-pic' src={member.profilePic || ''} alt={member.name} onError={ErrorImageHandler} />
+                                    <div className="invite-user-profile-info">
+                                        <div className="invite-user-profile-name">
+                                            {highlightText(member.name, searchTerm)}
+                                        </div>
+                                        <div className="invite-user-profile-email">
+                                            {highlightText(member.email, searchTerm)}
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                     </div>
                     <div className="invite-user-modal-actions">
-                        <button className="invite-user-invite-button" onClick={handleInvite}>초대</button>
-                        <button className="invite-user-cancel-button" onClick={onClose}>취소</button>
+                        <button className="invite-user-cancel-button" onClick={onClose}>Cancel</button>
+                        <button className="invite-user-invite-button" onClick={handleInvite}>Invite</button>
                     </div>
                 </div>
             </div>
