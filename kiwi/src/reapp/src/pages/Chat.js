@@ -9,6 +9,7 @@ import '../styles/pages/Page.css';
 import '../styles/pages/Chat.css';
 import { useParams } from "react-router-dom";
 import { getSessionItem } from "../jwt/storage";
+import axiosHandler from "../jwt/axiosHandler";
 
 const Chat = () => {
     const { teamno } = useParams();
@@ -35,7 +36,7 @@ const Chat = () => {
 
         // Fetch member count
         try {
-            const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
             setMemberCount(response.data.length);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -62,7 +63,7 @@ const Chat = () => {
         };
 
         try {
-            const response = await axios.post('/api/chat/createWithUsers', newChat);
+            const response = await axiosHandler.post('/api/chat/createWithUsers', newChat);
             console.log('새 채팅방이 생성되었습니다:', response.data);
             setShowCreateChatModal(false);
             setRefreshChatList(prev => !prev); // Refresh chat list
@@ -73,11 +74,11 @@ const Chat = () => {
 
     const handleInvite = async (member) => {
         try {
-            const response = await axios.post(`/api/chat/user/${selectedChatNum}/invite`, { memberId: member.id });
+            const response = await axiosHandler.post(`/api/chat/user/${selectedChatNum}/invite`, { memberId: member.id });
             console.log('사용자 초대 성공:', response.data);
 
             // 새 멤버 정보 가져오기
-            const newMemberResponse = await axios.get(`http://localhost:8080/api/chat/user/${selectedChatNum}`);
+            const newMemberResponse = await axiosHandler.get(`http://localhost:8080/api/chat/user/${selectedChatNum}`);
 
             // 멤버 카운트 및 멤버 리스트 업데이트
             setMemberCount(newMemberResponse.data.length);
@@ -101,7 +102,7 @@ const Chat = () => {
             return;
         }
         try {
-            const response = await axios.post(`/api/chat/user/${chatNum}/leave`, { memberId });
+            const response = await axiosHandler.post(`/api/chat/user/${chatNum}/leave`, { memberId });
             console.log('채팅방 나가기 성공:', response.data);
             setSelectedChatNum(null); // 선택된 채팅방 초기화
             setSelectedChatName(""); // 선택된 채팅방 이름 초기화

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import '../../../styles/components/chat/chatsidebar/InviteUserModal.css';
 import { getSessionItem } from "../../../jwt/storage";
+import axiosHandler from "../../../jwt/axiosHandler";
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
@@ -25,7 +25,7 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
 
     const fetchMembers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
             const fetchedMembers = response.data
                 .filter(member => member.memberId !== profile.username)
                 .map(member => ({

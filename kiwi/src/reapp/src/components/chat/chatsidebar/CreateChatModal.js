@@ -4,6 +4,7 @@ import '../../../styles/components/chat/chatsidebar/CreateChatModal.css';
 import { getSessionItem } from "../../../jwt/storage";
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
+import axiosHandler from "../../../jwt/axiosHandler";
 
 const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     const [profile, setProfile] = useState(null);
@@ -30,7 +31,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
     const fetchMembers = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            const response = await axiosHandler().get(`http://localhost:8080/api/chat/user/members?team=${team}`);
             const fetchedMembers = response.data
                 .filter(member => member.memberId !== profile.username)
                 .map(member => ({

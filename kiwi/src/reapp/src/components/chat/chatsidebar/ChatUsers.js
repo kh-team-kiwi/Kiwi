@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../../../styles/components/chat/chatsidebar/ChatUsers.css';
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
+import axiosHandler from "../../../jwt/axiosHandler";
 
 const ChatUsers = ({ chatNum }) => {
     const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ const ChatUsers = ({ chatNum }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+                const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);

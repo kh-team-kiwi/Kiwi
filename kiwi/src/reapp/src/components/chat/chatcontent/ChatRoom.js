@@ -11,7 +11,7 @@ import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
-
+import axiosHandler from "../../../jwt/axiosHandler";
 
 const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
@@ -35,7 +35,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
+                const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
                 const messagesWithUnreadCounts = await Promise.all(response.data.map(async (msg) => {
                     const unreadCount = await fetchUnreadCount(chatNum, msg.messageNum);
                     return { ...msg, unreadCount };
@@ -86,7 +86,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
     const fetchUnreadCount = async (chatNum, messageNum) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
+            const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching unread count:', error);
@@ -114,7 +114,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/chat/message/read', {
+            const response = await axiosHandler.post('http://localhost:8080/api/chat/message/read', {
                 messageNum: message.messageNum,
                 memberId: memberId
             });
@@ -166,7 +166,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                     formData.append('chatNum', chatNum);
                     formData.append('messageNum', `${chatNum}-${Date.now()}`);
 
-                    const response = await axios.post('http://localhost:8080/api/chat/message/upload', formData, {
+                    const response = await axiosHandler.post('http://localhost:8080/api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     });
 
@@ -221,7 +221,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
     const handleDownload = (event, filePath, fileName) => {
         event.preventDefault();
-        axios({
+        axiosHandler({
             url: `http://localhost:8080/api/chat/message/download?fileKey=${filePath}`,
             method: 'GET',
             responseType: 'blob',
@@ -254,7 +254,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
     const handleDeleteConfirm = async () => {
         if (selectedMessage) {
             try {
-                await axios.delete(`http://localhost:8080/api/chat/message/delete/${selectedMessage.messageNum}`, {
+                await axiosHandler.delete(`http://localhost:8080/api/chat/message/delete/${selectedMessage.messageNum}`, {
                     data: { username: profile.username }
                 });
                 setMessages(prevMessages => prevMessages.filter(msg => msg.messageNum !== selectedMessage.messageNum));
@@ -280,7 +280,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                         <div className="chat-room-message-sender">
                             <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
                             <div className='chat-room-message-name'>
-                            {msg.memberNickname}
+                                {msg.memberNickname}
 
                             </div>
                             <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
@@ -321,7 +321,6 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                                     </div>
                                 ))}
                             </div>
-                            {/* <small className="chat-room-message-time">{formatTime(msg.chatTime)}</small> */}
                             <small className="chat-room-unread-count"> {msg.unreadCount}</small>
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
