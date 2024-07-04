@@ -21,6 +21,7 @@
   --white-hover2: rgb(247, 247, 247);
   --darker-white-hover: rgb(216, 216, 216);
 
+  --light-blue: #e1edf3;
 
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
@@ -45,7 +46,7 @@
   --light-gray4: #e7e5e5;
   --yellow: yellow;
 
-  --sidebar-selected: rgb(238, 238, 238);
+  --sidebar-selected: #dbe7f3;
 
   /* variables not intended for dark mode/다크모드 아닌 변수들 */
   --green: #69a84f;

@@ -43,6 +43,9 @@ const DriveList = ({ onView, refresh }) => {
         try {
             const response = await axiosHandler.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
             setDrives(response.data);
+            if (response.data.length > 0) {
+                handleViewDrive(response.data[0].driveCode, response.data[0].driveName);
+            }
         } catch (error) {
             console.error('Failed to fetch drives', error);
         }
@@ -143,7 +146,7 @@ const DriveList = ({ onView, refresh }) => {
                                     {drive.driveName}
                                 </div>
                                 <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>
-                                    <OptionsIcon className='drive-list-options-icon'/>
+                                   ⋮
                                 </div>
                                 {openDropdown === drive.driveCode && (
                                     <div className="drive-list-options">

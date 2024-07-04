@@ -25,10 +25,6 @@ const DriveSidebar = ({ onView, refresh, teamno, onDriveCreated }) => {
 
     return (
         <div className='sidebar'>
-            <button className="drive-sidebar-create-button" onClick={handleOpenCreateDriveModal}>
-                <PlusIcon className='drive-sidebar-plus-icon'/>
-                Create Drive
-            </button>
             {showCreateDriveModal && (
                 <CreateDriveModal
                     team={teamno}
@@ -41,6 +37,10 @@ const DriveSidebar = ({ onView, refresh, teamno, onDriveCreated }) => {
                 />
             )}
             <DriveList onView={handleViewFiles} refresh={refresh} />
+            <button className="drive-sidebar-create-button" onClick={handleOpenCreateDriveModal}>
+                <PlusIcon className='drive-sidebar-plus-icon'/>
+                Create Drive
+            </button>
         </div>
     );
 };

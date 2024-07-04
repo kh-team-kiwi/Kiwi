@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import FileUploadWithDropzone from './FileUploadWithDropzone';
 import DriveFolderPopup from "./DriveFolderPopup";
 import DriveDeletePopup from './DriveDeletePopup';
-import EmptyDriveIcon from '../../../images/emptydrive.png';
+import EmptyFileIcon from '../../../images/emptyfile.png';
 import '../../../styles/components/drive/DriveContent.css';
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import DownloadIcon from '../../../images/svg/buttons/DownloadIcon';
@@ -295,6 +295,8 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                 </div>
             </div>
 
+            <FileUploadWithDropzone driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} />
+
             {viewMode === 'list' ? (
                 <div className='list-view'>
                     <div className='drive-content-list-header'>
@@ -307,12 +309,13 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                     </div>
                     {filteredItems.length === 0 ? (
                         <div className='img-enable-darkmode drive-content-no-files-container'>
-                            <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
+                            <img src={EmptyFileIcon} className='drive-content-empty-icon'/>
                             <div className='drive-content-empty-title'>
-                                No files to show
+                                Drag and Drop files here
                             </div>
                             <div className='drive-content-empty-description'>
-                                It looks like you haven't uploaded any files here. Start by clicking the "New" button to upload your files or create new folders.
+                                There are no files to show
+
                             </div>
                         </div>
                     ) : (
@@ -400,9 +403,9 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                 <div className='grid-view'>
                     {filteredItems.length === 0 ? (
                         <div className='img-enable-darkmode drive-content-no-files-container'>
-                            <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
+                            <img src={EmptyFileIcon} className='drive-content-empty-icon'/>
                             <div className='drive-content-empty-title'>
-                                No files to show
+                                Drag and Drop files here
                             </div>
                             <div className='drive-content-empty-description'>
                                 It looks like you haven't uploaded any files here. Click on the "New" button to upload your files or create new folders.

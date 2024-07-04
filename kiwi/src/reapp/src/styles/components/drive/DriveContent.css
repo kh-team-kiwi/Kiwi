@@ -591,14 +591,14 @@
 }
 
 .drive-content-empty-icon {
-    max-width: 250px;
+    max-width: 150px;
     height: auto;
     width: auto;
     object-fit: contain;
 }
 
 .drive-content-empty-title {
-    margin-top: 10px;
+    margin-top: 20px;
     color: var(--lighter-text-color);
     font-size: 24px;
     font-weight: 600;

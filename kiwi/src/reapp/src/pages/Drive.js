@@ -1,18 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getSessionItem } from "../jwt/storage";
+
 import DriveSidebar from '../components/drive/DriveSidebar';
 import '../styles/pages/Page.css';
 import '../styles/pages/Drive.css';
 import DriveContent from '../components/drive/DriveContent/DriveContent';
-import { useParams } from "react-router-dom";
+import EmptyDriveIcon from '../images/emptydrive.png';
+import axiosHandler from "../jwt/axiosHandler";
+import PlusIcon from '../images/svg/shapes/PlusIcon';
+import CreateDriveModal from "../components/drive/DriveContent/CreateDriveModal";
 
 const Drive = () => {
     const { teamno } = useParams();
+    const [drives, setDrives] = useState([]);
     const [selectedDrive, setSelectedDrive] = useState(null);
     const [selectedDriveName, setSelectedDriveName] = useState('');
     const [selectedFolder, setSelectedFolder] = useState(null);
     const [selectedFolderName, setSelectedFolderName] = useState('');
     const [breadcrumbs, setBreadcrumbs] = useState([]);
     const [refresh, setRefresh] = useState(false);
+    const [username, setUsername] = useState('');
+    const [showCreateDriveModal, setShowCreateDriveModal] = useState(false);
+
+    useEffect(() => {
+        const storedProfile = getSessionItem("profile");
+        if (storedProfile && storedProfile.username) {
+            setUsername(storedProfile.username);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (teamno && username) {
+            fetchDrives();
+        }
+    }, [refresh, teamno, username]);
+
+    const fetchDrives = async () => {
+        try {
+            const response = await axiosHandler.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
+            setDrives(response.data);
+            if (response.data.length > 0) {
+                handleViewDrive(response.data[0].driveCode, response.data[0].driveName);
+            } else {
+                setSelectedDrive(null);
+                setSelectedDriveName('');
+            }
+        } catch (error) {
+            console.error('Failed to fetch drives', error);
+        }
+    };
 
     const handleViewDrive = (driveCode, driveName) => {
         setSelectedDrive(driveCode);
@@ -54,16 +91,27 @@ const Drive = () => {
         }
     };
 
+    const handleOpenCreateDriveModal = () => {
+        console.log('tesstttt')
+        setShowCreateDriveModal(true);
+    };
+
+    const handleCloseCreateDriveModal = () => {
+        setShowCreateDriveModal(false);
+    };
+
     return (
-        <>
-            <DriveSidebar 
-                onView={handleViewDrive} 
-                refresh={refresh} 
-                teamno={teamno} 
-                onDriveCreated={handleDriveCreated}
-            />
-            <div className='content-container'>
-                {selectedDrive && (
+        <div className='drive-page'>
+            {drives.length > 0 && (
+                <DriveSidebar 
+                    onView={handleViewDrive} 
+                    refresh={refresh} 
+                    teamno={teamno} 
+                    onDriveCreated={handleDriveCreated}
+                />
+            )}
+            <div className={`content-container ${drives.length > 0 ? '' : 'full-width'}`}>
+                {drives.length > 0 ? (
                     <DriveContent
                         driveCode={selectedDrive}
                         parentPath={selectedFolder ? selectedFolder : selectedDrive}
@@ -73,9 +121,44 @@ const Drive = () => {
                         breadcrumbs={breadcrumbs}
                         onDeleteDrive={handleDriveDeleted}
                     />
+                ) : (
+                    <div className="drive-empty-message">
+                        <div className='drive-no-files-container'>
+                            <img src={EmptyDriveIcon} className='img-enable-darkmode drive-empty-icon'/>
+                            <div className="drive-empty-title">
+                                No Drives to show
+                            </div>
+                            <div className="drive-empty-description">
+                                Click on the button below to create a new drive 
+                            </div>
+                            <button 
+                                className="drive-empty-create-button" 
+                                onClick={handleOpenCreateDriveModal}
+                            >
+                                <PlusIcon className='drive-empty-plus-icon'/>
+                                <div>
+                                Create Drive
+
+
+                                </div>
+                            </button>
+                        </div>
+                        {showCreateDriveModal && (
+                <CreateDriveModal
+                    team={teamno}
+                    showCreateDriveModal={showCreateDriveModal}
+                    onSave={() => {
+                        handleDriveCreated();
+                        handleCloseCreateDriveModal();
+                    }}
+                    onClose={handleCloseCreateDriveModal}
+                />
+            )}
+                    </div>
                 )}
             </div>
-        </>
+
+        </div>
     );
 };
 
