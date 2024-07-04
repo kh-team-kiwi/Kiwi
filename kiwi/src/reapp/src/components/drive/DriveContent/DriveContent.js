@@ -18,6 +18,8 @@ import ListIcon from '../../../images/svg/buttons/ListIcon';
 import GridIcon from '../../../images/svg/buttons/GridIcon';
 import FileIcon from './FileIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
+import SearchIcon from '../../../images/svg/buttons/SearchIcon';
+
 
 const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
     const { teamno } = useParams();
@@ -32,6 +34,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     const [searchQuery, setSearchQuery] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'fileName', direction: 'ascending' });
     const [newDropdownVisible, setNewDropdownVisible] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const toggleDropdown = () => {
         setNewDropdownVisible(!newDropdownVisible);
@@ -44,6 +47,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     const fetchItems = async (path) => {
         const fullPath = path ? `${teamno}/drive/${path}` : `${teamno}/drive/${driveCode}`;
         console.log(`Fetching items for path: ${fullPath}`);
+        setLoading(true);
         try {
             const response = await axiosHandler.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files`, {
                 params: { parentPath: path }
@@ -52,6 +56,8 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
             setItems(response.data);
         } catch (error) {
             console.error('Failed to fetch items', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -229,6 +235,14 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         }
     };
 
+    // if (loading) {
+    //     return (
+    //         <div className="loading-screen">
+    //             {/* <div className="loading-spinner">Loading...</div> */}
+    //         </div>
+    //     );
+    // }
+
     return (
         <div className='drive-content-container'>
             <div className='drive-content-header'>
@@ -261,6 +275,9 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                         <span className='search-results-count'>{filteredItems.length} results</span>
                     )}
                     <div className='drive-content-search-wrapper'>
+                        <SearchIcon className="drive-content-search-icon" />
+
+                        
                         <input
                             type="text"
                             value={searchQuery}

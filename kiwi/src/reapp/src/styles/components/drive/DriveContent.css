@@ -612,3 +612,10 @@
     width: 500px;
     text-align: center;
 }
+
+.drive-content-search-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    fill: var(--gray);
+}

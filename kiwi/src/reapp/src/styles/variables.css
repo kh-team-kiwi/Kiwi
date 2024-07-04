@@ -11,6 +11,7 @@
   --gray-text: rgb(151, 149, 149); 
   --gray: gray;
   --dark-gray: rgb(54, 54, 54);
+  --field-background: #f9f9f9;
   
   --red: #e45a5a;
   --red-hover: #d51f1f;
@@ -21,7 +22,7 @@
   --white-hover2: rgb(247, 247, 247);
   --darker-white-hover: rgb(216, 216, 216);
 
-  --light-blue: #e1edf3;
+  --light-blue: #d4effc;
 
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
@@ -48,6 +49,8 @@
 
   --sidebar-selected: #dbe7f3;
 
+  --background-tab: #f1f1f1;
+
   /* variables not intended for dark mode/다크모드 아닌 변수들 */
   --green: #69a84f;
   --green-hover: #609648;  
@@ -71,6 +74,8 @@
   --text-color: #dfdfdf;
   --gray: #d4d4d4;
   --dark-gray: #c9c9c9;
+  --field-background: #8f8e8e;
+
 
   --white: #55575f;
   --white-hover: #46474d;
@@ -99,6 +104,9 @@
   --header-background-color: #2b2e2e ;
   --container-background-color:#3b3e3f;
   --white: #626464;
+  --light-blue: #3b3e3f;
+  --background-tab: #797878;
+
 
   --page-icon: #80a585;
   --page-icon-active: #4c6851;

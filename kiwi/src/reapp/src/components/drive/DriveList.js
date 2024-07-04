@@ -11,6 +11,7 @@ import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import CheckIcon from '../../images/svg/buttons/CheckIcon';
 import SharedIcon from '../../images/svg/buttons/SharedIcon';
 import DriveIcon from '../../images/svg/buttons/DriveIcon';
+import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import axiosHandler from "../../jwt/axiosHandler";
 
 const DriveList = ({ onView, refresh }) => {
@@ -24,6 +25,7 @@ const DriveList = ({ onView, refresh }) => {
     const [driveToDelete, setDriveToDelete] = useState(null);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedDrive, setSelectedDrive] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -109,16 +111,51 @@ const DriveList = ({ onView, refresh }) => {
         onView(driveCode, driveName);
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const clearSearch = () => {
+        setSearchQuery('');
+    };
+
+    const highlightText = (text, query) => {
+        if (!query) return text;
+        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+        return parts.map((part, index) =>
+            part.toLowerCase() === query.toLowerCase() ? <span key={index} className='chat-list-highlight'>{part}</span> : part
+        );
+    };
+
+    const filteredDrives = drives.filter(drive =>
+        drive.driveName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div>
+            <div className="chat-list-search-container">
+                <SearchIcon className="drive-list-search-icon" />
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Search Drive"
+                    className="chat-list-search-input"
+                />
+                {searchQuery && (
+                    <button className="chat-list-clear-search-button" onClick={clearSearch}>
+                        <ExitIcon />
+                    </button>
+                )}
+            </div>
             <div className='drive-list-shared-header'>
                 <SharedIcon className='drive-list-shared-icon' />
                 <div>
-                    Shared Drive - {drives.length}
+                    Shared Drive - {filteredDrives.length}
                 </div>
             </div>
             <ul>
-                {drives.map((drive) => (
+                {filteredDrives.map((drive) => (
                     <li
                         key={drive.driveCode}
                         onClick={() => handleViewDrive(drive.driveCode, drive.driveName)}
@@ -143,7 +180,11 @@ const DriveList = ({ onView, refresh }) => {
                             <div className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`}>
                                 <div className='drive-list-item-name'>
                                     <DriveIcon className='drive-list-drive-icon'/>
-                                    {drive.driveName}
+                                    <div>
+                                    {highlightText(drive.driveName, searchQuery)}
+
+
+                                    </div>
                                 </div>
                                 <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>
                                    ⋮

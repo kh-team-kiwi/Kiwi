@@ -72,6 +72,7 @@
     cursor: pointer;
     font-size: 20px;
     width: 20px;
+    color: var(--lighter-text-color);
 
 }
 
@@ -177,4 +178,11 @@
 
 .drive-list-edit {
     color: var(--lighter-text-color);
+}
+
+.drive-list-search-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    fill: var(--gray);
 }

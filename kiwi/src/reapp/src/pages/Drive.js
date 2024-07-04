@@ -22,6 +22,7 @@ const Drive = () => {
     const [refresh, setRefresh] = useState(false);
     const [username, setUsername] = useState('');
     const [showCreateDriveModal, setShowCreateDriveModal] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -37,6 +38,7 @@ const Drive = () => {
     }, [refresh, teamno, username]);
 
     const fetchDrives = async () => {
+        setLoading(true);
         try {
             const response = await axiosHandler.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
             setDrives(response.data);
@@ -48,6 +50,8 @@ const Drive = () => {
             }
         } catch (error) {
             console.error('Failed to fetch drives', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -92,13 +96,20 @@ const Drive = () => {
     };
 
     const handleOpenCreateDriveModal = () => {
-        console.log('tesstttt')
         setShowCreateDriveModal(true);
     };
 
     const handleCloseCreateDriveModal = () => {
         setShowCreateDriveModal(false);
     };
+
+    if (loading) {
+        return (
+            <div className="loading-screen">
+                <div className="loading-spinner">Loading...</div>
+            </div>
+        );
+    }
 
     return (
         <div className='drive-page'>
@@ -136,28 +147,23 @@ const Drive = () => {
                                 onClick={handleOpenCreateDriveModal}
                             >
                                 <PlusIcon className='drive-empty-plus-icon'/>
-                                <div>
-                                Create Drive
-
-
-                                </div>
+                                <div>Create Drive</div>
                             </button>
                         </div>
                         {showCreateDriveModal && (
-                <CreateDriveModal
-                    team={teamno}
-                    showCreateDriveModal={showCreateDriveModal}
-                    onSave={() => {
-                        handleDriveCreated();
-                        handleCloseCreateDriveModal();
-                    }}
-                    onClose={handleCloseCreateDriveModal}
-                />
-            )}
+                            <CreateDriveModal
+                                team={teamno}
+                                showCreateDriveModal={showCreateDriveModal}
+                                onSave={() => {
+                                    handleDriveCreated();
+                                    handleCloseCreateDriveModal();
+                                }}
+                                onClose={handleCloseCreateDriveModal}
+                            />
+                        )}
                     </div>
                 )}
             </div>
-
         </div>
     );
 };
