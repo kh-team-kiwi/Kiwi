@@ -317,7 +317,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                 No files to show
                             </div>
                             <div className='drive-content-empty-description'> 
-                            It looks like you haven't uploaded any files yet. Start by clicking the "New" button to upload your files or create new folders.
+                            It looks like you haven't uploaded any files here. Start by clicking the "New" button to upload your files or create new folders.
                             </div>
 
                         </div>
