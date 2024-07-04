@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { useParams } from "react-router-dom";
 import FileUploadWithDropzone from './FileUploadWithDropzone';
 import DriveFolderPopup from "./DriveFolderPopup";
 import DriveDeletePopup from './DriveDeletePopup';
-import { useParams } from "react-router-dom";
-
 import EmptyDriveIcon from '../../../images/emptydrive.png';
-
 import '../../../styles/components/drive/DriveContent.css';
-
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import DownloadIcon from '../../../images/svg/buttons/DownloadIcon';
 import EditIcon from '../../../images/svg/buttons/EditIcon';
@@ -18,11 +14,10 @@ import BackIcon from '../../../images/svg/buttons/BackIcon';
 import RightArrowIcon from '../../../images/svg/shapes/ThinRightArrow';
 import PlusIcon from '../../../images/svg/shapes/PlusIcon';
 import UploadFileIcon from '../../../images/svg/buttons/UploadFileIcon';
-
 import ListIcon from '../../../images/svg/buttons/ListIcon';
 import GridIcon from '../../../images/svg/buttons/GridIcon';
-
-import FileIcon from './FileIcon';  
+import FileIcon from './FileIcon';
+import axiosHandler from "../../../jwt/axiosHandler";
 
 const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
     const { teamno } = useParams();
@@ -50,7 +45,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = path ? `${teamno}/drive/${path}` : `${teamno}/drive/${driveCode}`;
         console.log(`Fetching items for path: ${fullPath}`);
         try {
-            const response = await axios.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files`, {
+            const response = await axiosHandler.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files`, {
                 params: { parentPath: path }
             });
             console.log('Fetched items:', response.data);
@@ -67,7 +62,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
             const url = isFolder
                 ? `http://localhost:8080/api/drive/${teamno}/${driveCode}/folders/${itemCode}`
                 : `http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}`;
-            await axios.delete(url, { params: { parentPath: fullPath } });
+            await axiosHandler.delete(url, { params: { parentPath: fullPath } });
             fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to delete item', error);
@@ -78,7 +73,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
         console.log(`Updating file name at path: ${fullPath}`);
         try {
-            await axios.put(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}`, JSON.stringify(newFileName), {
+            await axiosHandler.put(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}`, JSON.stringify(newFileName), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -96,7 +91,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
         console.log(`Updating folder name at path: ${fullPath}`);
         try {
-            await axios.put(`http://localhost:8080/api/drive/${teamno}/${driveCode}/folders/${itemCode}`, JSON.stringify(newFolderName), {
+            await axiosHandler.put(`http://localhost:8080/api/drive/${teamno}/${driveCode}/folders/${itemCode}`, JSON.stringify(newFolderName), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -124,7 +119,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
         console.log(`Downloading file from path: ${fullPath}`);
         try {
-            const response = await axios.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}/download`, {
+            const response = await axiosHandler.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}/download`, {
                 responseType: 'blob',
                 params: { parentPath: fullPath }
             });
@@ -154,7 +149,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         formData.append('teamNumber', teamno);
 
         try {
-            await axios.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
+            await axiosHandler.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -171,7 +166,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const confirmDeleteDrive = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/drive/${driveCode}`);
+            await axiosHandler.delete(`http://localhost:8080/api/drive/${driveCode}`);
             setShowDeletePopup(false);
             onDeleteDrive(driveCode);
         } catch (error) {
@@ -311,15 +306,14 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                         </span>
                     </div>
                     {filteredItems.length === 0 ? (
-                    <div className='img-enable-darkmode drive-content-no-files-container'>
+                        <div className='img-enable-darkmode drive-content-no-files-container'>
                             <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
-                            <div className='drive-content-empty-title'> 
+                            <div className='drive-content-empty-title'>
                                 No files to show
                             </div>
-                            <div className='drive-content-empty-description'> 
-                            It looks like you haven't uploaded any files here. Start by clicking the "New" button to upload your files or create new folders.
+                            <div className='drive-content-empty-description'>
+                                It looks like you haven't uploaded any files here. Start by clicking the "New" button to upload your files or create new folders.
                             </div>
-
                         </div>
                     ) : (
                         filteredItems.map((item) => (
@@ -333,9 +327,9 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                     <form className='drive-content-item' onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
                                         <div className='drive-content-edit-container'>
                                             <input className='drive-content-edit-input'
-                                                type="text"
-                                                value={newFileName}
-                                                onChange={(e) => setNewFileName(e.target.value)}
+                                                   type="text"
+                                                   value={newFileName}
+                                                   onChange={(e) => setNewFileName(e.target.value)}
                                             />
                                             <button className='drive-content-save-button' type="submit">
                                                 <CheckIcon className='drive-content-check-icon' />
@@ -347,10 +341,10 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                     <form className='drive-content-item' onSubmit={(e) => { e.preventDefault(); handleUpdateFolderName(item.fileCode); e.stopPropagation(); }} onClick={(e) => e.stopPropagation()}>
                                         <div className='drive-content-edit-container'>
                                             <input className='drive-content-edit-input'
-                                                type="text"
-                                                value={newFolderName}
-                                                onChange={(e) => setNewFolderName(e.target.value)}
-                                                onClick={(e) => e.stopPropagation()}
+                                                   type="text"
+                                                   value={newFolderName}
+                                                   onChange={(e) => setNewFolderName(e.target.value)}
+                                                   onClick={(e) => e.stopPropagation()}
                                             />
                                             <button className='drive-content-save-button' type="submit">
                                                 <CheckIcon className='drive-content-check-icon' />
@@ -405,16 +399,15 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
             ) : (
                 <div className='grid-view'>
                     {filteredItems.length === 0 ? (
-                    <div className='img-enable-darkmode drive-content-no-files-container'>
-                        <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
-                        <div className='drive-content-empty-title'> 
-                            No files to show
-                        </div>
-                        <div className='drive-content-empty-description'> 
-                            It looks like you haven't uploaded any files here. Click on the "New" button to upload your files or create new folders.
+                        <div className='img-enable-darkmode drive-content-no-files-container'>
+                            <img src={EmptyDriveIcon} className='drive-content-empty-icon'/>
+                            <div className='drive-content-empty-title'>
+                                No files to show
                             </div>
-
-                    </div>
+                            <div className='drive-content-empty-description'>
+                                It looks like you haven't uploaded any files here. Click on the "New" button to upload your files or create new folders.
+                            </div>
+                        </div>
                     ) : (
                         filteredItems.map((item) => (
                             <div
@@ -430,9 +423,9 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                     <form className='drive-grid-edit' onSubmit={(e) => { e.preventDefault(); handleUpdateFileName(item.fileCode); }}>
                                         <div className='drive-content-edit-container'>
                                             <input className='drive-content-edit-input'
-                                                type="text"
-                                                value={newFileName}
-                                                onChange={(e) => setNewFileName(e.target.value)}
+                                                   type="text"
+                                                   value={newFileName}
+                                                   onChange={(e) => setNewFileName(e.target.value)}
                                             />
                                             <button className='drive-content-save-button' type="submit">
                                                 <CheckIcon className='drive-content-check-icon' />
@@ -444,10 +437,10 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                     <form className='drive-grid-edit' onSubmit={(e) => { e.preventDefault(); handleUpdateFolderName(item.fileCode); e.stopPropagation(); }} onClick={(e) => e.stopPropagation()}>
                                         <div className='drive-content-edit-container'>
                                             <input className='drive-content-edit-input'
-                                                type="text"
-                                                value={newFolderName}
-                                                onChange={(e) => setNewFolderName(e.target.value)}
-                                                onClick={(e) => e.stopPropagation()}
+                                                   type="text"
+                                                   value={newFolderName}
+                                                   onChange={(e) => setNewFolderName(e.target.value)}
+                                                   onClick={(e) => e.stopPropagation()}
                                             />
                                             <button className='drive-content-save-button' type="submit">
                                                 <CheckIcon className='drive-content-check-icon' />
@@ -458,10 +451,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                 ) : (
                                     <div className='drive-grid-details'>
                                         <div className='drive-content-file-name'>
-                                            <div>
-                                            {highlightText(item.fileName, searchQuery)}
-
-                                            </div>
+                                            <div>{highlightText(item.fileName, searchQuery)}</div>
                                         </div>
                                         <div className='drive-grid-options'>
                                             <button className='drive-options-button' onClick={(e) => toggleOptionsMenu(e, item.fileCode)}>⋮</button>

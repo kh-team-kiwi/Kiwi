@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
 import '../../../styles/components/drive/DriveFolderPopup.css';
 import { useParams } from "react-router-dom";
-
-import CreateFolderIcon from '../../../images/svg/buttons/CreateFolderIcon'
+import CreateFolderIcon from '../../../images/svg/buttons/CreateFolderIcon';
+import axiosHandler from "../../../jwt/axiosHandler";
 
 const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, parentPath }) => {
     const { teamno } = useParams();
@@ -15,7 +14,7 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
         e.preventDefault();
         try {
             const adjustedParentPath = parentPath && !parentPath.endsWith('/') ? `${parentPath}/` : parentPath;
-            await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
+            await axiosHandler.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
                 folderName,
                 parentPath: adjustedParentPath || "",
                 teamNumber: teamno
@@ -25,7 +24,7 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
                 },
             });
             setFolderName('');
-            fetchFiles(); 
+            fetchFiles();
             closePopup();
         } catch (error) {
             console.error('Failed to create folder', error);
@@ -85,7 +84,6 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
                                 <button type="submit" className="drive-folder-popup-create-button">Create</button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             )}
