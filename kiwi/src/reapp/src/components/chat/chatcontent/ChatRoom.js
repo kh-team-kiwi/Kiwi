@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import axios from 'axios';
+import axiosHandler from "../../../jwt/axiosHandler";
 import { useParams } from "react-router-dom";
 import { getSessionItem } from "../../../jwt/storage";
 import ReactionMenu from './ReactionMenu';
@@ -11,7 +11,6 @@ import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
-import axiosHandler from "../../../jwt/axiosHandler";
 
 const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
@@ -43,7 +42,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 setMessages(messagesWithUnreadCounts);
                 markMessagesAsRead(messagesWithUnreadCounts);
             } catch (error) {
-                console.error('Error fetching messages:', error);
+                console.error('메시지 가져오기 오류:', error);
             }
         };
 
@@ -53,7 +52,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
         const client = Stomp.over(socket);
 
         client.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
+            console.log('연결됨: ' + frame);
             stompClient.current = client;
             client.subscribe(`/topic/chat/${chatNum}`, async (msg) => {
                 const newMessage = JSON.parse(msg.body);
@@ -72,13 +71,13 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 }
             });
         }, (error) => {
-            console.error('Connection error', error);
+            console.error('연결 오류', error);
         });
 
         return () => {
             if (stompClient.current) {
                 stompClient.current.disconnect(() => {
-                    console.log('Disconnected');
+                    console.log('연결 끊김');
                 });
             }
         };
@@ -89,14 +88,14 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
             const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
             return response.data;
         } catch (error) {
-            console.error('Error fetching unread count:', error);
+            console.error('읽지 않은 메시지 수 가져오기 오류:', error);
             return 0;
         }
     };
 
     const markMessagesAsRead = async (messages) => {
         if (!profile) {
-            console.error('Profile is null. Cannot mark messages as read.');
+            console.error('프로필이 null입니다. 메시지를 읽음으로 표시할 수 없습니다.');
             return;
         }
 
@@ -109,7 +108,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
     const markMessageAsRead = async (message, memberId) => {
         if (!memberId) {
-            console.error('Member ID is null. Cannot mark message as read.');
+            console.error('멤버 ID가 null입니다. 메시지를 읽음으로 표시할 수 없습니다.');
             return;
         }
 
@@ -138,7 +137,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 );
             }
         } catch (error) {
-            console.error('Error marking message as read:', error);
+            console.error('메시지를 읽음으로 표시하는 중 오류:', error);
         }
     };
 
@@ -182,10 +181,10 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                     fileInputRef.current.value = '';
                 }
             } catch (error) {
-                console.error('Error sending message or uploading files:', error);
+                console.error('메시지 전송 또는 파일 업로드 중 오류:', error);
             }
         } else {
-            console.error('There is no underlying STOMP connection');
+            console.error('기본 STOMP 연결이 없습니다.');
         }
     };
 
@@ -199,7 +198,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
         const minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
+        hours = hours ? hours : 12; // '0'은 '12'로 변경
         const minutesStr = minutes < 10 ? '0' + minutes : minutes;
         return `${hours}:${minutesStr} ${ampm}`;
     };
@@ -232,6 +231,8 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
             link.setAttribute('download', fileName);
             document.body.appendChild(link);
             link.click();
+        }).catch((error) => {
+            console.error('파일 다운로드 중 오류:', error);
         });
     };
 
@@ -259,7 +260,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 });
                 setMessages(prevMessages => prevMessages.filter(msg => msg.messageNum !== selectedMessage.messageNum));
             } catch (error) {
-                console.error('Error deleting message:', error);
+                console.error('메시지 삭제 중 오류:', error);
             } finally {
                 setShowDeletePopup(false);
                 setSelectedMessage(null);
@@ -281,11 +282,8 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                             <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
                             <div className='chat-room-message-name'>
                                 {msg.memberNickname}
-
                             </div>
                             <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
-
-
                         </div>
                         <div className="chat-room-message-content-container">
                             <div className="chat-room-message-content">
@@ -305,7 +303,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                                 )}
                                 {msg.files && msg.files.map((file, fileIndex) => (
                                     <div key={fileIndex} className="chat-room-message-file-container">
-                                        <a href={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
+                                        <a href="#" onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
                                             {isImage(file.originalFileName) ? (
                                                 <div className="chat-room-image-container">
                                                     <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
@@ -363,7 +361,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Send a message"
+                        placeholder="메시지 보내기"
                         className="chat-room-message-input"
                     />
                     <div onClick={sendMessage} className="chat-room-send-button">
