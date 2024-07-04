@@ -6,8 +6,13 @@ import com.kh.kiwi.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,12 +41,7 @@ public class AuthController {
         ResponseDto<?> result = authService.profile(memberId);
         return result;
     }
-    //프로필변경
-    @PostMapping("/api/auth/edit")
-    public ResponseDto<?> eidt(@RequestBody EditMemberDto memberDto) {
-        ResponseDto<?> result = authService.edit(memberDto);
-        return result;
-    }
+
     //이메일 중복검사
     @PostMapping("/api/auth/duplicate")
     public ResponseDto<?> duplicate(@RequestBody SignupDto requestBody) {
@@ -56,9 +56,30 @@ public class AuthController {
         return result;
     }
 
-    @PostMapping("/api/auth/imageUpload")
-    public ResponseDto<?> imageUpload(@RequestBody LoginDto requestBody) {
-        ResponseDto<?> result = authService.imageUpload();
-        return result;
+    // Account Settings API요청 : 프로필 이미지, 닉네임
+    @PostMapping("/api/auth/update/account")
+    public ResponseDto<?> updateAccount(@RequestParam(value = "profile", required = false) MultipartFile[] files,
+                                        @RequestParam("memberId") String memberId,
+                                        @RequestParam("memberNickname") String memberNickname) throws IOException {
+        return authService.updateAccount(files, memberId, memberNickname);
     }
+
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseDto<?> handleIOException(IOException e) {
+        return ResponseDto.setFailed( "파일 처리 중 오류가 발생했습니다.");
+    }
+
+    // Account Settings API요청 : 계정 삭제
+    @PostMapping("/api/auth/update/password")
+    public ResponseDto<?> updatePassword(@RequestBody Map<String, String> requestBody) {
+        return authService.updatePassword(requestBody);
+    }
+
+    // Account Settings API요청 : 계정 삭제
+    @PostMapping("/api/auth/delete/account")
+    public ResponseDto<?> deleteAccount(@RequestBody Map<String, String> requestBody) {
+        return authService.deleteAccount(requestBody);
+    }
+
 }

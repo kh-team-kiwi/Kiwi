@@ -5,8 +5,9 @@ import ErrorImage from '../../images/default-image.png';
 import PlusIcon from '../../images/svg/shapes/PlusIcon';
 import ThinUpArrow from '../../images/svg/shapes/ThinUpArrow';
 import EditIcon from '../../images/svg/buttons/EditIcon';
-import {getSessionItem, setSessionItem} from "../../jwt/storage";
+import {getSessionItem, removeLocalItem, removeSessionItem, setSessionItem} from "../../jwt/storage";
 import axiosHandler from "../../jwt/axiosHandler";
+import {useLocation, useNavigate, useNavigation, useParams} from "react-router-dom";
 
 const AccountSettings = ({ isOpen, onClose }) => {
   const [name, setName] = useState(getSessionItem('profile').name);
@@ -20,6 +21,9 @@ const AccountSettings = ({ isOpen, onClose }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [file, setFile] = useState();
+  const { teamno } = useParams();
+
   useEffect(() => {
     if (!isOpen) {
       setIsEditingName(false);
@@ -30,6 +34,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
 
   const handleProfilePictureChange = (e) => {
     setProfilePicture(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
   };
 
   const handleEditClick = () => {
@@ -37,16 +42,71 @@ const AccountSettings = ({ isOpen, onClose }) => {
   };
 
   const handleSave = async () => {
-    try{
-      // const res = await axiosHandler.get(`api/auth/profileUpdate/${name}`);
-      // setSessionItem('profile',res.data.data);
-      onClose();
-      window.location.reload();
+    const formData = new FormData();
+    if(file!==undefined) {
+      formData.append('profile', file);
+    } else {
+      formData.append('profile', null);
+    }
+    formData.append('memberId',getSessionItem('profile').username);
+    formData.append('memberNickname',name);
+
+    try {
+      const res = await axiosHandler.post('/api/auth/update/account', formData,
+          {headers: { 'Content-Type': 'multipart/form-data' }});
+      if(res.data.result){
+        alert("프로필이 변경되었습니다.")
+        setSessionItem('profile',res.data.data);
+        window.location.reload();
+      }else {
+        alert(res.data.message);
+      }
     } catch (e) {
-      if(e.data) alert(e.data.message);
-      console.log("AccountSettings save failed : ",e);
+      console.error(e);
+      alert("프로필 변경을 실패했습니다.")
     }
   };
+
+  const updatePassword = async () => {
+    try {
+      const memberId = getSessionItem('profile').username;
+      const currentPw = currentPassword;
+      const newPw = newPassword;
+      const res = await axiosHandler.post('/api/auth/update/password',{ memberId,currentPw,newPw });
+      if(res.data.result){
+        alert(res.data.message)
+        window.location.reload();
+      }else {
+        alert(res.data.message);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("비밀번호 변경을 실패했습니다.")
+    }
+  }
+
+  const deleteAccount = async () => {
+    try {
+      const memberId = getSessionItem('profile').username;
+      const password = currentPassword;
+      const res = await axiosHandler.post('/api/auth/delete/account',{memberId,password});
+      if(res.data.result){
+        alert(res.data.message)
+        setSessionItem('profile',res.data.data);
+        removeLocalItem("accessToken");
+        removeSessionItem("profile");
+        removeSessionItem("teams");
+        removeSessionItem("events");
+        localStorage.getItem("")
+        window.location.replace("/");
+      }else {
+        alert(res.data.message);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("회원 탈퇴를 실패했습니다.")
+    }
+  }
 
   if (!isOpen) return null;
 
@@ -119,19 +179,19 @@ const AccountSettings = ({ isOpen, onClose }) => {
                   <input
                       type="password"
                       placeholder="New Password"
-                      value={confirmPassword}
+                      value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       className="account-settings-input"
                   />
                   <input
                       type="password"
                       placeholder="Confirm Password"
-                      value={newPassword}
+                      value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className="account-settings-input"
                   />
                   <button className="account-settings-change-password-button"
-                          onClick={() => console.log('Password Changed')}>
+                          onClick={updatePassword}>
                     Change password
                   </button>
                 </div>
@@ -157,7 +217,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   className="account-settings-input"
                 />
-                <button className="account-settings-delete-button" onClick={() => console.log('Account deleted')}>
+                <button className="account-settings-delete-button" onClick={deleteAccount}>
                   Delete
                 </button>
               </div>

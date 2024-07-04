@@ -22,8 +22,9 @@ const Member = () => {
     const [displayRole, setDisplayRole] = useState(['owner','admin','member']);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [endPage, setEaxPage] = useState();
+    const [endPage, setEndPage] = useState();
     const [page, setPage] = useState([]);
+    const [displayPage, setDisplayPage] = useState([1,2,3,4,5]);
 
     const data = [
         {
@@ -150,9 +151,10 @@ const Member = () => {
         },
     ]
 
+    // 더미 데이터
     useEffect(() => {
         setMembers(data);
-        setEaxPage(data.length);
+        setEndPage(data.length);
         const tmpPage = [];
         for (let i=1; i<=endPage; i++ ){
             tmpPage.push(i);
@@ -160,6 +162,7 @@ const Member = () => {
         setPage(tmpPage);
     }, []);
 
+    // 서버에서 데이터 받아오기
     const fetchTeamData = async () => {
         try {
             const response = axiosHandler.post("/api/team/"+teamno);
@@ -174,41 +177,87 @@ const Member = () => {
         }
     }
 
+    // 서버에서 받아온 데이터 분류
     useEffect(() => {
         if (members) {
             setJoinedMembers(members.filter(member => member.status === 'JOINED'));
             setInvitedMembers(members.filter(member => member.status === 'INVITED'));
             setExiledMembers(members.filter(member => member.status === 'EXILED'));
         }
+        setDisplayMembers(memberCountFilter(joinedMembers));
+        console.log(displayMembers);
     }, [members]);
 
+    // page list 상태 반영
     useEffect(() => {
         if(displayMemberStatus==='joined'){
-            setDisplayMembers(joinedMembers);
-
+            setEndPage(Math.ceil(joinedMembers/displayCount));
         }
-        if(displayMemberStatus==='invited'){
-            setDisplayMembers(invitedMembers);
-
+        else if(displayMemberStatus==='invited'){
+            setEndPage(Math.ceil(invitedMembers/displayCount));
         }
-        if(displayMemberStatus==='exiled'){
-            setDisplayMembers(exiledMembers);
+        else if(displayMemberStatus==='exiled'){
+            setEndPage(Math.ceil(exiledMembers/displayCount));
+        }
+        const tmpPage = [];
+        for (let i=1; i<=endPage; i++ ){
+            tmpPage.push(i);
+        }
+        setPage(tmpPage);
+        if(page.length<6){
+            setDisplayPage(page);
+        }
+        setDisplayPage([1,2,3,4,5]);
+    }, [displayMemberStatus, displayCount]);
 
+    // status select 변경시 보이는 목록 반영
+    useEffect(() => {
+        if(displayMemberStatus==='joined'){
+            setDisplayMembers(memberCountFilter(joinedMembers));
+        }
+        else if(displayMemberStatus==='invited'){
+            setDisplayMembers(memberCountFilter(invitedMembers));
+        }
+        else if(displayMemberStatus==='exiled'){
+            setDisplayMembers(memberCountFilter(exiledMembers));
         }
     }, [displayMemberStatus]);
 
+    // count select 변경시 보이는 목록 반영
+    useEffect(() => {
+        setCurrentPage(1);
+        if(displayMemberStatus==='joined'){
+            setDisplayMembers(memberCountFilter(joinedMembers));
+        }
+        else if(displayMemberStatus==='invited'){
+            setDisplayMembers(memberCountFilter(invitedMembers));
+        }
+        else if(displayMemberStatus==='exiled'){
+            setDisplayMembers(memberCountFilter(exiledMembers));
+        }
+    }, [displayCount]);
+
+    // displayCount와 currentCount로 filtering 함수
+    const memberCountFilter = (members) => {
+        return members.filter((_, idx) => idx >= displayCount*(currentPage-1) && idx <= displayCount*currentPage-1);
+    }
+
+    // 셀렉트 이벤트
     const selectStatusHandle = (e) => {
         setDisplayMemberStatus(e.target.value);
         setCurrentPage(1);
     }
+    // 셀렉트 이벤트
     const selectSearchHandle = (e) => {
         setDisplaySearchType(e.target.value);
     }
+    // 셀렉트 이벤트
     const selectCountHandle = (e) => {
         setDisplayCount(e.target.value);
         setCurrentPage(1);
     }
 
+    // 체크박스 이벤트
     const allCheckHandler = (e) => {
         if(displayMemberStatus==='joined'){
 
@@ -228,12 +277,18 @@ const Member = () => {
         });
     }
 
+    // 페이지네이션 버튼 이벤트
     const pagingHandler = (event, pageType) => {
         //event.preventDefault();
         if (pageType === 'prev' && currentPage > 1) {
             setCurrentPage(currentPage - 1);
-        } else if (pageType === 'next' && currentPage < Math.ceil(joinedMembers.length / displayCount)) {
+        } else if (pageType === 'next' && currentPage < endPage) {
             setCurrentPage(currentPage + 1);
+        }
+        if(pageType === 'next' && currentPage>displayPage[4]){
+            setDisplayPage(page.filter((_, idx) => idx >=currentPage  && idx <=currentPage+4 ));
+        } else if(pageType === 'prev' && currentPage<displayPage[1]){
+            setDisplayPage(page.filter((_, idx) => idx >=currentPage-4  && idx <=currentPage ));
         }
     }
 
@@ -248,19 +303,6 @@ const Member = () => {
             return {cursor: 'default'};
         }
         return {cursor: 'pointer'};
-    }
-
-    const disablePagingHandler = () => {
-        if(displayMemberStatus==='joined' && currentPage===Math.ceil(joinedMembers.length/displayCount)){
-            return false;
-        }
-        if(displayMemberStatus==='invited' && currentPage===Math.ceil(invitedMembers.length/displayCount)){
-            return false;
-        }
-        if(displayMemberStatus==='exiled' && currentPage===Math.ceil(exiledMembers.length/displayCount)){
-            return false;
-        }
-        return true;
     }
 
     return (
@@ -318,8 +360,8 @@ const Member = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {displayMemberStatus === 'joined' ?
-                        joinedMembers.map((member, idx) => (
+                    {
+                        displayMembers.map((member, idx)=> (
                             <tr className={idx % 2 === 0 ? 'odd-column' : ''} key={idx}>
                                 <td><input className='teamsetings-team-checkbox' type='checkbox'/></td>
                                 <td>
@@ -329,50 +371,26 @@ const Member = () => {
                                 <td><span>{member.memberNickname}</span><br/><span>{member.memberId}</span></td>
                                 <td>{member.memberRole}</td>
                             </tr>
-                        )) :
-                        displayMemberStatus === 'invited' ?
-                            invitedMembers.map((member, idx)=> (
-                                <tr className={idx%2===0?'odd-column' : ''} key={idx}>
-                                    <td><input className='teamsetings-team-checkbox' type='checkbox'/></td>
-                                    <td>
-                                        <img className='teamsettigs-team-member-profile' src={member.memberFilePath} alt=''
-                                             onError={ErrorImageHandler}></img>
-                                    </td>
-                                    <td><span>{member.memberNickname}</span><br/><span>{member.memberId}</span></td>
-                                    <td>{member.memberRole}</td>
-                                </tr>
-                            )) :
-                                invitedMembers.map((member, idx)=> (
-                                    <tr className={idx%2===0?'odd-column' : ''} key={idx}>
-                                        <td><input className='teamsetings-team-checkbox' type='checkbox'/></td>
-                                        <td>
-                                            <img className='teamsettigs-team-member-profile' src={member.memberFilePath} alt=''
-                                                 onError={ErrorImageHandler}></img>
-                                        </td>
-                                        <td><span>{member.memberNickname}</span><br/><span>{member.memberId}</span></td>
-                                        <td>{member.memberRole}</td>
-                                    </tr>
-                                ))
+                        ))
                     }
                     </tbody>
                 </table>
             </div>
             <div className='teamsettings-team-footer'>
                 <button className='team-paging-prev'
-                        onClick={(event) => pagingHandler(event, 'prev')} disabled={currentPage === 1}
-                        style={currentPage === 1 ? {cursor: 'default'} : {cursor: 'pointer'}}>
+                        onClick={(event) => pagingHandler(event, 'prev')} disabled={currentPage === 1}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path fill="#979797"
                               d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
                     </svg>
                 </button>
                 {
-
+                    displayPage.map((page,idx)=> (
+                        <span className={`team-paging-num ${currentPage===page?'current':''}`} key={idx}>{page}</span>
+                    ))
                 }
-                <span className='team-paging-num'>1</span>
                 <button className='team-paging-next'
-                        onClick={(event) => pagingHandler(event, 'next')} disabled={disablePagingHandler()}
-                        style={disableStylePagingHandler()}>
+                        onClick={(event) => pagingHandler(event, 'next')} disabled={currentPage===endPage}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path fill="#979797"
                               d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>

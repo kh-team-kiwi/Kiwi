@@ -113,6 +113,11 @@
     padding: 0 3px;
 }
 
+.team-paging-num.current {
+    color: var(--page-green);
+    font-weight: bold;
+}
+
 .team-paging-num:hover {
     background-color: var(--light-gray5);
     color: var(--white);

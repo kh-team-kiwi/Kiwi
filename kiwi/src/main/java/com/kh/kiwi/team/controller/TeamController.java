@@ -76,10 +76,16 @@ public class TeamController {
     }
 
     @PostMapping("/upload/profile")
-    public ResponseDto<?> uploadProfile(@RequestParam("profile") MultipartFile[] files,
+    public ResponseDto<?> uploadProfile(@RequestParam(value = "profile") MultipartFile[] files,
                                         @RequestParam("team") String team,
                                         @RequestParam("memberId") String memberId) throws IOException {
         return teamService.uploadProfile(files, team, memberId);
+    }
+
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseDto<?> handleIOException(IOException e) {
+        return ResponseDto.setFailed( "파일 처리 중 오류가 발생했습니다.");
     }
 
 }
