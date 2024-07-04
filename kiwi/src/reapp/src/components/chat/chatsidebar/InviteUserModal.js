@@ -73,7 +73,7 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                         type="text"
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        placeholder="닉네임 검색"
+                        placeholder="Search name or email"
                     />
                 </div>
                 <div className="invite-user-container">
