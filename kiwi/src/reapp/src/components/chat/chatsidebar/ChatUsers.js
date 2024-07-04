@@ -4,7 +4,6 @@ import '../../../styles/components/chat/chatsidebar/ChatUsers.css';
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
-
 const ChatUsers = ({ chatNum }) => {
     const [users, setUsers] = useState([]);
 
@@ -21,6 +20,18 @@ const ChatUsers = ({ chatNum }) => {
         if (chatNum) {
             fetchUsers();
         }
+
+        const handleChatMemberUpdate = (event) => {
+            setUsers(event.detail);
+        };
+
+        // 이벤트 리스너 추가
+        window.addEventListener('chatMemberUpdate', handleChatMemberUpdate);
+
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        return () => {
+            window.removeEventListener('chatMemberUpdate', handleChatMemberUpdate);
+        };
     }, [chatNum]);
 
     return (
@@ -30,9 +41,7 @@ const ChatUsers = ({ chatNum }) => {
                 {users.map((user) => (
                     <li key={user.memberId} className="chat-user-item">
                         <img className='chat-user-profile-pic' src={''} alt={''} onError={ErrorImageHandler}></img>
-
-                        {/* <img src={user.profilePic} alt={`${user.memberNickname}'s profile`} className="chat-user-profile-pic" /> */}
-                        <div className="chat-users-name">{user.memberNickname} </div>
+                        <div className="chat-users-name">{user.memberNickname}</div>
                     </li>
                 ))}
             </ul>
