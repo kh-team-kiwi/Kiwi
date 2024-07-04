@@ -5,6 +5,7 @@ import '../../../styles/components/chat/chatsidebar/ChatList.css';
 
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import SearchIcon from '../../../images/svg/buttons/SearchIcon';
+import axiosHandler from "../../../jwt/axiosHandler";
 
 const ChatList = ({ onChatSelect, team, refreshChatList }) => {
     const [chats, setChats] = useState([]);
@@ -26,7 +27,7 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
     useEffect(() => {
         if (team && username) {
             console.log(`Fetching chat rooms for team: ${team} and member: ${username}`);
-            axios.get(`http://localhost:8080/api/chat?team=${team}&memberId=${username}`)
+            axiosHandler.get(`http://localhost:8080/api/chat?team=${team}&memberId=${username}`)
                 .then(response => {
                     console.log('Fetched chat rooms:', response.data); 
                     setChats(response.data);
