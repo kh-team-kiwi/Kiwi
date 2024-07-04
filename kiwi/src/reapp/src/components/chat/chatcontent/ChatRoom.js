@@ -23,6 +23,8 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
     const [replyingTo, setReplyingTo] = useState(null);
     const stompClient = useRef(null);
     const fileInputRef = useRef();
+    const messageEndRef = useRef(null);
+    const firstUnreadMessageRef = useRef(null);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -41,6 +43,15 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 }));
                 setMessages(messagesWithUnreadCounts);
                 markMessagesAsRead(messagesWithUnreadCounts);
+
+                const firstUnreadResponse = await axiosHandler.get(`http://localhost:8080/api/chat/message/firstUnread/${chatNum}/${profile.username}`);
+                if (firstUnreadResponse.status === 200 && firstUnreadResponse.data) {
+                    const firstUnreadMessage = firstUnreadResponse.data;
+                    firstUnreadMessageRef.current = firstUnreadMessage.messageNum;
+                }
+
+                // 진입 시에만 읽지 않은 메시지 위치로 스크롤
+                scrollToUnreadOrBottom();
             } catch (error) {
                 console.error('메시지 가져오기 오류:', error);
             }
@@ -68,6 +79,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                     const unreadCount = await fetchUnreadCount(chatNum, newMessage.messageNum);
                     setMessages(prevMessages => [...prevMessages, { ...newMessage, unreadCount }]);
                     markMessageAsRead(newMessage, profile.username);
+                    scrollToBottom();
                 }
             });
         }, (error) => {
@@ -82,6 +94,11 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
             }
         };
     }, [chatNum, profile]);
+
+    useEffect(() => {
+        // 메시지가 업데이트될 때마다 항상 최신 메시지 위치로 스크롤
+        scrollToBottom();
+    }, [messages]);
 
     const fetchUnreadCount = async (chatNum, messageNum) => {
         try {
@@ -180,6 +197,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
+                scrollToBottom();
             } catch (error) {
                 console.error('메시지 전송 또는 파일 업로드 중 오류:', error);
             }
@@ -273,11 +291,35 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
         setSelectedMessage(null);
     };
 
+    const scrollToUnreadOrBottom = () => {
+        if (firstUnreadMessageRef.current) {
+            const firstUnreadElement = document.getElementById(firstUnreadMessageRef.current);
+            if (firstUnreadElement) {
+                firstUnreadElement.scrollIntoView({ behavior: 'auto' });
+                return;
+            }
+        }
+        if (messageEndRef.current) {
+            messageEndRef.current.scrollIntoView({ behavior: 'auto' });
+        }
+    };
+
+    const scrollToBottom = () => {
+        if (messageEndRef.current) {
+            messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <div className="chat-room-container">
             <div className="chat-room-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className="chat-room-message-container">
+                    <div key={index} className="chat-room-message-container" id={msg.messageNum}>
+                        {msg.messageNum === firstUnreadMessageRef.current && (
+                            <div className="chat-room-unread-indicator">
+                                읽지 않은 메시지
+                            </div>
+                        )}
                         <div className="chat-room-message-sender">
                             <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
                             <div className='chat-room-message-name'>
@@ -327,6 +369,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                         </div>
                     </div>
                 ))}
+                <div ref={messageEndRef}></div>
             </div>
             <div className="chat-room-bottom-container">
                 {replyingTo && (

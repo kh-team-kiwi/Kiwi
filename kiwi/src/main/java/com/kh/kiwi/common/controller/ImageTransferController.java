@@ -1,7 +1,7 @@
 package com.kh.kiwi.common.controller;
 
 import com.kh.kiwi.common.service.ImageTransferService;
-import com.kh.kiwi.team.dto.ResponseDto;
+import com.kh.kiwi.common.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
