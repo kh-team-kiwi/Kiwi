@@ -224,4 +224,22 @@ public class MessageChatnumService {
         // 클라이언트에게 메시지 읽음 상태를 전송합니다.
         // 이를 위해 STOMP 클라이언트에 메시지를 보내는 로직을 구현합니다.
     }
+    public ChatMessage getFirstUnreadMessage(int chatNum, String memberId) {
+        List<MessageChatnum> messages = messageChatnumRepository.findByChat_ChatNum(chatNum);
+        for (MessageChatnum message : messages) {
+            MessageReadId id = new MessageReadId(message.getMessageNum(), memberId);
+            if (!messageReadRepository.existsById(id)) {
+                // 읽지 않은 첫 번째 메시지를 찾음
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setMessageNum(message.getMessageNum());
+                chatMessage.setChatNum(message.getChat().getChatNum());
+                chatMessage.setChatTime(message.getChatTime());
+                chatMessage.setChatContent(message.getChatContent());
+                chatMessage.setMemberNickname(message.getMember().getMemberNickname());
+                chatMessage.setSender(message.getMember().getMemberId());
+                return chatMessage;
+            }
+        }
+        return null; // 모두 읽은 상태
+    }
 }

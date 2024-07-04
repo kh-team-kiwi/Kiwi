@@ -92,4 +92,13 @@ public class ChatMessageController {
     public MessageReadDto broadcastMessageRead(MessageReadDto messageReadDto) {
         return messageReadDto;
     }
+
+    @GetMapping("/firstUnread/{chatNum}/{memberId}")
+    public ResponseEntity<ChatMessage> getFirstUnreadMessage(@PathVariable int chatNum, @PathVariable String memberId) {
+        ChatMessage firstUnreadMessage = messageChatnumService.getFirstUnreadMessage(chatNum, memberId);
+        if (firstUnreadMessage == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(firstUnreadMessage);
+    }
 }
