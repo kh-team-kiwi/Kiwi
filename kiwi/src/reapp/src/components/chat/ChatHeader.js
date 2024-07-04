@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatSearchBar from './ChatSearchBar';
 import InviteUserModal from './chatsidebar/InviteUserModal';
 import LeaveChatModal from './chatsidebar/LeaveChatModal';
 import '../../styles/components/chat/ChatHeader.css';
+import axios from 'axios';
 
-const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat, memberCount }) => {
+const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat, memberCount, setMemberCount }) => {
     const [showInviteUserModal, setShowInviteUserModal] = useState(false);
     const [showLeaveChatModal, setShowLeaveChatModal] = useState(false);
 
@@ -14,6 +15,8 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat, memberCoun
 
     const handleCloseInviteModal = () => {
         setShowInviteUserModal(false);
+        // 멤버 수 업데이트
+        fetchMemberCount();
     };
 
     const handleLeaveClick = () => {
@@ -23,6 +26,19 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat, memberCoun
     const handleCloseLeaveModal = () => {
         setShowLeaveChatModal(false);
     };
+
+    const fetchMemberCount = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            setMemberCount(response.data.length);
+        } catch (error) {
+            console.error('Error fetching member count:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchMemberCount();
+    }, [chatNum]);
 
     return (
         <div className='chat-header'>

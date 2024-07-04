@@ -18,6 +18,7 @@ const Chat = () => {
     const [refreshChatList, setRefreshChatList] = useState(false);
     const [memberCount, setMemberCount] = useState(0);
     const [profile, setProfile] = useState(null);
+    const [messages, setMessages] = useState([]); // 상태 추가
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -75,6 +76,12 @@ const Chat = () => {
             const response = await axios.post(`/api/chat/user/${selectedChatNum}/invite`, { memberId: member.id });
             console.log('사용자 초대 성공:', response.data);
             setRefreshChatList(prev => !prev); // Refresh chat list or chat members
+
+            // 메시지 리스트에 업데이트
+            setMessages(prevMessages => prevMessages.map(msg => ({
+                ...msg,
+                unreadCount: msg.unreadCount + 1
+            })));
         } catch (error) {
             console.error('사용자 초대 중 오류 발생:', error);
         }
@@ -102,10 +109,22 @@ const Chat = () => {
             <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
             <div className='content-container-chat'>
 
-                <ChatHeader chatName={selectedChatName} team={teamno} chatNum={selectedChatNum} onInvite={handleInvite} onLeaveChat={handleLeaveChat} memberCount={memberCount} />
-
+                {selectedChatNum && (
+                    <ChatHeader
+                        chatName={selectedChatName}
+                        team={teamno}
+                        chatNum={selectedChatNum}
+                        onInvite={handleInvite}
+                        onLeaveChat={handleLeaveChat}
+                        memberCount={memberCount}
+                        setMemberCount={setMemberCount} // 상태 추가
+                    />
+                )}
+                {!selectedChatNum && (
+                    <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
+                )}
                 {selectedChatNum ? (
-                    <ChatRoom chatNum={selectedChatNum} />
+                    <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} /> // 상태 전달
                 ) : (
                     <div className='chat-placeholder'>
                         <p>Select a chat room to start messaging.</p>

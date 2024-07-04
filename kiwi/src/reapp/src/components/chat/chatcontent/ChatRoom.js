@@ -7,17 +7,16 @@ import { getSessionItem } from "../../../jwt/storage";
 import ReactionMenu from './ReactionMenu';
 import MessageDeletePopup from './MessageDeletePopup';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
-
 import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
 
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
 
-const ChatRoom = ({ chatNum }) => {
+const ChatRoom = ({ chatNum, messages, setMessages }) => {
+
     const [profile, setProfile] = useState(null);
     const { teamno } = useParams();
-    const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [files, setFiles] = useState([]);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
