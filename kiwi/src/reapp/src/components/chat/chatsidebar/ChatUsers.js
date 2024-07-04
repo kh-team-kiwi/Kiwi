@@ -5,15 +5,13 @@ import '../../../styles/components/chat/chatsidebar/ChatUsers.css';
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
 const ChatUsers = ({ chatNum }) => {
-    const [owners, setOwners] = useState([]);
-    const [admins, setAdmins] = useState([]);
-    const [members, setMembers] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/chat/user/${chatNum}`);
-                groupUsersByRole(response.data);
+                setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
@@ -22,69 +20,30 @@ const ChatUsers = ({ chatNum }) => {
         if (chatNum) {
             fetchUsers();
         }
+
+        const handleChatMemberUpdate = (event) => {
+            setUsers(event.detail);
+        };
+
+        // 이벤트 리스너 추가
+        window.addEventListener('chatMemberUpdate', handleChatMemberUpdate);
+
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        return () => {
+            window.removeEventListener('chatMemberUpdate', handleChatMemberUpdate);
+        };
     }, [chatNum]);
-
-    const groupUsersByRole = (users) => {
-        const owners = [];
-        const admins = [];
-        const members = [];
-
-        users.forEach(user => {
-            if (user.memberRole === 'OWNER') {
-                owners.push(user);
-            } else if (user.memberRole === 'ADMIN') {
-                admins.push(user);
-            } else {
-                members.push(user);
-            }
-        });
-
-        setOwners(owners);
-        setAdmins(admins);
-        setMembers(members);
-    };
 
     return (
         <div className="chat-users-container">
-            {owners.length > 0 && (
-                <div className="chat-users-role">
-                    <h4>Owners</h4>
-                    <ul className="chat-users-list">
-                        {owners.map((user) => (
-                            <li key={user.memberId} className="chat-user-item">
-                                <img className='chat-user-profile-pic' src={''} alt={''} onError={ErrorImageHandler}></img>
-                                <div className="chat-users-name">{user.memberNickname}</div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {admins.length > 0 && (
-                <div className="chat-users-role">
-                    <h4>Admins</h4>
-                    <ul className="chat-users-list">
-                        {admins.map((user) => (
-                            <li key={user.memberId} className="chat-user-item">
-                                <img className='chat-user-profile-pic' src={''} alt={''} onError={ErrorImageHandler}></img>
-                                <div className="chat-users-name">{user.memberNickname}</div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {members.length > 0 && (
-                <div className="chat-users-role">
-                    <h4>Members</h4>
-                    <ul className="chat-users-list">
-                        {members.map((user) => (
-                            <li key={user.memberId} className="chat-user-item">
-                                <img className='chat-user-profile-pic' src={''} alt={''} onError={ErrorImageHandler}></img>
-                                <div className="chat-users-name">{user.memberNickname}</div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <ul className="chat-users-list">
+                {users.map((user) => (
+                    <li key={user.memberId} className="chat-user-item">
+                        <img className='chat-user-profile-pic' src={''} alt={''} onError={ErrorImageHandler}></img>
+                        <div className="chat-users-name">{user.memberNickname}</div>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };

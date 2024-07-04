@@ -75,17 +75,24 @@ const Chat = () => {
         try {
             const response = await axios.post(`/api/chat/user/${selectedChatNum}/invite`, { memberId: member.id });
             console.log('사용자 초대 성공:', response.data);
-            setRefreshChatList(prev => !prev); // Refresh chat list or chat members
 
-            // 메시지 리스트에 업데이트
+            // 새 멤버 정보 가져오기
+            const newMemberResponse = await axios.get(`http://localhost:8080/api/chat/user/${selectedChatNum}`);
+
+            // 멤버 카운트 및 멤버 리스트 업데이트
+            setMemberCount(newMemberResponse.data.length);
             setMessages(prevMessages => prevMessages.map(msg => ({
                 ...msg,
                 unreadCount: msg.unreadCount + 1
             })));
+
+            // 채팅 멤버 리스트를 업데이트하도록 이벤트 발생
+            window.dispatchEvent(new CustomEvent('chatMemberUpdate', { detail: newMemberResponse.data }));
         } catch (error) {
             console.error('사용자 초대 중 오류 발생:', error);
         }
     };
+
 
     const handleLeaveChat = async (chatNum) => {
         const memberId = profile?.username; // 프로필에서 로그인된 사용자의 ID를 가져옵니다.
