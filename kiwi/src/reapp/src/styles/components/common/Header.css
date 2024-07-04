@@ -116,6 +116,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    padding: 5px; 
+    gap: 10px;
+    border-radius: 10px;
+    transition: 0.2s;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.header-user-profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.header-user-profile-name {
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .header-user-container {

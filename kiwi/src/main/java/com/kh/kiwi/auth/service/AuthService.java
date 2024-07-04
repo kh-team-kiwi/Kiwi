@@ -124,8 +124,8 @@ public class AuthService {
                 s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromInputStream(files[0].getInputStream(), files[0].getSize()));
 
                 searchMember.get().setMemberFilepath(preFilePath+fileKey);
-                searchMember.get().setMemberNickname(memberNickname);
             }
+            searchMember.get().setMemberNickname(memberNickname);
             reuslt = MemberDto.builder().name(searchMember.get().getMemberNickname()).role(searchMember.get().getMemberRole()).filepath(searchMember.get().getMemberFilepath()).username(searchMember.get().getMemberId()).build();
 
             memberRepository.save(searchMember.get());

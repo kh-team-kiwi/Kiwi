@@ -331,7 +331,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                 Drag and Drop files here
                             </div>
                             <div className='drive-content-empty-description'>
-                                There are no files to show
+                            The contents of this folder will be displayed here
 
                             </div>
                         </div>
@@ -425,7 +425,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                 Drag and Drop files here
                             </div>
                             <div className='drive-content-empty-description'>
-                                It looks like you haven't uploaded any files here. Click on the "New" button to upload your files or create new folders.
+                            The contents of this folder will be displayed here
                             </div>
                         </div>
                     ) : (
