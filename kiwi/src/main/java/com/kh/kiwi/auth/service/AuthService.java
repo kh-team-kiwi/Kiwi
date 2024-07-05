@@ -143,7 +143,7 @@ public class AuthService {
             Member searchMember = memberRepository.findByMemberId(data.get("memberId"));
             if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
             if(bCryptPasswordEncoder.matches(data.get("currentPw"),searchMember.getPassword())) {
-                searchMember.setMemberPw(bCryptPasswordEncoder.encode(bCryptPasswordEncoder.encode(data.get("newPw"))));
+                searchMember.setMemberPw(bCryptPasswordEncoder.encode(data.get("newPw")));
                 memberRepository.save(searchMember);
             } else {
                 return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");

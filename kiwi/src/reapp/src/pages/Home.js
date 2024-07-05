@@ -177,10 +177,10 @@ const Home = () => {
                             </div>
                         </div>
                         <div className='home-user-dropdown-bottom'>
-                            <div className='home-help' onClick={openPopup}>
-                                <HelpIcon className='home-user-dropdown-icon' />
-                                {t('help')}
-                            </div>
+                            {/*<div className='home-help' onClick={openPopup}>*/}
+                            {/*    <HelpIcon className='home-user-dropdown-icon' />*/}
+                            {/*    {t('help')}*/}
+                            {/*</div>*/}
                             <div className='home-logout' onClick={logoutBtn}>
                                 <LogoutIcon className='home-user-dropdown-icon' />
                                 {t('logout')}
@@ -217,9 +217,9 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div className='home-team-buttons'>
-                                    <button className='home-team-settings' onClick={() => handleTeamsettings(team.team)}>
-                                        <SettingsIcon className="home-settings-icon" />
-                                    </button>
+                                    {/*<button className='home-team-settings' onClick={() => handleTeamsettings(team.team)}>*/}
+                                    {/*    <SettingsIcon className="home-settings-icon" />*/}
+                                    {/*</button>*/}
                                     <button className='home-team-launch' onClick={() => navigate(`/team/${team.team}`)}>
                                         {t('launch')}
                                     </button>

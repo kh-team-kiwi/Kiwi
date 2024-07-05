@@ -1,12 +1,14 @@
 package com.kh.kiwi.auth.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 @Getter
 @AllArgsConstructor(staticName = "set")
+@EqualsAndHashCode
 public class ResponseDto<D> {
     private boolean result;
     private String message;
