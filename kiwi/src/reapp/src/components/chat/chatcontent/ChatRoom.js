@@ -345,7 +345,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                         <div className="chat-room-message-sender">
                             <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
                             <div className='chat-room-message-name'>
-                                {msg.memberNickname}
+                                {msg.memberNickname} {msg.memberId}
                             </div>
                             <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
                         </div>
