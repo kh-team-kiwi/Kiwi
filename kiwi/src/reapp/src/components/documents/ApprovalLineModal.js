@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import '../../styles/components/documents/ApprovalLineModal.css';
 import axiosHandler from "../../jwt/axiosHandler";
+import { useParams } from 'react-router-dom';
 
 const ApprovalLineModal = ({ onSave, onClose }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -8,22 +9,25 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     const [selectedMember, setSelectedMember] = useState(null);
     const [approvers, setApprovers] = useState([]);
     const [references, setReferences] = useState([]);
+    const { teamno } = useParams();
 
     useEffect(() => {
-        fetchMembers();
-    }, []);
+        if (teamno) {
+            fetchMembers();
+        }
+    }, [teamno]);
 
     const fetchMembers = async () => {
         try {
             // 백엔드 API 호출을 통해 멤버 목록을 가져옵니다.
-            const response = await axiosHandler.get('/api/members/details');
+            const response = await axiosHandler.get(`/api/members/details/team/${teamno}`);
             const fetchedMembers = response.data.map(member => ({
                 id: member.employeeNo, // 유니크한 식별자 사용
                 name: member.name,
                 team: member.deptName, // 부서 이름을 팀으로 사용
                 role: member.position // 직책을 역할로 사용
             }));
-            setMembers(fetchedMembers);
+            setMembers(response.data);
         } catch (error) {
             console.error("멤버 목록을 가져오는데 실패했습니다.", error);
         }

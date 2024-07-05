@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import MemberForm from './MemberForm';
 import '../../styles/components/documents/MemberManagement.css';
 import axiosHandler from "../../jwt/axiosHandler";
+import { useParams } from 'react-router-dom';
 
 const MemberManagement = () => {
+    const { teamno } = useParams();
     const [members, setMembers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
     const [message, setMessage] = useState(''); // 메시지를 관리할 상태 추가
 
     useEffect(() => {
-        fetchMembers();
-    }, []);
+        if (teamno) {
+            fetchMembers();
+        }
+    }, [teamno]);
 
     const fetchMembers = async () => {
         try {
-            const response = await axiosHandler.get('/api/members/details');
+            const response = await axiosHandler.get(`/api/members/details/team/${teamno}`);
             setMembers(response.data);
+            console.log("teamno : " +teamno);
         } catch (error) {
             console.error("회원 정보를 불러오는데 실패하였습니다.", error);
         }
