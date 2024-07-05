@@ -71,4 +71,9 @@ public class MemberDetailsController {
         ResponseDto<?> result = memberDetailsService.memberDetails(requestBody.getEmployeeNo());
         return result;
     }
+    @GetMapping("/details/team/{teamId}")
+    public ResponseEntity<List<MemberDetailsDTO>> getMembersByTeamId(@PathVariable String teamId) {
+        List<MemberDetailsDTO> memberDetailsList = memberDetailsService.getMembersByTeamId(teamId);
+        return ResponseEntity.ok(memberDetailsList);
+    }
 }

@@ -52,7 +52,7 @@ const DocumentCompleted = ({ onDocumentClick }) => {
         }
     }, [employeeNo]);
 
-    if (loading) return <p>문서를 작성해주세요...</p>;
+    if (loading) return <p>열람한 문서가 없습니다...</p>;
     if (error) return <p>{error}</p>;
 
     return (

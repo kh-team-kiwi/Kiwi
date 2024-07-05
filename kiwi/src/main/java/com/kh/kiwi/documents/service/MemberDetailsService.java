@@ -106,4 +106,10 @@ public class MemberDetailsService {
         }
         return ResponseDto.setFailed("사원정보 불러오기를 실패하였습니다.");
     }
+    public List<MemberDetailsDTO> getMembersByTeamId(String teamId) {
+        List<MemberDetails> memberDetailsList = memberDetailsRepository.findByCompanyNum(teamId);
+        return memberDetailsList.stream()
+                .map(MemberDetailsDTO::new)
+                .collect(Collectors.toList());
+    }
 }
