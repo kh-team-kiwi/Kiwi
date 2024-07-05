@@ -33,13 +33,13 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
         if (storedProfile) {
             setProfile(storedProfile);
         } else {
-            console.error("Profile not found in session storage.");
+            console.error("세션 저장소에서 프로필을 찾을 수 없습니다.");
         }
     }, []);
 
     useEffect(() => {
         if (!profile) return;
-    
+
         const fetchMessages = async () => {
             try {
                 const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
@@ -49,25 +49,25 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                 }));
                 setMessages(messagesWithUnreadCounts);
                 markMessagesAsRead(messagesWithUnreadCounts);
-    
+
                 const firstUnreadResponse = await axiosHandler.get(`http://localhost:8080/api/chat/message/firstUnread/${chatNum}/${profile.username}`);
                 if (firstUnreadResponse.status === 200 && firstUnreadResponse.data) {
                     const firstUnreadMessage = firstUnreadResponse.data;
                     firstUnreadMessageRef.current = firstUnreadMessage.messageNum;
                 }
-    
-                // Scroll to the bottom without animation on initial load
+
+                // 초기 로드 시 애니메이션 없이 맨 아래로 스크롤
                 scrollToBottom();
             } catch (error) {
                 console.error('메시지 가져오기 오류:', error);
             }
         };
-    
+
         fetchMessages();
-    
+
         const socket = new SockJS('http://localhost:8080/ws');
         const client = Stomp.over(socket);
-    
+
         client.connect({}, (frame) => {
             console.log('연결됨: ' + frame);
             stompClient.current = client;
@@ -93,7 +93,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
         }, (error) => {
             console.error('연결 오류', error);
         });
-    
+
         return () => {
             if (stompClient.current) {
                 stompClient.current.disconnect(() => {
@@ -102,6 +102,13 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
             }
         };
     }, [chatNum, profile]);
+
+    useEffect(() => {
+        // 채팅방이 변경될 때마다 상태 초기화
+        setMessage('');
+        setFiles([]);
+        setReplyingTo(null);
+    }, [chatNum]);
 
     useEffect(() => {
         if (!isUserScrolling) {
