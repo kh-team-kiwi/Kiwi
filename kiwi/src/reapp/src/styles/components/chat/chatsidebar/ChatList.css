@@ -90,3 +90,19 @@
     margin-left: 5px;
     fill: var(--gray);
 }
+
+.chat-list-chat-icon {
+    width: 18px;
+    height: 18px;
+    fill: var(--lighter-text-color);
+}
+
+.chat-list-header {
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;  
+    align-items: center;
+    gap: 10px;
+    color: var(--lighter-text-color);
+    margin-bottom: 10px;
+}

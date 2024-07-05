@@ -9,6 +9,8 @@ import MessageDeletePopup from './MessageDeletePopup';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
 import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
+import ReplyIcon from '../../../images/svg/buttons/ReplyIcon';
+import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
 const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
@@ -350,7 +352,14 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                     <div key={index} className="chat-room-message-container" id={`message-${msg.messageNum}`}>
                         {msg.messageNum === firstUnreadMessageRef.current && (
                             <div className="chat-room-unread-indicator">
-                                읽지 않은 메시지
+                                <div className='chat-room-unread-line'>
+                                </div>
+                                <div className='chat-room-unread-text'>
+                                    Unread Messages
+
+                                </div>
+                                <div className='chat-room-unread-line'>
+                                </div>
                             </div>
                         )}
                         <div className="chat-room-message-sender">
@@ -369,12 +378,13 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                             <div className="chat-room-message-content">
                                 {msg.replyTo ? (
                                     <div className="chat-room-reply-container">
-                                        <div className="chat-room-reply-original">
-                                            <strong>{msg.replyTo.memberNickname}에게</strong><br/> {msg.replyTo.chatContent} <small>{formatTime(msg.replyTo.chatTime)}</small>
-                                        </div>
                                         <div className="chat-room-reply-content">
                                             {msg.chatContent}
                                         </div>
+                                        <div className="chat-room-reply-original">
+                                            <div className="chat-room-reply-original-top"> <div className='chat-room-reply-original-name'>{msg.replyTo.memberNickname}: </div> <div>{formatTime(msg.replyTo.chatTime)}</div> </div> {msg.replyTo.chatContent} 
+                                        </div>
+
                                     </div>
                                 ) : (
                                     msg.chatContent.split('\n').map((line, i) => (
@@ -413,8 +423,9 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
             <div className="chat-room-bottom-container">
                 {replyingTo && (
                     <div className="chat-room-replying-to">
-                        <strong>{replyingTo.memberNickname}:</strong> {replyingTo.chatContent}
-                        <button onClick={() => setReplyingTo(null)}>취소</button>
+                        <ReplyIcon className='chat-room-reply-icon'/>
+                        <div className='chat-room-replying-name'>{replyingTo.memberNickname}:</div> {replyingTo.chatContent}
+                        <div className='chat-room-reply-exit' onClick={() => setReplyingTo(null)}><ExitIcon/></div>
                     </div>
                 )}
                 {files.length > 0 && (
@@ -422,7 +433,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                         {files.map((file, index) => (
                             <div key={index} className="chat-room-file-preview">
                                 <span>{file.name}</span>
-                                <button onClick={() => removeFile(index)}>X</button>
+                                <button onClick={() => removeFile(index)}><ExitIcon/></button>
                             </div>
                         ))}
                     </div>

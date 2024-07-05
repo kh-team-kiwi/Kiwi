@@ -23,18 +23,21 @@
 }
 
 .chat-header-icon {
-    fill: var(--gray);
+    fill: var(--lighter-text-color);
 }
 
 .chat-header-leave-icon {
-    fill: var(--gray);
+    fill: var(--red);
 }
 
 .chat-header-member-invite {
     margin-right: 20px;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
+
+
 
 .chat-header-member-count {
     margin-right: 20px;

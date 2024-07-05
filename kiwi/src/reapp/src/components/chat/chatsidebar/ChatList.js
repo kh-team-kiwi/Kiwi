@@ -7,6 +7,8 @@ import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import SearchIcon from '../../../images/svg/buttons/SearchIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
 
+import ChatIcon from '../../../images/svg/buttons/ChatIcon';
+
 const ChatList = ({ onChatSelect, team, refreshChatList }) => {
     const [chats, setChats] = useState([]);
     const [profile, setProfile] = useState(null);
@@ -37,6 +39,13 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
                 });
         }
     }, [team, refreshChatList, username]);
+
+    useEffect(() => {
+        if (chats.length > 0 && !selectedChat) {
+            const firstChat = chats[0];
+            handleChatSelect(firstChat.chatNum, firstChat.chatName);
+        }
+    }, [chats, selectedChat]);
 
     const handleChatSelect = (chatNum, chatName) => {
         setSelectedChat(chatNum);
@@ -79,6 +88,12 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
                         <ExitIcon />
                     </button>
                 )}
+            </div>
+            <div className='chat-list-header'>
+                <ChatIcon className='chat-list-chat-icon'/>
+                <div>
+                    Group Chats - {filteredChats.length}
+                </div>
             </div>
             <ul className="chat-list-ul">
                 {filteredChats.map(chat => (

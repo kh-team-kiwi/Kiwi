@@ -112,59 +112,63 @@ const Drive = () => {
     }
 
     return (
-        <div className='drive-page'>
-            {drives.length > 0 && (
-                <DriveSidebar 
-                    onView={handleViewDrive} 
-                    refresh={refresh} 
-                    teamno={teamno} 
-                    onDriveCreated={handleDriveCreated}
-                />
-            )}
-            <div className={`content-container ${drives.length > 0 ? '' : 'full-width'}`}>
-                {drives.length > 0 ? (
-                    <DriveContent
-                        driveCode={selectedDrive}
-                        parentPath={selectedFolder ? selectedFolder : selectedDrive}
-                        driveName={selectedFolder ? selectedFolderName : selectedDriveName}
-                        onViewFolder={handleViewFolder}
-                        onBack={handleBack}
-                        breadcrumbs={breadcrumbs}
-                        onDeleteDrive={handleDriveDeleted}
-                    />
-                ) : (
-                    <div className="drive-empty-message">
-                        <div className='drive-no-files-container'>
-                            <img src={EmptyDriveIcon} className='img-enable-darkmode drive-empty-icon'/>
-                            <div className="drive-empty-title">
-                                No Drives to show
-                            </div>
-                            <div className="drive-empty-description">
-                                Click on the button below to create a new drive 
-                            </div>
-                            <button 
-                                className="drive-empty-create-button" 
-                                onClick={handleOpenCreateDriveModal}
-                            >
-                                <PlusIcon className='drive-empty-plus-icon'/>
-                                <div>Create Drive</div>
-                            </button>
-                        </div>
-                        {showCreateDriveModal && (
-                            <CreateDriveModal
-                                team={teamno}
-                                showCreateDriveModal={showCreateDriveModal}
-                                onSave={() => {
-                                    handleDriveCreated();
-                                    handleCloseCreateDriveModal();
-                                }}
-                                onClose={handleCloseCreateDriveModal}
+        <>
+            {!loading && (
+                <div className='drive-page'>
+                    {drives.length > 0 && (
+                        <DriveSidebar 
+                            onView={handleViewDrive} 
+                            refresh={refresh} 
+                            teamno={teamno} 
+                            onDriveCreated={handleDriveCreated}
+                        />
+                    )}
+                    <div className={`content-container ${drives.length > 0 ? '' : 'full-width'}`}>
+                        {drives.length > 0 ? (
+                            <DriveContent
+                                driveCode={selectedDrive}
+                                parentPath={selectedFolder ? selectedFolder : selectedDrive}
+                                driveName={selectedFolder ? selectedFolderName : selectedDriveName}
+                                onViewFolder={handleViewFolder}
+                                onBack={handleBack}
+                                breadcrumbs={breadcrumbs}
+                                onDeleteDrive={handleDriveDeleted}
                             />
+                        ) : (
+                            <div className="drive-empty-message">
+                                <div className='drive-no-files-container'>
+                                    <img src={EmptyDriveIcon} className='img-enable-darkmode drive-empty-icon'/>
+                                    <div className="drive-empty-title">
+                                        No Drives to show
+                                    </div>
+                                    <div className="drive-empty-description">
+                                        Click on the button below to create a new drive 
+                                    </div>
+                                    <button 
+                                        className="drive-empty-create-button" 
+                                        onClick={handleOpenCreateDriveModal}
+                                    >
+                                        <PlusIcon className='drive-empty-plus-icon'/>
+                                        <div>Create Drive</div>
+                                    </button>
+                                </div>
+                                {showCreateDriveModal && (
+                                    <CreateDriveModal
+                                        team={teamno}
+                                        showCreateDriveModal={showCreateDriveModal}
+                                        onSave={() => {
+                                            handleDriveCreated();
+                                            handleCloseCreateDriveModal();
+                                        }}
+                                        onClose={handleCloseCreateDriveModal}
+                                    />
+                                )}
+                            </div>
                         )}
                     </div>
-                )}
-            </div>
-        </div>
+                </div>
+            )}
+        </>
     );
 };
 

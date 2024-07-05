@@ -131,17 +131,25 @@
 }
 
 .create-chat-button {
-    padding: 10px 20px;
+    height: 40px;
     border: none;
-    background: #28a745;
-    color: white;
-    border-radius: 4px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: var(--lighter-text-color);
+    padding-right: 15px;
+    font-weight: 550;
+    transition: 0.2s;
     cursor: pointer;
-    margin-left: 10px;
+    position: fixed;
+    bottom: 10px;
+    background-color: var(--light-blue);
 }
 
 .create-chat-button:hover {
-    background: #218838;
+    background: var(--light-blue-hover);
 }
 
 .create-chat-header {
