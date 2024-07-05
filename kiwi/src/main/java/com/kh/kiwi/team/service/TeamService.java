@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -118,21 +119,26 @@ public class TeamService {
 
     // 새로운 멤버 관리 메서드 추가
     @Transactional
-    public ResponseDto<List<MemberDto>> getTeamMembers(String teamId) {
-        List<Group> groups = groupRepository.findByTeam(teamId);
-        List<MemberDto> members = groups.stream()
-                .map(group -> {
-                    Optional<Member> memberOpt = memberRepository.findById(group.getMemberId());
-                    if (memberOpt.isPresent()) {
-                        Member member = memberOpt.get();
-                        return new MemberDto(member.getMemberId(), member.getMemberNickname(), group.getRole());
-                    }
-                    return null;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public ResponseDto<?> getTeamMembers(String teamno) {
+        try{
+            List<Group> groups = groupRepository.findByTeamWithMember(teamno);
 
-        return ResponseDto.setSuccessData("멤버 조회에 성공했습니다.", members);
+            return ResponseDto.setSuccessData("팀원 조회를 성공했습니다.",
+                    groups.stream()
+                            .map(group -> TeamMemberDto.builder()
+                                    .memberId(group.getMemberId())
+                                    .team(group.getTeam())
+                                    .role(group.getRole())
+                                    .status(group.getStatus())
+                                    .memberFilepath(group.getMember().getMemberFilepath())
+                                    .memberNickname(group.getMember().getMemberNickname())
+                                    .build())
+                            .collect(Collectors.toList()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이트베이스 오류로 실패했습니다.");
+        }
     }
 
     @Transactional
@@ -274,4 +280,5 @@ public class TeamService {
 
         return ResponseDto.setSuccess("성공적으로 프로필을 저장했습니다.");
     }
+
 }

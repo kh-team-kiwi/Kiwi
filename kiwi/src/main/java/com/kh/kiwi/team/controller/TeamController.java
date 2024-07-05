@@ -39,9 +39,9 @@ public class TeamController {
         return teamService.getAllTeams(memberId);
     }
 
-    @GetMapping("/{teamId}/members")
-    public ResponseDto<List<MemberDto>> getTeamMembers(@PathVariable String teamId) {
-        return teamService.getTeamMembers(teamId);
+    @PostMapping("/{teamno}/members")
+    public ResponseDto<?> getTeamMembers(@PathVariable String teamno) {
+        return teamService.getTeamMembers(teamno);
     }
 
     @PostMapping("/leaveTeam")
@@ -87,5 +87,4 @@ public class TeamController {
     public ResponseDto<?> handleIOException(IOException e) {
         return ResponseDto.setFailed( "파일 처리 중 오류가 발생했습니다.");
     }
-
 }

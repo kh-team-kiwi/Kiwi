@@ -103,13 +103,15 @@
 .team-paging-prev, .team-paging-next {
     border: none;
     background-color: transparent;
+}
+
+.team-paging-prev.active, .team-paging-next.active {
     cursor: pointer;
 }
 
 .team-paging-num {
     border: 1px solid var(--light-gray);
     border-radius: 5px;
-    cursor: pointer;
     padding: 0 3px;
 }
 
@@ -118,9 +120,10 @@
     font-weight: bold;
 }
 
-.team-paging-num:hover {
+.team-paging-num.active:not(.current):hover {
     background-color: var(--light-gray5);
     color: var(--white);
+    cursor: pointer;
 }
 
 .teamsettings-table-sort-icon {

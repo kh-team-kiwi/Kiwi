@@ -26,6 +26,8 @@ const Member = () => {
     const [page, setPage] = useState([]);
     const [displayPage, setDisplayPage] = useState([1,2,3,4,5]);
 
+
+/*    // 더미 데이터
     const data = [
         {
             memberId: '구경모',
@@ -148,24 +150,868 @@ const Member = () => {
             team: '20240702_000003',
             role: 'MEMBER',
             status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모1',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모2',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모3',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모4',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모5',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모6',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모7',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모8',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모9',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모10',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모11',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모12',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모13',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },{
+            memberId: '구경모14',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모15',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모16',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모17',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모18',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모19',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모20',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
+        },
+        {
+            memberId: '구경모21',
+            team: '20240702_000003',
+            role: 'MEMBER',
+            status: 'JOINED'
         },
     ]
-
-    // 더미 데이터
+    // 더미 데이터 세팅
     useEffect(() => {
         setMembers(data);
-        setEndPage(data.length);
-        const tmpPage = [];
-        for (let i=1; i<=endPage; i++ ){
-            tmpPage.push(i);
-        }
-        setPage(tmpPage);
+    }, []);*/
+
+    useEffect(() => {
+        fetchTeamData();
     }, []);
 
     // 서버에서 데이터 받아오기
     const fetchTeamData = async () => {
         try {
-            const response = axiosHandler.post("/api/team/"+teamno);
+            const response = await axiosHandler.post("/api/team/"+teamno+"/members");
             if(response.data.result){
                 setMembers(response.data.data);
             } else {
@@ -180,67 +1026,69 @@ const Member = () => {
     // 서버에서 받아온 데이터 분류
     useEffect(() => {
         if (members) {
-            setJoinedMembers(members.filter(member => member.status === 'JOINED'));
-            setInvitedMembers(members.filter(member => member.status === 'INVITED'));
-            setExiledMembers(members.filter(member => member.status === 'EXILED'));
+            const joined = members.filter(member => member.status === 'JOINED');
+            const invited = members.filter(member => member.status === 'INVITED');
+            const exiled = members.filter(member => member.status === 'EXILED');
+
+            setJoinedMembers(joined);
+            setInvitedMembers(invited);
+            setExiledMembers(exiled);
+
+            setDisplayMembers(memberCountFilter(joined)); // joinedMembers 대신 바로 필터링된 joined 사용
+
+            // 총 페이지 수 계산
+            setEndPage(Math.ceil(joined.length / displayCount));
+            updateDisplayPage(currentPage, Math.ceil(joined.length / displayCount));
         }
-        setDisplayMembers(memberCountFilter(joinedMembers));
-        console.log(displayMembers);
     }, [members]);
 
-    // page list 상태 반영
+    // displayMemberStatus 변경 시 페이지네이션 상태 업데이트
     useEffect(() => {
-        if(displayMemberStatus==='joined'){
-            setEndPage(Math.ceil(joinedMembers/displayCount));
+        let totalCount;
+        if (displayMemberStatus === 'joined') {
+            totalCount = joinedMembers.length;
+        } else if (displayMemberStatus === 'invited') {
+            totalCount = invitedMembers.length;
+        } else {
+            totalCount = exiledMembers.length;
         }
-        else if(displayMemberStatus==='invited'){
-            setEndPage(Math.ceil(invitedMembers/displayCount));
-        }
-        else if(displayMemberStatus==='exiled'){
-            setEndPage(Math.ceil(exiledMembers/displayCount));
-        }
-        const tmpPage = [];
-        for (let i=1; i<=endPage; i++ ){
-            tmpPage.push(i);
-        }
-        setPage(tmpPage);
-        if(page.length<6){
-            setDisplayPage(page);
-        }
-        setDisplayPage([1,2,3,4,5]);
+        if(totalCount<1) totalCount++;
+        setEndPage(Math.ceil(totalCount / displayCount));
+        updateDisplayPage(currentPage, Math.ceil(totalCount / displayCount));
     }, [displayMemberStatus, displayCount]);
 
-    // status select 변경시 보이는 목록 반영
+    // 현재 페이지 변경 시 displayMembers 업데이트
     useEffect(() => {
-        if(displayMemberStatus==='joined'){
-            setDisplayMembers(memberCountFilter(joinedMembers));
+        let membersToDisplay;
+        if (displayMemberStatus === 'joined') {
+            membersToDisplay = joinedMembers;
+        } else if (displayMemberStatus === 'invited') {
+            membersToDisplay = invitedMembers;
+        } else {
+            membersToDisplay = exiledMembers;
         }
-        else if(displayMemberStatus==='invited'){
-            setDisplayMembers(memberCountFilter(invitedMembers));
-        }
-        else if(displayMemberStatus==='exiled'){
-            setDisplayMembers(memberCountFilter(exiledMembers));
-        }
-    }, [displayMemberStatus]);
+        setDisplayMembers(memberCountFilter(membersToDisplay));
+    }, [currentPage, displayMemberStatus, displayCount]);
 
-    // count select 변경시 보이는 목록 반영
-    useEffect(() => {
-        setCurrentPage(1);
-        if(displayMemberStatus==='joined'){
-            setDisplayMembers(memberCountFilter(joinedMembers));
-        }
-        else if(displayMemberStatus==='invited'){
-            setDisplayMembers(memberCountFilter(invitedMembers));
-        }
-        else if(displayMemberStatus==='exiled'){
-            setDisplayMembers(memberCountFilter(exiledMembers));
-        }
-    }, [displayCount]);
-
-    // displayCount와 currentCount로 filtering 함수
+    // displayCount로 displayMembers filtering 함수
     const memberCountFilter = (members) => {
-        return members.filter((_, idx) => idx >= displayCount*(currentPage-1) && idx <= displayCount*currentPage-1);
+        return  members.slice((currentPage - 1) * displayCount, currentPage * displayCount);
     }
+
+    const updateDisplayPage = (currentPage, totalPages) => {
+        let pages = [];
+        let startPage = Math.max(currentPage - 2, 1);
+        let endPage = Math.min(startPage + 4, totalPages);
+
+        if (endPage - startPage < 4) {
+            startPage = Math.max(endPage - 4, 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+        setDisplayPage(pages);
+    };
 
     // 셀렉트 이벤트
     const selectStatusHandle = (e) => {
@@ -259,51 +1107,32 @@ const Member = () => {
 
     // 체크박스 이벤트
     const allCheckHandler = (e) => {
-        if(displayMemberStatus==='joined'){
-
-        }
-
-        if(displayMemberStatus==='invited'){
-
-        }
-
-        if(displayMemberStatus==='exiled'){
-
-        }
-
         const checkboxs = document.querySelectorAll('.teamsetings-team-checkbox');
         checkboxs.forEach(item=>{
             item.checked=e.target.checked;
         });
     }
 
-    // 페이지네이션 버튼 이벤트
+    // 페이지네이션 애로우 버튼 이벤트
     const pagingHandler = (event, pageType) => {
-        //event.preventDefault();
+        event.preventDefault();
+        let newPage = currentPage;
+
         if (pageType === 'prev' && currentPage > 1) {
-            setCurrentPage(currentPage - 1);
+            newPage = currentPage - 1;
         } else if (pageType === 'next' && currentPage < endPage) {
-            setCurrentPage(currentPage + 1);
+            newPage = currentPage + 1;
         }
-        if(pageType === 'next' && currentPage>displayPage[4]){
-            setDisplayPage(page.filter((_, idx) => idx >=currentPage  && idx <=currentPage+4 ));
-        } else if(pageType === 'prev' && currentPage<displayPage[1]){
-            setDisplayPage(page.filter((_, idx) => idx >=currentPage-4  && idx <=currentPage ));
-        }
+        setCurrentPage(newPage);
+        updateDisplayPage(newPage, endPage);
     }
 
-    const disableStylePagingHandler = () => {
-        if(displayMemberStatus==='joined' && currentPage===Math.ceil(joinedMembers.length/displayCount)){
-            return {cursor: 'default'};
-        }
-        if(displayMemberStatus==='invited' && currentPage===Math.ceil(invitedMembers.length/displayCount)){
-            return {cursor: 'default'};
-        }
-        if(displayMemberStatus==='exiled' && currentPage===Math.ceil(exiledMembers.length/displayCount)){
-            return {cursor: 'default'};
-        }
-        return {cursor: 'pointer'};
-    }
+    // 페이지네이션 페이지 버튼 이벤트
+    const pageClickHandler = (pageNumber) => {
+        if(pageNumber===currentPage) return;
+        setCurrentPage(pageNumber);
+        updateDisplayPage(pageNumber, endPage);
+    };
 
     return (
         <div className='teamsettings-inner'>
@@ -365,11 +1194,11 @@ const Member = () => {
                             <tr className={idx % 2 === 0 ? 'odd-column' : ''} key={idx}>
                                 <td><input className='teamsetings-team-checkbox' type='checkbox'/></td>
                                 <td>
-                                    <img className='teamsettigs-team-member-profile' src={member.memberFilePath} alt=''
+                                    <img className='teamsettigs-team-member-profile' src={member.memberFilepath} alt=''
                                          onError={ErrorImageHandler}></img>
                                 </td>
                                 <td><span>{member.memberNickname}</span><br/><span>{member.memberId}</span></td>
-                                <td>{member.memberRole}</td>
+                                <td>{member.role}</td>
                             </tr>
                         ))
                     }
@@ -377,8 +1206,8 @@ const Member = () => {
                 </table>
             </div>
             <div className='teamsettings-team-footer'>
-                <button className='team-paging-prev'
-                        onClick={(event) => pagingHandler(event, 'prev')} disabled={currentPage === 1}>
+                <button className={`team-paging-prev ${currentPage === 1 ? '':'active'}`}
+                        onClick={(event) => pagingHandler(event, 'prev')}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path fill="#979797"
                               d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
@@ -386,11 +1215,11 @@ const Member = () => {
                 </button>
                 {
                     displayPage.map((page,idx)=> (
-                        <span className={`team-paging-num ${currentPage===page?'current':''}`} key={idx}>{page}</span>
+                        <span className={`team-paging-num ${displayPage.length===1?'':'active'} ${currentPage===page?'current':''}`} key={idx} onClick={()=>pageClickHandler(page)}>{page}</span>
                     ))
                 }
-                <button className='team-paging-next'
-                        onClick={(event) => pagingHandler(event, 'next')} disabled={currentPage===endPage}>
+                <button className={`team-paging-next ${displayPage.length===1||currentPage===endPage ? '':'active'}`}
+                        onClick={(event) => pagingHandler(event, 'next')}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path fill="#979797"
                               d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>

@@ -1,5 +1,6 @@
 package com.kh.kiwi.team.entity;
 
+import com.kh.kiwi.auth.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,4 +24,8 @@ public class Group {
     * */
     private String role;
     private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID", insertable = false, updatable = false)
+    private Member member;
 }
