@@ -67,8 +67,8 @@ const Header = () => {
         setActivePage('drive');
       } else if (path.includes('documents')) {
         setActivePage('documents');
-      } else if (path.includes('teamsettings/personal-manage')) {
-        setActivePage('teamsettings/personal-manage');
+      } else if (path.includes('teamsettings')) {
+        setActivePage('teamsettings');
       } else {
         navigate(`/team/${teamno}/calendar`);
       }
