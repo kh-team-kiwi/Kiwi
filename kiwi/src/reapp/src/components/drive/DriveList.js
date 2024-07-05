@@ -26,6 +26,7 @@ const DriveList = ({ onView, refresh }) => {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedDrive, setSelectedDrive] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [errorMessage, setErrorMessage] = useState(''); // 경고 메시지 상태 추가
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -71,6 +72,11 @@ const DriveList = ({ onView, refresh }) => {
 
     const handleEditSubmit = (e, driveCode) => {
         e.preventDefault();
+        if (newName.trim() === '') {
+            setErrorMessage('드라이브 이름은 공백일 수 없습니다.'); // 경고 메시지 설정
+            return;
+        }
+        setErrorMessage(''); // 경고 메시지 초기화
         handleUpdate(driveCode, newName);
         setEditDriveCode(null);
         setNewName('');
@@ -175,19 +181,20 @@ const DriveList = ({ onView, refresh }) => {
                                 <div className='drive-list-exit-button' onClick={(e) => { e.stopPropagation(); setEditDriveCode(null); }}>
                                     <ExitIcon />
                                 </div>
+                                {errorMessage && <div className="error-message">{errorMessage}</div>} {/* 경고 메시지 표시 */}
                             </form>
                         ) : (
                             <div className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`}>
                                 <div className='drive-list-item-name'>
                                     <DriveIcon className='drive-list-drive-icon'/>
                                     <div>
-                                    {highlightText(drive.driveName, searchQuery)}
+                                        {highlightText(drive.driveName, searchQuery)}
 
 
                                     </div>
                                 </div>
                                 <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>
-                                   ⋮
+                                    ⋮
                                 </div>
                                 {openDropdown === drive.driveCode && (
                                     <div className="drive-list-options">
