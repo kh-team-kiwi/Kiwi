@@ -37,7 +37,6 @@ const Chat = () => {
     }, [refreshChatList, teamno, profile]);
 
     const fetchChats = async () => {
-        setLoading(true);
         try {
             const response = await axiosHandler.get(`/api/chat?team=${teamno}&memberId=${profile.username}`);
             setChats(response.data);
@@ -137,58 +136,59 @@ const Chat = () => {
 
     return (
         <>
-            {chats.length > 0 && (
-                <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
-            )}
-            <div className={`content-container-chat ${chats.length > 0 ? '' : 'full-width'}`}>
-                {chats.length > 0 ? (
-                    <>
-                        {selectedChatNum && (
-                            <ChatHeader
-                                chatName={selectedChatName}
-                                team={teamno}
-                                chatNum={selectedChatNum}
-                                onInvite={handleInvite}
-                                onLeaveChat={handleLeaveChat}
-                                memberCount={memberCount}
-                                setMemberCount={setMemberCount}
-                                onMessageClick={handleMessageClick} 
+            <div className="chat-main-container">
+                {chats.length > 0 && (
+                    <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
+                )}
+                <div className={`content-container-chat ${chats.length > 0 ? '' : 'full-width'}`}>
+                    {chats.length > 0 ? (
+                        <>
+                            {selectedChatNum && (
+                                <ChatHeader
+                                    chatName={selectedChatName}
+                                    team={teamno}
+                                    chatNum={selectedChatNum}
+                                    onInvite={handleInvite}
+                                    onLeaveChat={handleLeaveChat}
+                                    memberCount={memberCount}
+                                    setMemberCount={setMemberCount}
+                                    onMessageClick={handleMessageClick} 
+                                />
+                            )}
+                            {!selectedChatNum && (
+                                <button type="button" className="document-button" onClick={handleCreateChat}>Create Chat Room</button>
+                            )}
 
-                            />
-                        )}
-                        {!selectedChatNum && (
-                            <button type="button" className="document-button" onClick={handleCreateChat}>Create Chat Room</button>
-                        )}
-
-                        <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} scrollToMessage={scrollToMessage} />
-                    </>
-                ) : (
-                    <div className="chat-empty-message">
-                        <div className='chat-no-chats-container'>
-                            <img src={EmptyChatIcon} className='img-enable-darkmode chat-empty-icon'/>
-                            <div className="chat-empty-title">
-                                No Chats to show
+                            <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} scrollToMessage={scrollToMessage} />
+                        </>
+                    ) : (
+                        <div className="chat-empty-message">
+                            <div className='chat-no-chats-container'>
+                                <img src={EmptyChatIcon} className='img-enable-darkmode chat-empty-icon'/>
+                                <div className="chat-empty-title">
+                                    No Chats to show
+                                </div>
+                                <div className="chat-empty-description">
+                                    Click on the button below to create a new chat room
+                                </div>
+                                <button 
+                                    className="chat-empty-create-button" 
+                                    onClick={handleCreateChat}
+                                >
+                                    <PlusIcon className='chat-empty-plus-icon'/>
+                                    <div>Create Chat</div>
+                                </button>
                             </div>
-                            <div className="chat-empty-description">
-                                Click on the button below to create a new chat room
-                            </div>
-                            <button 
-                                className="chat-empty-create-button" 
-                                onClick={handleCreateChat}
-                            >
-                                <PlusIcon className='chat-empty-plus-icon'/>
-                                <div>Create Chat</div>
-                            </button>
                         </div>
-                    </div>
+                    )}
+                </div>
+                {chats.length > 0 && (
+                    <ChatMemberList chatNum={selectedChatNum} />
+                )}
+                {showCreateChatModal && (
+                    <CreateChatModal onSave={handleSaveModal} onClose={handleCloseModal} team={teamno} showCreateChatModal={showCreateChatModal} />
                 )}
             </div>
-            {chats.length > 0 && (
-            <ChatMemberList chatNum={selectedChatNum} />
-        )}
-            {showCreateChatModal && (
-                <CreateChatModal onSave={handleSaveModal} onClose={handleCloseModal} team={teamno} showCreateChatModal={showCreateChatModal} />
-            )}
         </>
     );
 };

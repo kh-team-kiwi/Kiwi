@@ -37,7 +37,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
     useEffect(() => {
         if (!profile) return;
-
+    
         const fetchMessages = async () => {
             try {
                 const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
@@ -47,25 +47,25 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                 }));
                 setMessages(messagesWithUnreadCounts);
                 markMessagesAsRead(messagesWithUnreadCounts);
-
+    
                 const firstUnreadResponse = await axiosHandler.get(`http://localhost:8080/api/chat/message/firstUnread/${chatNum}/${profile.username}`);
                 if (firstUnreadResponse.status === 200 && firstUnreadResponse.data) {
                     const firstUnreadMessage = firstUnreadResponse.data;
                     firstUnreadMessageRef.current = firstUnreadMessage.messageNum;
                 }
-
-                // 진입 시에만 읽지 않은 메시지 위치로 스크롤
-                scrollToUnreadOrBottom();
+    
+                // Scroll to the bottom without animation on initial load
+                scrollToBottom();
             } catch (error) {
                 console.error('메시지 가져오기 오류:', error);
             }
         };
-
+    
         fetchMessages();
-
+    
         const socket = new SockJS('http://localhost:8080/ws');
         const client = Stomp.over(socket);
-
+    
         client.connect({}, (frame) => {
             console.log('연결됨: ' + frame);
             stompClient.current = client;
@@ -91,7 +91,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
         }, (error) => {
             console.error('연결 오류', error);
         });
-
+    
         return () => {
             if (stompClient.current) {
                 stompClient.current.disconnect(() => {
@@ -323,7 +323,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
     const scrollToBottom = () => {
         if (messageEndRef.current) {
-            messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            messageEndRef.current.scrollIntoView({ behavior: 'auto' });
         }
     };
 
