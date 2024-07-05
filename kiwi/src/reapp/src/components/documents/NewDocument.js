@@ -6,7 +6,7 @@ import axios from 'axios';
 import '../../styles/components/documents/NewDocument.css';
 import axiosHandler from "../../jwt/axiosHandler";
 
-const NewDocument = () => {
+const NewDocument = ({ onDocumentSubmit }) => {
     const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
     const [approvalLine, setApprovalLine] = useState({ approvers: [], references: [] });
     const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -23,7 +23,6 @@ const NewDocument = () => {
         docDate: new Date().toISOString()
     });
 
-    // sessionStorage에서 username을 가져와서 API 호출
     useEffect(() => {
         const profile = JSON.parse(sessionStorage.getItem('profile'));
         console.log("Session profile:", profile);
@@ -32,7 +31,6 @@ const NewDocument = () => {
             const { username } = profile;
             console.log("Username from session:", username);
 
-            // API 호출 시 username을 memberId로 사용
             axios.get(`/api/members/details/${username}`)
                 .then((response) => {
                     console.log("API response:", response.data);
@@ -49,14 +47,14 @@ const NewDocument = () => {
                             memberId: username
                         }));
                     } else {
-                        // alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
-                        // window.location.href = "/";
+                        alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
+                        window.location.href = "/";
                     }
                 })
                 .catch((error) => {
                     console.error("Failed to fetch user data:", error);
-                    // alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
-                    // window.location.href = "/"; // 홈 페이지로 이동
+                    alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
+                    window.location.href = "/";
                 });
         }
     }, []);
@@ -80,7 +78,6 @@ const NewDocument = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        window.location.reload();
 
         try {
             const formData = new FormData();
@@ -91,7 +88,7 @@ const NewDocument = () => {
                 docTitle: newDocument.title,
                 docContents: newDocument.content,
                 name: newDocument.name,
-                employeeNo: "1@admin",
+                employeeNo: newDocument.memberId,
                 docDate: new Date().toISOString().slice(0, 19),
                 docStatus: "진행중"
             };
@@ -106,15 +103,15 @@ const NewDocument = () => {
             // 결재자와 참조자 정보를 추가
             const approvalLineData = {
                 approvers: approvalLine.approvers.map((approver, index) => ({
-                    employeeNo: approver.id,
+                    employeeNo: approver.employeeNo,
                     name: approver.name,
                     position: approver.position
                 })),
                 references: approvalLine.references.map(ref => ({
-                    employeeNo: ref.id,
+                    employeeNo: ref.employeeNo,
+                    memberId: ref.memberId,
                     name: ref.name,
-                    companyNum: 1, // 예시로 추가된 필드
-                    memberId: ref.id // 예시로 추가된 필드
+                    position: ref.position
                 }))
             };
 
@@ -132,6 +129,11 @@ const NewDocument = () => {
 
             console.log('Document saved successfully:', response.data);
             alert("문서가 성공적으로 저장되었습니다.");
+
+            // 문서 제출 후 상태 업데이트를 위해 콜백 호출
+            if (onDocumentSubmit) {
+                onDocumentSubmit();
+            }
         } catch (error) {
             console.error("문서 저장 중 오류가 발생했습니다.", error);
             alert("문서 저장 중 오류가 발생했습니다.");
@@ -301,7 +303,7 @@ const NewDocument = () => {
                         </th>
                         <td className="confer vt applyTable" id="approvalFirstLine">
                             <table className="teamTable">
-                               <tbody>
+                                <tbody>
                                 <tr>
                                     <td className="team name">{author.position}</td>
                                     <td className="team name"></td>
@@ -370,7 +372,7 @@ const NewDocument = () => {
                         <th scope="row">참조</th>
                         <td id="approvalThirdLine">
                             {approvalLine.references.map((ref, index) => (
-                                <span key={ref.id}>
+                                <span key={ref.memberId}>
                                     {ref.name}
                                     {index < approvalLine.references.length - 1 ? ', ' : ''}
                                 </span>

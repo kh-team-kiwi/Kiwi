@@ -19,15 +19,15 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
 
     const fetchMembers = async () => {
         try {
-            // 백엔드 API 호출을 통해 멤버 목록을 가져옵니다.
             const response = await axiosHandler.get(`/api/members/details/team/${teamno}`);
             const fetchedMembers = response.data.map(member => ({
-                id: member.employeeNo, // 유니크한 식별자 사용
+                id: member.memberId, // 유니크한 식별자 사용
+                employeeNo: member.employeeNo, // 사원번호
                 name: member.name,
                 team: member.deptName, // 부서 이름을 팀으로 사용
                 role: member.position // 직책을 역할로 사용
             }));
-            setMembers(response.data);
+            setMembers(fetchedMembers);
         } catch (error) {
             console.error("멤버 목록을 가져오는데 실패했습니다.", error);
         }
@@ -56,12 +56,17 @@ const ApprovalLineModal = ({ onSave, onClose }) => {
     const handleSave = () => {
         onSave({
             approvers: approvers.map(approver => ({
-                id: approver.id,
+                memberId: approver.id,
+                employeeNo: approver.employeeNo,
                 name: approver.name,
-                team: approver.team,
                 position: approver.role
             })),
-            references
+            references: references.map(reference => ({
+                memberId: reference.id,
+                employeeNo: reference.employeeNo,
+                name: reference.name,
+                position: reference.role
+            }))
         });
         onClose();
     };

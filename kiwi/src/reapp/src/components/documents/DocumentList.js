@@ -32,10 +32,12 @@ const DocumentList = ({ onDocumentClick }) => {
         const fetchDocuments = async () => {
             try {
                 const response = await axiosHandler.get('/documents/all-documents');
+                console.log("API Response:", response.data);
                 const filteredDocs = response.data.filter(doc =>
                     doc.approvalLines.some(line => line.employeeNo === employeeNo) ||
                     doc.references.some(ref => ref.employeeNo === employeeNo)
                 );
+                console.log("Filtered Documents:", filteredDocs);
                 setDocuments(filteredDocs);
             } catch (error) {
                 setError('문서를 불러오는데 실패하였습니다.');
@@ -46,8 +48,10 @@ const DocumentList = ({ onDocumentClick }) => {
 
         if (employeeNo) {
             fetchDocuments();
+            console.log("Employee No:", employeeNo);
         }
     }, [employeeNo]);
+
 
     if (loading) return <p>문서를 작성해주세요...</p>;
     if (error) return <p>{error}</p>;
