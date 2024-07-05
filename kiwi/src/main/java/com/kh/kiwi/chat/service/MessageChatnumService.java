@@ -156,6 +156,12 @@ public class MessageChatnumService {
         return member.getMemberNickname();
     }
 
+    public String getFilepathByEmail(String email) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member email: " + email));
+        return member.getMemberFilepath();
+    }
+
     public void deleteMessageByIdAndUsername(String messageId, String username) {
         log.info("Deleting message with ID: {} by user: {}", messageId, username);
         MessageChatnum message = messageChatnumRepository.findById(messageId)

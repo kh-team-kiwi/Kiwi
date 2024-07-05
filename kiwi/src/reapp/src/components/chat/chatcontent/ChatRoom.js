@@ -177,7 +177,8 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 files: [],
                 type: 'CHAT',
                 replyToMessageNum: replyingTo ? replyingTo.messageNum : null,
-                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null
+                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null,
+                memberFilepath: profile.memberFilepath 
             };
 
             try {
