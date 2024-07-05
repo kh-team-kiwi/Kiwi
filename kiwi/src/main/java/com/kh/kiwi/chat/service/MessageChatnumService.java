@@ -107,6 +107,7 @@ public class MessageChatnumService {
             chatMessage.setChatContent(message.getChatContent());
             chatMessage.setMemberNickname(message.getMember().getMemberNickname());
             chatMessage.setMessageNum(message.getMessageNum());
+            chatMessage.setMemberFilepath(message.getMember().getMemberFilepath());
             if (message.getChatRef()) {
                 MessageChatnum refMessage = messageChatnumRepository.findById(message.getChatRefMessageNum())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + message.getChatRefMessageNum()));
@@ -153,6 +154,12 @@ public class MessageChatnumService {
         Member member = memberRepository.findById(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member email: " + email));
         return member.getMemberNickname();
+    }
+
+    public String getFilepathByEmail(String email) {
+        Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member email: " + email));
+        return member.getMemberFilepath();
     }
 
     public void deleteMessageByIdAndUsername(String messageId, String username) {

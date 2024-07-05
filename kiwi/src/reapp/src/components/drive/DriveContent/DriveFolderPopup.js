@@ -12,6 +12,11 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (folderName.trim() === '') {
+            setMessage('Folder name cannot be empty');
+            return;
+        }
+
         try {
             const adjustedParentPath = parentPath && !parentPath.endsWith('/') ? `${parentPath}/` : parentPath;
             await axiosHandler.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
@@ -24,6 +29,7 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
                 },
             });
             setFolderName('');
+            setMessage('');
             fetchFiles();
             closePopup();
         } catch (error) {
@@ -79,6 +85,7 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
                                 value={folderName}
                                 onChange={(e) => setFolderName(e.target.value)}
                             />
+                            {message && <div className="drive-folder-popup-error">{message}</div>}
                             <div className='drive-folder-popup-bottom'>
                                 <button type="button" className="drive-folder-popup-cancel-button" onClick={closePopup}>Cancel</button>
                                 <button type="submit" className="drive-folder-popup-create-button">Create</button>

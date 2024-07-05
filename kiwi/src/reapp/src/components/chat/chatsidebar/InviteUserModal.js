@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import '../../../styles/components/chat/chatsidebar/InviteUserModal.css';
 import { getSessionItem } from "../../../jwt/storage";
 import axiosHandler from "../../../jwt/axiosHandler";
-
 import ErrorImageHandler from "../../common/ErrorImageHandler";
-
 
 const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite }) => {
     const [profile, setProfile] = useState(null);
@@ -25,17 +23,26 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
 
     const fetchMembers = async () => {
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
-            const fetchedMembers = response.data
-                .filter(member => member.memberId !== profile.username)
+            // Fetch all team members
+            const allMembersResponse = await axiosHandler.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            const allMembers = allMembersResponse.data;
+
+            // Fetch current chat members
+            const chatMembersResponse = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            const chatMembers = chatMembersResponse.data;
+
+            // Exclude members who are already in the chat
+            const chatMemberIds = chatMembers.map(member => member.memberId);
+            const filteredMembers = allMembers.filter(member => !chatMemberIds.includes(member.memberId) && member.memberId !== profile.username)
                 .map(member => ({
                     id: member.memberId,
                     name: member.memberNickname,
                     email: member.memberId,
                     role: member.memberRole,
-                    profilePic: member.profilePic // Assuming profilePic is a part of the response
+                    profilePic: member.memberFilepath // Assuming memberFilepath is the profile picture URL
                 }));
-            setMembers(fetchedMembers);
+            
+            setMembers(filteredMembers);
         } catch (error) {
             console.error("Failed to fetch members:", error);
         }
@@ -77,31 +84,40 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                     />
                 </div>
                 <div className="invite-user-container">
-                    <div className="invite-user-member-list">
-                        {members
-                            .filter(
-                                (member) =>
-                                    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    member.email.toLowerCase().includes(searchTerm.toLowerCase())
-                            )
-                            .map((member) => (
-                                <div
-                                    key={member.id}
-                                    className={`invite-user-member-item ${selectedMember === member ? "selected" : ""}`}
-                                    onClick={() => handleMemberClick(member)}
-                                >
-                                    <img className='invite-user-profile-pic' src={member.profilePic || ''} alt={member.name} onError={ErrorImageHandler} />
-                                    <div className="invite-user-profile-info">
-                                        <div className="invite-user-profile-name">
-                                            {highlightText(member.name, searchTerm)}
-                                        </div>
-                                        <div className="invite-user-profile-email">
-                                            {highlightText(member.email, searchTerm)}
+                    {members.length === 0 ? (
+                        <div className="invite-user-no-members">No users to invite</div>
+                    ) : (
+                        <div className="invite-user-member-list">
+                            {members
+                                .filter(
+                                    (member) =>
+                                        member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        member.email.toLowerCase().includes(searchTerm.toLowerCase())
+                                )
+                                .map((member) => (
+                                    <div
+                                        key={member.id}
+                                        className={`invite-user-member-item ${selectedMember === member ? "selected" : ""}`}
+                                        onClick={() => handleMemberClick(member)}
+                                    >
+                                        <img
+                                            className='invite-user-profile-pic'
+                                            src={member.profilePic || 'default_profile_image_url.jpg'}
+                                            alt={member.name}
+                                            onError={ErrorImageHandler}
+                                        />
+                                        <div className="invite-user-profile-info">
+                                            <div className="invite-user-profile-name">
+                                                {highlightText(member.name, searchTerm)}
+                                            </div>
+                                            <div className="invite-user-profile-email">
+                                                {highlightText(member.email, searchTerm)}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                    </div>
+                                ))}
+                        </div>
+                    )}
                     <div className="invite-user-modal-actions">
                         <button className="invite-user-cancel-button" onClick={onClose}>Cancel</button>
                         <button className="invite-user-invite-button" onClick={handleInvite}>Invite</button>

@@ -9,11 +9,9 @@ import MessageDeletePopup from './MessageDeletePopup';
 import '../../../styles/components/chat/chatcontent/chatroom.css';
 import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
-
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
-const ChatRoom = ({ chatNum, messages, setMessages }) => {
-
+const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
     const [profile, setProfile] = useState(null);
     const { teamno } = useParams();
     const [message, setMessage] = useState('');
@@ -100,11 +98,19 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
     }, [chatNum, profile]);
 
     useEffect(() => {
-        // 메시지가 업데이트될 때마다 항상 최신 메시지 위치로 스크롤
         if (!isUserScrolling) {
             scrollToBottom();
         }
     }, [messages]);
+
+    useEffect(() => {
+        if (scrollToMessage) {
+            const messageElement = document.getElementById(`message-${scrollToMessage}`);
+            if (messageElement) {
+                messageElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [scrollToMessage]);
 
     const fetchUnreadCount = async (chatNum, messageNum) => {
         try {
@@ -177,7 +183,8 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 files: [],
                 type: 'CHAT',
                 replyToMessageNum: replyingTo ? replyingTo.messageNum : null,
-                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null
+                replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null,
+                memberFilepath: profile.memberFilepath
             };
 
             try {
@@ -299,7 +306,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
     const scrollToUnreadOrBottom = () => {
         if (firstUnreadMessageRef.current) {
-            const firstUnreadElement = document.getElementById(firstUnreadMessageRef.current);
+            const firstUnreadElement = document.getElementById(`message-${firstUnreadMessageRef.current}`);
             if (firstUnreadElement) {
                 firstUnreadElement.scrollIntoView({ behavior: 'auto' });
                 return;
@@ -336,16 +343,21 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
         <div className="chat-room-container">
             <div className="chat-room-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className="chat-room-message-container" id={msg.messageNum}>
+                    <div key={index} className="chat-room-message-container" id={`message-${msg.messageNum}`}>
                         {msg.messageNum === firstUnreadMessageRef.current && (
                             <div className="chat-room-unread-indicator">
                                 읽지 않은 메시지
                             </div>
                         )}
                         <div className="chat-room-message-sender">
-                            <img className='chat-user-profile-pic' src={''} alt={msg.memberNickname} onError={ErrorImageHandler}></img>
+                            <img
+                                className='chat-user-profile-pic'
+                                src={msg.memberFilepath || 'default_profile_image_url.jpg'}
+                                alt={msg.memberNickname}
+                                onError={ErrorImageHandler}
+                            />
                             <div className='chat-room-message-name'>
-                                {msg.memberNickname} {msg.memberId}
+                                {msg.memberNickname}
                             </div>
                             <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
                         </div>
@@ -383,7 +395,9 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                                     </div>
                                 ))}
                             </div>
-                            <small className="chat-room-unread-count"> {msg.unreadCount}</small>
+                            {msg.unreadCount > 0 && (
+                                <small className="chat-room-unread-count">{msg.unreadCount}</small>
+                            )}
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
                                 isOwnMessage={msg.sender === profile.username}
