@@ -4,7 +4,7 @@ import '../../styles/components/chat/ChatSearchBar.css';
 import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
 
-const ChatSearchBar = ({ chatNum }) => {
+const ChatSearchBar = ({ chatNum, onMessageClick }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
@@ -58,6 +58,13 @@ const ChatSearchBar = ({ chatNum }) => {
         return `${hours}:${minutesStr} ${ampm}`;
     };
 
+    const handleResultClick = (messageNum) => {
+        if (onMessageClick) {
+            onMessageClick(messageNum);
+        }
+        setShowResults(false);
+    };
+
     return (
         <div className="chat-searchbar-container">
             <div className="chat-searchbar-input-container">
@@ -66,7 +73,7 @@ const ChatSearchBar = ({ chatNum }) => {
                     type="text"
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    placeholder="Search messages"
+                    placeholder="메시지 검색"
                     className="chat-searchbar-input"
                 />
                 {searchTerm && (
@@ -78,10 +85,10 @@ const ChatSearchBar = ({ chatNum }) => {
             {showResults && (
                 <div className="chat-searchbar-results">
                     <div className="chat-searchbar-results-count">
-                        {searchResults.length} results found
+                        {searchResults.length}개의 결과가 검색되었습니다.
                     </div>
                     {searchResults.map((msg, index) => (
-                        <div key={index} className="chat-searchbar-result">
+                        <div key={index} className="chat-searchbar-result" onClick={() => handleResultClick(msg.messageNum)}>
                             <div className="chat-searchbar-result-name">{msg.memberNickname}: </div>
                             <div className="chat-searchbar-result-content">
                                 {highlightText(msg.chatContent, searchTerm)}

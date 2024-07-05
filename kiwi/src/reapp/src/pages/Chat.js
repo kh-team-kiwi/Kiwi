@@ -23,6 +23,7 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [scrollToMessage, setScrollToMessage] = useState(null); // 추가된 상태
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -122,6 +123,10 @@ const Chat = () => {
         }
     };
 
+    const handleMessageClick = (messageNum) => {
+        setScrollToMessage(messageNum);
+    };
+
     if (loading) {
         return (
             <div className="loading-screen">
@@ -147,14 +152,15 @@ const Chat = () => {
                                 onLeaveChat={handleLeaveChat}
                                 memberCount={memberCount}
                                 setMemberCount={setMemberCount}
+                                onMessageClick={handleMessageClick} 
+
                             />
                         )}
                         {!selectedChatNum && (
                             <button type="button" className="document-button" onClick={handleCreateChat}>Create Chat Room</button>
                         )}
 
-                            <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} />
-
+                        <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} scrollToMessage={scrollToMessage} />
                     </>
                 ) : (
                     <div className="chat-empty-message">
