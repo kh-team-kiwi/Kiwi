@@ -28,7 +28,11 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
-        setProfile(storedProfile);
+        if (storedProfile) {
+            setProfile(storedProfile);
+        } else {
+            console.error("Profile not found in session storage.");
+        }
     }, []);
 
     useEffect(() => {
@@ -400,8 +404,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                             )}
                             <ReactionMenu
                                 onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
-                                isOwnMessage={msg.sender === profile.username}
-                            />
+                                isOwnMessage={profile && msg.sender === profile.username}/>
                         </div>
                     </div>
                 ))}

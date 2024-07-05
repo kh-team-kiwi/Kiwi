@@ -7,11 +7,15 @@
     z-index: 1000;
     margin-left: 55px;
     border-radius: 5px;
+    bottom: -20px;
 }
 
 .reaction-menu-container {
     display: flex;
-    gap: 10px;
+}
+
+.reaction-button:hover {
+    background-color: var(--white-hover);
 }
 
 .reaction-button {

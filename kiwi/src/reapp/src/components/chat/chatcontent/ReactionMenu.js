@@ -3,8 +3,8 @@ import '../../../styles/components/chat/chatcontent/reactionMenu.css';
 
 const ReactionMenu = ({ onClickReaction, isOwnMessage }) => {
     const reactions = [
-        { emoji: '❌️', key: 'cross', show: isOwnMessage },  // X 표시 추가, 자신이 작성한 메시지일 때만 보이게 설정
-        { emoji: '💬️', key: 'comment', show: true } // 댓글 표시 추가
+        { emoji: '❌️', key: 'cross', show: isOwnMessage },  
+        { emoji: '💬️', key: 'comment', show: true } 
     ];
 
     return (

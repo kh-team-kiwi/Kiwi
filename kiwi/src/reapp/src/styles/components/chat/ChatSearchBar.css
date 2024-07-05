@@ -92,13 +92,10 @@
 }
 
 .chat-searchbar-search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none; 
-    width: 24px;
-    height: 24px;
+        width: 20px;
+        height: 20px;
+        margin-left: 5px;
+        fill: var(--gray);
 }
 
 .chat-searchbar-highlight {

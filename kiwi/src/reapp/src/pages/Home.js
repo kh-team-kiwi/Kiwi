@@ -103,7 +103,13 @@ const Home = () => {
     }, []);
 
     const fetchTeams = async () => {
-        const memberId = getSessionItem("profile").username;
+        const profile = getSessionItem("profile");
+        if (!profile) {
+            console.error("Profile not found in session storage.");
+            return;
+        }
+
+        const memberId = profile.username;
         try {
             const res = await axiosHandler.get("/api/team/list/" + memberId);
             if (res.status === 200) {
@@ -122,7 +128,13 @@ const Home = () => {
     }, []);
 
     const handleCreateTeam = async (formTeamData) => {
-        const memberId = getSessionItem("profile").username;
+        const profile = getSessionItem("profile");
+        if (!profile) {
+            console.error("Profile not found in session storage.");
+            return;
+        }
+
+        const memberId = profile.username;
         const response = await axiosHandler.post(`/api/team/create?memberId=${memberId}`, formTeamData);
         if (response.status === 200) {
             fetchTeams();
@@ -157,8 +169,8 @@ const Home = () => {
             <AccountSettings isOpen={accountSettingsOpen} onClose={closeAccountSettings} />
             <div className={`home-user-container ${userDropdown ? 'active' : ''}`}>
                 <div className='home-user-details' onClick={toggleUserDropdown}>
-                    <img className='home-user-profile-image' src={getSessionItem("profile").filepath} onError={ErrorImageHandler} alt='user-profile-image' />
-                    &nbsp;&nbsp;{getSessionItem("profile").username}&nbsp;&nbsp;
+                    <img className='home-user-profile-image' src={user?.filepath} onError={ErrorImageHandler} alt='user-profile-image' />
+                    &nbsp;&nbsp;{user?.username}&nbsp;&nbsp;
                     <div className={`down-arrow ${userDropdown ? 'flipped' : ''}`}>
                         <DownArrow />
                     </div>
@@ -191,7 +203,7 @@ const Home = () => {
             </div>
             <div className='home-welcome-container'>
                 <div className='welcome-text' style={welcomeStyle}>
-                    {t('welcome-back')}, {getSessionItem("profile").name}
+                    {t('welcome-back')}, {user?.name}
                 </div>
             </div>
             <div className='team-list-container' style={teamListStyle}>
@@ -245,7 +257,7 @@ const Home = () => {
             <ToastMessage />
         </div>
     ) : (
-        <div>Loading...</div> 
+        <div></div> 
     );
 };
 

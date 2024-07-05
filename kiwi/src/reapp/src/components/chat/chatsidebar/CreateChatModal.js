@@ -16,9 +16,11 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
-        setProfile(storedProfile);
         if (storedProfile) {
+            setProfile(storedProfile);
             setJoinedMembers([{ id: storedProfile.username, name: storedProfile.name, email: storedProfile.username, role: storedProfile.role }]);
+        } else {
+            console.error("Profile not found in session storage.");
         }
     }, []);
 
@@ -61,7 +63,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     };
 
     const handleRemoveJoinedMember = (joinedMember) => {
-        if (joinedMember.id === profile.username) {
+        if (joinedMember.id === profile?.username) {
             return;
         }
         setJoinedMembers(joinedMembers.filter(a => a.id !== joinedMember.id));
@@ -163,16 +165,16 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                             <div className="create-chat-admins-list">
                                 {joinedMembers.map((joinedMember) => (
                                     <div key={joinedMember.id} className="create-chat-admin-item">
-                                        <img className='create-chat-profile-image' src={joinedMember.id === profile.username ? profile.filepath : joinedMember.filepath} alt={''} onError={ErrorImageHandler} />
+                                        <img className='create-chat-profile-image' src={joinedMember.id === profile?.username ? profile.filepath : joinedMember.filepath} alt={''} onError={ErrorImageHandler} />
                                         <div className='create-chat-profile-info'>
                                             <div className='create-chat-profile-name'>
-                                                {joinedMember.name} {joinedMember.id === profile.username && <span className="create-chat-you-tag">You</span>}
+                                                {joinedMember.name} {joinedMember.id === profile?.username && <span className="create-chat-you-tag">You</span>}
                                             </div>
                                             <div className='create-chat-profile-email'>
                                                 {joinedMember.email} 
                                             </div>
                                         </div>
-                                        {joinedMember.id !== profile.username && (
+                                        {joinedMember.id !== profile?.username && (
                                             <div className='create-chat-remove-button' onClick={() => handleRemoveJoinedMember(joinedMember)}>
                                                 <ExitIcon />
                                             </div>

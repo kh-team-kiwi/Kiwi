@@ -35,7 +35,7 @@
 }
 
 .chat-room-message-content {
-    background-color: #abf8ab;
+    background-color: var(--message-color);
     border-radius: 10px;
     padding: 10px;
     max-width: fit-content;
