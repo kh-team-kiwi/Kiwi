@@ -11,7 +11,7 @@ import PaperclipIcon from '../../../images/svg/shapes/PaperclipIcon';
 import SendIcon from '../../../images/svg/buttons/SendIcon';
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
-const ChatRoom = ({ chatNum, messages, setMessages }) => {
+const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
     const [profile, setProfile] = useState(null);
     const { teamno } = useParams();
     const [message, setMessage] = useState('');
@@ -19,7 +19,6 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [replyingTo, setReplyingTo] = useState(null);
-    const [imageLoaded, setImageLoaded] = useState({}); // State to track image loading
     const stompClient = useRef(null);
     const fileInputRef = useRef();
     const messageEndRef = useRef(null);
@@ -99,11 +98,19 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
     }, [chatNum, profile]);
 
     useEffect(() => {
-        // 메시지가 업데이트될 때마다 항상 최신 메시지 위치로 스크롤
         if (!isUserScrolling) {
             scrollToBottom();
         }
     }, [messages]);
+
+    useEffect(() => {
+        if (scrollToMessage) {
+            const messageElement = document.getElementById(`message-${scrollToMessage}`);
+            if (messageElement) {
+                messageElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [scrollToMessage]);
 
     const fetchUnreadCount = async (chatNum, messageNum) => {
         try {
@@ -177,7 +184,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                 type: 'CHAT',
                 replyToMessageNum: replyingTo ? replyingTo.messageNum : null,
                 replyTo: replyingTo ? { memberNickname: replyingTo.memberNickname, chatContent: replyingTo.chatContent, chatTime: replyingTo.chatTime } : null,
-                memberFilepath: profile.memberFilepath 
+                memberFilepath: profile.memberFilepath
             };
 
             try {
@@ -299,7 +306,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
 
     const scrollToUnreadOrBottom = () => {
         if (firstUnreadMessageRef.current) {
-            const firstUnreadElement = document.getElementById(firstUnreadMessageRef.current);
+            const firstUnreadElement = document.getElementById(`message-${firstUnreadMessageRef.current}`);
             if (firstUnreadElement) {
                 firstUnreadElement.scrollIntoView({ behavior: 'auto' });
                 return;
@@ -336,7 +343,7 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
         <div className="chat-room-container">
             <div className="chat-room-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className="chat-room-message-container" id={msg.messageNum}>
+                    <div key={index} className="chat-room-message-container" id={`message-${msg.messageNum}`}>
                         {msg.messageNum === firstUnreadMessageRef.current && (
                             <div className="chat-room-unread-indicator">
                                 읽지 않은 메시지
@@ -347,58 +354,55 @@ const ChatRoom = ({ chatNum, messages, setMessages }) => {
                                 className='chat-user-profile-pic'
                                 src={msg.memberFilepath || 'default_profile_image_url.jpg'}
                                 alt={msg.memberNickname}
-                                onLoad={() => setImageLoaded(prev => ({ ...prev, [msg.messageNum]: true }))}
                                 onError={ErrorImageHandler}
                             />
                             <div className='chat-room-message-name'>
-                                {msg.memberNickname} 
+                                {msg.memberNickname}
                             </div>
                             <div className="chat-room-message-time">{formatTime(msg.chatTime)}</div>
                         </div>
-                        {imageLoaded[msg.messageNum] && (
-                            <div className="chat-room-message-content-container">
-                                <div className="chat-room-message-content">
-                                    {msg.replyTo ? (
-                                        <div className="chat-room-reply-container">
-                                            <div className="chat-room-reply-original">
-                                                <strong>{msg.replyTo.memberNickname}에게</strong><br/> {msg.replyTo.chatContent} <small>{formatTime(msg.replyTo.chatTime)}</small>
-                                            </div>
-                                            <div className="chat-room-reply-content">
-                                                {msg.chatContent}
-                                            </div>
+                        <div className="chat-room-message-content-container">
+                            <div className="chat-room-message-content">
+                                {msg.replyTo ? (
+                                    <div className="chat-room-reply-container">
+                                        <div className="chat-room-reply-original">
+                                            <strong>{msg.replyTo.memberNickname}에게</strong><br/> {msg.replyTo.chatContent} <small>{formatTime(msg.replyTo.chatTime)}</small>
                                         </div>
-                                    ) : (
-                                        msg.chatContent.split('\n').map((line, i) => (
-                                            <React.Fragment key={i}>{line}<br /></React.Fragment>
-                                        ))
-                                    )}
-                                    {msg.files && msg.files.map((file, fileIndex) => (
-                                        <div key={fileIndex} className="chat-room-message-file-container">
-                                            <a href="#" onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
-                                                {isImage(file.originalFileName) ? (
-                                                    <div className="chat-room-image-container">
-                                                        <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
-                                                        <div className="chat-room-download-icon">↓</div>
-                                                    </div>
-                                                ) : (
-                                                    <div className="chat-room-file-link-container">
-                                                        <span className="chat-room-file-link">{file.originalFileName}</span>
-                                                        <span className="chat-room-file-link">↓</span>
-                                                    </div>
-                                                )}
-                                            </a>
+                                        <div className="chat-room-reply-content">
+                                            {msg.chatContent}
                                         </div>
-                                    ))}
-                                </div>
-                                {msg.unreadCount > 0 && (
-                                    <small className="chat-room-unread-count">{msg.unreadCount}</small>
+                                    </div>
+                                ) : (
+                                    msg.chatContent.split('\n').map((line, i) => (
+                                        <React.Fragment key={i}>{line}<br /></React.Fragment>
+                                    ))
                                 )}
-                                <ReactionMenu
-                                    onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
-                                    isOwnMessage={msg.sender === profile.username}
-                                />
+                                {msg.files && msg.files.map((file, fileIndex) => (
+                                    <div key={fileIndex} className="chat-room-message-file-container">
+                                        <a href="#" onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
+                                            {isImage(file.originalFileName) ? (
+                                                <div className="chat-room-image-container">
+                                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
+                                                    <div className="chat-room-download-icon">↓</div>
+                                                </div>
+                                            ) : (
+                                                <div className="chat-room-file-link-container">
+                                                    <span className="chat-room-file-link">{file.originalFileName}</span>
+                                                    <span className="chat-room-file-link">↓</span>
+                                                </div>
+                                            )}
+                                        </a>
+                                    </div>
+                                ))}
                             </div>
-                        )}
+                            {msg.unreadCount > 0 && (
+                                <small className="chat-room-unread-count">{msg.unreadCount}</small>
+                            )}
+                            <ReactionMenu
+                                onClickReaction={(reactionKey) => handleReactionClick(reactionKey, msg)}
+                                isOwnMessage={msg.sender === profile.username}
+                            />
+                        </div>
                     </div>
                 ))}
                 <div ref={messageEndRef}></div>

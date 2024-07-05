@@ -19,7 +19,8 @@ const Chat = () => {
     const [refreshChatList, setRefreshChatList] = useState(false);
     const [memberCount, setMemberCount] = useState(0);
     const [profile, setProfile] = useState(null);
-    const [messages, setMessages] = useState([]); // 상태 추가
+    const [messages, setMessages] = useState([]);
+    const [scrollToMessage, setScrollToMessage] = useState(null); // 추가된 상태
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -94,7 +95,6 @@ const Chat = () => {
         }
     };
 
-
     const handleLeaveChat = async (chatNum) => {
         const memberId = profile?.username; // 프로필에서 로그인된 사용자의 ID를 가져옵니다.
         if (!memberId) {
@@ -112,11 +112,14 @@ const Chat = () => {
         }
     };
 
+    const handleMessageClick = (messageNum) => {
+        setScrollToMessage(messageNum);
+    };
+
     return (
         <>
             <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
             <div className='content-container-chat'>
-
                 {selectedChatNum && (
                     <ChatHeader
                         chatName={selectedChatName}
@@ -125,14 +128,15 @@ const Chat = () => {
                         onInvite={handleInvite}
                         onLeaveChat={handleLeaveChat}
                         memberCount={memberCount}
-                        setMemberCount={setMemberCount} // 상태 추가
+                        setMemberCount={setMemberCount}
+                        onMessageClick={handleMessageClick} // 추가된 콜백
                     />
                 )}
                 {!selectedChatNum && (
                     <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
                 )}
                 {selectedChatNum ? (
-                    <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} /> // 상태 전달
+                    <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} scrollToMessage={scrollToMessage} /> // 상태 전달
                 ) : (
                     <div className='chat-placeholder'>
                         <p>Select a chat room to start messaging.</p>
