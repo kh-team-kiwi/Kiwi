@@ -31,12 +31,15 @@ public class ChatMessageController {
     public ChatMessage sendMessage(ChatMessage message) {
         message.setChatTime(LocalDateTime.now());
         String memberNickname = messageChatnumService.getNicknameByEmail(message.getSender());
+        String memberFilepath = messageChatnumService.getFilepathByEmail(message.getSender());
+        message.setMemberFilepath(memberFilepath);
         message.setMemberNickname(memberNickname);
         message.setChatContent(message.getContent());
         messageChatnumService.saveMessage(message);
         log.debug("Message sent: {}", message);
         return message;
     }
+
 
     @PostMapping("/upload")
     public List<ChatMessage.FileInfo> uploadFiles(@RequestParam("files") MultipartFile[] files,
@@ -45,6 +48,8 @@ public class ChatMessageController {
         log.debug("Uploading files for chatNum: {}", chatNum);
         return messageChatnumService.uploadFiles(files, team, chatNum);
     }
+
+
 
     @GetMapping("/messages/{chatNum}")
     public List<ChatMessage> getMessagesByChatNum(@PathVariable Integer chatNum) {
