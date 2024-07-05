@@ -87,6 +87,7 @@ const MemberManagement = () => {
                 selectedMember={selectedMember}
                 onSave={handleSave}
                 onDelete={handleDelete}
+                teamno={teamno} // teamno 값을 MemberForm 컴포넌트로 전달
             />
             {message && <div className="message">{message}</div>} {/* 메시지를 화면에 표시 */}
         </div>

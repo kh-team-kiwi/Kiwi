@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/components/documents/MemberForm.css';
 
-const MemberForm = ({ selectedMember, onSave, onDelete }) => {
+const MemberForm = ({ selectedMember, onSave, onDelete, teamno }) => {
     const [formData, setFormData] = useState({
         employeeNo: '',
         name: '',
@@ -16,7 +16,7 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
         title: '',
         position: '',
         docSecurity: '9',
-        companyNum: '',
+        companyNum: teamno || '', // teamno 값을 companyNum에 설정
         memberId: ''
     });
 
@@ -35,7 +35,7 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
                 title: selectedMember.title || '',
                 position: selectedMember.position || '',
                 docSecurity: selectedMember.docSecurity || '9',
-                companyNum: selectedMember.companyNum || '',
+                companyNum: selectedMember.companyNum || teamno || '',
                 memberId: selectedMember.memberId || ''
             });
         } else {
@@ -52,15 +52,14 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
                 title: '',
                 position: '',
                 docSecurity: '9',
-                companyNum: '',
+                companyNum: teamno || '',
                 memberId: ''
             });
         }
-    }, [selectedMember]);
+    }, [selectedMember, teamno]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(`Changing ${name} to ${value}`);
         setFormData({
             ...formData,
             [name]: value
@@ -69,6 +68,12 @@ const MemberForm = ({ selectedMember, onSave, onDelete }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // employeeNo 생성 로직 추가
+        if (!formData.employeeNo && formData.companyNum && formData.memberId) {
+            formData.employeeNo = `${formData.companyNum}@${formData.memberId.split('@')[0]}`;
+        }
+
         console.log('Submitting form with data:', formData);
         onSave(formData);
     };
