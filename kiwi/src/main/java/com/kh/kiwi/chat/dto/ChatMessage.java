@@ -24,6 +24,7 @@ public class ChatMessage {
     private String messageNum; // 메시지 번호
     private String replyToMessageNum; // 댓글 대상 메시지 번호 추가
     private ReplyTo replyTo; // 댓글 대상 메시지 정보 추가
+    private String memberFilepath;
 
     @Data
     public static class FileInfo {

@@ -40,7 +40,7 @@ const ChatUsers = ({ chatNum }) => {
             <ul className="chat-users-list">
                 {users.map((user) => (
                     <li key={user.memberId} className="chat-user-item">
-                        <img className='chat-user-profile-pic' src={''} alt={''} onError={ErrorImageHandler}></img>
+                        <img className='chat-user-profile-pic' src={user.memberFilepath} alt={''} onError={ErrorImageHandler}></img>
                         <div className="chat-users-name">{user.memberNickname}</div>
                     </li>
                 ))}

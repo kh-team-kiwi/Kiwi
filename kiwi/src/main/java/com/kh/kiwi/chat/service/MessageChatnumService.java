@@ -107,6 +107,7 @@ public class MessageChatnumService {
             chatMessage.setChatContent(message.getChatContent());
             chatMessage.setMemberNickname(message.getMember().getMemberNickname());
             chatMessage.setMessageNum(message.getMessageNum());
+            chatMessage.setMemberFilepath(message.getMember().getMemberFilepath());
             if (message.getChatRef()) {
                 MessageChatnum refMessage = messageChatnumRepository.findById(message.getChatRefMessageNum())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid message ID: " + message.getChatRefMessageNum()));
