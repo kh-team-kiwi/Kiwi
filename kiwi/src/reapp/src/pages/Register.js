@@ -176,7 +176,7 @@ const Register = () => {
 
 
         if(target.name==='memberId'){
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(target.value);
+            const emailPattern = /^(?=.{1,30}$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(target.value);
             setEmailValidate('emailPattern',emailPattern);
         }
 

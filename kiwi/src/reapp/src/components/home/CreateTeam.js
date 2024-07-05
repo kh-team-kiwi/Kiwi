@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../styles/components/home/CreateTeam.css';
 import axiosHandler from "../../jwt/axiosHandler";
 import {getSessionItem} from "../../jwt/storage";
+import ErrorImageHandler from "../common/ErrorImageHandler";
 
 const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
@@ -246,7 +247,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
             <div className='create-team-member-list-container'> 
                 {formData.invitedMembers.map(member => (
                         <div key={member.username} className="create-team-member">
-                            <img className='create-team-member-image' src={member.filepath} />
+                            <img className='create-team-member-image' src={member.filepath} onError={ErrorImageHandler} />
 
                             <div className='create-team-member-info'>
                               <div className='create-team-member-name-wrapper' >
