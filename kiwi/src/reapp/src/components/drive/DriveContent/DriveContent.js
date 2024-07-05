@@ -44,6 +44,13 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         fetchItems(parentPath);
     }, [teamno, driveCode, parentPath, breadcrumbs]);
 
+    useEffect(() => {
+        // 이름 변경 상태에서 벗어나면 경고 메시지 초기화
+        if (!editFileCode && !editFolderCode) {
+            setErrorMessage('');
+        }
+    }, [editFileCode, editFolderCode]);
+
     const fetchItems = async (path) => {
         const fullPath = path ? `${teamno}/drive/${path}` : `${teamno}/drive/${driveCode}`;
         console.log(`Fetching items for path: ${fullPath}`);
