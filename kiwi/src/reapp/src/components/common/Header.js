@@ -3,6 +3,7 @@ import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import ToggleButton from './ToggleButton';
 import { useTranslation } from 'react-i18next';
 
+
 import '../../styles/components/common/Header.css';
 import ErrorImageHandler from "./ErrorImageHandler";
 import {TeamContext} from "../../context/TeamContext";
@@ -24,7 +25,7 @@ const Header = () => {
   const { teams, setTeams, joinTeam} = useContext(TeamContext);
   const { teamno } = useParams();
 
-  const [activePage, setActivePage] = useState('calendar');
+  const [activePage, setActivePage] = useState('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [notificationDropdownVisible, setNotificationDropdownVisible] = useState(false);
 
@@ -53,6 +54,25 @@ const Header = () => {
 
     const openAccountSettings = () => setAccountSettingsOpen(true);
     const closeAccountSettings = () => setAccountSettingsOpen(false);
+
+    const location = useLocation();
+
+    useEffect(() => {
+      const path = location.pathname;
+      if (path.includes('calendar')) {
+        setActivePage('calendar');
+      } else if (path.includes('chat')) {
+        setActivePage('chat');
+      } else if (path.includes('drive')) {
+        setActivePage('drive');
+      } else if (path.includes('documents')) {
+        setActivePage('documents');
+      } else if (path.includes('teamsettings/personal-manage')) {
+        setActivePage('teamsettings/personal-manage');
+      } else {
+        navigate(`/team/${teamno}/calendar`);
+      }
+    }, [location]); 
 
 
   const fetchData = async () => {
@@ -222,10 +242,6 @@ const Header = () => {
       console.error(e);
     }
   }
-  useEffect(() => {
-      navigate(`/team/${teamno}/calendar`);
-    
-  }, []);
 
   return (
     <header className='header-container'>
