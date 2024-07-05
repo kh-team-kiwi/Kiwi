@@ -31,6 +31,9 @@ public class MemberDetailsService {
 
     public void saveMemberDetails(MemberDetailsDTO memberDetailsDTO) {
         MemberDetails memberDetails = convertToEntity(memberDetailsDTO);
+        if (memberDetails.getEmployeeNo() == null || memberDetails.getEmployeeNo().isEmpty()) {
+            memberDetails.setEmployeeNo(memberDetails.getCompanyNum() + "@" + memberDetails.getMemberId().split("@")[0]);
+        }
         memberDetailsRepository.save(memberDetails);
     }
 
