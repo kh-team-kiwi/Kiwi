@@ -137,23 +137,27 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                                 className="create-drive-search-input"
                             />
                             <div className="create-drive-member-list">
-                                {filteredMembers.map((member) => (
-                                    <div
-                                        key={member.id}
-                                        className={`create-drive-member-item ${joinedMembers.some(joinedMember => joinedMember.id === member.id) ? 'create-drive-selected' : ''}`}
-                                        onClick={() => handleMemberClick(member)}
-                                    >
-                                        <img className='create-drive-profile-image' src='' alt={''} onError={ErrorImageHandler}></img>
-                                        <div className='create-drive-profile-info'>
-                                            <div className='create-drive-profile-name'>
-                                                {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) &&<span className="create-drive-joined-tag">Joined</span>}
-                                            </div>
-                                            <div className='create-drive-profile-email'>
-                                                {member.email}
+                                {filteredMembers.length > 0 ? (
+                                    filteredMembers.map((member) => (
+                                        <div
+                                            key={member.id}
+                                            className={`create-drive-member-item ${joinedMembers.some(joinedMember => joinedMember.id === member.id) ? 'create-drive-selected' : ''}`}
+                                            onClick={() => handleMemberClick(member)}
+                                        >
+                                            <img className='create-drive-profile-image' src='' alt={''} onError={ErrorImageHandler}></img>
+                                            <div className='create-drive-profile-info'>
+                                                <div className='create-drive-profile-name'>
+                                                    {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) && <span className="create-drive-joined-tag">Joined</span>}
+                                                </div>
+                                                <div className='create-drive-profile-email'>
+                                                    {member.email}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                ) : (
+                                    <div className="no-members-message">No members to invite</div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -173,7 +177,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                                         </div>
                                         {joinedMember.id !== profile.username && (
                                             <div className='create-drive-remove-button' onClick={() => handleRemoveJoinedMember(joinedMember)}>
-                                                <ExitIcon/>
+                                                <ExitIcon />
                                             </div>
                                         )}
                                     </div>

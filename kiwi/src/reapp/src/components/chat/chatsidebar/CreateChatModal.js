@@ -134,23 +134,27 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                 className="create-chat-search-input"
                             />
                             <div className="create-chat-member-list">
-                                {filteredMembers.map((member) => (
-                                    <div
-                                        key={member.id}
-                                        className={`create-chat-member-item ${joinedMembers.some(joinedMember => joinedMember.id === member.id) ? 'create-chat-selected' : ''}`}
-                                        onClick={() => handleMemberClick(member)}
-                                    >
-                                        <img className='create-chat-profile-image' src={member.filepath} alt={''} onError={ErrorImageHandler}></img>
-                                        <div className='create-chat-profile-info'>
-                                            <div className='create-chat-profile-name'>
-                                                {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) &&<span className="create-chat-joined-tag">Joined</span>}
-                                            </div>
-                                            <div className='create-chat-profile-email'>
-                                                {member.email} 
+                                {filteredMembers.length > 0 ? (
+                                    filteredMembers.map((member) => (
+                                        <div
+                                            key={member.id}
+                                            className={`create-chat-member-item ${joinedMembers.some(joinedMember => joinedMember.id === member.id) ? 'create-chat-selected' : ''}`}
+                                            onClick={() => handleMemberClick(member)}
+                                        >
+                                            <img className='create-chat-profile-image' src={member.filepath} alt={''} onError={ErrorImageHandler}></img>
+                                            <div className='create-chat-profile-info'>
+                                                <div className='create-chat-profile-name'>
+                                                    {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) && <span className="create-chat-joined-tag">Joined</span>}
+                                                </div>
+                                                <div className='create-chat-profile-email'>
+                                                    {member.email} 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                ) : (
+                                    <div className="no-members-message">No members to invite</div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -160,7 +164,6 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                 {joinedMembers.map((joinedMember) => (
                                     <div key={joinedMember.id} className="create-chat-admin-item">
                                         <img className='create-chat-profile-image' src={joinedMember.id === profile.username ? profile.filepath : joinedMember.filepath} alt={''} onError={ErrorImageHandler} />
-
                                         <div className='create-chat-profile-info'>
                                             <div className='create-chat-profile-name'>
                                                 {joinedMember.name} {joinedMember.id === profile.username && <span className="create-chat-you-tag">You</span>}
@@ -171,7 +174,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                         </div>
                                         {joinedMember.id !== profile.username && (
                                             <div className='create-chat-remove-button' onClick={() => handleRemoveJoinedMember(joinedMember)}>
-                                                <ExitIcon/>
+                                                <ExitIcon />
                                             </div>
                                         )}
                                     </div>

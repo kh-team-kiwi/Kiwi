@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { getSessionItem } from "../jwt/storage";
 import ChatSidebar from '../components/chat/ChatSidebar';
 import ChatMemberList from '../components/chat/ChatMemberList';
 import ChatHeader from '../components/chat/ChatHeader';
@@ -7,9 +8,9 @@ import ChatRoom from '../components/chat/chatcontent/ChatRoom';
 import CreateChatModal from '../components/chat/chatsidebar/CreateChatModal';
 import '../styles/pages/Page.css';
 import '../styles/pages/Chat.css';
-import { useParams } from "react-router-dom";
-import { getSessionItem } from "../jwt/storage";
+import EmptyChatIcon from '../images/emptychat.png';
 import axiosHandler from "../jwt/axiosHandler";
+import PlusIcon from '../images/svg/shapes/PlusIcon';
 
 const Chat = () => {
     const { teamno } = useParams();
@@ -19,24 +20,44 @@ const Chat = () => {
     const [refreshChatList, setRefreshChatList] = useState(false);
     const [memberCount, setMemberCount] = useState(0);
     const [profile, setProfile] = useState(null);
-    const [messages, setMessages] = useState([]); // 상태 추가
+    const [messages, setMessages] = useState([]);
+    const [chats, setChats] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
         setProfile(storedProfile);
     }, []);
 
-    const handleApprovalLineSave = (line) => {
-        setShowCreateChatModal(false);
+    useEffect(() => {
+        if (teamno && profile) {
+            fetchChats();
+        }
+    }, [refreshChatList, teamno, profile]);
+
+    const fetchChats = async () => {
+        setLoading(true);
+        try {
+            const response = await axiosHandler.get(`/api/chat?team=${teamno}&memberId=${profile.username}`);
+            setChats(response.data);
+            if (response.data.length > 0) {
+                handleChatSelect(response.data[0].chatNum, response.data[0].chatName);
+            } else {
+                setSelectedChatNum(null);
+                setSelectedChatName('');
+            }
+        } catch (error) {
+            console.error('Failed to fetch chats', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleChatSelect = async (chatNum, chatName) => {
         setSelectedChatNum(chatNum);
         setSelectedChatName(chatName);
-
-        // Fetch member count
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            const response = await axiosHandler.get(`/api/chat/user/${chatNum}`);
             setMemberCount(response.data.length);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -52,7 +73,6 @@ const Chat = () => {
     };
 
     const handleSaveModal = async (data) => {
-        console.log("Saved Data: ", data);
         const newChat = {
             chatName: data.chatName,
             chatAdminMemberId: data.approvers[0].id,
@@ -64,82 +84,102 @@ const Chat = () => {
 
         try {
             const response = await axiosHandler.post('/api/chat/createWithUsers', newChat);
-            console.log('새 채팅방이 생성되었습니다:', response.data);
             setShowCreateChatModal(false);
-            setRefreshChatList(prev => !prev); // Refresh chat list
+            setRefreshChatList(prev => !prev);
         } catch (error) {
-            console.error('채팅방 생성 중 오류 발생:', error);
+            console.error('Error creating chat room:', error);
         }
     };
 
     const handleInvite = async (member) => {
         try {
-            const response = await axiosHandler.post(`/api/chat/user/${selectedChatNum}/invite`, { memberId: member.id });
-            console.log('사용자 초대 성공:', response.data);
-
-            // 새 멤버 정보 가져오기
-            const newMemberResponse = await axiosHandler.get(`http://localhost:8080/api/chat/user/${selectedChatNum}`);
-
-            // 멤버 카운트 및 멤버 리스트 업데이트
+            await axiosHandler.post(`/api/chat/user/${selectedChatNum}/invite`, { memberId: member.id });
+            const newMemberResponse = await axiosHandler.get(`/api/chat/user/${selectedChatNum}`);
             setMemberCount(newMemberResponse.data.length);
             setMessages(prevMessages => prevMessages.map(msg => ({
                 ...msg,
                 unreadCount: msg.unreadCount + 1
             })));
-
-            // 채팅 멤버 리스트를 업데이트하도록 이벤트 발생
             window.dispatchEvent(new CustomEvent('chatMemberUpdate', { detail: newMemberResponse.data }));
         } catch (error) {
-            console.error('사용자 초대 중 오류 발생:', error);
+            console.error('Error inviting user:', error);
         }
     };
 
-
     const handleLeaveChat = async (chatNum) => {
-        const memberId = profile?.username; // 프로필에서 로그인된 사용자의 ID를 가져옵니다.
+        const memberId = profile?.username;
         if (!memberId) {
-            console.error('로그인된 사용자의 ID를 찾을 수 없습니다.');
+            console.error('Unable to find logged-in user ID.');
             return;
         }
         try {
-            const response = await axiosHandler.post(`/api/chat/user/${chatNum}/leave`, { memberId });
-            console.log('채팅방 나가기 성공:', response.data);
-            setSelectedChatNum(null); // 선택된 채팅방 초기화
-            setSelectedChatName(""); // 선택된 채팅방 이름 초기화
-            setRefreshChatList(prev => !prev); // 채팅방 목록 새로고침
+            await axiosHandler.post(`/api/chat/user/${chatNum}/leave`, { memberId });
+            setSelectedChatNum(null);
+            setSelectedChatName('');
+            setRefreshChatList(prev => !prev);
         } catch (error) {
-            console.error('채팅방 나가기 중 오류 발생:', error);
+            console.error('Error leaving chat room:', error);
         }
     };
 
+    if (loading) {
+        return (
+            <div className="loading-screen">
+                <div className="loading-spinner">Loading...</div>
+            </div>
+        );
+    }
+
     return (
         <>
-            <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
-            <div className='content-container-chat'>
+            {chats.length > 0 && (
+                <ChatSidebar onChatSelect={handleChatSelect} team={teamno} refreshChatList={refreshChatList} onCreateChat={handleCreateChat} />
+            )}
+            <div className={`content-container-chat ${chats.length > 0 ? '' : 'full-width'}`}>
+                {chats.length > 0 ? (
+                    <>
+                        {selectedChatNum && (
+                            <ChatHeader
+                                chatName={selectedChatName}
+                                team={teamno}
+                                chatNum={selectedChatNum}
+                                onInvite={handleInvite}
+                                onLeaveChat={handleLeaveChat}
+                                memberCount={memberCount}
+                                setMemberCount={setMemberCount}
+                            />
+                        )}
+                        {!selectedChatNum && (
+                            <button type="button" className="document-button" onClick={handleCreateChat}>Create Chat Room</button>
+                        )}
 
-                {selectedChatNum && (
-                    <ChatHeader
-                        chatName={selectedChatName}
-                        team={teamno}
-                        chatNum={selectedChatNum}
-                        onInvite={handleInvite}
-                        onLeaveChat={handleLeaveChat}
-                        memberCount={memberCount}
-                        setMemberCount={setMemberCount} // 상태 추가
-                    />
-                )}
-                {!selectedChatNum && (
-                    <button type="button" className="document-button" onClick={handleCreateChat}>채팅방 생성</button>
-                )}
-                {selectedChatNum ? (
-                    <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} /> // 상태 전달
+                            <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} />
+
+                    </>
                 ) : (
-                    <div className='chat-placeholder'>
-                        <p>Select a chat room to start messaging.</p>
+                    <div className="chat-empty-message">
+                        <div className='chat-no-chats-container'>
+                            <img src={EmptyChatIcon} className='img-enable-darkmode chat-empty-icon'/>
+                            <div className="chat-empty-title">
+                                No Chats to show
+                            </div>
+                            <div className="chat-empty-description">
+                                Click on the button below to create a new chat room
+                            </div>
+                            <button 
+                                className="chat-empty-create-button" 
+                                onClick={handleCreateChat}
+                            >
+                                <PlusIcon className='chat-empty-plus-icon'/>
+                                <div>Create Chat</div>
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
+            {chats.length > 0 && (
             <ChatMemberList chatNum={selectedChatNum} />
+        )}
             {showCreateChatModal && (
                 <CreateChatModal onSave={handleSaveModal} onClose={handleCloseModal} team={teamno} showCreateChatModal={showCreateChatModal} />
             )}
