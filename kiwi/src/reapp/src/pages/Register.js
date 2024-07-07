@@ -113,16 +113,12 @@ const Register = () => {
     }, [emailCheck.emailPattern, emailCheck.emptyWhitespacePattern, formData.memberId]); // 의존성 배열에 포함
 
     useEffect(() => {
-        if(passwordCheck.emptyWhitespacePattern && passwordCheck.least8char && passwordCheck.specialSymbol) {
-            if(formData.memberPwd === formData.confirmPwd) {
-                setPasswordCheck(prevState => ({ ...prevState, duplicatePattern: true}));
-            } else {
-                setPasswordCheck(prevState => ({ ...prevState, duplicatePattern: false}));
-            }
+        if (passwordCheck.emptyWhitespacePattern && passwordCheck.least8char && passwordCheck.specialSymbol) {
+            setPasswordCheck(prevState => ({ ...prevState, duplicatePattern: true }));
         } else {
-            setPasswordCheck(prevState => ({...prevState, duplicatePattern: false}));
+            setPasswordCheck(prevState => ({ ...prevState, duplicatePattern: false }));
         }
-    }, [passwordCheck.emptyWhitespacePattern, passwordCheck.least8char, passwordCheck.specialSymbol, confirmPwCheck.duplicatePattern, formData.memberPwd]);
+    }, [passwordCheck.emptyWhitespacePattern, passwordCheck.least8char, passwordCheck.specialSymbol, formData.memberPwd]);
 
     useEffect(() => {
         if(confirmPwCheck.emptyWhitespacePattern && confirmPwCheck.least8char && confirmPwCheck.specialSymbol) {
@@ -405,21 +401,22 @@ const Register = () => {
             <div
                 className={`validator-email-box ${showValidator && validatorType === 'memberId' ? 'show' : 'hide'}`}>
                 <div className='validator-header'>
-                    {/*<b>{t('terms-and-conditions')}</b>*/}
+                    <EmailIcon className='register-requirements-icon'/>
+                    Email Requirements
                 </div>
                 <ul className='validator-content'>
                     <li>
-                        <span>공백이 없어야 합니다.</span>
+                        <span>공백이 없어야 합니다</span>
                         <span>{emailCheck.emptyWhitespacePattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
                     <li>
-                        <span>이메일 형식을 지켜주세요.</span>
+                        <span>이메일 형식을 지켜주세요</span>
                         <span>{emailCheck.emailPattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
                     <li>
-                        <span>중복되지 않은 이메일 입니다.</span>
+                        <span>중복되지 않은 이메일 입니다</span>
                         <span>{emailCheck.duplicatePattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
@@ -428,16 +425,16 @@ const Register = () => {
             <div
                 className={`validator-username-box ${showValidator && validatorType === 'memberNickname' ? 'show' : 'hide'}`}>
                 <div className='validator-header'>
-                    {/*<b>{t('terms-and-conditions')}</b>*/}
-                </div>
+                <ProfileIcon className='register-requirements-icon'/>
+                    Username Requirements                </div>
                 <ul className='validator-content'>
                     <li>
-                        <span>공백이 없어야 합니다.</span>
+                        <span>공백이 없어야 합니다</span>
                         <span>{usernameCheck.emptyWhitespacePattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
                     <li>
-                        <span>2글자 이상 10글자 이하만 가능합니다.</span>
+                        <span>2글자 이상 10글자 이하만 가능합니다</span>
                         <span>{usernameCheck.least2char ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
@@ -446,38 +443,36 @@ const Register = () => {
             <div
                 className={`validator-password-box ${showValidator && validatorType === 'memberPwd' ? 'show' : 'hide'}`}>
                 <div className='validator-header'>
-                    {/*<b>{t('terms-and-conditions')}</b>*/}
+                    <PasswordIcon className='register-requirements-icon'/>
+                    Password Requirements
                 </div>
                 <ul className='validator-content'>
                     <li>
-                        <span>공백이 없어야 합니다.</span>
+                        <span>공백이 없어야 합니다</span>
                         <span>{passwordCheck.emptyWhitespacePattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
                     <li>
-                        <span>최소 8글자 이상이어야합니다.</span>
+                        <span>8글자 이상 16글자 이하만 가능합니다</span>
                         <span>{passwordCheck.least8char ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
                     <li>
-                        <span>특수문자(!@#$%^)를 포함해야합니다.</span>
+                        <span>특수문자(!@#$%^)를 포함해야합니다</span>
                         <span>{passwordCheck.specialSymbol ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>
-                    <li>
-                        <span>비밀번호가 일치합니다.</span>
-                        <span>{passwordCheck.duplicatePattern ? <CheckedCircle className='checkedCircle'/> :
-                            <RegularCircle className='regularCircle'/>}</span>
-                    </li>
+
                 </ul>
             </div>
             <div
                 className={`validator-confirmPW-box ${showValidator && validatorType === 'confirmPwd' ? 'show' : 'hide'}`}>
                 <div className='validator-header'>
-                    {/*<b>{t('terms-and-conditions')}</b>*/}
+                    <PasswordIcon className='register-requirements-icon'/>
+                        Confirm Password
                 </div>
                 <ul className='validator-content'>
-                    <li>
+                    {/* <li>
                         <span>공백이 없어야 합니다.</span>
                         {confirmPwCheck.emptyWhitespacePattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}
@@ -491,9 +486,9 @@ const Register = () => {
                         <span>특수문자(!@#$%^)를 포함해야합니다.</span>
                         <span>{confirmPwCheck.specialSymbol ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
-                    </li>
+                    </li> */}
                     <li>
-                        <span>비밀번호가 일치합니다.</span>
+                        <span>비밀번호가 일치합니다</span>
                         <span>{confirmPwCheck.duplicatePattern ? <CheckedCircle className='checkedCircle'/> :
                             <RegularCircle className='regularCircle'/>}</span>
                     </li>

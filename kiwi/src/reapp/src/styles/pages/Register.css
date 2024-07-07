@@ -350,23 +350,21 @@ body {
     border-radius: 15px;
     background-color: #fff;
     text-align: center;
-    margin-left: -520px;
+    margin-left: 370px;
     z-index: 300;
-    width: 500px;
-    height: 230px;
-    margin-top: -470px;
+    margin-top: -410px;
 }
 
 .validator-email-box::before {
     position: absolute;
     width: 1em;
     height: 1em;
-    right: calc( -0.7em + 4px );
+    left: calc( -0.7em + 4px );
     transform: rotate( 135deg );
     background-color: #fff;
     content: '';
     z-index:299;
-    margin-top: 105px;
+    margin-top: 60px;
 }
 
 .validator-username-box.show {
@@ -384,23 +382,21 @@ body {
     border-radius: 15px;
     background-color: #fff;
     text-align: center;
-    margin-left: -520px;
+    margin-left: 370px;
     z-index: 300;
-    width: 500px;
-    height: 130px;
-    margin-top: -370px;
+    margin-top: -350px;
 }
 
 .validator-username-box::before {
     position: absolute;
     width: 1em;
     height: 1em;
-    right: calc( -0.7em + 4px );
+    left: calc( -0.7em + 4px );
     transform: rotate( 135deg );
     background-color: #fff;
     content: '';
-    z-index:299;
-    margin-top: 55px;
+    z-index:199;
+    margin-top: 50px;
 }
 
 .validator-password-box.show {
@@ -418,23 +414,21 @@ body {
     border-radius: 15px;
     background-color: #fff;
     text-align: center;
-    margin-left: -520px;
+    margin-left: 370px;
     z-index: 300;
-    width: 500px;
-    height: 200px;
-    margin-top: -350px;
+    margin-top: -300px;
 }
 
 .validator-password-box::before {
     position: absolute;
     width: 1em;
     height: 1em;
-    right: calc( -0.7em + 4px );
+    left: calc( -0.7em + 4px );
     transform: rotate( 135deg );
     background-color: #fff;
     content: '';
     z-index:299;
-    margin-top: 104px;
+    margin-top: 64px;
 }
 
 .validator-confirmPW-box.show {
@@ -452,49 +446,68 @@ body {
     border-radius: 15px;
     background-color: #fff;
     text-align: center;
-    margin-left: -520px;
+    margin-left: 370px;
     z-index: 300;
-    width: 500px;
-    height: 200px;
-    margin-top: -300px;
+    margin-top: -220px;
 }
 
 .validator-confirmPW-box::before {
     position: absolute;
     width: 1em;
     height: 1em;
-    right: calc( -0.7em + 4px );
+    left: calc( -0.7em + 4px );
     transform: rotate( 135deg );
     background-color: #fff;
     content: '';
     z-index:299;
-    margin-top: 100px;
+    margin-top: 30px;
 }
 
 .checkedCircle {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 .regularCircle {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 .validator-content {
     height: 90%;
     text-align: left;
-    padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    gap: 10px;
+    margin: 12px;
+    justify-content: center;
 }
 
 .validator-content li {
-    font-size: 24px;
+    font-size: 18px;
     display: flex;
     flex-direction: row;
     align-content: center;
     justify-content: space-between;
-    padding: 0 10px;
+    color: var(--dark-brown);
+    gap: 20px;
+}
+
+
+
+.validator-header {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--dark-brown);
+}
+
+.register-requirements-icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--dark-brown);
 }
