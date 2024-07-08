@@ -87,4 +87,9 @@ public class TeamController {
     public ResponseDto<?> handleIOException(IOException e) {
         return ResponseDto.setFailed( "파일 처리 중 오류가 발생했습니다.");
     }
+
+    @PostMapping("/invite")
+    public ResponseDto<?> inviteMember(@RequestBody TeamCreateRequest dto) {
+        return teamService.inviteMember(dto);
+    }
 }
