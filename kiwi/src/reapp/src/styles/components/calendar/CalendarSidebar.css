@@ -231,7 +231,7 @@
 }
 
 .filter-button.active {
-  background-color: var(--light-green-darkmode);
+  background-color: var(--light-blue-darkmode);
 }
 
 .filter-button:hover {

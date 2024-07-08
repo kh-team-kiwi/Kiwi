@@ -5,6 +5,11 @@ import ErrorImageHandler from "../../common/ErrorImageHandler";
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
 
+import { toast } from 'react-toastify';
+
+
+
+
 const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     const [profile, setProfile] = useState(null);
     const [driveName, setDriveName] = useState('');
@@ -68,7 +73,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
 
     const handleSave = async () => {
         if (!profile || !driveName.trim()) {
-            console.error('Invalid profile or drive name');
+            toast.error("Please enter a drive name");
             return;
         }
 
@@ -83,6 +88,8 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
         try {
             const response = await axiosHandler.post('http://localhost:8080/api/drive/create', driveData);
             onSave(response.data);
+            toast.success("Drive created successfully!");
+
             onClose();
         } catch (error) {
             console.error('Failed to create drive', error);
@@ -188,10 +195,11 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                 </div>
                 <div className="create-drive-modal-bottom">
                     <button className="create-drive-cancel-button" onClick={onClose}>Cancel</button>
-                    <button className="create-drive-create-button" onClick={handleSave} disabled={!driveName.trim()}>Create</button>
+                    <button className="create-drive-create-button" onClick={handleSave}>Create</button>
                 </div>
             </div>
         </div>
+        
     );
 };
 

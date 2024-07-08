@@ -1,0 +1,7 @@
+@import '../../variables.css';
+
+.Toastify__toast {
+    background-color: var(--white);
+    color: var(--lighter-text-color) ;
+
+}

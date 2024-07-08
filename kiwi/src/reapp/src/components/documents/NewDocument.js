@@ -6,6 +6,9 @@ import axios from 'axios';
 import '../../styles/components/documents/NewDocument.css';
 import axiosHandler from "../../jwt/axiosHandler";
 
+import { toast } from 'react-toastify';
+
+
 const NewDocument = ({ onDocumentSubmit }) => {
     const [showApprovalLineModal, setShowApprovalLineModal] = useState(false);
     const [approvalLine, setApprovalLine] = useState({ approvers: [], references: [] });
@@ -47,13 +50,13 @@ const NewDocument = ({ onDocumentSubmit }) => {
                             memberId: username
                         }));
                     } else {
-                        alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
+                        toast.error("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
                         window.location.href = "/";
                     }
                 })
                 .catch((error) => {
                     console.error("Failed to fetch user data:", error);
-                    alert("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
+                    toast.error("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
                     window.location.href = "/";
                 });
         }
@@ -94,7 +97,7 @@ const NewDocument = ({ onDocumentSubmit }) => {
             };
 
             if (!newDocument.title || newDocument.title.trim() === '') {
-                alert("문서 제목을 입력해 주세요.");
+                toast.error("문서 제목을 입력해 주세요.");
                 return;
             }
 
@@ -128,7 +131,7 @@ const NewDocument = ({ onDocumentSubmit }) => {
             });
 
             console.log('Document saved successfully:', response.data);
-            alert("문서가 성공적으로 저장되었습니다.");
+            toast.success("문서가 성공적으로 저장되었습니다.");
 
             // 문서 제출 후 상태 업데이트를 위해 콜백 호출
             if (onDocumentSubmit) {
@@ -136,14 +139,14 @@ const NewDocument = ({ onDocumentSubmit }) => {
             }
         } catch (error) {
             console.error("문서 저장 중 오류가 발생했습니다.", error);
-            alert("문서 저장 중 오류가 발생했습니다.");
+            toast.error("문서 저장 중 오류가 발생했습니다.");
         }
     };
 
 
     const handleSaveClick = () => {
         if (!newDocument.title || newDocument.title.trim() === '') {
-            alert("문서 제목을 입력해 주세요.");
+            toast.error("문서 제목을 입력해 주세요.");
             return;
         }
         handleSubmit();

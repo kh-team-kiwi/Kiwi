@@ -4,6 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import '../styles/pages/Login.css';
 
+import { toast } from 'react-toastify';
+
+
 import backgroundImage from '../images/background.png'; 
 import ToggleLanguageButton from '../components/common/ToggleLanguageButton';
 import Logo from '../components/common/Logo';
@@ -75,7 +78,7 @@ const Login = () => {
         } catch (error) {
             console.log(error);
             if ( error.response.status === 401){
-                alert("인증에 실패 했습니다.")
+                toast.error('Invalid Login. Please check your username or password.')
             }
         }
 
@@ -191,6 +194,8 @@ const Login = () => {
             {t('new-to-kiwi')} <Link to="#" onClick={handleJoinNowClick}>{t('join-now')}</Link>
             </div>
         </div>
+
+
 
         </div>
         

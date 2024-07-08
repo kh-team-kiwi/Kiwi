@@ -4,6 +4,9 @@ import { getSessionItem } from "../../../jwt/storage";
 import axiosHandler from "../../../jwt/axiosHandler";
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
+import { toast } from 'react-toastify';
+
+
 const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite }) => {
     const [profile, setProfile] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -60,6 +63,8 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
         if (selectedMember) {
             onInvite(selectedMember);
             onClose();
+        } else {
+            toast.error('Please select a user to invite')
         }
     };
 
@@ -74,7 +79,7 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
     return (
         <div className="invite-user-modal-overlay">
             <div className="invite-user-modal-content">
-                <h2>Invite Users</h2>
+                <div className="invite-user-modal-title">Invite Users</div>
                 <div className="invite-user-searchBox">
                     <input
                         type="text"
