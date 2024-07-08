@@ -19,10 +19,6 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
         try{
             const res = await axiosHandler.post("/api/team/invite",{teamName:teamno, invitedMembers:inviteList});
             if (res.data.result) {
-                const data = res.data.data;
-                setInviteList(prev => ([
-                    ...prev, data,
-                ]));
                 window.location.reload();
             } else {
                 alert("오류가 발생했습니다.");
@@ -99,6 +95,7 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
             {isModalOpen && (
                 <div className="teamsettigs-invite-modal">
                     <div className="modal-content">
+                        <div className='invite-modal-title'>멤버 초대</div>
                         <input
                             type="text"
                             value={memberEmail}

@@ -1,7 +1,9 @@
 package com.kh.kiwi.auth.dto;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
+@ToString
 @Getter
 @Setter
 @Builder

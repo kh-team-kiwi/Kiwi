@@ -15,35 +15,98 @@
     background-color: #fefefe;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
+    width: 40%;
+    max-width: 400px;
     text-align: center;
+    border-radius: 15px;
 }
 
-.teamsettigs-manage-modal .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.manage-modal-title {
+    font-size: 25px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.manage-apply-btn {
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: var(--green);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 10px;
+}
+.manage-cancle-btn {
+    color: var(--dark-brown);
+    background-color: white;
+    border: 2px solid gray;
+    box-shadow: none;
+    transition: 0.2s;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.modal-manage-select-box, .modal-manage-role-box {
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.modal-manage-tag-name {
+    width: 150px;
+    text-align: left;
+    margin-right: 30px;
+}
+
+.modal-manage-tag-content {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.manage-modal-icon {
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 }
 
-.teamsettigs-manage-modal .close:hover,
-.teamsettigs-manage-modal .close:focus {
-    color: black;
-    text-decoration: none;
+.modal-hover-wrapper:hover #selectedList {
+    display: block;
 }
 
-.teamsettigs-manage-modal input[type="text"] {
-    width: calc(100% - 60px);
-    padding: 10px;
-    margin-right: 10px;
+#selectedList {
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    background-color: var(--white);
+    border-radius: 5px;
+    min-width: 130px;
+    min-height: 25px;
+    max-height: 200px;
+    top: 465px;
+    left: 680px;
+    overflow-y: auto;
 }
 
-.teamsettigs-manage-modal #inviteList {
-    margin-top: 20px;
+.modal-mini-list {
+    width: 100%;
+    height: 25px;
+    display: flex;
+    align-items: center;
 }
 
-.teamsettigs-manage-modal #inviteList > div {
-    margin-bottom: 10px;
+.modal-mini-list-img {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin: 0 10px;
 }

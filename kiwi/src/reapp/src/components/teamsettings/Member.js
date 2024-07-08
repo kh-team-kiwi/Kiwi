@@ -5,6 +5,7 @@ import axiosHandler from "../../jwt/axiosHandler";
 import {useParams} from "react-router-dom";
 import InviteMember from "./InviteMember";
 import ManageMember from "./ManageMember";
+import {all} from "axios";
 
 const Member = () => {
     const {teamno} = useParams();
@@ -17,11 +18,12 @@ const Member = () => {
 
     const [displayMemberStatus, setDisplayMemberStatus] = useState('joined'); // joined,invited,exiled
     const [displaySearchType, setDisplaySearchType] = useState('name'); // name,email
+    const [isSearchInput, setIsSearchInput] = useState('');
     const [displayCount, setDisplayCount] = useState(10); // 10,20,50
 
     const [checkedMembers, setCheckedMembers] = useState([]);
-    const [displaySort, setDisplaySort] = useState('asc'); // desc,asc
-    const [displayRole, setDisplayRole] = useState(['owner','admin','member']);
+    const [displaySort, setDisplaySort] = useState(true); // true : asc / false : desc
+    const [displayRole, setDisplayRole] = useState(['OWNER','ADMIN','MEMBER']);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [endPage, setEndPage] = useState();
@@ -38,7 +40,11 @@ const Member = () => {
         try {
             const response = await axiosHandler.post("/api/team/"+teamno+"/members");
             if(response.data.result){
-                setMembers(response.data.data);
+                const members = response.data.data;
+                members.sort((a,b)=>{
+                    return a.memberNickname.localeCompare(b.memberNickname);
+                })
+                setMembers(members);
             } else {
                 alert(response.data.message);
             }
@@ -80,7 +86,7 @@ const Member = () => {
         if(totalCount<1) totalCount++;
         setEndPage(Math.ceil(totalCount / displayCount));
         updateDisplayPage(currentPage, Math.ceil(totalCount / displayCount));
-    }, [displayMemberStatus, displayCount]);
+    }, [displayMemberStatus, displayCount, isSearchInput]);
 
     // 현재 페이지 변경 시 displayMembers 업데이트
     useEffect(() => {
@@ -92,8 +98,57 @@ const Member = () => {
         } else {
             membersToDisplay = exiledMembers;
         }
-        setDisplayMembers(memberCountFilter(membersToDisplay));
-    }, [currentPage, displayMemberStatus, displayCount]);
+
+        const sortedMembers = [...membersToDisplay].sort((a, b) => {
+            if (displaySort) {
+                return a.memberNickname.localeCompare(b.memberNickname);
+            } else {
+                return b.memberNickname.localeCompare(a.memberNickname);
+            }
+        });
+
+        const roleFilteredMembers = sortedMembers.filter(member=>displayRole.includes(member.role));
+
+
+        const searchFilteredMembers = roleFilteredMembers.filter(member => {
+            if (displaySearchType === 'name') {
+                return member.memberNickname.includes(isSearchInput);
+            } else if (displaySearchType === 'email') {
+                return member.memberId.includes(isSearchInput);
+            }
+            return true;
+        });
+
+        setDisplayMembers(memberCountFilter(searchFilteredMembers));
+    }, [currentPage, displayMemberStatus, displayCount, displaySort, displayRole, isSearchInput]);
+
+    const ascSort = (members) => {
+        members.sort((a,b)=>{
+            if (a.memberNickname < b.memberNickname) {
+                return -1;
+            }
+            if (a.memberNickname > b.memberNickname) {
+                return 1;
+            }
+            return 0;
+        })
+    }
+
+    const descSrot = (members) => {
+        members.sort((a, b) => {
+            if (a.memberNickname < b.memberNickname) {
+                return 1;
+            }
+            if (a.memberNickname > b.memberNickname) {
+                return -1;
+            }
+            return 0;
+        });
+    }
+
+    const sortHandle = () => {
+        setDisplaySort(prevState => !prevState);
+    }
 
     // displayCount로 displayMembers filtering 함수
     const memberCountFilter = (members) => {
@@ -130,14 +185,6 @@ const Member = () => {
         setCurrentPage(1);
     }
 
-    // 체크박스 이벤트
-    const allCheckHandler = (e) => {
-        const checkboxs = document.querySelectorAll('.teamsetings-team-checkbox');
-        checkboxs.forEach(item=>{
-            item.checked=e.target.checked;
-        });
-    }
-
     // 페이지네이션 애로우 버튼 이벤트
     const pagingHandler = (event, pageType) => {
         event.preventDefault();
@@ -171,22 +218,81 @@ const Member = () => {
         setIsManageModalOpen(true);
     };
 
+    // all checkbox handle
+    const allCheckHandler = (e) => {
+        const checkboxs = document.querySelectorAll('.teamsetings-team-checkbox');
+        checkboxs.forEach(item=>{
+            item.checked=e.target.checked;
+        });
+        if(e.target.checked){
+            setCheckedMembers(displayMembers);
+        } else {
+            setCheckedMembers([]);
+        }
+    }
+
+    // item checkbox handle
+    const checkHandle = (e, member) => {
+        if (e.target.checked) {
+            setCheckedMembers(prevState => {
+                const newCheckedMembers = [...prevState, member];
+                if (newCheckedMembers.length === displayMembers.length) {
+                    document.getElementById("allCheckBox").checked = true;
+                }
+                return newCheckedMembers;
+            });
+        } else {
+            setCheckedMembers(prevState => {
+                const newCheckedMembers = prevState.filter(item => item.memberId !== member.memberId);
+                document.getElementById("allCheckBox").checked = false;
+                return newCheckedMembers;
+            });
+        }
+    }
+
+    const [memberCheck, setMemberCheck] = useState(true);
+    const [adminCheck, setAdminCheck] = useState(true);
+    const [ownerCheck, setOwnerCheck] = useState(true);
+
+
+    const displayRoleHandle = (e) => {
+        roleCheckBoxFilter(e);
+        if(e.target.checked){
+            setDisplayRole(prevState => [...prevState,e.target.name]);
+        }else {
+            setDisplayRole(prevState => prevState.filter(role => role !== e.target.name));
+        }
+    }
+
+    const roleCheckBoxFilter = (e) => {
+        if(e.target.name==='MEMBER'){
+            setMemberCheck(!memberCheck);
+        }else if(e.target.name==='ADMIN') {
+            setAdminCheck(!adminCheck);
+        } else {
+            setOwnerCheck(!ownerCheck);
+        }
+    }
+
+    const searchInputHandler = (e) => {
+        setIsSearchInput(e.target.value);
+    }
     return (
         <div className='teamsettings-inner'>
             <div className='teamsettings-header'>멤버 관리</div>
             <div className='teamsettings-team-table-header'>
                 <div className='teamsettings-team-table-header-top'>
                     <select value={displayMemberStatus} onChange={selectStatusHandle}>
-                        <option value='joined'>참여 중인 멤버</option>
-                        <option value='invited'>초대 중인 멤버</option>
-                        <option value='exiled'>차단 멤버</option>
+                        <option value='joined'>참여 중인 멤버 ({joinedMembers.length}명)</option>
+                        {/*<option value='invited'>초대 중인 멤버 ({invitedMembers.length}명)</option>*/}
+                        <option value='exiled'>차단 멤버 ({exiledMembers.length}명)</option>
                     </select>
                     <div>
                         <select value={displaySearchType} onChange={selectSearchHandle}>
                             <option value='name'>멤버 이름</option>
                             <option value='email'>이메일</option>
                         </select>
-                        <input type='text'/>
+                        <input value={isSearchInput} type='text' onChange={searchInputHandler}/>
                     </div>
                 </div>
                 <div className='teamsettings-team-table-header-bottom'>
@@ -210,26 +316,55 @@ const Member = () => {
                         <th><input id='allCheckBox' onChange={allCheckHandler} type='checkbox'/></th>
                         <th>사진</th>
                         <th>
-                            <span>이름</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
-                                 className='teamsettings-table-sort-icon'>
-                                <path
-                                    d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7V64c0-17.7 14.3-32 32-32s32 14.3 32 32V365.7l32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/>
-                            </svg>
+                            <span>닉네임</span>
+                            <span onClick={sortHandle}>
+                                {
+                                    displaySort ?
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                             className='teamsettings-table-sort-icon'>
+                                            <path
+                                                d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7V64c0-17.7 14.3-32 32-32s32 14.3 32 32V365.7l32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 128H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H320c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/>
+                                        </svg>
+                                        :
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                             className='teamsettings-table-sort-icon'>
+                                            <path d="M151.6 469.6C145.5 476.2 137 480 128 480s-17.5-3.8-23.6-10.4l-88-96c-11.9-13-11.1-33.3 2-45.2s33.3-11.1 45.2 2L96 365.7V64c0-17.7 14.3-32 32-32s32 14.3 32 32V365.7l32.4-35.4c11.9-13 32.2-13.9 45.2-2s13.9 32.2 2 45.2l-88 96zM320 480c-17.7 0-32-14.3-32-32s14.3-32 32-32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H320zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H320zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H320zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32H544c17.7 0 32 14.3 32 32s-14.3 32-32 32H320z"/>
+                                        </svg>
+                                }
+                            </span>
                         </th>
                         <th>
-                            <span>권한</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='teamsettings-table-filter-icon'>
-                                <path d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z"/>
-                            </svg>
+                            <span className='role-hover-popup-wrapper'>
+                                <span className='role-hover-popup-title'>권한</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                 className='teamsettings-table-filter-icon'>
+                                <path
+                                    d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z"/>
+                                </svg>
+                                <ul className='role-hover-popup'>
+                                    <li className='role-hover-popup-item'>
+                                        <span>MEMBER</span>
+                                        <input checked={memberCheck} type='checkbox' name='MEMBER' onChange={displayRoleHandle}/>
+                                    </li>
+                                    <li className='role-hover-popup-item'>
+                                        <span>ADMIN</span>
+                                        <input checked={adminCheck} type='checkbox' name='ADMIN' onChange={displayRoleHandle}/>
+                                    </li>
+                                    <li className='role-hover-popup-item'>
+                                        <span>OWNER</span>
+                                        <input checked={ownerCheck} type='checkbox' name='OWNER' onChange={displayRoleHandle}/>
+                                    </li>
+                                </ul>
+                            </span>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        displayMembers.map((member, idx)=> (
+                        displayMembers.map((member, idx) => (
                             <tr className={idx % 2 === 0 ? 'odd-column' : ''} key={idx}>
-                                <td><input className='teamsetings-team-checkbox' type='checkbox'/></td>
+                                <td><input className='teamsetings-team-checkbox' type='checkbox'
+                                           onClick={(e) => checkHandle(e, member)}/></td>
                                 <td>
                                     <img className='teamsettigs-team-member-profile' src={member.memberFilepath} alt=''
                                          onError={ErrorImageHandler}></img>
@@ -265,7 +400,7 @@ const Member = () => {
             </div>
 
             <InviteMember setIsModalOpen={setIsInviteModalOpen} isModalOpen={isInviteModalOpen} joinedMembers={joinedMembers} />
-            <ManageMember setIsModalOpen={setIsManageModalOpen} isModalOpen={isManageModalOpen} joinedMembers={joinedMembers} />
+            <ManageMember setIsModalOpen={setIsManageModalOpen} isModalOpen={isManageModalOpen} checkedMembers={checkedMembers} />
         </div>
     );
 };

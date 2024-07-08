@@ -54,11 +54,6 @@ public class TeamController {
         return teamService.getRole(teamno,memberId);
     }
 
-    @PostMapping("/updateRole")
-    public ResponseDto<?> updateMemberRole(@RequestParam String teamId, @RequestParam String memberId, @RequestParam String role) {
-        return teamService.updateMemberRole(teamId, memberId, role);
-    }
-
     @PostMapping("/removeMember")
     public ResponseDto<?> removeMember(@RequestParam String teamId, @RequestParam String memberId) {
         return teamService.removeMember(teamId, memberId);
@@ -91,5 +86,10 @@ public class TeamController {
     @PostMapping("/invite")
     public ResponseDto<?> inviteMember(@RequestBody TeamCreateRequest dto) {
         return teamService.inviteMember(dto);
+    }
+
+    @PostMapping("/update/role/{teamno}")
+    public ResponseDto<?> updateRole(@RequestBody List<TeamMemberDto> data, @PathVariable String teamno) {
+        return teamService.updateRole(data,teamno);
     }
 }
