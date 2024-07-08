@@ -164,3 +164,62 @@
   color: var(--gray-text);
 
 }
+
+.calendar-sidebar-filter-container {
+  position: absolute;
+  bottom: 0;
+  width: 210px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  border-top: 1px solid var(--light-gray);
+  flex-direction: column;
+  color: var(--lighter-text-color);
+  background-color: var(--white);
+}
+
+.filter-button {
+  flex: 1;
+  padding: 10px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin-bottom: 5px;
+  width: 210px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-button.active {
+  background-color: var(--light-green-darkmode);
+}
+
+.filter-button:hover {
+  background-color: var(--white-hover);
+}
+
+.calendar-sidebar-filter-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px
+}
+.calendar-sidebar-filter-icon {
+  width: 22px;
+  height: 22px;
+  fill: var(--lighter-text-color);
+}
+
+.calendar-sidebar-selected-icon {
+  fill: var(--green);
+  margin-left: auto;
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+
+}
+
