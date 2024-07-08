@@ -6,7 +6,6 @@ import '../../styles/components/common/ToastNotification.css';
 const ToastNotification = ({ text, type = "default", ...props }) => {
   const showToast = () => {
     const commonProps = {
-      closeButton: <i className="custom-toast-close-button">✖</i>,
       ...props,
     };
 

@@ -71,7 +71,7 @@
     background-color: var(--page-icon-active);
 }
 
-.header-page-settings-container {
+.header-page-settings-container, .header-page-member-settings-container {
     position: relative;
     width: 45px;
     height: 45px;
@@ -85,8 +85,9 @@
 
 }
 
-.header-page-settings-container.active {
+.header-page-settings-container.active, .header-page-member-settings-container.active {
     background-color: var(--secondary-active);
+    
 }
 
 
@@ -206,6 +207,38 @@
     border-radius: 10px;
     padding: 5px;
   }
+
+  .header-member-settings-dropdown {
+    position: absolute;
+    background-color: var(--white);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 2060;
+    min-width: 220px;
+    top: 60px;
+    left: 425px;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .header-leave-team-button {
+    background-color: var(--darker-red);
+    height: 40px;
+    width: 100%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.header-leave-team-button:hover {
+    background-color: var(--darker-red-hover);
+}
+
+
 
 
   
@@ -412,7 +445,7 @@
     }
 }
 
-.header-page-icon-container.inactive:hover, .header-page-settings-container.inactive:hover {
+.header-page-icon-container.inactive:hover, .header-page-member-settings-container.inactive:hover  , .header-page-settings-container.inactive:hover {
     
     animation: jump 0.2s ease forwards;
 

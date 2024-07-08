@@ -55,7 +55,7 @@ const SecondRouts = () => {
                         <Route path="drive" element={<Drive />} />
                         <Route path="documents" element={<Documents/>}></Route>
                         <Route path="teamsettings/*" element={<TeamSettings/>}>
-                            <Route path="personal-manage" element={<Personal />}></Route>
+                            {/* <Route path="personal-manage" element={<Personal />}></Route> */}
                             <Route path="member-manage" element={<Member />}></Route>
                             <Route path="team-manage" element={<Team />}></Route>
                         </Route>

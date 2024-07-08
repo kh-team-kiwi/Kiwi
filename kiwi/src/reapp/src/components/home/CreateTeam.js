@@ -4,6 +4,9 @@ import axiosHandler from "../../jwt/axiosHandler";
 import {getSessionItem} from "../../jwt/storage";
 import ErrorImageHandler from "../common/ErrorImageHandler";
 
+import { toast } from 'react-toastify';
+
+
 const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
   const [formData, setFormData] = useState({
@@ -32,7 +35,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     e.preventDefault();
     let check = validateInputName(formData.teamName)
     if(check!==true){
-      alert(check);
+      toast.error(check);
       return;
     }
     onCreateTeam(formData); 
@@ -81,18 +84,18 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       let check = validateInput(inputMember);
       console.log(check);
       if(check!==true){
-        alert(check);
+        toast.error(check);
         return;
       }
 
       if(formData.invitedMembers.some(member=>member.username === inputMember)){
-        alert("이미 초대된 회원입니다.");
+        toast.error("이미 초대된 회원입니다.");
         setInputMember('');
         return;
       }
 
       if(getSessionItem("profile").username===inputMember){
-        alert("팀 생성자는 자동으로 추가 됩니다.");
+        toast.error("팀 생성자는 자동으로 추가 됩니다.");
         setInputMember('');
         return;
       }
@@ -112,9 +115,9 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
           console.log(formData);
           setInputMember('');
         } else if(res.status === 200 && !res.data.result) {
-          alert(res.data.message);
+          toast.success(res.data.message);
         } else {
-          alert("오류가 발생했습니다.");
+          toast.error("오류가 발생했습니다.");
         }
       } catch (e) {
         console.error("create team failed : ",e)
@@ -128,17 +131,17 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
     let check = validateInput(inputMember);
     if(check!==true){
-      alert(check);
+      toast.error(check);
       return;
     }
 
     if(formData.invitedMembers.some(member=>member.username === inputMember)){
-      alert("이미 초대된 회원입니다.");
+      toast.error("이미 초대된 회원입니다.");
       setInputMember('');
       return;
     }
     if(getSessionItem("profile").username===inputMember){
-      alert("팀 생성자는 자동으로 추가 됩니다.");
+      toast.error("팀 생성자는 자동으로 추가 됩니다.");
       setInputMember('');
       return;
     }
@@ -151,9 +154,9 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       }));
       setInputMember('');
     } else if(res.status === 200 && !res.data.result) {
-      alert(res.data.message);
+      toast.success(res.data.message);
     } else {
-      alert("오류가 발생했습니다.");
+      toast.error("오류가 발생했습니다.");
     }
   }
 
