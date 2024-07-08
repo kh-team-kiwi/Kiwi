@@ -54,10 +54,10 @@ const SecondRouts = () => {
                         <Route path="calendar" element={<Calendar />} />
                         <Route path="drive" element={<Drive />} />
                         <Route path="documents" element={<Documents/>}></Route>
-                        <Route path="teamsettings/*" element={<TeamSettings/>}>
+                        <Route path="settings/*" element={<TeamSettings/>}>
                             {/* <Route path="personal-manage" element={<Personal />}></Route> */}
-                            <Route path="member-manage" element={<Member />}></Route>
-                            <Route path="team-manage" element={<Team />}></Route>
+                            <Route path="role" element={<Member />}></Route>
+                            <Route path="team" element={<Team />}></Route>
                         </Route>
                     </Route>
                 </Routes>

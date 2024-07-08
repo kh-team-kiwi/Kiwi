@@ -1,4 +1,4 @@
-.side-menu-bar{
+.teamsettings-sidebar {
     width: 250px;
     position: fixed;
     top: 60px;
@@ -9,58 +9,43 @@
     border-right: 1px solid var(--light-gray);
     overflow-y: auto;
     padding: 10px;
-    background-color: var(--settings-gray-filed);
-    display: flex;
-    flex-direction: column;
-}
-
-.side-menu-bar-inner {
-    display: flex;
-    flex-direction: column;
-}
-
-.side-menu-bar-item {
-    margin: 10px 0;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: var(--white);
     display: flex;
-    justify-content: start;
+    flex-direction: column;
+}
+
+.teamsettings-sidebar-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.teamsettings-sidebar-item {
+    padding: 5px;
+    height: 35px;
+    display: flex;
     align-items: center;
+    font-size: 16px;
+    border-radius: 10px;
+    position: relative;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--lighter-text-color);
+    gap: 10px;
 }
 
-.side-menu-bar-item:hover {
-    background-color: var(--white-hover);
+.teamsettings-sidebar-item.selected {
+    background-color: var(--sidebar-selected);
+    box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.teamsettings-icon {
-    width: 25px;
-    height: 25px;
-    margin: 4px 10px 0 5px;
-}
 
-.teamsettings-icon path{
-    fill: var(--settings-regular)
-}
 
-.teamsettings-icon.select path{
-    fill: var(--settings-selected)
-}
-
-.teamsettings-item-name {
-    color: var(--settings-regular);
-}
-
-.teamsettings-item-name.select {
-    color: var(--settings-selected)
-}
 
 .teamsettings-sidebar-bottom {
     margin-top: auto;
 }
-.leave-team-button {
+
+.teamsettings-sidebar-leave-team-button {
     background-color: var(--darker-red);
     height: 40px;
     width: 100%;
@@ -74,6 +59,38 @@
     cursor: pointer;
 }
 
-.leave-team-button:hover {
-    background-color: var(--darker-red-hover);
+.unselected:hover {
+    background-color: var(--white-hover);
+}
+
+.teamsettings-sidebar-settings-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--lighter-text-color);
+}
+
+.teamsettings-sidebar-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--lighter-text-color);
+
+}
+
+.teamsettings-sidebar-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.teamsettings-sidebar-icon {
+    height: 30px;
+
+    fill: var(--lighter-text-color);
+}
+
+.teamsettings-sidebar-roles-icon {
+    height: 22px;
+
+    fill: var(--lighter-text-color);
+    margin-left: 5px;
 }
