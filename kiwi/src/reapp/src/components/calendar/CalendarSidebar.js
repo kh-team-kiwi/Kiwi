@@ -5,12 +5,15 @@ import { useTranslation } from 'react-i18next';
 import TimeIcon from '../../images/svg/buttons/TimeIcon';
 import EmptyCalendarIcon from '../../images/emptycalendar.png';
 
-import FilterIcon from '../../images/svg/buttons/FilterIcon'
-import SelectedIcon from '../../images/svg/buttons/SelectedIcon'
+import FilterIcon from '../../images/svg/buttons/FilterIcon';
+import SelectedIcon from '../../images/svg/buttons/SelectedIcon';
+
+import ThinUpArrow from '../../images/svg/shapes/ThinUpArrow';
 
 const CalendarSidebar = ({ events, selectedCalendar }) => {
   const { t, i18n } = useTranslation();
   const [filter, setFilter] = useState('all');
+  const [filtersVisible, setFiltersVisible] = useState(false);
 
   const upcomingEvents = events
     .map(event => ({
@@ -154,117 +157,119 @@ const CalendarSidebar = ({ events, selectedCalendar }) => {
 
   return (
     <div className="sidebar">
-      <div className='calendar-sidebar-top'>
-        <TimeIcon className='calendar-sidebar-time-icon' />
-        <div className='calendar-sidebar-title'>
-          {selectedCalendar === 'personal' ? t('personal-events') : t('team-events')}
+      <div className='calendar-sidebar-events'>
+        <div className='calendar-sidebar-top'>
+          <TimeIcon className='calendar-sidebar-time-icon' />
+          <div className='calendar-sidebar-title'>
+            {selectedCalendar === 'personal' ? t('personal-events') : t('team-events')}
+          </div>
         </div>
+
+        {getEventsToDisplay().length === 0 ? (
+          <div className="calendar-sidebar-no-events-container">
+            <img className='event-empty-icon img-enable-darkmode' src={EmptyCalendarIcon} alt='No events' />
+            <div className='event-empty-text'>
+              {t('no-events')}
+            </div>
+            <div className='event-empty-subtext'>
+              {t('no-events-explanation')}
+            </div>
+          </div>
+        ) : (
+          [...groupedEvents.keys()].map((day, index) => (
+            <div key={index}>
+              <div className="event-day-group">
+                <span className="day-label">{day}</span>
+                <span className="date-label"> {groupedEvents.get(day).dateString}</span>
+              </div>
+              <ul>
+                {groupedEvents.get(day).events.map((event, eventIndex) => (
+                  <li key={eventIndex} className="event-item" style={{ backgroundColor: `rgba(${parseInt(event.color.slice(1, 3), 16)}, ${parseInt(event.color.slice(3, 5), 16)}, ${parseInt(event.color.slice(5, 7), 16)}, 0.25)` }}>
+                    <div className="event-time-info">
+                      <div className="event-start-time">
+                        {formatTime(event.startDate)}
+                      </div>
+                      {event.startDate >= new Date() && (
+                        <div className="time-until-event">
+                          {getTimeUntilEvent(event.startDate)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="event-title-container">
+                      <div
+                        className="event-color-circle"
+                        style={{ backgroundColor: event.color }}
+                      ></div>
+                      <div className="event-title">{event.title}</div>
+                    </div>
+                    <div className="event-description-sidebar">
+                      {event.description}
+                    </div>
+                    {event.location && (
+                      <div className="event-location-container-sidebar">
+                        <svg className="event-location-icon bi bi-geo-alt-fill" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+                        </svg>
+                        <div className="event-location-sidebar">
+                          {event.location}
+                        </div>
+                      </div>
+                    )}
+                    <div className="event-duration">
+                      {formatDate(event.startDate)}{' '}
+                      {formatTime(event.startDate)}
+                      &nbsp; - &nbsp;
+                      {formatDate(event.startDate) === formatDate(event.endDate) ? (
+                        formatTime(event.endDate)
+                      ) : (
+                        <>
+                          {formatDate(event.endDate)}{' '}
+                          {formatTime(event.endDate)}
+                        </>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        )}
       </div>
 
-      {getEventsToDisplay().length === 0 ? (
-        <div className="calendar-sidebar-no-events-container">
-          <img className='event-empty-icon img-enable-darkmode' src={EmptyCalendarIcon} alt='No events' />
-          <div className='event-empty-text'>
-            {t('no-events')}
-          </div>
-          <div className='event-empty-subtext'>
-            {t('no-events-explanation')}
-          </div>
-        </div>
-      ) : (
-        [...groupedEvents.keys()].map((day, index) => (
-          <div key={index}>
-            <div className="event-day-group">
-              <span className="day-label">{day}</span>
-              <span className="date-label"> {groupedEvents.get(day).dateString}</span>
-            </div>
-            <ul>
-              {groupedEvents.get(day).events.map((event, eventIndex) => (
-                <li key={eventIndex} className="event-item" style={{ backgroundColor: `rgba(${parseInt(event.color.slice(1, 3), 16)}, ${parseInt(event.color.slice(3, 5), 16)}, ${parseInt(event.color.slice(5, 7), 16)}, 0.25)` }}>
-                  <div className="event-time-info">
-                    <div className="event-start-time">
-                      {formatTime(event.startDate)}
-                    </div>
-                    <div className="time-until-event">
-                      {getTimeUntilEvent(event.startDate)}
-                    </div>
-                  </div>
-                  <div className="event-title-container">
-                    <div
-                      className="event-color-circle"
-                      style={{ backgroundColor: event.color }}
-                    ></div>
-                    <div className="event-title">{event.title}</div>
-                  </div>
-                  <div className="event-description-sidebar">
-                    {event.description}
-                  </div>
-                  {event.location && (
-                    <div className="event-location-container-sidebar">
-                      <svg className="event-location-icon bi bi-geo-alt-fill" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-                      </svg>
-                      <div className="event-location-sidebar">
-                        {event.location}
-                      </div>
-                    </div>
-                  )}
-                  <div className="event-duration">
-                    {formatDate(event.startDate)}{' '}
-                    {formatTime(event.startDate)}
-                    &nbsp; - &nbsp;
-                    {formatDate(event.startDate) === formatDate(event.endDate) ? (
-                      formatTime(event.endDate)
-                    ) : (
-                      <>
-                        {formatDate(event.endDate)}{' '}
-                        {formatTime(event.endDate)}
-                      </>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      )}
-
       <div className="calendar-sidebar-filter-container">
-        <div className='calendar-sidebar-filter-header'>
+        <div
+          className='calendar-sidebar-filter-header'
+          onClick={() => setFiltersVisible(!filtersVisible)}
+        >
           <FilterIcon className='calendar-sidebar-filter-icon' />
           <div>
-          Event Filter
-
+            Event Filter
           </div>
+          <div className={`filter-arrow ${filtersVisible ? 'expanded' : 'collapsed'}`}><ThinUpArrow className='calendar-sidebar-arrow'/></div>
         </div>
-        <button
-          className={`filter-button ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
-        >
-          {/* {t('view-all-events')} */}
-          All events
-          {filter === 'all' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
-
-        </button>
-        <button
-          className={`filter-button ${filter === 'upcoming' ? 'active' : ''}`}
-          onClick={() => setFilter('upcoming')}
-          
-        >
-          {/* {t('upcoming-events')} */}
-          Upcoming events
-          {filter === 'upcoming' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
-
-        </button>
-        <button
-          className={`filter-button ${filter === 'finished' ? 'active' : ''}`}
-          onClick={() => setFilter('finished')}
-        >
-          {/* {t('finished-events')} */}
-          Finished events
-          {filter === 'finished' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
-
-        </button>
+        <div className={`filter-buttons-container ${filtersVisible ? 'active' : ''}`}>
+          <button
+            className={`filter-button ${filter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilter('all')}
+          >
+            All events
+            {filter === 'all' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
+          </button>
+          <button
+            className={`filter-button ${filter === 'upcoming' ? 'active' : ''}`}
+            onClick={() => setFilter('upcoming')}
+          >
+            Upcoming events
+            {filter === 'upcoming' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
+          </button>
+          <button
+            className={`filter-button ${filter === 'finished' ? 'active' : ''}`}
+            onClick={() => setFilter('finished')}
+          >
+            Finished events
+            {filter === 'finished' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
+          </button>
+        </div>
       </div>
     </div>
   );
