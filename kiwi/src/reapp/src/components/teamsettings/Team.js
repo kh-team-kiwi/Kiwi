@@ -81,6 +81,31 @@ const Team = () => {
         }
     }
 
+    const handleRole = () => {
+        try{
+
+        } catch (e) {
+            console.log("에러가 발생했습니다.")
+        }
+    }
+
+    const [ownerInput, setOwnerInput] = useState('');
+    const [searchList, setSearchList] = useState([]);
+
+    const handleOwnerInput = async () => {
+        try {
+            const res = await axiosHandler.post('/api/team/search/',{teamno:teamno,search:ownerInput});
+            if(res.data.result){
+
+            } else {
+                alert(res.data.message);
+            }
+        } catch (e) {
+            console.error(e)
+        }
+
+    }
+
     return (
         <div className='teamsettings-inner'>
             <div className='teamsettings-header'>팀 관리</div>
@@ -120,6 +145,18 @@ const Team = () => {
                         style={{display: 'none'}}
                         onChange={handleProfilePictureChange}
                     />
+                </div>
+            </div>
+            <div className='teamsettings-team-section'>
+                <div>권한 양도</div>
+                <div>
+                    <p>OWNER 권한을 양도합니다.</p>
+                    <input type='text' value={ownerInput} onChange={handleOwnerInput} className='team-owner-input' placeholder='이메일 입력'/>
+                    <ul>
+                        <li>
+                        </li>
+                    </ul>
+                    <button onClick={handleRole}>권한 양도하기</button>
                 </div>
             </div>
             <div className='teamsettings-team-section teamsettings-team-delete'>
