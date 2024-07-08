@@ -17,15 +17,9 @@
     border: 1px solid #888;
     width: 50%;
     max-width: 500px;
-    max-height: 400px;
+    max-height: 460px;
     text-align: center;
     border-radius: 15px;
-}
-
-.teamsettigs-invite-modal .close:hover,
-.teamsettigs-invite-modal .close:focus {
-    color: black;
-    text-decoration: none;
 }
 
 .teamsettigs-invite-modal input[type="text"] {
@@ -77,4 +71,10 @@
     padding: 5px;
     display: flex;
     margin-bottom: 5px;
+}
+
+.invite-modal-title {
+    font-size: 25px;
+    margin-bottom: 30px;
+    text-align: left;
 }

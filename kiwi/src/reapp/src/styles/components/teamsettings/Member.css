@@ -132,6 +132,7 @@
     margin-left: 3px;
     margin-bottom: 3px;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .teamsettings-table-filter-icon {
@@ -140,4 +141,34 @@
     margin-left: 3px;
     margin-bottom: 4px;
     vertical-align: middle;
+    cursor: pointer;
+}
+
+.role-hover-popup-title {
+    cursor: pointer;
+}
+
+.role-hover-popup {
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+.role-hover-popup-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    height: 20px;
+    margin: 10px 0;
+}
+
+.role-hover-popup-wrapper {
+    display: inline-block;
+}
+
+.role-hover-popup-wrapper:hover .role-hover-popup {
+    display: block;
 }

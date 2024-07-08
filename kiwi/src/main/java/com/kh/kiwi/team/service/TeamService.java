@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -27,10 +28,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -138,25 +136,6 @@ public class TeamService {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("데이트베이스 오류로 실패했습니다.");
-        }
-    }
-
-    @Transactional
-    public ResponseDto<?> updateMemberRole(String teamId, String memberId, String role) {
-        try {
-            GroupId groupId = new GroupId(memberId, teamId);
-            Optional<Group> groupOpt = groupRepository.findById(groupId);
-
-            if (groupOpt.isPresent()) {
-                Group group = groupOpt.get();
-                group.setRole(role);
-                groupRepository.save(group);
-                return ResponseDto.setSuccess("권한 변경에 성공했습니다.");
-            } else {
-                return ResponseDto.setFailed("존재하지 않는 팀원입니다.");
-            }
-        } catch (Exception e) {
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
         }
     }
 
@@ -283,7 +262,6 @@ public class TeamService {
 
     @Transactional
     public ResponseDto<?> inviteMember(TeamCreateRequest tcdto) {
-
         try{
             if(!teamRepository.existsById(tcdto.getTeamName())) return ResponseDto.setFailed("팀을 찾을 수 없습니다.");
             List<MemberDto> invitedMembers = tcdto.getInvitedMembers();
@@ -297,6 +275,26 @@ public class TeamService {
                 groupRepository.save(invite);
             });
             return ResponseDto.setSuccess("초대되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+        }
+    }
+
+    @Transactional
+    public ResponseDto<?> updateRole(List<TeamMemberDto> updateMembers, String teamno) {
+        try{
+            if(!teamRepository.existsById(teamno)) return ResponseDto.setFailed("팀을 찾을 수 없습니다.");
+            updateMembers.forEach(member -> {
+                Group update = Group.builder()
+                        .team(member.getTeam())
+                        .memberId(member.getMemberId())
+                        .role(member.getRole())
+                        .status(member.getStatus())
+                        .build();
+                groupRepository.save(update);
+            });
+            return ResponseDto.setSuccess("반영되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");

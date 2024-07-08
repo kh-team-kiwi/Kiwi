@@ -99,7 +99,6 @@ const Header = () => {
     try {
       const res = await axiosHandler.get(`/api/team/getRole/team/${teamno}/member/${memberId}`);
       if(res.status===200){
-        console.log(res)
         joinTeam(res.data);
       } else {
         console.log(res);
