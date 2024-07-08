@@ -9,6 +9,9 @@ import { getSessionItem, removeLocalItem, removeSessionItem, setSessionItem } fr
 import axiosHandler from "../../jwt/axiosHandler";
 import { useParams } from "react-router-dom";
 
+import { toast } from 'react-toastify';
+
+
 const AccountSettings = ({ isOpen, onClose }) => {
   const [name, setName] = useState(getSessionItem('profile').name);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -61,15 +64,16 @@ const AccountSettings = ({ isOpen, onClose }) => {
       const res = await axiosHandler.post('/api/auth/update/account', formData,
         { headers: { 'Content-Type': 'multipart/form-data' } });
       if (res.data.result) {
-        alert("프로필이 변경되었습니다.");
+        toast.success('Changes have been saved!');
         setSessionItem('profile', res.data.data);
         window.location.reload();
       } else {
-        alert(res.data.message);
+        toast.error('An error has occurred.');
       }
     } catch (e) {
       console.error(e);
-      alert("프로필 변경을 실패했습니다.");
+      toast.error('An error has occurred.');
+
     }
   };
 
@@ -95,11 +99,11 @@ const AccountSettings = ({ isOpen, onClose }) => {
 
   const updatePassword = async () => {
     if (!passwordCheck.isValid) {
-      alert("Invalid password. Ensure it meets all requirements.");
+      toast.error("Invalid password. Ensure it meets all requirements.");
       return;
     }
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
+      toast.error("Passwords do not match.");
       return;
     }
 
@@ -109,14 +113,18 @@ const AccountSettings = ({ isOpen, onClose }) => {
       const newPw = newPassword;
       const res = await axiosHandler.post('/api/auth/update/password', { memberId, currentPw, newPw });
       if (res.data.result) {
-        alert(res.data.message);
-        window.location.reload();
+        setIsPasswordSectionExpanded(false);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        toast.success("Your password has been updated");
+
       } else {
-        alert(res.data.message);
       }
     } catch (e) {
       console.error(e);
-      alert("비밀번호 변경을 실패했습니다.");
+      toast.error('An error has occurred.');
+
     }
   };
 
@@ -126,7 +134,6 @@ const AccountSettings = ({ isOpen, onClose }) => {
       const password = currentPassword;
       const res = await axiosHandler.post('/api/auth/delete/account', { memberId, password });
       if (res.data.result) {
-        alert(res.data.message);
         setSessionItem('profile', res.data.data);
         removeLocalItem("accessToken");
         removeSessionItem("profile");
@@ -134,11 +141,11 @@ const AccountSettings = ({ isOpen, onClose }) => {
         removeSessionItem("events");
         window.location.replace("/");
       } else {
-        alert(res.data.message);
+        toast.error('An error has occurred.');
       }
     } catch (e) {
       console.error(e);
-      alert("회원 탈퇴를 실패했습니다.");
+      toast.error('An error has occurred.');
     }
   };
 

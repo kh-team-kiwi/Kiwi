@@ -419,7 +419,7 @@
 }
 
 .header-team-details.selected {
-    background-color: var(--light-green-darkmode);
+    background-color: var(--light-blue-darkmode);
   }
 
 .header-tick-icon {

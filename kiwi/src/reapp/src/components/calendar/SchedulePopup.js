@@ -5,6 +5,8 @@ import { getSessionItem } from "../../jwt/storage";
 import { useLocation } from "react-router-dom";
 import axiosHandler from "../../jwt/axiosHandler";
 import PlusIcon from '../../images/svg/shapes/PlusIcon';
+import { toast } from 'react-toastify';
+
 
 const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
   const { t } = useTranslation();
@@ -137,8 +139,12 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
 
   const handleAddEvent = () => {
     if (!newEvent.title.trim()) {
+      toast.error("Please enter a title");
+
       return;
     }
+    toast.success("Event added successfully!");
+
     addSchedule(); // database save
     closePopup();
   };
@@ -153,7 +159,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
           [data.calendar]: [...prevEvents[data.calendar], data]
         }));
       } else {
-        alert("서버 저장에 실패했습니다.");
+
       }
     } catch (error) {
       console.error("Failed to addSchedule:", error);
@@ -318,6 +324,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
           </div>
         </div>
       )}
+
     </>
   );
 };

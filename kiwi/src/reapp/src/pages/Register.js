@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import backgroundImage from '../images/background.png'; 
 
+import { toast } from 'react-toastify';
+
 import ToggleLanguageButton from '../components/common/ToggleLanguageButton';
 import Logo from '../components/common/Logo';
 
@@ -213,11 +215,11 @@ const Register = () => {
             .then((res) => {
                 if (res.data.result) {
                     console.log('회원가입 성공:', res.data);
-                    alert(res.data.message);
+                    toast.success('Welcome to Kiwi!');
                     navigate('/',{replace:true});
                 } else {
                     console.error('회원가입 실패:', res.data);
-                    alert(res.data.message)
+                    toast.success('Registration Failed')
                 }
             }).catch((err) => {
                 console.error("회원가입 실패:", err);

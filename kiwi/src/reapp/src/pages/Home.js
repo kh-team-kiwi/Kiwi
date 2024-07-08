@@ -29,7 +29,6 @@ import NotificationIcon from '../images/svg/account/NotificationIcon';
 import SettingsIcon from '../images/svg/buttons/SettingsIcon';
 import HelpIcon from '../images/svg/buttons/HelpIcon';
 import LogoutIcon from '../images/svg/buttons/LogoutIcon';
-import ToastMessage from "../components/toast/ToastMessage";
 
 const Home = () => {
     const [isImageLoaded, setImageLoaded] = useState(false); 
@@ -254,7 +253,6 @@ const Home = () => {
                     <CreateTeam onCreateTeam={handleCreateTeam} toggleTeamView={toggleTeamView} />
                 </div>
             )}
-            <ToastMessage />
         </div>
     ) : (
         <div></div> 

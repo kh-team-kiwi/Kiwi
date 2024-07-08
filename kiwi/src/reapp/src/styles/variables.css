@@ -1,5 +1,8 @@
 :root {
-  --header-background-color: #e8f6f7;
+  --header-background-color: #e5f8fa;
+  /* --header-background-color: #e7f8fa; */
+
+
   --page-icon: #8ab290;
   --page-icon-active: #55755b;
   --secondary: #bfbb9e;
@@ -24,7 +27,7 @@
   --white-hover2: rgb(247, 247, 247);
   --darker-white-hover: rgb(216, 216, 216);
 
-  --light-blue: #eaeff3;
+  --light-blue: #e3f3fd;
 
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
@@ -39,7 +42,7 @@
   --settings-selected: black;
 
   --toggle-background:#e5ebe8;
-  --light-green-darkmode: #e9f7e3;
+  --light-blue-darkmode: #e3f7f6;
 
   --transparent-white: rgba(255, 255, 255, 0.7);
 
@@ -116,6 +119,9 @@
   --secondary-active: #9b9881;
 
   --sidebar-selected:rgb(141, 141, 141);
+
+  --light-blue-darkmode: #798686;
+
 
   .img-enable-darkmode {
     filter: brightness(70%);

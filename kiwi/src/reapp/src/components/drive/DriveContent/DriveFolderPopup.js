@@ -3,6 +3,9 @@ import '../../../styles/components/drive/DriveFolderPopup.css';
 import { useParams } from "react-router-dom";
 import CreateFolderIcon from '../../../images/svg/buttons/CreateFolderIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
+import { toast } from 'react-toastify';
+
+
 
 const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, parentPath }) => {
     const { teamno } = useParams();
@@ -13,7 +16,8 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (folderName.trim() === '') {
-            setMessage('Folder name cannot be empty');
+            toast.error("Please enter a folder name");
+
             return;
         }
 
@@ -85,7 +89,6 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
                                 value={folderName}
                                 onChange={(e) => setFolderName(e.target.value)}
                             />
-                            {message && <div className="drive-folder-popup-error">{message}</div>}
                             <div className='drive-folder-popup-bottom'>
                                 <button type="button" className="drive-folder-popup-cancel-button" onClick={closePopup}>Cancel</button>
                                 <button type="submit" className="drive-folder-popup-create-button">Create</button>

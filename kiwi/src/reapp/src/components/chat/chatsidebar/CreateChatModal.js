@@ -5,6 +5,9 @@ import ErrorImageHandler from "../../common/ErrorImageHandler";
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
 
+import { toast } from 'react-toastify';
+
+
 const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     const [profile, setProfile] = useState(null);
     const [chatName, setChatName] = useState('');
@@ -71,6 +74,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
     const handleSave = async () => {
         if (!profile || !chatName.trim()) {
+            toast.error('Please enter a chat name')
             console.error('Invalid profile or chat name');
             return;
         }
@@ -85,6 +89,8 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
         };
 
         onSave(chatData);
+        toast.success('Chat created successfully!')
+
         onClose();
     };
 
@@ -187,7 +193,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                 </div>
                 <div className="create-chat-modal-bottom">
                     <button className="create-chat-cancel-button" onClick={onClose}>Cancel</button>
-                    <button className="create-chat-create-button" onClick={handleSave} disabled={!chatName.trim()}>Create</button>
+                    <button className="create-chat-create-button" onClick={handleSave} >Create</button>
                 </div>
             </div>
         </div>
