@@ -281,4 +281,25 @@ public class TeamService {
         return ResponseDto.setSuccess("성공적으로 프로필을 저장했습니다.");
     }
 
+    @Transactional
+    public ResponseDto<?> inviteMember(TeamCreateRequest tcdto) {
+
+        try{
+            if(!teamRepository.existsById(tcdto.getTeamName())) return ResponseDto.setFailed("팀을 찾을 수 없습니다.");
+            List<MemberDto> invitedMembers = tcdto.getInvitedMembers();
+            invitedMembers.forEach(member -> {
+                Group invite = Group.builder()
+                        .team(tcdto.getTeamName())
+                        .memberId(member.getUsername())
+                        .role("MEMBER")
+                        .status("JOINED")
+                        .build();
+                groupRepository.save(invite);
+            });
+            return ResponseDto.setSuccess("초대되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+        }
+    }
 }
