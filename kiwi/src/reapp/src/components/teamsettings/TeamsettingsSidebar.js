@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import '../../styles/components/teamsettings/TeamsettingsSidebar.css';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import SettingsIcon from '../../images/svg/buttons/SettingsIcon';
 
 import { TeamContext } from "../../context/TeamContext";
@@ -10,12 +10,27 @@ import { toast } from 'react-toastify';
 import TeamSettingsIcon from '../../images/svg/buttons/TeamSettingsIcon';
 import ManageRolesIcon from '../../images/svg/buttons/ManageRolesIcon';
 
-
 const SideMenuBar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { teamno } = useParams();
     const { role } = useContext(TeamContext);
-    const [selectedItem, setSelectedItem] = useState('');
+    const [selectedItem, setSelectedItem] = useState('user');
+
+    useEffect(() => {
+        if (location.pathname.includes('settings/user')) {
+            setSelectedItem('user');
+        } else if (location.pathname.includes('settings/team')) {
+            setSelectedItem('team');
+        }
+    }, [location.pathname]);
+
+    useEffect(() => {
+        // Navigate to user settings by default when the page loads
+        if (location.pathname === `/team/${teamno}/settings`) {
+            navigate(`/team/${teamno}/settings/user`);
+        }
+    }, [teamno, location.pathname, navigate]);
 
     const handleOnClick = (item) => {
         setSelectedItem(item);
@@ -53,7 +68,6 @@ const SideMenuBar = () => {
             </div>
             <div className={`teamsettings-sidebar-item ${selectedItem === 'team' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('team')}>
                 <TeamSettingsIcon className='teamsettings-sidebar-icon' />
-
                 <div>Team Settings</div>
             </div>
             <div className='teamsettings-sidebar-bottom'>
