@@ -404,7 +404,7 @@ const Member = () => {
                         <div className='teamsettings-user-blocked-toggle' 
                             onClick={() => setDisplayMemberStatus(displayMemberStatus === 'joined' ? 'exiled' : 'joined')}
                         >
-                            {displayMemberStatus === 'joined' ? 'View Blocked Users' : 'View Joined Users'}
+                            {displayMemberStatus === 'joined' ? 'Blocked Users' : 'Joined Users'}
                         </div>
                         {isSearchInput && (
                             <span className='search-results-count'>{filteredItemCount} results</span>
