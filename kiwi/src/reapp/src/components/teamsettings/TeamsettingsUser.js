@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import '../../styles/components/teamsettings/TeamsettingsUser.css';
 import ErrorImageHandler from "../common/ErrorImageHandler";
 import axiosHandler from "../../jwt/axiosHandler";
 import { useParams } from "react-router-dom";
 import InviteMember from "./InviteMember";
 import ManageMember from "./ManageMember";
+import {TeamContext} from "../../context/TeamContext";
 
 import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
@@ -16,6 +17,7 @@ import { toast } from 'react-toastify';
 
 const Member = () => {
     const { teamno } = useParams();
+    const { role } = useContext(TeamContext);
 
     const [members, setMembers] = useState([]);
     const [joinedMembers, setJoinedMembers] = useState([]);
@@ -367,7 +369,7 @@ const Member = () => {
                         </div>
                             {checkedMembers.length > 0 && (
                                 <div className='teamsettings-user-selected-container'>
-                                    <div>{checkedMembers.length} members selected</div>
+                                    <div>{checkedMembers.length} users selected</div>
 
                                     <div className='teamsettings-user-manage-button' type='button' onClick={openManageModal}>Manage</div>
                                 </div>
@@ -437,8 +439,10 @@ const Member = () => {
                                 <div className={`teamsettings-user-list-item ${idx % 2 === 0 ? 'odd-column' : ''}`} key={idx}>
                                     <div className='teamsettings-user-header-left'>
                                         
-                                        <div className='teamsettings-user-list-item-checkbox'>
-                                            <input className='teamsettings-team-checkbox' type='checkbox' onClick={(e) => checkHandle(e, member)}/>
+                                    <div className='teamsettings-user-list-item-checkbox'>
+                                            {role === 'OWNER' || (role === 'ADMIN' && member.role === 'MEMBER') ? (
+                                                <input className='teamsettings-team-checkbox' type='checkbox' onClick={(e) => checkHandle(e, member)}/>
+                                            ) : <div  style={{ width: '20px' }}/>}
                                         </div>
                                         <div className='teamsettings-user-list-item-photo'>
                                             <img className='teamsettings-team-member-profile' src={member.memberFilepath} alt='' onError={ErrorImageHandler}></img>
@@ -456,10 +460,11 @@ const Member = () => {
                                     </div>
                                     {displayMemberStatus === 'joined' && (
                                     <div className='teamsettings-user-header-right'>
-                                            <div className='teamsettings-user-list-item-role'>
-                                                {member.role === 'OWNER' ? (
-                                                    <span></span>
-                                                ) : (
+                                        <div className='teamsettings-user-list-item-role'>
+                                            {member.role === 'OWNER' ? (
+                                                <span></span>
+                                            ) : (
+                                                role === 'OWNER' && (
                                                     <select className='teamsettings-user-role-dropdown'
                                                         value={member.role}
                                                         onChange={(e) => handleRoleChange(member, e.target.value)}
@@ -467,13 +472,17 @@ const Member = () => {
                                                         <option value='MEMBER'>MEMBER</option>
                                                         <option value='ADMIN'>ADMIN</option>
                                                     </select>
-                                                )}
-                                            </div>
-                                        <div className='teamsettings-user-list-item-options'>
-                                            {/* {member.role === 'MEMBER' && <button onClick={() => promoteToAdmin(member)}>Promote to Admin</button>}
-                                            {member.role === 'ADMIN' && <button onClick={() => changeToMember(member)}>Change to Member</button>} */}
-                                            {!(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => exileMember(member)}>Kick </div>)} 
+                                                )
+                                            )}
                                         </div>
+                                        <div className='teamsettings-user-list-item-options'>
+                                            {role === 'OWNER' ? (
+                                                !(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => exileMember(member)}>Kick</div>)
+                                            ) : (
+                                                role === 'ADMIN' && member.role === 'MEMBER' && (<div className='teamsettings-user-kick-button' onClick={() => exileMember(member)}>Kick</div>)
+                                            )}
+                                        </div>
+
                                     </div>)}
                                 </div>
                             ))
