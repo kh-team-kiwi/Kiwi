@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import '../../styles/components/common/SideMenuBar.css';
+import '../../styles/components/teamsettings/TeamsettingsSidebar.css';
 import { useNavigate, useParams } from "react-router-dom";
 import SettingsIcon from '../../images/svg/buttons/SettingsIcon';
 

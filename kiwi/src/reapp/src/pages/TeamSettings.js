@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/pages/Page.css';
 import '../styles/pages/TeamSettings.css'
-import SideMenuBar from "../components/common/TeamsettingsSidebar";
+import SideMenuBar from "../components/teamsettings/TeamsettingsSidebar";
 import {Outlet} from "react-router-dom";
 
 const TeamSettings = () => {

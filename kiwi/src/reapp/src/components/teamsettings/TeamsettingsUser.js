@@ -9,6 +9,8 @@ import ManageMember from "./ManageMember";
 import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
 
+import PlusIcon from '../../images/svg/shapes/PlusIcon';
+
 import { toast } from 'react-toastify';
 
 
@@ -24,7 +26,7 @@ const Member = () => {
     const [displayMemberStatus, setDisplayMemberStatus] = useState('joined'); // joined,invited,exiled
     const [displaySearchType, setDisplaySearchType] = useState('name'); // name,email
     const [isSearchInput, setIsSearchInput] = useState('');
-    const [displayCount, setDisplayCount] = useState(10); // 10,20,50
+    const [displayCount, setDisplayCount] = useState(20); // 10,20,50
 
     const [checkedMembers, setCheckedMembers] = useState([]);
     const [displaySort, setDisplaySort] = useState(true); // true : asc / false : desc
@@ -37,6 +39,9 @@ const Member = () => {
 
     const [filteredItemCount, setFilteredItemCount] = useState(0);
     const [sortConfig, setSortConfig] = useState({ key: 'memberNickname', direction: 'ascending' });
+
+    const [isRolePopupOpen, setIsRolePopupOpen] = useState(false);
+
 
     useEffect(() => {
         fetchTeamData();
@@ -205,7 +210,7 @@ const Member = () => {
     };
 
     const allCheckHandler = (e) => {
-        const checkboxes = document.querySelectorAll('.teamsetings-team-checkbox');
+        const checkboxes = document.querySelectorAll('.teamsettings-team-checkbox');
         checkboxes.forEach(item => {
             item.checked = e.target.checked;
         });
@@ -351,13 +356,51 @@ const Member = () => {
             <div className='teamsettings-user-table-header'>
                 <div className='teamsettings-user-table-header-top'>
                     <div className='teamsettings-user-header-left'>
+                        <div className='teamsettings-user-invite-button' onClick={openInviteModal}> <PlusIcon className='teamsettings-user-plus-icon' /> Invite </div>
+
                         <div className='teamsettings-user-title'>
                             {displayMemberStatus === 'joined' ? 'Joined Users' : 'Blocked Users'}
+                            &nbsp;
+                            - 
+                            &nbsp;
+                            {displayMemberStatus === 'joined' ? joinedMembers.length : exiledMembers.length}
                         </div>
+                            {checkedMembers.length > 0 && (
+                                <div className='teamsettings-user-selected-container'>
+                                    <span>{checkedMembers.length} members selected</span>
+
+                                    <div className='teamsettings-user-manage-button' type='button' onClick={openManageModal}>Manage</div>
+                                </div>
+                            )}
 
                     </div>
 
                     <div className='teamsettings-user-header-right'>
+                    <span className='teamsettings-user-role-hover-popup-wrapper' onClick={() => setIsRolePopupOpen(!isRolePopupOpen)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='teamsettings-user-table-filter-icon'>
+                            <path
+                                d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z"/>
+                        </svg>
+                        <span className='teamsettings-user-role-hover-popup-title'>Filter Roles</span>
+
+                        {isRolePopupOpen && (
+                            <ul className='teamsettings-user-role-hover-popup'>
+                                <li className='teamsettings-user-role-hover-popup-item'>
+                                    <span>Member</span>
+                                    <input checked={memberCheck} type='checkbox' name='MEMBER' onChange={displayRoleHandle}/>
+                                </li>
+                                <li className='teamsettings-user-role-hover-popup-item'>
+                                    <span>Admin</span>
+                                    <input checked={adminCheck} type='checkbox' name='ADMIN' onChange={displayRoleHandle}/>
+                                </li>
+                                <li className='teamsettings-user-role-hover-popup-item'>
+                                    <span>Owner</span>
+                                    <input checked={ownerCheck} type='checkbox' name='OWNER' onChange={displayRoleHandle}/>
+                                </li>
+                            </ul>
+                        )}
+                    </span>
+
                         <div className='teamsettings-user-blocked-toggle' 
                             onClick={() => setDisplayMemberStatus(displayMemberStatus === 'joined' ? 'exiled' : 'joined')}
                         >
@@ -379,17 +422,15 @@ const Member = () => {
 
                 </div>
                 <div className='teamsettings-user-table-header-bottom'>
-                    <div className='heder-bottom-btn-box'>
-                        <button type='button' onClick={openInviteModal}>멤버 초대</button>
-                        <button type='button' onClick={openManageModal}>멤버 관리</button>
+                    <div className='header-bottom-btn-box'>
                     </div>
-                    <div>
+                    {/* <div>
                         <select value={displayCount} onChange={selectCountHandle}>
                             <option value={10}>10 명씩 보기</option>
                             <option value={20}>20 명씩 보기</option>
                             <option value={50}>50 명씩 보기</option>
                         </select>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className='teamsettings-user-table-wrapper'>
@@ -398,27 +439,7 @@ const Member = () => {
                     <span className='teamsettings-user-username-column'  onClick={() => handleSort('memberNickname')} style={{cursor: 'pointer'}}>
                         Username {(sortConfig.direction === 'ascending' ? '↑' : '↓')}
                     </span>
-                    <span className='role-hover-popup-wrapper'>
-                        <span className='role-hover-popup-title'>권한</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='teamsettings-table-filter-icon'>
-                            <path
-                                d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z"/>
-                        </svg>
-                        <ul className='role-hover-popup'>
-                            <li className='role-hover-popup-item'>
-                                <span>MEMBER</span>
-                                <input checked={memberCheck} type='checkbox' name='MEMBER' onChange={displayRoleHandle}/>
-                            </li>
-                            <li className='role-hover-popup-item'>
-                                <span>ADMIN</span>
-                                <input checked={adminCheck} type='checkbox' name='ADMIN' onChange={displayRoleHandle}/>
-                            </li>
-                            <li className='role-hover-popup-item'>
-                                <span>OWNER</span>
-                                <input checked={ownerCheck} type='checkbox' name='OWNER' onChange={displayRoleHandle}/>
-                            </li>
-                        </ul>
-                    </span>
+
                 </div>
                 <div className='teamsettings-user-list'>
                     <div className='teamsettings-user-list-body'>
@@ -426,24 +447,31 @@ const Member = () => {
                             displayMembers.map((member, idx) => (
                                 <div className={`teamsettings-user-list-item ${idx % 2 === 0 ? 'odd-column' : ''}`} key={idx}>
                                     <div className='teamsettings-user-header-left'>
+                                        
                                         <div className='teamsettings-user-list-item-checkbox'>
-                                            <input className='teamsetings-team-checkbox' type='checkbox' onClick={(e) => checkHandle(e, member)}/>
+                                            <input className='teamsettings-team-checkbox' type='checkbox' onClick={(e) => checkHandle(e, member)}/>
                                         </div>
                                         <div className='teamsettings-user-list-item-photo'>
-                                            <img className='teamsettigs-team-member-profile' src={member.memberFilepath} alt='' onError={ErrorImageHandler}></img>
+                                            <img className='teamsettings-team-member-profile' src={member.memberFilepath} alt='' onError={ErrorImageHandler}></img>
                                         </div>
                                         <div className='teamsettings-user-list-item-username'>
-                                            <span className='teamsettings-user-username-text'>{highlightText(member.memberNickname, isSearchInput)}</span><br/>
-                                            <span className='teamsettings-user-email-text'>{highlightText(member.memberId, isSearchInput)}</span>
+                                            <div className='teamsettings-user-username-text'>
+                                                {highlightText(member.memberNickname, isSearchInput)}
+                                                <div className={`role-tag ${member.role.toLowerCase()}`}>{member.role.toLowerCase()}</div>
+
+                                            </div>
+                                            <div className='teamsettings-user-email-text'>
+                                                {highlightText(member.memberId, isSearchInput)}
+                                            </div>
                                         </div>
                                     </div>
                                     {displayMemberStatus === 'joined' && (
                                     <div className='teamsettings-user-header-right'>
                                             <div className='teamsettings-user-list-item-role'>
                                                 {member.role === 'OWNER' ? (
-                                                    <span>OWNER</span>
+                                                    <span></span>
                                                 ) : (
-                                                    <select
+                                                    <select className='teamsettings-user-role-dropdown'
                                                         value={member.role}
                                                         onChange={(e) => handleRoleChange(member, e.target.value)}
                                                     >
@@ -455,7 +483,7 @@ const Member = () => {
                                         <div className='teamsettings-user-list-item-options'>
                                             {/* {member.role === 'MEMBER' && <button onClick={() => promoteToAdmin(member)}>Promote to Admin</button>}
                                             {member.role === 'ADMIN' && <button onClick={() => changeToMember(member)}>Change to Member</button>} */}
-                                            {!(member.role === 'OWNER') && (<button onClick={() => exileMember(member)}>Kick Member</button>)} 
+                                            {!(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => exileMember(member)}>Kick </div>)} 
                                         </div>
                                     </div>)}
                                 </div>
@@ -485,8 +513,8 @@ const Member = () => {
                     </svg>
                 </button>
             </div>
-
             <InviteMember setIsModalOpen={setIsInviteModalOpen} isModalOpen={isInviteModalOpen} joinedMembers={joinedMembers} />
+
             <ManageMember setIsModalOpen={setIsManageModalOpen} isModalOpen={isManageModalOpen} checkedMembers={checkedMembers} />
         </div>
     );

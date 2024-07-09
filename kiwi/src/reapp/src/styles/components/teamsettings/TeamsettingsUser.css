@@ -80,6 +80,10 @@
     text-align: left;
 }
 
+/* .teamsettings-user-list-item-username {
+    display: flex;
+} */
+
 .teamsettings-user-list-item.odd-column {
   background-color: var(--settings-gray-filed);
 }
@@ -96,10 +100,12 @@
     vertical-align: middle;
 }
 
-.teamsettigs-team-member-profile {
+.teamsettings-team-member-profile {
     width: 40px;
     height: 40px;
     border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
 }
 
 .teamsettings-user-footer {
@@ -141,7 +147,7 @@
 }
 
 .team-paging-num.current {
-    color: var(--page-green);
+    color: var(--lighter-text-color);
     font-weight: bold;
 }
 
@@ -255,6 +261,7 @@
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .teamsettings-user-username-sort {
@@ -272,9 +279,184 @@
     text-align: left;
     color: var(--lighter-text-color);
     margin-left: 10px;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .teamsettings-user-username-text {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.teamsettings-user-kick-button {
+    background-color: var(--red);
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+
+}
+
+.teamsettings-user-role-dropdown {
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    outline: none;
+    background-color: var(--white);
+    color: var(--lighter-text-color);
+    border-radius: 5px;
+    font-weight: 600;
+    margin-right: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+.teamsettings-user-role-dropdown > option {
+    font-size: 600;
+    color: var(--lighter-text-color);
+    font-size: 16px;
+}
+
+
+
+.teamsettings-user-owner-tag {
+    font-weight: 600;
+    margin-right: 40px;
+}
+
+.role-tag {
+    margin-left: 10px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+
+}
+
+.role-tag.member {
+    background-color: rgb(61, 175, 76);
+}
+
+.role-tag.admin {
+    background-color: rgb(44, 121, 236);
+}
+
+.role-tag.owner {
+    background-color: rgb(252, 84, 84);
+}
+
+.teamsettings-user-role-hover-popup-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+}
+
+.teamsettings-user-role-hover-popup-title {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.teamsettings-user-table-filter-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.teamsettings-user-role-hover-popup {
+    display: flex;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    list-style: none;
+    margin: 0;
+    top: 130%;
+    left: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+
+    flex-direction: column;
+}
+
+.teamsettings-user-role-hover-popup-item {
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.teamsettings-user-role-hover-popup-item span {
+    margin-right: 10px;
+}
+
+.teamsettings-user-invite-button {
+    font-size: 20px;
+    background-color: var(--white);
+    padding: 10px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    color: var(--lighter-text-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.teamsettings-user-invite-button:hover {
+    background-color: var(--white-hover);
+}
+
+.teamsettings-user-plus-icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--lighter-text-color);
+}
+
+.teamsettings-user-selected-container {
+    background-color: var(--light-blue);
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 18px;
+    display: flex;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--lighter-text-color);
+    align-items: center;
+    margin-left: 10px;
+}
+
+.teamsettings-user-manage-button {
+    font-size: 16px;
+    background-color: var(--white);
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: 0.2s;
+    
+}
+
+.teamsettings-user-manage-button:hover {
+    background-color: var(--white-hover);
+
 }
