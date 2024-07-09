@@ -154,7 +154,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       }));
       setInputMember('');
     } else if(res.status === 200 && !res.data.result) {
-      toast.success(res.data.message);
+      toast.error(res.data.message);
     } else {
       toast.error("오류가 발생했습니다.");
     }
