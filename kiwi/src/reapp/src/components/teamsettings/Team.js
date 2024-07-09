@@ -8,6 +8,11 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import ErrorImageHandler from "../common/ErrorImageHandler";
 
+const Loading = () => {
+    return <div>Loading...</div>;
+};
+
+
 const Team = () => {
     const location = useLocation();
     const [name, setName] = useState('');
@@ -100,13 +105,20 @@ const Team = () => {
     const [searchList, setSearchList] = useState([]);
     const [searchSelect, setSearchSelect] = useState('');
     const [isOwnerBtn, setIsOwnerBtn] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if(role!=='OWNER'){
+        if(role!==null){
+            setLoading(false);
+        }
+    }, [role]);
+
+    useEffect(() => {
+        if(loading===false&&role!=='OWNER'){
             alert('권한이 없습니다.');
             navigate('/team/'+teamno+'/settings');
         }
-    }, []);
+    }, [loading, role]);
 
     useEffect(() => {
         if(searchSelect==='') {
@@ -135,6 +147,11 @@ const Team = () => {
         setOwnerInput('');
         setSearchList([]);
     }
+
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
         <div className='teamsettings-inner'>
             <div className='teamsettings-header'>팀 관리</div>

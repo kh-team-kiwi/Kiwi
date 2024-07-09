@@ -15,11 +15,11 @@ axiosHandler.interceptors.request.use(
             accessToken = accessToken.replace(/"/g, '');
         }
         const jwt = `Bearer ${accessToken}`;
-        console.log("interceptors : add access");
         if (jwt) {
             // 요청을 보내기 전에 Authorization 헤더에 토큰 추가
             config.headers.Authorization = jwt;
         }
+        console.log("interceptors : add access token");
         return config;
     },
     error => {
@@ -38,12 +38,11 @@ axiosHandler.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            console.log('Token expired and Token rerotate');
             originalRequest._retry = true;
-
             try {
                 const response = await axios.post('/api/auth/reissue', { withCredentials: true });
                 const accessToken = response.headers['access'];
-                console.log('axiosHandler.interceptors.response : ' + accessToken);
 
                 if (accessToken) {
                     setLocalItem('accessToken', accessToken);
@@ -51,16 +50,16 @@ axiosHandler.interceptors.response.use(
                     originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                     return axiosHandler(originalRequest);
                 } else {
-                    console.error('Access Token not found in response headers');
+                    console.error('Token rerotate failed. Access Token not found in response headers');
                     alert('서버와 통신에서 에러가 발생했습니다. 다시 로그인해 주세요.');
                     removeLocalItem('accessToken');
                     removeSessionItem('profile');
                     window.location.replace('/');
-                    return Promise.reject(new Error('Access Token not found'));
+                    return Promise.reject(new Error('Token rerotate failed. Access Token not found'));
                 }
             } catch (error) {
                 if (error.response && error.response.status === 400) {
-                    console.error('Refresh Token is invalid');
+                    console.error('Token rerotate failed. Refresh Token is invalid');
                     alert('토큰이 만료 되었습니다. 다시 로그인해 주세요.');
                     removeLocalItem('accessToken');
                     removeSessionItem('profile');

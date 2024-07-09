@@ -301,7 +301,7 @@ const Header = () => {
       <div className='header-team-container-wrapper'>
         <div className={`header-team-container ${teamDropdown ? 'active' : ''}`} ref={teamDropdownRef}>
           <div className='header-selected-team-details' onClick={toggleTeamDropdown} ref={teamButtonRef}>
-            <img className='header-selected-team-profile-image' src={selectedTeam.teamFilepath || defaultImage}  alt={''} onError={ErrorImageHandler}/>
+            <img className='header-selected-team-profile-image' src={selectedTeam.teamFilepath===null ? '':selectedTeam.teamFilepath}  alt={''} onError={ErrorImageHandler}/>
             <div className='header-selected-team-name'>
               {selectedTeam.teamName}
             </div>
@@ -321,7 +321,7 @@ const Header = () => {
                     key={team.team}
                     onClick={() => handleTeamClick(team)}
                   >
-                    <img className='header-team-profile-image' src={team.teamFilepath || defaultImage} alt={''} onError={ErrorImageHandler} />
+                    <img className='header-team-profile-image' src={team.teamFilepath===null ? '':team.teamFilepath} alt={''} onError={ErrorImageHandler} />
                     <div className='header-team-name'>
                       {team.teamName}
                     </div>
