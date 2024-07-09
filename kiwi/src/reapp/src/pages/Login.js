@@ -160,15 +160,15 @@ const Login = () => {
                         placeholder={t('password')}
                     />
                 </div>
-                <div className="forgot">
-                    <Trans
-                    i18nKey="forgot"
-                    components={{
-                        username: <Link className="forgot-link" to="#" title="Username" />,
-                        password: <Link className="forgot-link" to="#" title="Password" />
-                    }}
-                    />         
-                </div>
+                {/*<div className="forgot">*/}
+                {/*    <Trans*/}
+                {/*    i18nKey="forgot"*/}
+                {/*    components={{*/}
+                {/*        username: <Link className="forgot-link" to="#" title="Username" />,*/}
+                {/*        password: <Link className="forgot-link" to="#" title="Password" />*/}
+                {/*    }}*/}
+                {/*    />         */}
+                {/*</div>*/}
                 <button type="submit" className="login-button">{t('login')}</button>
             </form>
             <div className='login-divider'>
@@ -183,9 +183,9 @@ const Login = () => {
                 <button className='social-media-container'>
                     <img className='social-media-icon' src={googleImage} onClick={googleLogin} alt='Google'/>
                 </button>
-                <button className='social-media-container'>
-                    <img className='social-media-icon' src={kakaoImage} onClick={kakaoLogin} alt='Kakao'/>
-                </button>
+                {/*<button className='social-media-container'>*/}
+                {/*    <img className='social-media-icon' src={kakaoImage} onClick={kakaoLogin} alt='Kakao'/>*/}
+                {/*</button>*/}
                 <button className='social-media-container'>
                     <img className='social-media-icon' src={naverImage} onClick={naverLogin} alt='Naver'/>
                 </button>

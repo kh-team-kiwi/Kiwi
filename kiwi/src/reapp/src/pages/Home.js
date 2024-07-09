@@ -178,10 +178,10 @@ const Home = () => {
                 {userDropdown && (
                     <>
                         <div className='home-user-dropdown'>
-                            <div>
-                                <NotificationIcon className='home-user-dropdown-icon' />
-                                {t('notifications')}
-                            </div>
+                            {/*<div>*/}
+                            {/*    <NotificationIcon className='home-user-dropdown-icon' />*/}
+                            {/*    {t('notifications')}*/}
+                            {/*</div>*/}
                             <div className='home-user-dropdown-settings' onClick={openAccountSettings}>
                                 <SettingsIcon className='home-user-dropdown-icon' />
                                 {t('account-settings')}
@@ -216,7 +216,7 @@ const Home = () => {
                     <div className="home-team-list">
                         {teams.map(team => (
                             <div key={team.team} className="team-item">
-                                <img className='home-team-image' src={team.teamFilepath} onError={ErrorImageHandler} />
+                                <img className='home-team-image' src={team.teamFilepath===null?'':team.teamFilepath} onError={ErrorImageHandler} />
                                 <div className='home-team-info'>
                                     <div>
                                         <div className='home-team-name'>{team.teamName}</div>

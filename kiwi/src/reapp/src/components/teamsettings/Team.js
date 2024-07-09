@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import '../../styles/components/teamsettings/Team.css'
 import axiosHandler from "../../jwt/axiosHandler";
 import PlusIcon from "../../images/svg/shapes/PlusIcon";
@@ -6,6 +6,12 @@ import {TeamContext} from "../../context/TeamContext";
 import {getLocalItem, getSessionItem} from "../../jwt/storage";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
+import ErrorImageHandler from "../common/ErrorImageHandler";
+
+const Loading = () => {
+    return <div>Loading...</div>;
+};
+
 
 const Team = () => {
     const location = useLocation();
@@ -14,6 +20,7 @@ const Team = () => {
     const [file, setFile] = useState();
     const navigate = useNavigate();
     const { teamno } = useParams();
+    const {role} = useContext(TeamContext);
 
     const handleProfilePictureChange = (e) => {
         setProfile(URL.createObjectURL(e.target.files[0]));
@@ -81,9 +88,14 @@ const Team = () => {
         }
     }
 
-    const handleRole = () => {
+    const handleRole = async () => {
         try{
-
+            const res = await axiosHandler.post('/api/team/change/owner/',{teamno:teamno,newOwner:searchSelect.memberId,oldOwner:getSessionItem('profile').memberId});
+            if(res.data.result){
+                window.location.reload();
+            } else {
+                alert(res.data.message);
+            }
         } catch (e) {
             console.log("에러가 발생했습니다.")
         }
@@ -91,19 +103,53 @@ const Team = () => {
 
     const [ownerInput, setOwnerInput] = useState('');
     const [searchList, setSearchList] = useState([]);
+    const [searchSelect, setSearchSelect] = useState('');
+    const [isOwnerBtn, setIsOwnerBtn] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if(role!==null){
+            setLoading(false);
+        }
+    }, [role]);
+
+    useEffect(() => {
+        if(loading===false&&role!=='OWNER'){
+            alert('권한이 없습니다.');
+            navigate('/team/'+teamno+'/settings');
+        }
+    }, [loading, role]);
+
+    useEffect(() => {
+        if(searchSelect==='') {
+            setIsOwnerBtn(false);
+        } else {
+            setIsOwnerBtn(true);
+        }
+    }, [searchSelect]);
 
     const handleOwnerInput = async () => {
+        if(ownerInput==='') return;
         try {
             const res = await axiosHandler.post('/api/team/search/',{teamno:teamno,search:ownerInput});
             if(res.data.result){
-
+                setSearchList(res.data.data);
             } else {
                 alert(res.data.message);
             }
         } catch (e) {
             console.error(e)
         }
+    }
 
+    const searchSelectHandle = (item) => {
+        setSearchList(item);
+        setOwnerInput('');
+        setSearchList([]);
+    }
+
+    if (loading) {
+        return <Loading />;
     }
 
     return (
@@ -148,16 +194,41 @@ const Team = () => {
                 </div>
             </div>
             <div className='teamsettings-team-section'>
-                <div>권한 양도</div>
+                <div><span>권한 양도 (OWNER 권한을 양도합니다. ADMIN권한으로 전환됩니다.)</span></div>
+                {
+                    searchSelect !== '' && (
+                        <div className='teamsettigs-team-select-item'>
+                            <img className='teamsettigs-team-search-profile' src={searchSelect.memberFilepath} alt=''
+                                 onError={ErrorImageHandler}></img>
+                            <div className='teamsettigs-team-search-name'>
+                                <span>{searchSelect.memberNickname}</span>
+                                <span>{searchSelect.memberId}</span>
+                            </div>
+                            <sapn className='teamsettigs-team-search-role'>{searchSelect.role}</sapn>
+                        </div>
+                    )
+                }
                 <div>
-                    <p>OWNER 권한을 양도합니다.</p>
-                    <input type='text' value={ownerInput} onChange={handleOwnerInput} className='team-owner-input' placeholder='이메일 입력'/>
+                    <input type='text' value={ownerInput} onChange={handleOwnerInput} className='team-owner-input'
+                           placeholder='이메일 입력'/>
                     <ul>
-                        <li>
-                        </li>
+                        {
+                            searchList.map((item, idx) => (
+                                <li className='teamsettigs-team-search-item' key={idx}
+                                    onClick={() => searchSelectHandle(item)}>
+                                    <img className='teamsettigs-team-search-profile' src={item.memberFilepath} alt=''
+                                         onError={ErrorImageHandler}></img>
+                                    <div className='teamsettigs-team-search-name'>
+                                        <span>{item.memberNickname}</span>
+                                        <span>{item.memberId}</span>
+                                    </div>
+                                    <sapn className='teamsettigs-team-search-role'>{item.role}</sapn>
+                                </li>
+                            ))
+                        }
                     </ul>
-                    <button onClick={handleRole}>권한 양도하기</button>
                 </div>
+                <button disabled={isOwnerBtn} onClick={handleRole}>권한 양도하기</button>
             </div>
             <div className='teamsettings-team-section teamsettings-team-delete'>
                 <div>팀 삭제</div>
