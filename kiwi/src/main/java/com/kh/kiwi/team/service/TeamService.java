@@ -200,15 +200,15 @@ public class TeamService {
         return groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build()).get().getRole();
     }
 
-    public ResponseDto<?> updateTeamName(String team, String teamName, String memberId){
+    public ResponseDto<?> updateTeamName(String team, String teamName){
         try{
             Optional<Team> searchTeam = teamRepository.findById(team);
             if (searchTeam.isEmpty()) {
                 return ResponseDto.setFailed("팀 이름 변경에 실패했습니다. 존재하지 않는 팀입니다.");
             } else {
-                Team newTeam = searchTeam.get();
-                newTeam.setTeamName(teamName);
-                teamRepository.save(newTeam);
+                ;
+                searchTeam.get().setTeamName(teamName);
+                teamRepository.save(searchTeam.get());
                 return ResponseDto.setSuccess("팀 이름을 변경했습니다.");
             }
         } catch (Exception e) {
