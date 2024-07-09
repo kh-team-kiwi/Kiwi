@@ -4,6 +4,7 @@ import {getSessionItem} from "../../jwt/storage";
 import axiosHandler from "../../jwt/axiosHandler";
 import ErrorImageHandler from "../common/ErrorImageHandler";
 import {useParams} from "react-router-dom";
+import {toast } from "react-toastify";
 
 const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
 
@@ -19,12 +20,14 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
         try{
             const res = await axiosHandler.post("/api/team/invite",{teamName:teamno, invitedMembers:inviteList});
             if (res.data.result) {
+
                 window.location.reload();
+
             } else {
-                alert("오류가 발생했습니다.");
+                toast.error("오류가 발생했습니다.");
             }
         } catch (error) {
-            alert("오류가 발생했습니다.");
+            toast.error("오류가 발생했습니다.");
         }
     };
 
@@ -33,18 +36,18 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
 
         let check = validateInput(memberEmail);
         if(check!==true){
-            alert(check);
+            toast.error(check);
             return;
         }
 
         if(inviteList.some(member=>member.username === memberEmail)){
-            alert("이미 포함된 팀원입니다.");
+            toast.error("이미 포함된 팀원입니다.");
             setMemberEmail('');
             return;
         }
 
         if(joinedMembers.some(member => member.memberId === memberEmail)){
-            alert("이미 참여 중인 팀원입니다.");
+            toast.error("이미 참여 중인 팀원입니다.");
             setMemberEmail('');
             return;
         }
@@ -58,12 +61,12 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
                 ]));
                 setMemberEmail('');
             } else if(res.status === 200 && !res.data.result) {
-                alert(res.data.message);
+                toast.error(res.data.message);
             } else {
-                alert("오류가 발생했습니다.");
+                toast.error("오류가 발생했습니다.");
             }
         } catch (error) {
-            alert("오류가 발생했습니다.");
+            toast.error("오류가 발생했습니다.");
         }
     }
 
@@ -93,9 +96,10 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
     return (
         <>
             {isModalOpen && (
-                <div className="teamsettigs-invite-modal">
+                <div className="teamsettings-invite-modal">
                     <div className="modal-content">
-                        <div className='invite-modal-title'>멤버 초대</div>
+                        <div className='invite-modal-title'>Invite Users to the Team!</div>
+                        <div className='invite-member-middle'>
                         <input
                             type="text"
                             value={memberEmail}
@@ -104,6 +108,9 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
                             className="invite-modal-input"
                         />
                         <button className='invite-add-btn' onClick={handleMemberTagBtn}>Add</button>
+
+                        </div>
+
                         {inviteList.length > 0 && (
                             <div id="inviteList">
                                 {inviteList.map(member => (
@@ -113,7 +120,7 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
                                         <div className='create-team-member-info'>
                                             <div className='create-team-member-name-wrapper'>
                                                 <div className='create-team-member-name'>{member.name}</div>
-                                                <div className='create-team-invite-pending'> Invite Pending</div>
+                                                <div className='create-team-invite-pending'> Invited</div>
                                             </div>
                                             <div className='create-team-member-email'>{member.username}</div>
                                         </div>
@@ -129,8 +136,11 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
                                 ))}
                             </div>
                         )}
-                        <button className='invite-cancle-btn' onClick={closeModal}>Cancel</button>
+                        <div className='invite-member-bottom'>
+                        <button className='invite-cancel-btn' onClick={closeModal}>Cancel</button>
                         <button className='invite-invite-btn' onClick={handleInvite}>Invite</button>
+
+                        </div>
                     </div>
                 </div>
             )}

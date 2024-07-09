@@ -1,4 +1,23 @@
-.teamsettigs-manage-modal {
+@keyframes bounceIn {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    75% {
+      transform: scale(1.04);
+      opacity: 1;
+    }
+    90% {
+      transform: scale(0.98);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+
+
+.teamsettings-manage-modal {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,23 +27,29 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
 }
 
-.teamsettigs-manage-modal .modal-content {
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
+.teamsettings-manage-modal .modal-content {
+    background-color: var(--white);
+    padding: 15px;
     width: 40%;
-    max-width: 400px;
+    max-width: 350px;
     text-align: center;
     border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 200px;
+    animation: bounceIn 0.2s ease-out; 
+
 }
 
 .manage-modal-title {
-    font-size: 25px;
-    margin-bottom: 30px;
+    font-size: 22px;
     text-align: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 10px;
 }
 
 .manage-apply-btn {
@@ -40,7 +65,7 @@
     padding-right: 15px;
     margin-left: 10px;
 }
-.manage-cancle-btn {
+.manage-cancel-btn {
     color: var(--dark-brown);
     background-color: white;
     border: 2px solid gray;
@@ -56,14 +81,12 @@
 
 .modal-manage-select-box, .modal-manage-role-box {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     justify-content: space-between;
 }
 
-.modal-manage-tag-name {
-    width: 150px;
-    text-align: left;
-    margin-right: 30px;
+.modal-manage-role-box > option {
+    background-color: red;
 }
 
 .modal-manage-tag-content {
@@ -83,8 +106,16 @@
     display: block;
 }
 
+.manage-apply-btn:hover {
+    background-color: var(--green-hover);
+}
+
+.manage-cancel-btn:hover {
+    background-color: rgba(5, 5, 5, 0.1);
+
+}
+
 #selectedList {
-    display: none;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     position: absolute;
     background-color: var(--white);
@@ -99,14 +130,53 @@
 
 .modal-mini-list {
     width: 100%;
-    height: 25px;
+    height: 40px;
     display: flex;
     align-items: center;
+    margin-bottom: 5px;
+    color: var(--lighter-text-color);
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .modal-mini-list-img {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
     margin: 0 10px;
+}
+
+.manage-modal-middle {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--light-gray2);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.manage-modal-selected-users {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal-manage-dropdown {
+    outline: none;
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: var(--white);
+    color: var(--lighter-text-color);
+    font-size: 18px;
+}
+
+.modal-manage-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -367,7 +367,7 @@ const Member = () => {
                         </div>
                             {checkedMembers.length > 0 && (
                                 <div className='teamsettings-user-selected-container'>
-                                    <span>{checkedMembers.length} members selected</span>
+                                    <div>{checkedMembers.length} members selected</div>
 
                                     <div className='teamsettings-user-manage-button' type='button' onClick={openManageModal}>Manage</div>
                                 </div>
@@ -420,17 +420,6 @@ const Member = () => {
 
                     </div>
 
-                </div>
-                <div className='teamsettings-user-table-header-bottom'>
-                    <div className='header-bottom-btn-box'>
-                    </div>
-                    {/* <div>
-                        <select value={displayCount} onChange={selectCountHandle}>
-                            <option value={10}>10 명씩 보기</option>
-                            <option value={20}>20 명씩 보기</option>
-                            <option value={50}>50 명씩 보기</option>
-                        </select>
-                    </div> */}
                 </div>
             </div>
             <div className='teamsettings-user-table-wrapper'>
