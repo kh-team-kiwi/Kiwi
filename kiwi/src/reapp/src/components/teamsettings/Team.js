@@ -35,7 +35,7 @@ const Team = () => {
         if(name.length===0) return alert("최소 1글자 이상 입력해야합니다.");
         try {
             const memberId = getSessionItem('profile').username;
-            const res = await axiosHandler.post('/api/team/update'+location.pathname+'/'+name,{ memberId: memberId });
+            const res = await axiosHandler.post('/api/team/update/team',{ teamno: teamno, teamName:name });
             if(res.data.result){
                 alert("팀 이름이 변경되었습니다.")
                 window.location.reload();

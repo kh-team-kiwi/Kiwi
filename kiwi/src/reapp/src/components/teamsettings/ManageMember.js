@@ -43,7 +43,7 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
             }
             const res = await axiosHandler.post("/api/team/update/role/"+teamno,selectedList);
             if (res.data.result) {
-                window.location.reload();
+                //window.location.reload();
             } else {
                 alert("오류가 발생했습니다.");
             }

@@ -59,9 +59,11 @@ public class TeamController {
         return teamService.removeMember(teamId, memberId);
     }
 
-    @PostMapping("/update/team/{team}/teamsettings/team-manage/{teamName}")
-    public ResponseDto<?> updateTeamName(@PathVariable String team, @PathVariable String teamName, @RequestBody String member) {
-        return teamService.updateTeamName(team,teamName, member);
+    @PostMapping("/update/team")
+    public ResponseDto<?> updateTeamName(@RequestBody Map<String, String> requestBody) {
+        String team = requestBody.get("teamno");
+        String teamName = requestBody.get("teamName");
+        return teamService.updateTeamName(team,teamName);
     }
 
     @PostMapping("/delete/team/{team}/teamsettings/team-manage")
