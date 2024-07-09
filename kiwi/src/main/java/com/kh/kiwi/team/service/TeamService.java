@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -295,6 +296,55 @@ public class TeamService {
                 groupRepository.save(update);
             });
             return ResponseDto.setSuccess("반영되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+        }
+    }
+
+    public ResponseDto<?> searchMember(String teamno, String searchKey) {
+        try{
+            List<Group> groups = groupRepository.findByTeamWithMember(teamno);
+            if(groups==null||groups.isEmpty()) return ResponseDto.setSuccess("조회된 인원이 없습니다.");
+            List<TeamMemberDto> filteredGroups = groups.stream().filter(group -> group.getMemberId().contains(searchKey))
+                    .map(group -> TeamMemberDto.builder()
+                            .memberId(group.getMemberId())
+                            .team(group.getTeam())
+                            .role(group.getRole())
+                            .status(group.getStatus())
+                            .memberFilepath(group.getMember().getMemberFilepath())
+                            .memberNickname(group.getMember().getMemberNickname())
+                            .build()).toList();
+            if(filteredGroups.size()>5) filteredGroups.subList(0,5);
+            return ResponseDto.setSuccessData("조회되었습니다.",filteredGroups);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+        }
+    }
+
+    @Transactional
+    public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner) {
+        try{
+            Optional<Team> searchTeam = teamRepository.findById(teamno);
+            if(searchTeam.isEmpty()) return ResponseDto.setFailed("팀을 조회할 수 없습니다.");
+
+
+            Optional<Group> predecessor = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
+            Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
+            if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("존재하지 않는 멤버입니다.");
+
+            searchTeam.get().setTeamAdminMemberId(newOwner);
+            successor.get().setRole("OWNER");
+            predecessor.get().setRole("ADMIN");
+
+            teamRepository.save(searchTeam.get());
+            groupRepository.save(successor.get());
+            groupRepository.save(predecessor.get());
+
+            return ResponseDto.setSuccess("변경되었습니다.");
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");

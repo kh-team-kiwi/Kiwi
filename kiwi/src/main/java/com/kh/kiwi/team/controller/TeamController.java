@@ -92,4 +92,20 @@ public class TeamController {
     public ResponseDto<?> updateRole(@RequestBody List<TeamMemberDto> data, @PathVariable String teamno) {
         return teamService.updateRole(data,teamno);
     }
+
+    @PostMapping("/search")
+    public ResponseDto<?> searchMember(@RequestBody Map<String, String> requestBody) {
+        String teamno = requestBody.get("teamno");
+        String searchKey = requestBody.get("search");
+        return teamService.searchMember(teamno,searchKey);
+    }
+
+    @PostMapping("/change/owner")
+    public ResponseDto<?> changeOwner(@RequestBody Map<String, String> requestBody) {
+        String teamno = requestBody.get("teamno");
+        String newOwner = requestBody.get("newOwner");
+        String oldOwner = requestBody.get("oldOwner");
+        return teamService.changeOwner(teamno,newOwner,oldOwner);
+    }
+
 }

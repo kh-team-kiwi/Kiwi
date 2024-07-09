@@ -3,7 +3,7 @@ import {removeLocalItem, removeSessionItem, setLocalItem} from "./storage";
 
 
 // Axios 인스턴스 생성
-const axiosHandler = axios.create({
+const axiosHandler= axios.create({
     withCredentials: true
 });
 
@@ -19,6 +19,7 @@ axiosHandler.interceptors.request.use(
             // 요청을 보내기 전에 Authorization 헤더에 토큰 추가
             config.headers.Authorization = jwt;
         }
+        console.log("interceptors - requestURL : ",config.url)
         console.log("interceptors : add access token");
         return config;
     },

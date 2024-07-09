@@ -90,7 +90,7 @@ const Team = () => {
 
     const handleRole = async () => {
         try{
-            const res = await axiosHandler.post('/api/team/change/owner/',{teamno:teamno,newOwner:searchSelect.memberId,oldOwner:getSessionItem('profile').memberId});
+            const res = await axiosHandler.post('/api/team/change/owner',{teamno:teamno,newOwner:searchSelect.memberId,oldOwner:getSessionItem('profile').username});
             if(res.data.result){
                 window.location.reload();
             } else {
@@ -104,7 +104,7 @@ const Team = () => {
     const [ownerInput, setOwnerInput] = useState('');
     const [searchList, setSearchList] = useState([]);
     const [searchSelect, setSearchSelect] = useState('');
-    const [isOwnerBtn, setIsOwnerBtn] = useState(false);
+    const [isOwnerBtn, setIsOwnerBtn] = useState(true);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -122,17 +122,22 @@ const Team = () => {
 
     useEffect(() => {
         if(searchSelect==='') {
-            setIsOwnerBtn(false);
-        } else {
             setIsOwnerBtn(true);
+        } else {
+            setIsOwnerBtn(false);
         }
     }, [searchSelect]);
 
-    const handleOwnerInput = async () => {
-        if(ownerInput==='') return;
+    useEffect( () => {
+        searchMember();
+    }, [ownerInput]);
+
+    const searchMember = async () => {
+        if (ownerInput === '') return setSearchList([]);
         try {
-            const res = await axiosHandler.post('/api/team/search/',{teamno:teamno,search:ownerInput});
+            const res = await axiosHandler.post('/api/team/search',{teamno:teamno,search:ownerInput});
             if(res.data.result){
+                console.log(res.data.data);
                 setSearchList(res.data.data);
             } else {
                 alert(res.data.message);
@@ -142,10 +147,12 @@ const Team = () => {
         }
     }
 
+    const handleOwnerInput = async (e) => {
+        setOwnerInput(e.target.value)
+    }
+
     const searchSelectHandle = (item) => {
-        setSearchList(item);
-        setOwnerInput('');
-        setSearchList([]);
+        setSearchSelect(item);
     }
 
     if (loading) {
@@ -214,7 +221,7 @@ const Team = () => {
                     <ul>
                         {
                             searchList.map((item, idx) => (
-                                <li className='teamsettigs-team-search-item' key={idx}
+                                <li className={`teamsettigs-team-search-item ${item.memberId===searchSelect.memberId ? 'select':''}`} key={idx}
                                     onClick={() => searchSelectHandle(item)}>
                                     <img className='teamsettigs-team-search-profile' src={item.memberFilepath} alt=''
                                          onError={ErrorImageHandler}></img>
@@ -228,7 +235,7 @@ const Team = () => {
                         }
                     </ul>
                 </div>
-                <button disabled={isOwnerBtn} onClick={handleRole}>권한 양도하기</button>
+                <button type='button' onClick={handleRole}>권한 양도하기</button>
             </div>
             <div className='teamsettings-team-section teamsettings-team-delete'>
                 <div>팀 삭제</div>

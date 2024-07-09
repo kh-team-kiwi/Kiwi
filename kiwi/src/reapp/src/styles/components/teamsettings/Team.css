@@ -78,3 +78,22 @@
 .teamsettings-team-profile-box{
     position: relative;
 }
+
+.teamsettigs-team-search-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.teamsettigs-team-search-item, .teamsettigs-team-select-item {
+    display: flex;
+}
+
+.teamsettigs-team-search-item:hover, .teamsettigs-team-select-item:hover {
+    background-color: rgba(5, 5, 5, 0.1);
+}
+
+.teamsettigs-team-search-item.select{
+    background-color: rgba(5, 5, 5, 0.5);
+}
