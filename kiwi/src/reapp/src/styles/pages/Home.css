@@ -204,10 +204,9 @@
 }
 
 .home-user-container.active {
-    height: 166px;
+    height: 120px;
     background: white;
     transition: 0.2s;
-
 }
 
 
@@ -290,7 +289,6 @@
 } */
 
 .home-team-image {
-    background-color: gray;
     width: 70px;
     height: 70px;
     border-radius: 10px;
