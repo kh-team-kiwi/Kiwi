@@ -78,6 +78,8 @@ const Header = () => {
         setActivePage('settings');
       } else {
         navigate(`/team/${teamno}/calendar`);
+        window.location.reload();
+
       }
     }, [location]); 
 
