@@ -160,8 +160,8 @@ const Team = () => {
     }
 
     return (
-        <div className='teamsettings-inner'>
-            <div className='teamsettings-header'>팀 관리</div>
+        <div className='teamsettings-team-container'>
+            <div className='teamsettings-team-header'>Team Settings</div>
             <div className='teamsettings-team-section'>
                 <div>팀 이름 변경</div>
                 <div>

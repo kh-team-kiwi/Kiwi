@@ -1,6 +1,12 @@
-.teamsettings-header {
-    font-size: 30px;
-    padding: 70px;
+.teamsettings-team-container {
+    padding: 15px;
+}
+
+.teamsettings-team-header {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
 .teamsettings-team-section {
