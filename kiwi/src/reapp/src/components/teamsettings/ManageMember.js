@@ -9,7 +9,7 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
 
     const {teamno} = useParams();
     const [role, setRole] = useState('default');
-    const [selectedList, setSelectedList] = useState(checkedMembers);
+    const [selectedList, setSelectedList] = useState(checkedMembers===null?[]:checkedMembers);
     const [isList, setIsList] = useState(false);
 
     useEffect(() => {
@@ -24,26 +24,32 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
     const handleRole = async () =>{
         if(selectedList.filter(member=>member.role==='OWNER').length===1) return alert('OWNER는 변경할 수 없습니다.');
         try{
-            if(role==='admin'){
-                setSelectedList(prevState => (prevState.map(member=>{
-                    member.role='ADMIN';
-                })))
-            } else if (role==='member') {
-                setSelectedList(prevState => (prevState.map(member=>{
-                    member.role='MEMBER';
-                })))
-            } else if (role==='exiled') {
-                setSelectedList(prevState => (prevState.map(member=>{
-                    member.status='EXILED';
-                })))
+            let updatedList;
+            if (role === 'admin') {
+                updatedList = selectedList.map(member => ({
+                    ...member,
+                    role: 'ADMIN'
+                }));
+            } else if (role === 'member') {
+                updatedList = selectedList.map(member => ({
+                    ...member,
+                    role: 'MEMBER'
+                }));
+            } else if (role === 'exiled') {
+                updatedList = selectedList.map(member => ({
+                    ...member,
+                    status: 'EXILED'
+                }));
             } else {
-                setSelectedList(prevState => (prevState.map(member=>{
-                    member.status='JOINED';
-                })))
+                updatedList = selectedList.map(member => ({
+                    ...member,
+                    status: 'JOINED'
+                }));
             }
-            const res = await axiosHandler.post("/api/team/update/role/"+teamno,selectedList);
+
+            const res = await axiosHandler.post("/api/team/update/role/"+teamno,updatedList);
             if (res.data.result) {
-                //window.location.reload();
+                window.location.reload();
             } else {
                 alert("오류가 발생했습니다.");
             }
