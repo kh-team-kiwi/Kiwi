@@ -269,9 +269,12 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     font-weight: 600;
     font-size: 18px;
-
+    transition: 0.2s;
 }
 
+.teamsettings-user-blocked-toggle:hover {
+    background-color: var(--blocked-users-hover);
+}
 
 .teamsettings-user-list-item {
     display: flex;

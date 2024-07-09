@@ -57,7 +57,7 @@ const SideMenuBar = () => {
                 <div>Team Settings</div>
             </div>
             <div className='teamsettings-sidebar-bottom'>
-                <div className='teamsettings-sidebar-leave-team-button' onClick={handleLeaveTeam}>팀 탈퇴하기</div>
+                <div className='teamsettings-sidebar-leave-team-button' onClick={handleLeaveTeam}>Leave Team</div>
             </div>
         </div>
     );

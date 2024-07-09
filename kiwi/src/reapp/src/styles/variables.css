@@ -57,6 +57,7 @@
   --yellow: yellow;
 
   --blocked-users: rgb(235, 234, 234);
+  --blocked-users-hover: rgb(219, 216, 216);
 
   --sidebar-selected: #dbe7f3;
 
@@ -87,6 +88,7 @@
   --dark-gray: #c9c9c9;
   --field-background: #8f8e8e;
   --blocked-users: rgb(117, 116, 116);
+  --blocked-users-hover: rgb(99, 98, 98);
 
 
   --white: #55575f;
@@ -128,6 +130,7 @@
   --sidebar-selected:rgb(141, 141, 141);
 
   --light-blue-darkmode: #798686;
+  --settings-gray-filed: #2f2f33;
 
 
   .img-enable-darkmode {
