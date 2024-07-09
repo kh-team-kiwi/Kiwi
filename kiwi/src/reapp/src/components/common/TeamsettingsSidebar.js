@@ -45,11 +45,11 @@ const SideMenuBar = () => {
         <div className='teamsettings-sidebar'>
             <div className='teamsettings-sidebar-header'>
                 <SettingsIcon className='teamsettings-sidebar-settings-icon' />
-                <div className='teamsettings-sidebar-title'> Team Settings </div>
+                <div className='teamsettings-sidebar-title'> General Settings </div>
             </div>
-            <div className={`teamsettings-sidebar-item ${selectedItem === 'role' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('role')}>  
+            <div className={`teamsettings-sidebar-item ${selectedItem === 'user' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('user')}>  
                 <ManageRolesIcon className='teamsettings-sidebar-roles-icon'/>
-                <div>Manage Roles</div>
+                <div>User Settings</div>
             </div>
             <div className={`teamsettings-sidebar-item ${selectedItem === 'team' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('team')}>
                 <TeamSettingsIcon className='teamsettings-sidebar-icon' />

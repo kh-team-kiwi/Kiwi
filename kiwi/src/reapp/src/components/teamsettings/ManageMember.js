@@ -13,7 +13,7 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
     const [isList, setIsList] = useState(false);
 
     useEffect(() => {
-        setSelectedList(checkedMembers); // checkedMembers가 변경될 때 selectedList를 업데이트
+        setSelectedList(checkedMembers); 
     }, [checkedMembers]);
 
     const closeModal = () => {

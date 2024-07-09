@@ -14,7 +14,7 @@ import Error from "../components/common/Error";
 import {TeamContext, TeamProvider} from "../context/TeamContext";
 import TeamLayout from "../pages/TeamLayout";
 import Personal from "../components/teamsettings/Personal";
-import Member from "../components/teamsettings/Member";
+import User from "../components/teamsettings/TeamsettingsUser";
 import Team from "../components/teamsettings/Team";
 import ToastMessage from "../components/toast/ToastMessage";
 
@@ -56,7 +56,7 @@ const SecondRouts = () => {
                         <Route path="documents" element={<Documents/>}></Route>
                         <Route path="settings/*" element={<TeamSettings/>}>
                             {/* <Route path="personal-manage" element={<Personal />}></Route> */}
-                            <Route path="role" element={<Member />}></Route>
+                            <Route path="user" element={<User />}></Route>
                             <Route path="team" element={<Team />}></Route>
                         </Route>
                     </Route>

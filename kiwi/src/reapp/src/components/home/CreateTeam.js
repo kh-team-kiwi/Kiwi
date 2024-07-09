@@ -255,7 +255,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
                             <div className='create-team-member-info'>
                               <div className='create-team-member-name-wrapper' >
                                 <div className='create-team-member-name'>{member.name}</div>
-                                <div className='create-team-invite-pending' > Invite Pending</div>
+                                <div className='create-team-invite-pending' > Invited</div>
                               </div>
 
 

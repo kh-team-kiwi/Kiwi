@@ -1,0 +1,280 @@
+.teamsettings-user-container {
+    padding: 20px;
+}
+
+.teamsettings-user-title {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.teamsettings-header {
+    font-size: 30px;
+    padding: 70px;
+}
+.teamsettings-user-table {
+
+}
+.teamsettings-user-table-column-names{
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 5px;
+}
+.teamsettings-user-table-header-top {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.teamsettings-user-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.teamsettings-user-header-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.teamsettings-user-table-header-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+.teamsettings-user-table-wrapper{
+
+}
+.teamsettings-user-table{
+    width: 100%;
+}
+.teamsettings-user-table thead tr {
+    height: 30px;
+}
+.teamsettings-user-table tbody tr {
+    height: 60px;
+}
+.teamsettings-user-table th:nth-child(1){
+    width: 30px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.teamsettings-user-table th:nth-child(2){
+    width: 70px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.teamsettings-user-table th:nth-child(3){
+    vertical-align: middle;
+    text-align: left;
+}
+
+.teamsettings-user-table th:nth-child(4){
+    width: 100px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.teamsettings-user-list-item.odd-column {
+  background-color: var(--settings-gray-filed);
+}
+
+.teamsettings-user-table td:first-child {
+    text-align: center;
+}
+
+.teamsettings-user-table td:nth-child(2) {
+    text-align: center;
+}
+
+.teamsettings-user-table td {
+    vertical-align: middle;
+}
+
+.teamsettigs-team-member-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.teamsettings-user-footer {
+    position: sticky;
+    width: 100%;
+    height: 40px;
+    background-color: var(--container-background-color);
+    bottom: 0;
+    border-top: 1px solid var(--light-gray);
+    padding: 10px 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-paging-prev, .team-paging-next, .team-paging-num {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+}
+
+.team-paging-prev, .team-paging-next {
+    border: none;
+    background-color: transparent;
+}
+
+.team-paging-prev.active, .team-paging-next.active {
+    cursor: pointer;
+}
+
+.team-paging-num {
+    border: 1px solid var(--light-gray);
+    border-radius: 5px;
+    padding: 0 3px;
+}
+
+.team-paging-num.current {
+    color: var(--page-green);
+    font-weight: bold;
+}
+
+.team-paging-num.active:not(.current):hover {
+    background-color: var(--light-gray5);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.teamsettings-user-table-header {
+}
+
+.teamsettings-table-sort-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: 3px;
+    margin-bottom: 3px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.teamsettings-table-filter-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: 3px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.role-hover-popup-title {
+    cursor: pointer;
+}
+
+.role-hover-popup {
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 0 10px;
+    
+}
+
+.role-hover-popup-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    height: 20px;
+    margin: 10px 0;
+}
+
+.role-hover-popup-wrapper {
+    display: inline-block;
+    margin-left: auto;
+}
+
+.role-hover-popup-wrapper:hover .role-hover-popup {
+    display: block;
+}
+
+.teamsettings-user-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 15px;
+}
+
+.teamsettings-user-search-input {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 4px;
+    width: 300px;
+    font-size: 18px;
+    outline: none;
+    background-color: transparent;
+    color: var(--lighter-text-color);
+}
+
+.teamsettings-user-search-input::placeholder {
+    color: var(--gray);
+}
+
+.teamsettings-user-search-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    fill: var(--gray);
+}
+
+.teamsettings-user-clear-search-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    display: flex;
+}
+
+.teamsettings-user-blocked-toggle {
+    margin-right: 20px;
+    background-color: rgb(233, 230, 230);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+}
+
+.teamsettings-user-username-sort {
+}
+
+.teamsettings-user-list-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 60px;
+    justify-content: space-between;
+}
+
+.teamsettings-user-username-column {
+    text-align: left;
+    color: var(--lighter-text-color);
+    margin-left: 10px;
+}
+
+.teamsettings-user-username-text {
+    font-size: 18px;
+    font-weight: 600;
+}
