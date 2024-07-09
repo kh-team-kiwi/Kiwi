@@ -1,5 +1,6 @@
 package com.kh.kiwi.auth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kh.kiwi.auth.dto.SignupDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,6 +22,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name="MEMBER")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Member implements UserDetails {
     @Id
     private String memberId;
