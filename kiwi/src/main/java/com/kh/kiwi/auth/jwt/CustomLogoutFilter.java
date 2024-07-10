@@ -27,47 +27,46 @@ public class CustomLogoutFilter extends GenericFilterBean {
     }
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("CustomLogoutFilter > doFilter 2 : "+request );
         //path and method verify
         String requestUri = request.getRequestURI();
+
         if (!requestUri.equals("/api/auth/logout")) {
             filterChain.doFilter(request, response);
             return;
         }
         String requestMethod = request.getMethod();
-        if (!requestMethod.equals("POST")) {
-
+        if (!requestMethod.equals("GET")) {
             filterChain.doFilter(request, response);
             return;
         }
+
+        System.out.println("CustomLogoutFilter > doFilter 2 : "+request );
 
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
-
             if (cookie.getName().equals("refresh")) {
-
                 refresh = cookie.getValue();
             }
         }
 
         //refresh null check
         if (refresh == null) {
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+        System.out.println("CustomLogoutFilter >> refresh null check ");
 
         //expired check
         try {
             jwtUtil.isExpired(refresh);
         } catch (ExpiredJwtException e) {
-
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+        System.out.println("CustomLogoutFilter >> refresh expired check ");
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
@@ -77,15 +76,16 @@ public class CustomLogoutFilter extends GenericFilterBean {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+        System.out.println("CustomLogoutFilter >> token type refresh check ");
 
         //DB에 저장되어 있는지 확인
         Boolean isExist = refreshRepository.existsByRefresh(refresh);
         if (!isExist) {
-
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+        System.out.println("CustomLogoutFilter >> token is exist DB check ");
 
         //로그아웃 진행
         //Refresh 토큰 DB에서 제거

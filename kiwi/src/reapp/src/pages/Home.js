@@ -149,17 +149,18 @@ const Home = () => {
 
     const user = getSessionItem("profile");
 
-    async function logoutBtn() {
+    const logoutBtn = async () =>  {
         try {
             const response = await axiosHandler.get("/api/auth/logout");
-            removeLocalItem("accessToken");
-            removeSessionItem("profile");
-            removeSessionItem("teams");
-            removeSessionItem("events");
-            localStorage.getItem("")
-            navigate('/', { replace: true });
+            if(response.status===200){
+                removeLocalItem("accessToken");
+                removeSessionItem("profile");
+                removeSessionItem("teams");
+                removeSessionItem("events");
+                navigate('/', { replace: true });
+            }
         } catch (e) {
-            if (e.data) toast.error('An error has occurred.');
+            toast.error('An error has occurred.');
 
         }
     }
