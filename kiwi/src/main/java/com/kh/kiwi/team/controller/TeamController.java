@@ -66,10 +66,11 @@ public class TeamController {
         return teamService.updateTeamName(team,teamName);
     }
 
-    @PostMapping("/delete/team/{team}/teamsettings/team-manage")
+    @PostMapping("/delete/team/{team}/settings/team")
     public ResponseDto<?> deleteTeam(@PathVariable String team, @RequestBody Map<String, String> requestBody) {
         String memberId = requestBody.get("memberId");
-        return teamService.deleteTeam(team, memberId);
+        String password = requestBody.get("password");
+        return teamService.deleteTeam(team, memberId, password);
     }
 
     @PostMapping("/upload/profile")
@@ -107,7 +108,8 @@ public class TeamController {
         String teamno = requestBody.get("teamno");
         String newOwner = requestBody.get("newOwner");
         String oldOwner = requestBody.get("oldOwner");
-        return teamService.changeOwner(teamno,newOwner,oldOwner);
+        String password = requestBody.get("password");
+        return teamService.changeOwner(teamno,newOwner,oldOwner, password);
     }
 
 }

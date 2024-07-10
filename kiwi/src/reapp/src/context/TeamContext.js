@@ -10,6 +10,9 @@ const TeamProvider = ({ children }) => {
     const [teams,setTeams] = useState([]);
 
     const [role, setRole] = useState(null);
+    const [teamProfile, setTeamProfile] = useState('');
+    const [headerRefresh, setHeaderRefresh] = useState(false);
+
 
     const joinTeam = (role) => {
         setRole(role);
@@ -19,9 +22,17 @@ const TeamProvider = ({ children }) => {
         setRole(null);
     }
 
+    const updateTeamProfile = (profile) => {
+        setTeamProfile(profile);
+    };
+
+    const triggerHeaderRefresh = () => {
+        setHeaderRefresh(prevState => !prevState);
+    };
+
 
     return (
-        <TeamContext.Provider value={{ teams, setTeams, joinTeam, leaveTeam, role}}>
+        <TeamContext.Provider value={{ teams, setTeams, joinTeam, leaveTeam, role, teamProfile, updateTeamProfile , headerRefresh, triggerHeaderRefresh }}>
             {children}
         </TeamContext.Provider>
     );

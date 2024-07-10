@@ -94,6 +94,16 @@
     "cancel": "キャンセル",
     "no-events": "表示するイベントはありません",
     "no-events-explanation": "ここに今後のイベントが表示されます！",
-    "save": "保存"
+    "save": "保存",
+    "no-whitespace": "空白を含まない",
+    "valid-email": "有効なメール形式",
+    "unique-email": "ユニークなメールアドレス",
+    "email-requirements": "メールの要件",
+    "username-requirements": "ユーザー名の要件",
+    "username-length-requirement": "2から10文字の間",
+    "password-requirements": "パスワードの要件",
+    "password-length-requirement": "8から16文字の間",
+    "password-special-char-requirement": "特殊文字を含む (!@#$%^)",
+    "password-same": "パスワードが一致する"
   }
   

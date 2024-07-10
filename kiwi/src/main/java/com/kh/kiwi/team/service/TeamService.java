@@ -17,6 +17,7 @@ import com.kh.kiwi.team.repository.GroupRepository;
 import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,8 @@ public class TeamService {
     private final MemberRepository memberRepository;
     private final MemberDetailsRepository memberDetailsRepository;
     private final NotificationService notificationService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
@@ -218,19 +221,35 @@ public class TeamService {
     }
 
     @Transactional
-    public ResponseDto<?> deleteTeam(String team, String memberId) {
+    public ResponseDto<?> deleteTeam(String team, String memberId, String password) {
         try{
-            if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
-                groupRepository.deleteAllByTeam(team);
-                teamRepository.deleteById(team);
-                return ResponseDto.setSuccess("성공적으로 삭제되었습니다.");
+            Member searchMember = memberRepository.findByMemberId(memberId);
+            if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
+            if(bCryptPasswordEncoder.matches(password ,searchMember.getPassword())) {
+                try{
+                    if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
+                        groupRepository.deleteAllByTeam(team);
+                        teamRepository.deleteById(team);
+                        return ResponseDto.setSuccess("성공적으로 삭제되었습니다.");
+                    } else {
+                        return ResponseDto.setFailed("조건이 일치하지 않아 삭제에 실패했습니다.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return ResponseDto.setFailed("데이터베이스 오류로 팀 삭제에 실패했습니다.");
+                }
+
+
             } else {
-                return ResponseDto.setFailed("조건이 일치하지 않아 삭제에 실패했습니다.");
+                return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 팀 삭제에 실패했습니다.");
+            return ResponseDto.setFailed("오류가 발생해 저장을 실패했습니다.");
         }
+
+
+
     }
 
     public ResponseDto<?> uploadProfile(MultipartFile[] files, String team, String memberId) throws IOException {
@@ -325,29 +344,42 @@ public class TeamService {
     }
 
     @Transactional
-    public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner) {
+    public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner, String password) {
         try{
-            Optional<Team> searchTeam = teamRepository.findById(teamno);
-            if(searchTeam.isEmpty()) return ResponseDto.setFailed("팀을 조회할 수 없습니다.");
+            Member searchMember = memberRepository.findByMemberId(oldOwner);
+            if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
+            if(bCryptPasswordEncoder.matches(password ,searchMember.getPassword())) {
+                try{
+                    Optional<Team> searchTeam = teamRepository.findById(teamno);
+                    if(searchTeam.isEmpty()) return ResponseDto.setFailed("팀을 조회할 수 없습니다.");
 
 
-            Optional<Group> predecessor = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
-            Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
-            if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("존재하지 않는 멤버입니다.");
+                    Optional<Group> predecessor = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
+                    Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
+                    if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("존재하지 않는 멤버입니다.");
 
-            searchTeam.get().setTeamAdminMemberId(newOwner);
-            successor.get().setRole("OWNER");
-            predecessor.get().setRole("ADMIN");
+                    searchTeam.get().setTeamAdminMemberId(newOwner);
+                    successor.get().setRole("OWNER");
+                    predecessor.get().setRole("ADMIN");
 
-            teamRepository.save(searchTeam.get());
-            groupRepository.save(successor.get());
-            groupRepository.save(predecessor.get());
+                    teamRepository.save(searchTeam.get());
+                    groupRepository.save(successor.get());
+                    groupRepository.save(predecessor.get());
 
-            return ResponseDto.setSuccess("변경되었습니다.");
+                    return ResponseDto.setSuccess("변경되었습니다.");
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+                }
+
+            } else {
+                return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("오류가 발생해 저장을 실패했습니다.");
         }
+
     }
 }

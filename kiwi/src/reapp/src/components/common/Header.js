@@ -25,7 +25,7 @@ import { toast } from 'react-toastify';
 
 
 const Header = () => {
-  const { teams, setTeams, joinTeam} = useContext(TeamContext);
+  const { teams, setTeams, joinTeam, teamProfile, updateTeamProfile, headerRefresh } = useContext(TeamContext);
   const { teamno } = useParams();
   const { role } = useContext(TeamContext);
 
@@ -119,6 +119,7 @@ const Header = () => {
       const findTeam = teams.find(team => team.team === teamno);
       if (findTeam) {
         setSelectedTeam(findTeam);
+        updateTeamProfile(findTeam.teamFilepath);
       } else {
         setSelectedTeam({});
       }
@@ -303,8 +304,8 @@ const Header = () => {
       <div className='header-team-container-wrapper'>
         <div className={`header-team-container ${teamDropdown ? 'active' : ''}`} ref={teamDropdownRef}>
           <div className='header-selected-team-details' onClick={toggleTeamDropdown} ref={teamButtonRef}>
-            <img className='header-selected-team-profile-image' src={selectedTeam.teamFilepath===null ? '':selectedTeam.teamFilepath}  alt={''} onError={ErrorImageHandler}/>
-            <div className='header-selected-team-name'>
+          <img className='header-selected-team-profile-image' src={teamProfile || defaultImage} alt={''} onError={ErrorImageHandler} />
+          <div className='header-selected-team-name'>
               {selectedTeam.teamName}
             </div>
             <div className={`header-team-arrow-container down-arrow ${teamDropdown ? 'flipped' : ''}`}>

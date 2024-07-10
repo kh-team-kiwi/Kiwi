@@ -1,105 +1,328 @@
-.teamsettings-team-container {
-    padding: 15px;
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    75% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+    90% {
+        transform: scale(0.98);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-.teamsettings-team-header {
-    margin-top: 10px;
+.team-settings-container {
+    padding: 15px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.team-settings-title {
     font-size: 22px;
     font-weight: 600;
     margin-bottom: 20px;
+    text-align: center;
 }
 
-.teamsettings-team-section {
-    padding: 0 70px;
-}
-
-.teamsettings-team-section > div {
-    margin-bottom: 10px;
-}
-
-.teamsettings-team-section input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid var(--settings-selected);
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.teamsettings-team-section button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--page-icon);
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.teamsettings-team-section button:hover {
-    background-color: var(--page-icon-active);
-}
-
-.teamsettings-team-delete p {
-    font-weight: bold;
-}
-
-.teamsettings-team-delete button {
-    background-color: var(--red);
-}
-
-.teamsettings-team-delete button:hover {
-    background-color: var(--red-hover);
-}
-
-.teamsettings-team-delete p {
+.team-settings-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 20px;
-    color: #555;
-}
-.teamsettings-team-profile{
-    width: 150px;
-    height: 150px;
-    background-color: var(--settings-gray-filed);
-    border-radius: 7px;
-}
-.teamsettings-team-icon {
-    width: 150px;
-    height: 150px;
-    fill: var(--light-gray);
-    cursor: pointer;
 }
 
-.teamsettings-team-icon:hover {
-    filter: brightness(0.7) contrast(1.5);
+.team-settings-profile-picture-container {
+    position: relative;
+    margin-bottom: 10px;
 }
-.teamsettings-team-profile-x{
+
+.team-settings-profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+}
+
+.team-settings-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: var(--gray);
+    border-radius: 15px;
+}
+
+.team-settings-upload-button {
+    position: absolute;
+    bottom: -8px;
+    right: -10px;
+    background-color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.team-settings-upload-button:hover {
+    background-color: var(--white-hover);
+}
+
+.team-settings-plus-icon {
+
+    fill: var(--lighter-text-color);
+}
+
+.team-settings-profile-x {
     width: 20px;
     height: 20px;
     position: absolute;
     top: 0;
-    left: 130px;
+    right: 0;
     fill: var(--page-icon);
     cursor: pointer;
 }
-.teamsettings-team-profile-box{
-    position: relative;
+
+.team-settings-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.teamsettigs-team-search-profile {
+.team-settings-change-name-container,
+.team-settings-change-owner-container,
+.team-settings-delete-container {
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgb(239, 241, 238);
+    
+}
+
+.team-settings-change-name,
+.team-settings-change-owner,
+.team-settings-delete {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--lighter-text-color);
+    margin-bottom: 10px;
+}
+
+.team-settings-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    outline: none;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.team-settings-password-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    outline: none;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.team-settings-change-name-button,
+.team-settings-change-owner-button,
+.team-settings-delete-button {
+    background-color: var(--green);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: 0.2s;
+    margin-left: auto;
+
+}
+
+.team-settings-change-name-button:hover,
+.team-settings-change-owner-button:hover,
+.team-settings-delete-button:hover {
+    background-color: var(--green-hover);
+}
+
+.team-settings-search-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.team-settings-select-item{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--light-blue);
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+
+
+.team-settings-search-profile {
     width: 40px;
     height: 40px;
     border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-right: 10px;
 }
 
-.teamsettigs-team-search-item, .teamsettigs-team-select-item {
+.team-settings-search-name {
     display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    color: var(--lighter-text-color);
 }
 
-.teamsettigs-team-search-item:hover, .teamsettigs-team-select-item:hover {
-    background-color: rgba(5, 5, 5, 0.1);
+.team-settings-search-role {
+    font-size: 14px;
+    color: gray;
 }
 
-.teamsettigs-team-search-item.select{
-    background-color: rgba(5, 5, 5, 0.5);
+.team-settings-delete {
+    color: var(--red);
+}
+
+.team-settings-delete-warning {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--lighter-text-color);
+}
+
+.team-settings-change-owner-warning {
+    font-size: 18px;
+    color: var(--lighter-text-color);
+    margin-bottom: 15px;
+}
+
+.team-settings-bottom {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.team-settings-button-wrapper {
+    display: flex;
+    margin-top: 10px;
+}
+
+.team-settings-dropdown {
+    position: absolute;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000; 
+}
+
+.team-settings-search-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+    transition: background-color 0.3s ease;
+    gap: 10px;
+}
+
+.team-settings-search-item:last-child {
+    border-bottom: none;
+}
+
+.team-settings-search-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.team-settings-search-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-right: 10px;
+}
+
+.team-settings-input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.team-settings-clear-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.team-settings-clear-button svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--lighter-text-color);
+}
+
+.team-settings-selected-tag {
+    background-color: #4caf50;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.team-settings-remove-selected {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.team-settings-remove-selected svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--lighter-text-color);
+}
+
+.team-settings-remove-selected:hover svg {
+    fill: var(--lighter-text-color);
+}
+
+.team-settings-selected-name-container {
+    display: flex;
+    font-size: 18px;
+    color: var(--lighter-text-color);
+    height: 25px;
+    align-items: center;
+    
+}
+
+.team-settings-selected-name {
+    font-weight: 600;
+}
+
+.team-settings-selected-right {
+    display: flex;
+    align-items: center;
 }

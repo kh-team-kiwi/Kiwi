@@ -94,6 +94,16 @@
     "cancel": "取消",
     "no-events": "没有活动显示",
     "no-events-explanation": "即将到来的活动将在这里显示！",
-    "save": "保存"
+    "save": "保存",
+    "no-whitespace": "无空格",
+    "valid-email": "有效的电子邮件格式",
+    "unique-email": "唯一的电子邮件",
+    "email-requirements": "电子邮件要求",
+    "username-requirements": "用户名要求",
+    "username-length-requirement": "2到10个字符之间",
+    "password-requirements": "密码要求",
+    "password-length-requirement": "8到16个字符之间",
+    "password-special-char-requirement": "包含特殊字符 (!@#$%^)",
+    "password-same": "密码匹配"
   }
   

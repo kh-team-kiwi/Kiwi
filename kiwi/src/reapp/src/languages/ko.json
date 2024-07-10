@@ -94,7 +94,18 @@
   "cancel": "취소",
   "no-events": "표시할 이벤트가 없습니다",
   "no-events-explanation": "다가오는 이벤트가 여기에 표시됩니다!",
-  "save": "저장"
+  "save": "저장",
+  "no-whitespace": "공백이 없어야 합니다",
+  "valid-email": "이메일 형식을 지켜주세요",
+  "unique-email": "중복되지 않은 이메일 입니다",
+  "email-requirements": "이메일 요구사항",
+  "username-requirements": "유저네임 요구사항",
+  "username-length-requirement": "2글자 이상 10글자 이하만 가능합니다",
+  "password-requirements": "패스워드 요구사항",
+  "password-length-requirement": "8글자 이상 16글자 이하만 가능합니다",
+  "password-special-char-requirement": "특수문자(!@#$%^)를 포함해야합니다",
+  "password-same": "비밀번호가 일치합니다"
+
 
 
 }
