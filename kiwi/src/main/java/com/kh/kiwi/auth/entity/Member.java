@@ -28,7 +28,7 @@ public class Member implements UserDetails {
     private String memberId;
     private String memberPw;
     private String memberFilepath;
-    private String memberStatus; // 1:active 2:lock
+    private String memberStatus; //
     private String memberRole; // MEMBER, KADMIN
     private String memberNickname;
     private LocalDateTime memberDate; // created at
@@ -84,7 +84,7 @@ public class Member implements UserDetails {
         this.memberId= dto.getMemberId();
         this.memberPw = hash;
         this.memberFilepath = dto.getMemberFilepath();
-        this.memberStatus = "1";
+        this.memberStatus = "ACTIVATED";
         this.memberRole = "MEMBER";
         this.memberNickname = dto.getMemberNickname();
         this.memberDate = LocalDateTime.now();

@@ -109,15 +109,15 @@ public class TeamService {
                 groupRepository.save(invite);
             });
 
-            for (MemberDto member : invitedMembers) {
-                notificationService.customNotify(member.getUsername(), "팀에 초대되었습니다.", "INVITE", "sse");
-            }
+//            for (MemberDto member : invitedMembers) {
+//                notificationService.customNotify(member.getUsername(), "팀에 초대되었습니다.", "INVITE", "sse");
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseTeamDto.setFailed("데이터베이스 연결에 실패했습니다.");
+            return ResponseTeamDto.setFailed("The database connection failed.");
         }
-        return ResponseTeamDto.setSuccessData("팀생성에 성공했습니다.", team);
+        return ResponseTeamDto.setSuccessData("Team creation was successful.", team);
     }
 
     // 새로운 멤버 관리 메서드 추가
@@ -126,7 +126,7 @@ public class TeamService {
         try{
             List<Group> groups = groupRepository.findByTeamWithMember(teamno);
 
-            return ResponseDto.setSuccessData("팀원 조회를 성공했습니다.",
+            return ResponseDto.setSuccessData("The team member lookup was successful.",
                     groups.stream()
                             .map(group -> TeamMemberDto.builder()
                                     .memberId(group.getMemberId())
@@ -140,7 +140,7 @@ public class TeamService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이트베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a datebase error.");
         }
     }
 
@@ -181,23 +181,23 @@ public class TeamService {
         try {
             Optional<Team> searchTeam = teamRepository.findById(teamno);
             if (searchTeam.isEmpty()) {
-                return ResponseDto.setFailed("존재하지 않는 팀번호 입니다.");
+                return ResponseDto.setFailed("A team number that doesn't exist.");
             }
             if (searchTeam.get().getTeamAdminMemberId().equals(memberId)) {
-                return ResponseDto.setFailed("팀 소유자는 탈퇴할 수 없습니다.");
+                return ResponseDto.setFailed("Team owners can't leave.");
             }
             GroupId searchGroup = GroupId.builder().team(teamno).memberId(memberId).build();
             if (groupRepository.existsById(searchGroup)) {
                 groupRepository.deleteById(searchGroup);
             } else {
-                return ResponseDto.setFailed("존재하지 않는 팀원 입니다.");
+                return ResponseDto.setFailed("This team member doesn't exist.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a database error.");
         }
 
-        return ResponseDto.setSuccess("성공적으로 팀을 나왔습니다.");
+        return ResponseDto.setSuccess("You've successfully exited the team.");
     }
 
     public String getRole(String teamno, String memberId) {
@@ -208,16 +208,16 @@ public class TeamService {
         try{
             Optional<Team> searchTeam = teamRepository.findById(team);
             if (searchTeam.isEmpty()) {
-                return ResponseDto.setFailed("팀 이름 변경에 실패했습니다. 존재하지 않는 팀입니다.");
+                return ResponseDto.setFailed("Renaming a team failed. The team doesn't exist.");
             } else {
                 ;
                 searchTeam.get().setTeamName(teamName);
                 teamRepository.save(searchTeam.get());
-                return ResponseDto.setSuccess("팀 이름을 변경했습니다.");
+                return ResponseDto.setSuccess("You changed the team name.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 팀 이름 변경에 실패했습니다.");
+            return ResponseDto.setFailed("The team name change failed due to a database error.");
         }
     }
 
@@ -227,13 +227,13 @@ public class TeamService {
             if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
                 groupRepository.deleteAllByTeam(team);
                 teamRepository.deleteById(team);
-                return ResponseDto.setSuccess("성공적으로 삭제되었습니다.");
+                return ResponseDto.setSuccess("Successfully deleted.");
             } else {
-                return ResponseDto.setFailed("조건이 일치하지 않아 삭제에 실패했습니다.");
+                return ResponseDto.setFailed("The delete failed because the conditions didn't match.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 팀 삭제에 실패했습니다.");
+            return ResponseDto.setFailed("Deleting a team failed due to a database error.");
         }
     }
 
@@ -244,7 +244,7 @@ public class TeamService {
         try{
             Optional<Team> searchTeam = teamRepository.findById(team);
             if (searchTeam.isEmpty()) {
-                return ResponseDto.setFailed("팀을 조회할 수 없습니다.");
+                return ResponseDto.setFailed("I can't look up my team.");
             }
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -259,16 +259,16 @@ public class TeamService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("오류가 발생해 저장을 실패했습니다.");
+            return ResponseDto.setFailed("The save failed because an error occurred.");
         }
 
-        return ResponseDto.setSuccess("성공적으로 프로필을 저장했습니다.");
+        return ResponseDto.setSuccess("You have successfully saved your profile.");
     }
 
     @Transactional
     public ResponseDto<?> inviteMember(TeamCreateRequest tcdto) {
         try{
-            if(!teamRepository.existsById(tcdto.getTeamName())) return ResponseDto.setFailed("팀을 찾을 수 없습니다.");
+            if(!teamRepository.existsById(tcdto.getTeamName())) return ResponseDto.setFailed("No teams were found.");
             List<MemberDto> invitedMembers = tcdto.getInvitedMembers();
             invitedMembers.forEach(member -> {
                 Group invite = Group.builder()
@@ -279,17 +279,17 @@ public class TeamService {
                         .build();
                 groupRepository.save(invite);
             });
-            return ResponseDto.setSuccess("초대되었습니다.");
+            return ResponseDto.setSuccess("The invitation was successful.");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a database error.");
         }
     }
 
     @Transactional
     public ResponseDto<?> updateRole(List<TeamMemberDto> updateMembers, String teamno) {
         try{
-            if(!teamRepository.existsById(teamno)) return ResponseDto.setFailed("팀을 찾을 수 없습니다.");
+            if(!teamRepository.existsById(teamno)) return ResponseDto.setFailed("No teams were found.");
             updateMembers.forEach(member -> {
                 Group update = Group.builder()
                         .team(member.getTeam())
@@ -299,17 +299,17 @@ public class TeamService {
                         .build();
                 groupRepository.save(update);
             });
-            return ResponseDto.setSuccess("반영되었습니다.");
+            return ResponseDto.setSuccess("Reflected.");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a database error.");
         }
     }
 
     public ResponseDto<?> searchMember(String teamno, String searchKey) {
         try{
             List<Group> groups = groupRepository.findByTeamWithMember(teamno);
-            if(groups==null||groups.isEmpty()) return ResponseDto.setSuccess("조회된 인원이 없습니다.");
+            if(groups==null||groups.isEmpty()) return ResponseDto.setSuccess("No people were found.");
             List<TeamMemberDto> filteredGroups = groups.stream().filter(group -> group.getMemberId().contains(searchKey))
                     .map(group -> TeamMemberDto.builder()
                             .memberId(group.getMemberId())
@@ -320,11 +320,11 @@ public class TeamService {
                             .memberNickname(group.getMember().getMemberNickname())
                             .build()).toList();
             if(filteredGroups.size()>5) filteredGroups.subList(0,5);
-            return ResponseDto.setSuccessData("조회되었습니다.",filteredGroups);
+            return ResponseDto.setSuccessData("It was viewed.",filteredGroups);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a database error.");
         }
     }
 
@@ -332,12 +332,12 @@ public class TeamService {
     public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner) {
         try{
             Optional<Team> searchTeam = teamRepository.findById(teamno);
-            if(searchTeam.isEmpty()) return ResponseDto.setFailed("팀을 조회할 수 없습니다.");
+            if(searchTeam.isEmpty()) return ResponseDto.setFailed("I can't look up my team.");
 
 
             Optional<Group> predecessor = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
             Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
-            if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("존재하지 않는 멤버입니다.");
+            if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("The member does not exist.");
 
             searchTeam.get().setTeamAdminMemberId(newOwner);
             successor.get().setRole("OWNER");
@@ -347,24 +347,24 @@ public class TeamService {
             groupRepository.save(successor.get());
             groupRepository.save(predecessor.get());
 
-            return ResponseDto.setSuccess("변경되었습니다.");
+            return ResponseDto.setSuccess("Changed.");
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a database error.");
         }
     }
 
     public ResponseDto<?> updateStatus(String teamno, String memberId, String status) {
         try{
             Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
-            if(search.isEmpty()) return ResponseDto.setFailed("멤버를 조회할 수 없습니다.");
+            if(search.isEmpty()) return ResponseDto.setFailed("Unable to look up members.");
             search.get().setStatus(status);
             groupRepository.save(search.get());
-            return ResponseDto.setSuccess("변경되었습니다.");
+            return ResponseDto.setSuccess("Changed.");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+            return ResponseDto.setFailed("Failed with a database error.");
         }
     }
 }

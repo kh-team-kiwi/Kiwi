@@ -54,7 +54,7 @@ public class AuthService {
         boolean isPasswordMatch = bCryptPasswordEncoder.matches(dto.getMemberPwd(), hashedPassword);
 
         if(!isPasswordMatch) {
-            return ResponseDto.setFailed("암호화에 실패하였습니다.");
+            return ResponseDto.setFailed("Encryption failed.");
         }
 
         // UserEntity 생성
@@ -64,10 +64,10 @@ public class AuthService {
         try {
             memberRepository.save(member);
         } catch (Exception e) {
-            return ResponseDto.setFailed("데이터베이스 연결에 실패하였습니다.");
+            return ResponseDto.setFailed("The database connection failed.");
         }
 
-        return ResponseDto.setSuccess("회원가입을 성공했습니다.\n로그인 페이지로 이동합니다.");
+        return ResponseDto.setSuccess("You have successfully signed up.");
     }
 
     public ResponseDto<?> profile(String memberId){
@@ -75,9 +75,9 @@ public class AuthService {
         if(member != null) {
             MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
                     .role(member.getMemberRole()).build();
-           return ResponseDto.setSuccessData("프로필 이미지 입니다.", memberDto);
+           return ResponseDto.setSuccessData("The profile image.", memberDto);
         }
-        return  ResponseDto.setFailed("해당하는 프로필 정보가 없습니다.");
+        return  ResponseDto.setFailed("No applicable profile information exists.");
     }
 
 
@@ -86,9 +86,9 @@ public class AuthService {
         Member member = memberRepository.findById(memberId).orElse(null);
         System.out.println(member);
         if(member == null) {
-            return ResponseDto.setSuccess("생성가능한 이메일 입니다.");
+            return ResponseDto.setSuccess("The email that can be generated.");
         }
-        return  ResponseDto.setFailed("생성 불가능한 이메일입니다.");
+        return  ResponseDto.setFailed("The email cannot be created.");
     }
 
     public ResponseDto<?> existMember(String memberId){
@@ -98,9 +98,9 @@ public class AuthService {
         if(member != null) {
             MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
                     .role(member.getMemberRole()).build();
-            return ResponseDto.setSuccessData("초대 가능한 이메일 입니다.",memberDto);
+            return ResponseDto.setSuccessData("The email that can be invited.",memberDto);
         }
-        return  ResponseDto.setFailed("초대 불가능한 이메일입니다.");
+        return  ResponseDto.setFailed("The email is uninviteable.");
     }
 
     public ResponseDto<?> updateAccount(@RequestParam("profile") MultipartFile[] files,
@@ -112,7 +112,7 @@ public class AuthService {
         try{
             Optional<Member> searchMember = memberRepository.findById(memberId);
             if (searchMember.isEmpty()) {
-                return ResponseDto.setFailed("회원을 조회할 수 없습니다.");
+                return ResponseDto.setFailed("I can't look up a member.");
             }
 
             if(files != null && files.length > 0) {
@@ -132,42 +132,42 @@ public class AuthService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("오류가 발생해 저장을 실패했습니다.");
+            return ResponseDto.setFailed("The save failed because an error occurred.");
         }
 
-        return ResponseDto.setSuccessData("성공적으로 프로필을 저장했습니다.",reuslt);
+        return ResponseDto.setSuccessData("You have successfully saved your profile.",reuslt);
     }
 
     public ResponseDto<?> updatePassword(String memberId,String currentPw,String newPw){
         try{
             Member searchMember = memberRepository.findByMemberId(memberId);
-            if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
+            if(searchMember==null) return ResponseDto.setFailed("The member doesn't exist.");
             if(bCryptPasswordEncoder.matches(currentPw,searchMember.getPassword())) {
                 searchMember.setMemberPw(bCryptPasswordEncoder.encode(newPw));
                 memberRepository.save(searchMember);
             } else {
-                return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
+                return ResponseDto.setFailed("The passwords don't match.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("오류가 발생해 저장을 실패했습니다.");
+            return ResponseDto.setFailed("The save failed because an error occurred.");
         }
 
-        return ResponseDto.setSuccess("비밀번호를 변경했습니다.");
+        return ResponseDto.setSuccess("You've changed your password.");
     }
 
     public ResponseDto<?> deleteAccount(String memberId, String password){
         try{
             Member searchMember = memberRepository.findByMemberId(memberId);
-            if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
-            if(teamRepository.existsByTeamAdminMemberId(memberId)) return ResponseDto.setFailed("팀 소유자는 삭제할 수 없습니다.");
+            if(searchMember==null) return ResponseDto.setFailed("The member doesn't exist.");
+            if(teamRepository.existsByTeamAdminMemberId(memberId)) return ResponseDto.setFailed("Team owners can't be deleted.");
             if(bCryptPasswordEncoder.matches(password,searchMember.getPassword())){
                 memberRepository.deleteById(memberId);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("오류가 발생해 삭제를 실패했습니다.");
+            return ResponseDto.setFailed("The delete failed because an error occurred.");
         }
-        return ResponseDto.setSuccess("계정을 삭제했습니다.");
+        return ResponseDto.setSuccess("You deleted your account.");
     }
 }
