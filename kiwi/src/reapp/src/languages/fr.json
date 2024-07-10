@@ -94,7 +94,17 @@
     "cancel": "Annuler",
     "no-events": "Aucun événement à afficher",
     "no-events-explanation": "Les événements à venir seront affichés ici !",
-    "save": "Sauvegarder"
+    "save": "Sauvegarder",
+    "no-whitespace": "Pas d'espace",
+    "valid-email": "Format d'email valide",
+    "unique-email": "Email unique",
+    "email-requirements": "Exigences de l'email",
+    "username-requirements": "Exigences du nom d'utilisateur",
+    "username-length-requirement": "Entre 2 et 10 caractères",
+    "password-requirements": "Exigences du mot de passe",
+    "password-length-requirement": "Entre 8 et 16 caractères",
+    "password-special-char-requirement": "Inclut un caractère spécial (!@#$%^)",
+    "password-same": "Les mots de passe correspondent"
 
   
     

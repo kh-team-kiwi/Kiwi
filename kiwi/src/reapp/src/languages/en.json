@@ -94,6 +94,16 @@
   "cancel": "Cancel",
   "no-events": "No events to show",
   "no-events-explanation": "Upcoming events will be shown here!",
-  "save": "Save"
+  "save": "Save",
+  "no-whitespace": "No whitespace",
+  "valid-email": "Valid email format",
+  "unique-email": "Unique email",
+  "email-requirements": "Email requirements",
+  "username-requirements": "Username requirements",
+  "username-length-requirement": "Between 2 and 10 characters",
+  "password-requirements": "Password requirements",
+  "password-length-requirement": "Between 8 and 16 characters",
+  "password-special-char-requirement": "Includes a special character (!@#$%^)",
+  "password-same": "Passwords match"
 
 }

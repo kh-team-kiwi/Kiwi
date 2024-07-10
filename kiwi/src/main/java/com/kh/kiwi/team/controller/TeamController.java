@@ -108,8 +108,9 @@ public class TeamController {
     * 팀 삭제 요청
     * */
     @PostMapping("/{team}/member/{memberId}")
-    public ResponseDto<?> deleteTeam(@PathVariable String team, @PathVariable String memberId) {
-        return teamService.deleteTeam(team, memberId);
+    public ResponseDto<?> deleteTeam(@PathVariable String team, @PathVariable String memberId, @RequestBody Map<String, String> RequestBody) {
+        String password = RequestBody.get("password");
+        return teamService.deleteTeam(team, memberId,password);
     }
 
     /*
@@ -138,7 +139,8 @@ public class TeamController {
         String teamno = requestBody.get("teamno");
         String newOwner = requestBody.get("newOwner");
         String oldOwner = requestBody.get("oldOwner");
-        return teamService.changeOwner(teamno,newOwner,oldOwner);
+        String password = requestBody.get("password");
+        return teamService.changeOwner(teamno,newOwner,oldOwner, password);
     }
 
     /*

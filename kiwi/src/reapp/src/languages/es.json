@@ -94,6 +94,16 @@
     "cancel": "Cancelar",
     "no-events": "No hay eventos para mostrar",
     "no-events-explanation": "¡Los próximos eventos se mostrarán aquí!",
-    "save": "Guardar"
+    "save": "Guardar",
+    "no-whitespace": "Sin espacios en blanco",
+    "valid-email": "Formato de correo electrónico válido",
+    "unique-email": "Correo electrónico único",
+    "email-requirements": "Requisitos del correo electrónico",
+    "username-requirements": "Requisitos del nombre de usuario",
+    "username-length-requirement": "Entre 2 y 10 caracteres",
+    "password-requirements": "Requisitos de la contraseña",
+    "password-length-requirement": "Entre 8 y 16 caracteres",
+    "password-special-char-requirement": "Incluye un carácter especial (!@#$%^)",
+    "password-same": "Las contraseñas coinciden"
   }
   

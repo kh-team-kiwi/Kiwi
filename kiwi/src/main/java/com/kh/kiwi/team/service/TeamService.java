@@ -21,6 +21,7 @@ import com.kh.kiwi.team.repository.GroupRepository;
 import com.kh.kiwi.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,8 @@ public class TeamService {
     private final MemberRepository memberRepository;
     private final MemberDetailsRepository memberDetailsRepository;
     private final NotificationService notificationService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
@@ -222,8 +225,11 @@ public class TeamService {
     }
 
     @Transactional
-    public ResponseDto<?> deleteTeam(String team, String memberId) {
+    public ResponseDto<?> deleteTeam(String team, String memberId, String password) {
         try{
+            Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
+            String hashedPassword = bCryptPasswordEncoder.encode(password);
+            if(!bCryptPasswordEncoder.matches(hashedPassword,search.get().getMember().getPassword())) return setFailed("Invalid Password.");
             if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
                 groupRepository.deleteAllByTeam(team);
                 teamRepository.deleteById(team);
@@ -235,6 +241,9 @@ public class TeamService {
             e.printStackTrace();
             return ResponseDto.setFailed("Deleting a team failed due to a database error.");
         }
+
+
+
     }
 
     public ResponseDto<?> uploadProfile(MultipartFile[] files, String team, String memberId) throws IOException {
@@ -329,30 +338,43 @@ public class TeamService {
     }
 
     @Transactional
-    public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner) {
+    public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner, String password) {
         try{
+            Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
+            String hashedPassword = bCryptPasswordEncoder.encode(password);
+            if(!bCryptPasswordEncoder.matches(hashedPassword,search.get().getMember().getPassword())) return setFailed("Invalid Password.");
+            
+            
             Optional<Team> searchTeam = teamRepository.findById(teamno);
-            if(searchTeam.isEmpty()) return ResponseDto.setFailed("I can't look up my team.");
-
+            if(searchTeam.isEmpty()) return ResponseDto.setFailed("can't look up team number");
 
             Optional<Group> predecessor = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
             Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
             if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("The member does not exist.");
 
-            searchTeam.get().setTeamAdminMemberId(newOwner);
-            successor.get().setRole("OWNER");
-            predecessor.get().setRole("ADMIN");
+                    searchTeam.get().setTeamAdminMemberId(newOwner);
+                    successor.get().setRole("OWNER");
+                    predecessor.get().setRole("ADMIN");
 
-            teamRepository.save(searchTeam.get());
-            groupRepository.save(successor.get());
-            groupRepository.save(predecessor.get());
+                    teamRepository.save(searchTeam.get());
+                    groupRepository.save(successor.get());
+                    groupRepository.save(predecessor.get());
 
             return ResponseDto.setSuccess("Changed.");
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+                }
+
+            } else {
+                return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("Failed with a database error.");
         }
+
     }
 
     public ResponseDto<?> updateStatus(String teamno, String memberId, String status) {

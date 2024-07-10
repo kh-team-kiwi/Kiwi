@@ -94,7 +94,17 @@
     "cancel": "Abbrechen",
     "no-events": "Keine Ereignisse anzuzeigen",
     "no-events-explanation": "Kommende Ereignisse werden hier angezeigt!",
-    "save": "Speichern"
+    "save": "Speichern",
+    "no-whitespace": "Keine Leerzeichen",
+    "valid-email": "Gültiges E-Mail-Format",
+    "unique-email": "Einzigartige E-Mail",
+    "email-requirements": "E-Mail-Anforderungen",
+    "username-requirements": "Benutzernamen-Anforderungen",
+    "username-length-requirement": "Zwischen 2 und 10 Zeichen",
+    "password-requirements": "Passwort-Anforderungen",
+    "password-length-requirement": "Zwischen 8 und 16 Zeichen",
+    "password-special-char-requirement": "Sonderzeichen enthalten (!@#$%^)",
+    "password-same": "Passwörter stimmen überein"
     
     
   }
