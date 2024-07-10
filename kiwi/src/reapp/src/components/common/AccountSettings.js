@@ -68,10 +68,9 @@ const AccountSettings = ({ isOpen, onClose }) => {
         setSessionItem('profile', res.data.data);
         window.location.reload();
       } else {
-        toast.error('An error has occurred.');
+        toast.error(res.data.message);
       }
     } catch (e) {
-      console.error(e);
       toast.error('An error has occurred.');
 
     }
@@ -111,18 +110,17 @@ const AccountSettings = ({ isOpen, onClose }) => {
       const memberId = getSessionItem('profile').username;
       const currentPw = currentPassword;
       const newPw = newPassword;
-      const res = await axiosHandler.post('/api/auth/update/password', { memberId, currentPw, newPw });
+      const res = await axiosHandler.put('/api/auth/member/'+memberId, { currentPw, newPw });
       if (res.data.result) {
         setIsPasswordSectionExpanded(false);
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
         toast.success("Your password has been updated");
-
       } else {
+        toast.error(res.data.message);
       }
     } catch (e) {
-      console.error(e);
       toast.error('An error has occurred.');
 
     }
@@ -132,7 +130,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
     try {
       const memberId = getSessionItem('profile').username;
       const password = currentPassword;
-      const res = await axiosHandler.post('/api/auth/delete/account', { memberId, password });
+      const res = await axiosHandler.delete('/api/auth/member/'+memberId, { password });
       if (res.data.result) {
         setSessionItem('profile', res.data.data);
         removeLocalItem("accessToken");
@@ -141,10 +139,9 @@ const AccountSettings = ({ isOpen, onClose }) => {
         removeSessionItem("events");
         window.location.replace("/");
       } else {
-        toast.error('An error has occurred.');
+        toast.error(res.data.message);
       }
     } catch (e) {
-      console.error(e);
       toast.error('An error has occurred.');
     }
   };

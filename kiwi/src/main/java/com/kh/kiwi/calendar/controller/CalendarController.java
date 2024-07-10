@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/team")
+@RequestMapping("/api/calendar")
 public class CalendarController {
     /*
     int SC_OK = 200;
@@ -35,7 +35,7 @@ public class CalendarController {
 
     private final CalendarService calendarService;
 
-    @PostMapping("/{team}/calendar/list/{memberId}")
+    @GetMapping("/team/{team}/member/{memberId}")
     public ResponseEntity<ResponseDto<Map<String, Object>>> getSchedules(@PathVariable  String team, @PathVariable String memberId){
         ResponseDto<Map<String, Object>> result = calendarService.getSchedules(memberId,team);
         if(!result.isResult())
@@ -44,7 +44,7 @@ public class CalendarController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/{team}/calendar/create/{memberId}")
+    @PostMapping("/team/{team}/member/{memberId}")
     public ResponseEntity<?> addSchedule(@PathVariable  String team, @PathVariable String memberId, @RequestBody CalendarRequestDto dto){
         dto.setMemberId(memberId);
         dto.setTeam(team);
@@ -55,7 +55,7 @@ public class CalendarController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{team}/calendar/delete/{scheduleNo}")
+    @DeleteMapping("/team/{team}/schedule/{scheduleNo}")
     public ResponseEntity<?> deleteSchedule(@PathVariable String scheduleNo){
         ResponseDto<?> result = calendarService.deleteSchedule(scheduleNo);
         if(!result.isResult())
@@ -64,7 +64,7 @@ public class CalendarController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/{team}/calendar/update")
+    @PutMapping("/")
     public ResponseEntity<?> updateSchedule(@RequestBody Schedule dto){
         ResponseDto<?> result = calendarService.updateSchedule(dto);
         if(!result.isResult())

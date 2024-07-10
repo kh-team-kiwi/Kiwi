@@ -17,7 +17,6 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
     }, [checkedMembers]);
 
     const closeModal = () => {
-        console.log(selectedList);
         setIsModalOpen(false);
     };
 
@@ -35,10 +34,10 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
                     ...member,
                     role: 'MEMBER'
                 }));
-            } else if (role === 'exiled') {
+            } else if (role === 'blocked') {
                 updatedList = selectedList.map(member => ({
                     ...member,
-                    status: 'EXILED'
+                    status: 'BLOCKED'
                 }));
             } else {
                 updatedList = selectedList.map(member => ({
@@ -47,7 +46,7 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
                 }));
             }
 
-            const res = await axiosHandler.post("/api/team/update/role/"+teamno,updatedList);
+            const res = await axiosHandler.post("/api/team/"+teamno,updatedList);
             if (res.data.result) {
                 window.location.reload();
             } else {
@@ -75,7 +74,7 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
                                         <option value='default' hidden disabled>적용할 관리를 선택해주세요.</option>
                                         <option value='admin'>관리자로 지정</option>
                                         <option value='member'>멤버로 지정</option>
-                                        <option value='exiled'>멤버 차단</option>
+                                        <option value='blocked'>멤버 차단</option>
                                         <option value='joined'>차단 해제</option>
                                     </select>
                                 </div>

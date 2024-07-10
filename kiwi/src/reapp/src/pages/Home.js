@@ -29,6 +29,7 @@ import NotificationIcon from '../images/svg/account/NotificationIcon';
 import SettingsIcon from '../images/svg/buttons/SettingsIcon';
 import HelpIcon from '../images/svg/buttons/HelpIcon';
 import LogoutIcon from '../images/svg/buttons/LogoutIcon';
+import {toast} from "react-toastify";
 
 const Home = () => {
     const [isImageLoaded, setImageLoaded] = useState(false); 
@@ -110,15 +111,15 @@ const Home = () => {
 
         const memberId = profile.username;
         try {
-            const res = await axiosHandler.get("/api/team/list/" + memberId);
+            const res = await axiosHandler.get("/api/team/member/" + memberId);
             if (res.status === 200) {
                 setTeams(res.data);
                 setSessionItem("teams", res.data);
             } else {
-                console.log(res);
+                toast.error(res.data.message);
             }
         } catch (error) {
-            console.error('Error fetching teams:', error);
+            toast.error('An error has occurred.');
         }
     };
 
@@ -134,9 +135,15 @@ const Home = () => {
         }
 
         const memberId = profile.username;
-        const response = await axiosHandler.post(`/api/team/create?memberId=${memberId}`, formTeamData);
-        if (response.status === 200) {
-            fetchTeams();
+        try{
+            const response = await axiosHandler.post('/api/team/create/'+memberId, formTeamData);
+            if (response.status === 200) {
+                fetchTeams();
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (e) {
+            toast.error('An error has occurred.');
         }
     };
 
@@ -144,7 +151,7 @@ const Home = () => {
 
     async function logoutBtn() {
         try {
-            const response = await axiosHandler.post("/api/auth/logout");
+            const response = await axiosHandler.get("/api/auth/logout");
             removeLocalItem("accessToken");
             removeSessionItem("profile");
             removeSessionItem("teams");
@@ -152,13 +159,9 @@ const Home = () => {
             localStorage.getItem("")
             navigate('/', { replace: true });
         } catch (e) {
-            if (e.data) alert(e.data.message);
-            console.error(e);
-        }
-    }
+            if (e.data) toast.error('An error has occurred.');
 
-    function handleTeamsettings(team) {
-        navigate(`/team/${team}/teamsettings/personal-manage`);
+        }
     }
 
     return isImageLoaded ? (

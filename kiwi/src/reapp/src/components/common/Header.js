@@ -87,26 +87,26 @@ const Header = () => {
   const fetchData = async () => {
     const memberId = getSessionItem("profile").username;
     try {
-      const res = await axiosHandler.get("/api/team/list/" + memberId);
+      const res = await axiosHandler.get("/api/team/member/" + memberId);
       if (res.status === 200) {
         setTeams(res.data);
         setSessionItem("teams", res.data);
       } else {
-        console.log(res);
+        if(res.data) toast.error(res.data.message);
       }
     } catch (error) {
-      console.error('Error fetching teams:', error);
+      toast.error(error.data.message);
     }
 
     try {
-      const res = await axiosHandler.get(`/api/team/getRole/team/${teamno}/member/${memberId}`);
+      const res = await axiosHandler.get(`/api/team/${teamno}/member/${memberId}`);
       if(res.status===200){
         joinTeam(res.data);
       } else {
-        console.log(res);
+        if(res.data) toast.error(res.data.message);
       }
     } catch (e) {
-      console.error('Error fetchRole:', e);
+      toast.error(e.data.message);
     }
   };
 
@@ -239,7 +239,7 @@ const Header = () => {
 
   async function logoutBtn(){
     try{
-      const response = await axiosHandler.post("/api/auth/logout");
+      const response = await axiosHandler.get("/api/auth/logout");
       if (response.status === 200) {
         removeLocalItem("accessToken");
         removeSessionItem("profile");
@@ -248,29 +248,23 @@ const Header = () => {
         localStorage.getItem("")
         navigate('/', {replace:true});
       } else {
-        console.error(response);
+        toast('An error occurred');
       }
     } catch (e) {
-      console.error(e);
+      toast('An error occurred');
     }
   }
 
   const handleLeaveTeam = async () => {
-    const dto = {
-        memberId: getSessionItem("profile").username,
-        team: teamno
-    }
     try {
-        const res = await axiosHandler.post("/api/team/leaveTeam", dto);
+      const res = await axiosHandler.delete("/api/team/"+teamno+"/member/"+getSessionItem("profile").username);
         if (res.data.result) {
             toast.success(res.data.message);
             navigate('/home', { replace: true });
         } else {
             toast.error(res.data.message);
-            console.log('skjfdhskfjshkj')
         }
     } catch (e) {
-        console.error("handleLeaveTeam failed: ", e);
         toast.error('Failed to leave team.');
         toast.error('error');
     }

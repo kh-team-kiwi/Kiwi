@@ -7,6 +7,7 @@ import {getLocalItem, getSessionItem} from "../../jwt/storage";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import ErrorImageHandler from "../common/ErrorImageHandler";
+import {toast} from "react-toastify";
 
 const Loading = () => {
     return <div>Loading...</div>;
@@ -34,33 +35,30 @@ const Team = () => {
     const handleTeamName = async () => {
         if(name.length===0) return alert("최소 1글자 이상 입력해야합니다.");
         try {
-            const memberId = getSessionItem('profile').username;
-            const res = await axiosHandler.post('/api/team/update/team',{ teamno: teamno, teamName:name });
+            const res = await axiosHandler.put('/api/team/'+teamno+'/teamname/'+name);
             if(res.data.result){
                 alert("팀 이름이 변경되었습니다.")
                 window.location.reload();
             }else {
-                alert(res.data.message);
+                toast.error(res.data.message);
             }
         } catch (e) {
-            console.error(e);
-            alert("팀 이름 변경을 실패했습니다.")
+            toast.error(e.data.message);
         }
     }
 
     const handleTeamDelete = async () => {
         try {
             const memberId = getSessionItem('profile').username;
-            const res = await axiosHandler.post('/api/team/delete'+location.pathname,{memberId});
+            const res = await axiosHandler.delete('/api/team/'+teamno+'/member/'+memberId);
             if(res.data.result){
                 alert("삭제되었습니다.")
                 navigate('/home',{replace:true});
             }else {
-                alert(res.data.message);
+                toast.error(res.data.message);
             }
         } catch (e) {
-            console.error(e);
-            alert("팀 삭제에 실패했습니다.")
+            toast.error(e.data.message);
         }
     }
 
@@ -70,9 +68,7 @@ const Team = () => {
         formData.append('profile', file);
         formData.append('team', teamno);
         formData.append('memberId',getSessionItem('profile').username);
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
+
         try {
             const res = await axiosHandler.post('/api/team/upload/profile', formData,
                 {headers: { 'Content-Type': 'multipart/form-data' }});
@@ -83,8 +79,7 @@ const Team = () => {
                 alert(res.data.message);
             }
         } catch (e) {
-            console.error(e);
-            alert("팀 프로필 변경을 실패했습니다.")
+            toast.error(e.data.message);
         }
     }
 
@@ -97,7 +92,7 @@ const Team = () => {
                 alert(res.data.message);
             }
         } catch (e) {
-            console.log("에러가 발생했습니다.")
+            toast.error(e.data.message);
         }
     }
 
@@ -135,15 +130,14 @@ const Team = () => {
     const searchMember = async () => {
         if (ownerInput === '') return setSearchList([]);
         try {
-            const res = await axiosHandler.post('/api/team/search',{teamno:teamno,search:ownerInput});
+            const res = await axiosHandler.get('/api/team/'+teamno+'/searchkey/'+ownerInput);
             if(res.data.result){
-                console.log(res.data.data);
                 setSearchList(res.data.data);
             } else {
                 alert(res.data.message);
             }
         } catch (e) {
-            console.error(e)
+            toast.error(e.data.message);
         }
     }
 

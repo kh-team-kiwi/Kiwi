@@ -8,13 +8,14 @@ import LocationIcon from '../../images/svg/buttons/LocationIcon';
 import DeleteIcon from '../../images/svg/buttons/DeleteIcon';
 import TimeIcon from '../../images/svg/buttons/TimeIcon';
 import axiosHandler from "../../jwt/axiosHandler";
-import { useLocation } from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import EditPopup from '../calendar/EditPopup';
 
 const EventPopup = ({ event, position, onClose, setEvents }) => {
   const { t, i18n } = useTranslation();
   const popupRef = useRef(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const {teamno} = useParams();
 
   useEffect(() => {
     const popup = popupRef.current;
@@ -114,7 +115,7 @@ const EventPopup = ({ event, position, onClose, setEvents }) => {
     const scheduleNo = event.scheduleNo;
     console.log("handleScheduleDelete : ");
     try {
-      const response = await axiosHandler.get("/api" + location.pathname + "/delete/" + scheduleNo);
+      const response = await axiosHandler.delete("/api/calendar/team/" + teamno + "/schedule/" + scheduleNo);
       if (response.data.result) {
         setEvents((prevEvents) => ({
           ...prevEvents,

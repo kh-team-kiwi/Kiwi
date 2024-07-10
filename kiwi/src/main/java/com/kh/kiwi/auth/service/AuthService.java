@@ -91,7 +91,7 @@ public class AuthService {
         return  ResponseDto.setFailed("생성 불가능한 이메일입니다.");
     }
 
-    public ResponseDto<?> member(String memberId){
+    public ResponseDto<?> existMember(String memberId){
         System.out.println(memberId);
         Member member = memberRepository.findById(memberId).orElse(null);
         System.out.println(member);
@@ -138,12 +138,12 @@ public class AuthService {
         return ResponseDto.setSuccessData("성공적으로 프로필을 저장했습니다.",reuslt);
     }
 
-    public ResponseDto<?> updatePassword(Map<String,String> data){
+    public ResponseDto<?> updatePassword(String memberId,String currentPw,String newPw){
         try{
-            Member searchMember = memberRepository.findByMemberId(data.get("memberId"));
+            Member searchMember = memberRepository.findByMemberId(memberId);
             if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
-            if(bCryptPasswordEncoder.matches(data.get("currentPw"),searchMember.getPassword())) {
-                searchMember.setMemberPw(bCryptPasswordEncoder.encode(data.get("newPw")));
+            if(bCryptPasswordEncoder.matches(currentPw,searchMember.getPassword())) {
+                searchMember.setMemberPw(bCryptPasswordEncoder.encode(newPw));
                 memberRepository.save(searchMember);
             } else {
                 return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
@@ -156,13 +156,13 @@ public class AuthService {
         return ResponseDto.setSuccess("비밀번호를 변경했습니다.");
     }
 
-    public ResponseDto<?> deleteAccount(Map<String,String> data){
+    public ResponseDto<?> deleteAccount(String memberId, String password){
         try{
-            Member searchMember = memberRepository.findByMemberId(data.get("memberId"));
+            Member searchMember = memberRepository.findByMemberId(memberId);
             if(searchMember==null) return ResponseDto.setFailed("존재하지 않는 회원입니다.");
-            if(teamRepository.existsByTeamAdminMemberId(data.get("memberId"))) return ResponseDto.setFailed("팀 소유자는 삭제할 수 없습니다.");
-            if(bCryptPasswordEncoder.matches(data.get("password"),searchMember.getPassword())){
-                memberRepository.deleteById(data.get("memberId"));
+            if(teamRepository.existsByTeamAdminMemberId(memberId)) return ResponseDto.setFailed("팀 소유자는 삭제할 수 없습니다.");
+            if(bCryptPasswordEncoder.matches(password,searchMember.getPassword())){
+                memberRepository.deleteById(memberId);
             }
         } catch (Exception e) {
             e.printStackTrace();

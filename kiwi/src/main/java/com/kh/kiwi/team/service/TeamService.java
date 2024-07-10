@@ -6,6 +6,10 @@ import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
 import com.kh.kiwi.documents.entity.MemberDetails;
 import com.kh.kiwi.documents.repository.MemberDetailsRepository;
+import com.kh.kiwi.s3drive.entity.FileDrive;
+import com.kh.kiwi.s3drive.repository.DriveUsersRepository;
+import com.kh.kiwi.s3drive.repository.FileDriveRepository;
+import com.kh.kiwi.s3file.repository.FileDriveFileRepository;
 import com.kh.kiwi.team.dto.*;
 import com.kh.kiwi.team.entity.Company;
 import com.kh.kiwi.team.entity.Group;
@@ -140,26 +144,26 @@ public class TeamService {
         }
     }
 
-    @Transactional
-    public ResponseDto<?> removeMember(String teamId, String memberId) {
-        try {
-            GroupId groupId = new GroupId(memberId, teamId);
-            Optional<Group> groupOpt = groupRepository.findById(groupId);
+//    @Transactional
+//    public ResponseDto<?> removeMember(String teamId, String memberId) {
+//        try {
+//            GroupId groupId = new GroupId(memberId, teamId);
+//            Optional<Group> groupOpt = groupRepository.findById(groupId);
+//
+//            if (groupOpt.isPresent()) {
+//                groupRepository.deleteById(groupId);
+//                return ResponseDto.setSuccess("팀원 추방에 성공했습니다.");
+//            } else {
+//                return ResponseDto.setFailed("존재하지 않는 팀원입니다.");
+//            }
+//        } catch (Exception e) {
+//            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+//        }
+//    }
 
-            if (groupOpt.isPresent()) {
-                groupRepository.deleteById(groupId);
-                return ResponseDto.setSuccess("팀원 추방에 성공했습니다.");
-            } else {
-                return ResponseDto.setFailed("존재하지 않는 팀원입니다.");
-            }
-        } catch (Exception e) {
-            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
-        }
-    }
-
-    public Optional<Team> getTeamById(String teamId) {
-        return teamRepository.findById(teamId);
-    }
+//    public Optional<Team> getTeamById(String teamId) {
+//        return teamRepository.findById(teamId);
+//    }
 
     public List<Team> getAllTeams(String memberId) {
         List<Group> groups = groupRepository.findAllByMemberId(memberId);
@@ -173,16 +177,16 @@ public class TeamService {
                 .collect(Collectors.toList()); // List<Team>으로 수집
     }
 
-    public ResponseDto<?> leaveTeam(LeaveTeamRequestDto dto) {
+    public ResponseDto<?> leaveTeam(String teamno, String memberId) {
         try {
-            Optional<Team> searchTeam = teamRepository.findById(dto.getTeam());
+            Optional<Team> searchTeam = teamRepository.findById(teamno);
             if (searchTeam.isEmpty()) {
                 return ResponseDto.setFailed("존재하지 않는 팀번호 입니다.");
             }
-            if (searchTeam.get().getTeamAdminMemberId().equals(dto.getMemberId())) {
+            if (searchTeam.get().getTeamAdminMemberId().equals(memberId)) {
                 return ResponseDto.setFailed("팀 소유자는 탈퇴할 수 없습니다.");
             }
-            GroupId searchGroup = GroupId.builder().team(dto.getTeam()).memberId(dto.getMemberId()).build();
+            GroupId searchGroup = GroupId.builder().team(teamno).memberId(memberId).build();
             if (groupRepository.existsById(searchGroup)) {
                 groupRepository.deleteById(searchGroup);
             } else {
@@ -345,6 +349,19 @@ public class TeamService {
 
             return ResponseDto.setSuccess("변경되었습니다.");
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
+        }
+    }
+
+    public ResponseDto<?> updateStatus(String teamno, String memberId, String status) {
+        try{
+            Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
+            if(search.isEmpty()) return ResponseDto.setFailed("멤버를 조회할 수 없습니다.");
+            search.get().setStatus(status);
+            groupRepository.save(search.get());
+            return ResponseDto.setSuccess("변경되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");

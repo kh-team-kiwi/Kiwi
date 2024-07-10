@@ -106,7 +106,7 @@ const Register = () => {
                     setEmailCheck(prevState => ({...prevState, duplicatePattern: res.data.result}));
                 })
                 .catch(error => {
-                    console.error("handleChange >> email check : "+error);
+                    toast.error('An error has occurred.');
                 });
         } else {
             // 조건 미충족 시 duplicatePattern false 설정
@@ -209,25 +209,22 @@ const Register = () => {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
-
-        const response = await axios.post('/api/auth/signup', formData)
+        e.preventDefault();
+        await axios.post('/api/auth/signup', formData)
             .then((res) => {
                 if (res.data.result) {
-                    console.log('회원가입 성공:', res.data);
                     toast.success('Welcome to Kiwi!');
                     navigate('/',{replace:true});
                 } else {
-                    console.error('회원가입 실패:', res.data);
                     toast.success('Registration Failed')
                 }
-            }).catch((err) => {
-                console.error("회원가입 실패:", err);
+            }).catch(() => {
+                toast.error('Invalid Request. Registration Failed')
             });
     };
 
     const formStateCheck = (state) => {
-        for(const [key, value] of Object.entries(state)){
+        for(const [value] of Object.entries(state)){
             if(!value) return value;
         }
         return true;
