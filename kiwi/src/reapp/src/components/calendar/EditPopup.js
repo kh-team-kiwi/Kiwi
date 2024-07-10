@@ -63,7 +63,7 @@ const EditPopup = ({ event, isOpen, onClose, setEvents }) => {
     };
     console.log("before", updatedEvent);
     try {
-      const response = await axiosHandler.post("/api" + locate.pathname + "/update", updatedEvent);
+      const response = await axiosHandler.put("/api/calendar/", updatedEvent);
       if (response.data.result) {
         const data = response.data.data;
         console.log("after", data);

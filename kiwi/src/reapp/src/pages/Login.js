@@ -12,16 +12,13 @@ import ToggleLanguageButton from '../components/common/ToggleLanguageButton';
 import Logo from '../components/common/Logo';
 
 import googleImage from '../images/google.png';
-import kakaoImage from '../images/kakao.png';
+// import kakaoImage from '../images/kakao.png';
 import naverImage from '../images/naver.png';
 
 import EmailIcon from '../images/svg/account/EmailIcon';
 import PasswordIcon from '../images/svg/account/PasswordIcon';
 
 
-
-
-import axiosHandler from "../jwt/axiosHandler";
 import {setLocalItem, setSessionItem} from "../jwt/storage";
 
 const Login = () => {
@@ -59,8 +56,6 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('id:', username);
-        console.log('password:', password);
         try {
             const response = await axios.post('api/auth/login', {
                 username: username,
@@ -119,11 +114,11 @@ const Login = () => {
         window.location.href = "http://localhost:8080/oauth2/authorization/google"
     }
 
-    const kakaoLogin = () => {
-
-        window.location.href = "http://localhost:8080/oauth2/authorization/kakao"
-
-    }
+    // const kakaoLogin = () => {
+    //
+    //     window.location.href = "http://localhost:8080/oauth2/authorization/kakao"
+    //
+    // }
 
     return (
         <div>
@@ -194,9 +189,6 @@ const Login = () => {
             {t('new-to-kiwi')} <Link to="#" onClick={handleJoinNowClick}>{t('join-now')}</Link>
             </div>
         </div>
-
-
-
         </div>
         
     );

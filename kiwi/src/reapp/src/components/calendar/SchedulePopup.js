@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../../styles/components/calendar/SchedulePopup.css';
 import { getSessionItem } from "../../jwt/storage";
-import { useLocation } from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import axiosHandler from "../../jwt/axiosHandler";
 import PlusIcon from '../../images/svg/shapes/PlusIcon';
 import { toast } from 'react-toastify';
@@ -60,6 +60,7 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
   const [newEvent, setNewEvent] = useState(getInitialEventState());
 
   const location = useLocation();
+  const {teamno} = useParams();
 
   useEffect(() => {
     setNewEvent((prevEvent) => ({
@@ -143,26 +144,26 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
 
       return;
     }
-    toast.success("Event added successfully!");
-
     addSchedule(); // database save
     closePopup();
   };
 
   const addSchedule = async () => {
     try {
-      const response = await axiosHandler.post("/api" + location.pathname + "/create/" + getSessionItem("profile").username, newEvent);
+      const response = await axiosHandler.post("/api/calendar/team/" + teamno + "/member/" + getSessionItem("profile").username, newEvent);
       const data = response.data.data;
       if (data) {
         setEvents((prevEvents) => ({
           ...prevEvents,
           [data.calendar]: [...prevEvents[data.calendar], data]
         }));
-      } else {
 
+        toast.success("Event added successfully!");
+      } else {
+        toast.error('An error occurred.');
       }
     } catch (error) {
-      console.error("Failed to addSchedule:", error);
+      toast.error('An error occurred.');
     }
   }
 

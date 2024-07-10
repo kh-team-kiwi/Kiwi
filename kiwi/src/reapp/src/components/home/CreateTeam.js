@@ -77,54 +77,52 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
 
   const[inputMember, setInputMember] = useState('');
 
-  const handleMemberTag = async (event) => {
-    if(event.key === "Enter"){
-      event.preventDefault();
-
-      let check = validateInput(inputMember);
-      console.log(check);
-      if(check!==true){
-        toast.error(check);
-        return;
-      }
-
-      if(formData.invitedMembers.some(member=>member.username === inputMember)){
-        toast.error("이미 초대된 회원입니다.");
-        setInputMember('');
-        return;
-      }
-
-      if(getSessionItem("profile").username===inputMember){
-        toast.error("팀 생성자는 자동으로 추가 됩니다.");
-        setInputMember('');
-        return;
-      }
-
-      console.log("create-team >> input enter evenet : ", inputMember);
-      try{
-        const res = await axiosHandler.post("/api/auth/member",{memberId:event.target.value});
-
-        if (res.status === 200 && res.data.result) {
-          console.log("create-team >> return : ", res.data);
-          const data = res.data.data;
-          console.log(data);
-          setFormData(prev => ({
-            ...prev,
-            invitedMembers: [...prev.invitedMembers, data],
-          }));
-          console.log(formData);
-          setInputMember('');
-        } else if(res.status === 200 && !res.data.result) {
-          toast.success(res.data.message);
-        } else {
-          toast.error("오류가 발생했습니다.");
-        }
-      } catch (e) {
-        console.error("create team failed : ",e)
-      }
-
-    }
-  };
+  // const handleMemberTag = async (event) => {
+  //   if(event.key === "Enter"){
+  //     event.preventDefault();
+  //
+  //     let check = validateInput(inputMember);
+  //
+  //     if(check!==true){
+  //       toast.error(check);
+  //       return;
+  //     }
+  //
+  //     if(formData.invitedMembers.some(member=>member.username === inputMember)){
+  //       toast.error("이미 초대된 회원입니다.");
+  //       setInputMember('');
+  //       return;
+  //     }
+  //
+  //     if(getSessionItem("profile").username===inputMember){
+  //       toast.error("팀 생성자는 자동으로 추가 됩니다.");
+  //       setInputMember('');
+  //       return;
+  //     }
+  //
+  //     try{
+  //       const res = await axiosHandler.post("/api/auth/member",{memberId:event.target.value});
+  //
+  //       if (res.status === 200 && res.data.result) {
+  //
+  //         const data = res.data.data;
+  //         setFormData(prev => ({
+  //           ...prev,
+  //           invitedMembers: [...prev.invitedMembers, data],
+  //         }));
+  //
+  //         setInputMember('');
+  //       } else if(res.status === 200 && !res.data.result) {
+  //         toast.success(res.data.message);
+  //       } else {
+  //         toast.error("오류가 발생했습니다.");
+  //       }
+  //     } catch (e) {
+  //
+  //     }
+  //
+  //   }
+  // };
 
   const handleMemberTagBtn = async (event) => {
     event.preventDefault();
@@ -145,7 +143,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       setInputMember('');
       return;
     }
-    const res = await axiosHandler.post("/api/auth/member",{memberId:inputMember});
+    const res = await axiosHandler.get("/api/auth/member/"+inputMember);
     if (res.status === 200 && res.data.result) {
       const data = res.data.data;
       setFormData(prev => ({
@@ -234,7 +232,6 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
                   value={inputMember}
                   onKeyDown={preventEnterSubmit}
                   onChange={handleChange}
-                  onKeyUp={handleMemberTag}
                 />
               </div>
 

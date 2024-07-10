@@ -53,7 +53,7 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
         }
 
         try{
-            const res = await axiosHandler.post("/api/auth/member",{memberId:memberEmail});
+            const res = await axiosHandler.post("/api/auth/member/"+memberEmail);
             if (res.data.result) {
                 const data = res.data.data;
                 setInviteList(prev => ([

@@ -41,30 +41,30 @@ const Team = () => {
     const handleTeamName = async () => {
         if (name.length === 0) return alert("최소 1글자 이상 입력해야합니다.");
         try {
-            const res = await axiosHandler.post('/api/team/update/team', { teamno: teamno, teamName: name });
-            if (res.data.result) {
-                toast.success("팀 이름이 변경되었습니다.");
-            } else {
+            const res = await axiosHandler.put('/api/team/'+teamno+'/teamname/'+name);
+            if(res.data.result){
+                alert("팀 이름이 변경되었습니다.")
+                window.location.reload();
+            }else {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            console.error(e);
-            toast.error("팀 이름 변경을 실패했습니다.");
+            toast.error(e.data.message);
         }
     };
 
     const handleTeamDelete = async () => {
         try {
-            const res = await axiosHandler.post('/api/team/delete' + location.pathname, { memberId: currentUserId, password: deletePassword });
-            if (res.data.result) {
-                toast.success("삭제되었습니다.");
-                navigate('/home', { replace: true });
-            } else {
+            const memberId = getSessionItem('profile').username;
+            const res = await axiosHandler.delete('/api/team/'+teamno+'/member/'+memberId,{password:deletePassword});
+            if(res.data.result){
+                alert("삭제되었습니다.")
+                navigate('/home',{replace:true});
+            }else {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            console.error(e);
-            toast.error("팀 삭제에 실패했습니다.");
+            toast.error(e.data.message);
         }
     };
 
@@ -84,8 +84,7 @@ const Team = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            console.error(e);
-            toast.error("팀 프로필 변경을 실패했습니다.");
+            toast.error(e.data.message);
         }
     };
 
@@ -98,8 +97,7 @@ const Team = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            console.log("에러가 발생했습니다.");
-            toast.error("팀 소유권 변경을 실패했습니다.");
+            toast.error(e.data.message);
         }
     };
 
@@ -137,16 +135,15 @@ const Team = () => {
     const searchMember = async () => {
         if (ownerInput === '') return setSearchList([]);
         try {
-            const res = await axiosHandler.post('/api/team/search', { teamno: teamno, search: ownerInput });
-            if (res.data.result) {
-
+            const res = await axiosHandler.get('/api/team/'+teamno+'/searchkey/'+ownerInput);
+            if(res.data.result){
                 const filteredResults = res.data.data.filter(member => member.memberId !== currentUserId);
                 setSearchList(filteredResults);
             } else {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            console.error(e);
+            toast.error(e.data.message);
         }
     };
 

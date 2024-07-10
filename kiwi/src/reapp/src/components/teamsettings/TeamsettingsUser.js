@@ -22,10 +22,10 @@ const Member = () => {
     const [members, setMembers] = useState([]);
     const [joinedMembers, setJoinedMembers] = useState([]);
     const [invitedMembers, setInvitedMembers] = useState([]);
-    const [exiledMembers, setExiledMembers] = useState([]);
+    const [blockedMembers, setBlockedMembers] = useState([]);
     const [displayMembers, setDisplayMembers] = useState([]);
 
-    const [displayMemberStatus, setDisplayMemberStatus] = useState('joined'); // joined,invited,exiled
+    const [displayMemberStatus, setDisplayMemberStatus] = useState('joined'); // joined,invited,blocked
     const [displaySearchType, setDisplaySearchType] = useState('name'); // name,email
     const [isSearchInput, setIsSearchInput] = useState('');
     const [displayCount, setDisplayCount] = useState(20); // 10,20,50
@@ -51,7 +51,7 @@ const Member = () => {
 
     const fetchTeamData = async () => {
         try {
-            const response = await axiosHandler.post("/api/team/"+teamno+"/members");
+            const response = await axiosHandler.get("/api/team/"+teamno);
             if(response.data.result){
                 const members = response.data.data;
                 members.sort((a,b)=>{
@@ -59,11 +59,10 @@ const Member = () => {
                 })
                 setMembers(members);
             } else {
-                alert(response.data.message);
+                toast.error(response.data.message);
             }
         } catch (e) {
-            console.error(e);
-            alert("서버와 통신에서 오류가 발생했습니다.")
+            toast.error("서버와 통신에서 오류가 발생했습니다.")
         }
     }
 
@@ -71,11 +70,11 @@ const Member = () => {
         if (members) {
             const joined = members.filter(member => member.status === 'JOINED');
             const invited = members.filter(member => member.status === 'INVITED');
-            const exiled = members.filter(member => member.status === 'EXILED');
+            const blocked = members.filter(member => member.status === 'BLOCKED');
 
             setJoinedMembers(joined);
             setInvitedMembers(invited);
-            setExiledMembers(exiled);
+            setBlockedMembers(blocked);
 
             setDisplayMembers(memberCountFilter(joined));
 
@@ -91,7 +90,7 @@ const Member = () => {
         } else if (displayMemberStatus === 'invited') {
             totalCount = invitedMembers.length;
         } else {
-            totalCount = exiledMembers.length;
+            totalCount = blockedMembers.length;
         }
         if(totalCount<1) totalCount++;
         setEndPage(Math.ceil(totalCount / displayCount));
@@ -105,7 +104,7 @@ const Member = () => {
     }, [currentPage, displayMemberStatus, displayCount, displaySort, displayRole, isSearchInput, sortConfig]);
 
     const filterMembers = () => {
-        let membersToDisplay = displayMemberStatus === 'joined' ? joinedMembers : exiledMembers;
+        let membersToDisplay = displayMemberStatus === 'joined' ? joinedMembers : blockedMembers;
 
         // Apply role filter
         const roleFilteredMembers = membersToDisplay.filter(member => displayRole.includes(member.role));
@@ -271,45 +270,10 @@ const Member = () => {
     const clearSearch = () => {
         setIsSearchInput('');
     };
-
-    const promoteToAdmin = async (member) => {
-        try {
-            const updatedMember = { ...member, role: 'ADMIN' };
-            const res = await axiosHandler.post(`/api/team/update/role/${teamno}`, [updatedMember]);
-            if (res.data.result) {
-                fetchTeamData(); // Refresh the data after updating the role
-            } else {
-                alert("Failed to promote to admin.");
-            }
-        } catch (error) {
-            console.error("Error promoting to admin:", error);
-            alert("An error occurred while promoting to admin.");
-        }
-    };
     
-    const changeToMember = async (member) => {
+    const handleMemberStatus = async (member, status) => {
         try {
-            const updatedMember = { ...member, role: 'MEMBER' };
-            const res = await axiosHandler.post(`/api/team/update/role/${teamno}`, [updatedMember]);
-            if (res.data.result) {
-                fetchTeamData(); // Refresh the data after updating the role
-            } else {
-                alert("Failed to change to member.");
-            }
-        } catch (error) {
-            console.error("Error changing to member:", error);
-            alert("An error occurred while changing to member.");
-        }
-    };
-    
-    const exileMember = async (member) => {
-        const dto = {
-            memberId: member.memberId,
-            team: teamno
-        };
-    
-        try {
-            const res = await axiosHandler.post("/api/team/leaveTeam", dto);
+            const res = await axiosHandler.put("/api/team/"+teamno+"/member/"+member.memberId+"/status/"+status);
             if (res.data.result) {
                 toast.success(res.data.message);
                 fetchTeamData(); 
@@ -317,30 +281,14 @@ const Member = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            console.error("Failed to exile member: ", e);
-            toast.error('Failed to exile member.');
-        }
-    };
-    
-    const unblockMember = async (member) => {
-        try {
-            const updatedMember = { ...member, status: 'JOINED' };
-            const res = await axiosHandler.post(`/api/team/update/status/${teamno}`, [updatedMember]);
-            if (res.data.result) {
-                fetchTeamData(); // Refresh the data after updating the status
-            } else {
-                alert("Failed to unblock member.");
-            }
-        } catch (error) {
-            console.error("Error unblocking member:", error);
-            alert("An error occurred while unblocking the member.");
+            toast.error('Failed to block member.');
         }
     };
     
     const handleRoleChange = async (member, newRole) => {
         try {
             const updatedMember = { ...member, role: newRole };
-            const res = await axiosHandler.post(`/api/team/update/role/${teamno}`, [updatedMember]);
+            const res = await axiosHandler.put(`/api/team/${teamno}`, [updatedMember]);
             if (res.data.result) {
                 fetchTeamData(); // Refresh the data after updating the role
                 toast.success('Role was successfully changed.');
@@ -348,7 +296,6 @@ const Member = () => {
                 alert(`Failed to change role to ${newRole}.`);
             }
         } catch (error) {
-            console.error(`Error changing role to ${newRole}:`, error);
             alert(`An error occurred while changing role to ${newRole}.`);
         }
     };
@@ -365,7 +312,7 @@ const Member = () => {
                             &nbsp;
                             - 
                             &nbsp;
-                            {displayMemberStatus === 'joined' ? joinedMembers.length : exiledMembers.length}
+                            {displayMemberStatus === 'joined' ? joinedMembers.length : blockedMembers.length}
                         </div>
                             {checkedMembers.length > 0 && (
                                 <div className='teamsettings-user-selected-container'>
@@ -404,7 +351,7 @@ const Member = () => {
                     </span>
 
                         <div className='teamsettings-user-blocked-toggle' 
-                            onClick={() => setDisplayMemberStatus(displayMemberStatus === 'joined' ? 'exiled' : 'joined')}
+                            onClick={() => setDisplayMemberStatus(displayMemberStatus === 'joined' ? 'blocked' : 'joined')}
                         >
                             {displayMemberStatus === 'joined' ? 'Blocked Users' : 'Joined Users'}
                         </div>
@@ -477,9 +424,9 @@ const Member = () => {
                                         </div>
                                         <div className='teamsettings-user-list-item-options'>
                                             {role === 'OWNER' ? (
-                                                !(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => exileMember(member)}>Kick</div>)
+                                                !(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => handleMemberStatus(member,"BLOCKED")}>Kick</div>)
                                             ) : (
-                                                role === 'ADMIN' && member.role === 'MEMBER' && (<div className='teamsettings-user-kick-button' onClick={() => exileMember(member)}>Kick</div>)
+                                                role === 'ADMIN' && member.role === 'MEMBER' && (<div className='teamsettings-user-kick-button' onClick={() => handleMemberStatus(member,"BLOCKED")}>Kick</div>)
                                             )}
                                         </div>
 
