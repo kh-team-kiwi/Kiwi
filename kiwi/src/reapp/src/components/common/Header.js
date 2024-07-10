@@ -177,12 +177,26 @@ const Header = () => {
     setMemberSettingsDropdown(!memberSettingsDropdown);
   };
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedDarkMode = localStorage.getItem('darkMode');
+    return savedDarkMode ? JSON.parse(savedDarkMode) : false;
+  });
+
 
   const handleDarkModeToggle = () => {
-    setIsDarkMode(prevState => !prevState);
-    document.body.classList.toggle('dark-mode');
+    setIsDarkMode(prevState => {
+      const newState = !prevState;
+      localStorage.setItem('darkMode', JSON.stringify(newState));
+      document.body.classList.toggle('dark-mode', newState);
+      return newState;
+    });
   };
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
+  }, [isDarkMode]);
 
   const handleTeamClick = (team) => {
     setTeamDropdown(false);
