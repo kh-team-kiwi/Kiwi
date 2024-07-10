@@ -107,7 +107,7 @@ public class TeamController {
     * Team.js
     * 팀 삭제 요청
     * */
-    @PostMapping("/{team}/member/{memberId}")
+    @PostMapping("/{team}/member/{memberId}/deleteTeam")
     public ResponseDto<?> deleteTeam(@PathVariable String team, @PathVariable String memberId, @RequestBody Map<String, String> RequestBody) {
         String password = RequestBody.get("password");
         return teamService.deleteTeam(team, memberId,password);

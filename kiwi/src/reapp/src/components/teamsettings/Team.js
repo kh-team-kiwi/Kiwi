@@ -56,7 +56,7 @@ const Team = () => {
     const handleTeamDelete = async () => {
         try {
             const memberId = getSessionItem('profile').username;
-            const res = await axiosHandler.delete('/api/team/'+teamno+'/member/'+memberId,{password:deletePassword});
+            const res = await axiosHandler.post('/api/team/'+teamno+'/member/'+memberId+'/deleteTeam',{password:deletePassword});
             if(res.data.result){
                 alert("삭제되었습니다.")
                 navigate('/home',{replace:true});
@@ -90,7 +90,7 @@ const Team = () => {
 
     const handleRole = async () => {
         try {
-            const res = await axiosHandler.post('/api/team/change/owner', { teamno: teamno, newOwner: searchSelect.memberId, oldOwner: currentUserId, password: changeOwnerPassword });
+            const res = await axiosHandler.put('/api/team/change/owner', { teamno: teamno, newOwner: searchSelect.memberId, oldOwner: currentUserId, password: changeOwnerPassword });
             if (res.data.result) {
                 toast.success("팀 소유권이 변경되었습니다.");
             } else {
@@ -282,7 +282,7 @@ const Team = () => {
                                 onChange={(e) => setDeletePassword(e.target.value)}
                                 className="team-settings-password-input"
                             />
-                        <button onClick={() => handleTeamDelete()} className="team-settings-delete-button">Delete team</button>
+                        <button onClick={handleTeamDelete} className="team-settings-delete-button">Delete team</button>
                     </div>
                 </div>
             </div>

@@ -227,9 +227,8 @@ public class TeamService {
     @Transactional
     public ResponseDto<?> deleteTeam(String team, String memberId, String password) {
         try{
-            Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
-            String hashedPassword = bCryptPasswordEncoder.encode(password);
-            if(!bCryptPasswordEncoder.matches(hashedPassword,search.get().getMember().getPassword())) return setFailed("Invalid Password.");
+            Optional<Group> search = groupRepository.findById(GroupId.builder().team(team).memberId(memberId).build());
+            if(!bCryptPasswordEncoder.matches(password,search.get().getMember().getPassword())) return ResponseDto.setFailed("Invalid Password.");
             if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
                 groupRepository.deleteAllByTeam(team);
                 teamRepository.deleteById(team);
@@ -340,9 +339,8 @@ public class TeamService {
     @Transactional
     public ResponseDto<?> changeOwner(String teamno,String newOwner,String oldOwner, String password) {
         try{
-            Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
-            String hashedPassword = bCryptPasswordEncoder.encode(password);
-            if(!bCryptPasswordEncoder.matches(hashedPassword,search.get().getMember().getPassword())) return setFailed("Invalid Password.");
+            Optional<Group> search = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
+            if(!bCryptPasswordEncoder.matches(password,search.get().getMember().getPassword())) return ResponseDto.setFailed("Invalid Password.");
             
             
             Optional<Team> searchTeam = teamRepository.findById(teamno);
@@ -352,24 +350,16 @@ public class TeamService {
             Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
             if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("The member does not exist.");
 
-                    searchTeam.get().setTeamAdminMemberId(newOwner);
-                    successor.get().setRole("OWNER");
-                    predecessor.get().setRole("ADMIN");
+            searchTeam.get().setTeamAdminMemberId(newOwner);
+            successor.get().setRole("OWNER");
+            predecessor.get().setRole("ADMIN");
 
-                    teamRepository.save(searchTeam.get());
-                    groupRepository.save(successor.get());
-                    groupRepository.save(predecessor.get());
+            teamRepository.save(searchTeam.get());
+            groupRepository.save(successor.get());
+            groupRepository.save(predecessor.get());
 
             return ResponseDto.setSuccess("Changed.");
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return ResponseDto.setFailed("데이터베이스 오류로 실패했습니다.");
-                }
-
-            } else {
-                return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
-            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("Failed with a database error.");

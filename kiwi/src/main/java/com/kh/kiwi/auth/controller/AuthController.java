@@ -91,7 +91,7 @@ public class AuthController {
     }
 
     /*
-     * CreateTeam.js
+     * CreateTeam.js, InviteMember.js
      * 가입 여부 확인
      * */
     @GetMapping("/api/auth/member/{memberId}")
