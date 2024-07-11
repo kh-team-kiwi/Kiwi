@@ -15,12 +15,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //@EnableAspectJAutoProxy
 //@EnableAsync
 //@PropertySource("classpath:/")
-public class KiwiApplication extends SpringBootServletInitializer {
+public class KiwiApplication {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(KiwiApplication.class);
-    }
+
     public static void main(String[] args) {
         SpringApplication.run(KiwiApplication.class, args);
     }

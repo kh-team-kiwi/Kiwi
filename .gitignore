@@ -110,3 +110,4 @@ yarn-error.log*
 # But include application.properties
 !/kiwi/src/main/resources/application.properties
 kiwi-file/src/main/resources/application.properties
+/kiwi/src/main/resources/static
