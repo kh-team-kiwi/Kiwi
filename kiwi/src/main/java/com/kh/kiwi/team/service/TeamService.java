@@ -189,12 +189,9 @@ public class TeamService {
             if (searchTeam.get().getTeamAdminMemberId().equals(memberId)) {
                 return ResponseDto.setFailed("Team owners can't leave.");
             }
-            GroupId searchGroup = GroupId.builder().team(teamno).memberId(memberId).build();
-            if (groupRepository.existsById(searchGroup)) {
-                groupRepository.deleteById(searchGroup);
-            } else {
-                return ResponseDto.setFailed("This team member doesn't exist.");
-            }
+            Optional<Group> member = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
+            member.get().setStatus("DELETED");
+            groupRepository.save(member.get());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.setFailed("Failed with a database error.");

@@ -90,7 +90,7 @@ public class AuthService {
     }
 
     public ResponseDto<?> existMember(String memberId){
-        Member member = memberRepository.findById(memberId).orElse(null);
+        Member member = memberRepository.findAllByMemberIdAndMemberStatus(memberId,"ACTIVATED");
         if(member != null) {
             MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
                     .role(member.getMemberRole()).build();

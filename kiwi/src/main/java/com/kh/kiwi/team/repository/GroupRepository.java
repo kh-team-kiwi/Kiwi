@@ -11,6 +11,7 @@ import java.util.List;
 public interface GroupRepository extends JpaRepository<Group, GroupId> {
 
     List<Group> findAllByMemberIdAndStatusNot(String memberId, String status);
+    List<Group> findAllByTeamAndStatus(String team, String status);
     List<Group> findByTeam(String team);
     void deleteAllByTeam(String team);
 
