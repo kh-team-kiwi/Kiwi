@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axiosHandler from '../../jwt/axiosHandler'; // 기존의 axiosHandler를 사용
+import axiosHandler from '../../jwt/axiosHandler';
 import '../../styles/components/documents/DocumentSidebar.css';
-import { getSessionItem } from '../../jwt/storage'; // 세션에서 프로필 정보를 가져오는 유틸리티 함수
-import { useParams } from 'react-router-dom'; // useParams 사용
+import { getSessionItem } from '../../jwt/storage';
+import { useParams } from 'react-router-dom';
 
 const DocumentSidebar = ({ handleMenuClick }) => {
-    const { teamno } = useParams(); // URL에서 팀 번호를 가져옴
+    const { teamno } = useParams();
     const [counts, setCounts] = useState({
         전체: 0,
         진행중: 0,
@@ -37,7 +37,7 @@ const DocumentSidebar = ({ handleMenuClick }) => {
                             });
 
                         // Fetch user role
-                        axiosHandler.get(`/api/team/getRole/team/${teamno}/member/${username}`)
+                        axiosHandler.get(`/api/team/${teamno}/member/${username}`)
                             .then(response => {
                                 setRole(response.data);
                             })
@@ -50,7 +50,7 @@ const DocumentSidebar = ({ handleMenuClick }) => {
                     console.error("사용자의 인사 정보를 가져오는 중 오류가 발생했습니다.", error);
                 });
         }
-    }, [teamno]); // teamno가 변경될 때마다 useEffect 실행
+    }, [teamno]);
 
     return (
         <div className="sidebar documents-sidebar">
