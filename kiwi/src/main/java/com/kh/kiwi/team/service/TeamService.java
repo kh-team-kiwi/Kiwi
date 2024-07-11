@@ -169,7 +169,7 @@ public class TeamService {
 //    }
 
     public List<Team> getAllTeams(String memberId) {
-        List<Group> groups = groupRepository.findAllByMemberId(memberId);
+        List<Group> groups = groupRepository.findAllByMemberIdAndStatusNot(memberId, "DELETED");
         System.out.println("TeamService > getAllTeams : " + groups);
 
         return groups.stream()
@@ -205,6 +205,15 @@ public class TeamService {
 
     public String getRole(String teamno, String memberId) {
         return groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build()).get().getRole();
+    }
+
+    public ResponseDto<?> getStatus(String teamno, String memberId) {
+        String status = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build()).get().getStatus();
+        if(status.equals("BLOCKED")){
+            return ResponseDto.setFailed("BLOCKED.");
+        } else {
+            return ResponseDto.setSuccess("");
+        }
     }
 
     public ResponseDto<?> updateTeamName(String team, String teamName){

@@ -165,6 +165,21 @@ const Home = () => {
         }
     }
 
+    const checkTeamMemberStatus = async (team) => {
+        const memberId = getSessionItem('profile').username;
+        try {
+            const res = await axiosHandler.get("/api/team/"+team+"/member/"+memberId+"/status");
+            if(res.data.result){
+                navigate('/team/'+team);
+            } else {
+                toast("You're blocked and can't enter.")
+            }
+        } catch (e) {
+            toast.error('An error has occurred.');
+
+        }
+    }
+
     return isImageLoaded ? (
         <div className="home-background">
             <Logo />
@@ -235,7 +250,7 @@ const Home = () => {
                                     {/*<button className='home-team-settings' onClick={() => handleTeamsettings(team.team)}>*/}
                                     {/*    <SettingsIcon className="home-settings-icon" />*/}
                                     {/*</button>*/}
-                                    <button className='home-team-launch' onClick={() => navigate(`/team/${team.team}`)}>
+                                    <button className='home-team-launch' onClick={()=>checkTeamMemberStatus(team.team)}>
                                         {t('launch')}
                                     </button>
                                 </div>

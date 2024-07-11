@@ -1,4 +1,4 @@
-package com.kh.kiwi.auth.dto;
+package com.kh.kiwi.auth.service;
 
 import com.kh.kiwi.auth.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +50,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-
-        return true;
+        return !member.getMemberStatus().equals("LOCKED");
     }
 
     @Override
@@ -62,7 +61,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-
-        return true;
+        return !member.getMemberStatus().equals("DELETED");
     }
 }

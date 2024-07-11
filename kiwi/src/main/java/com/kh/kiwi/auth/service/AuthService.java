@@ -37,15 +37,15 @@ public class AuthService {
         try {
             // 존재하는 경우 : true / 존재하지 않는 경우 : false
             if(memberRepository.existsById(dto.getMemberId())) {
-                return ResponseDto.setFailed("중복된 Email 입니다.");
+                return ResponseDto.setFailed("This is a duplicate Email.");
             }
         } catch (Exception e) {
-            return ResponseDto.setFailed("데이터베이스 연결에 실패하였습니다.");
+            return ResponseDto.setFailed("The database connection failed.");
         }
 
         // password 중복 확인
         if(!dto.getMemberPwd().equals(dto.getConfirmPwd())) {
-            return ResponseDto.setFailed("비밀번호가 일치하지 않습니다.");
+            return ResponseDto.setFailed("The passwords don't match.");
         }
 
         // 비밀번호 암호화
@@ -82,9 +82,7 @@ public class AuthService {
 
 
     public ResponseDto<?> duplicate(String memberId){
-        System.out.println(memberId);
         Member member = memberRepository.findById(memberId).orElse(null);
-        System.out.println(member);
         if(member == null) {
             return ResponseDto.setSuccess("The email that can be generated.");
         }
@@ -92,9 +90,7 @@ public class AuthService {
     }
 
     public ResponseDto<?> existMember(String memberId){
-        System.out.println(memberId);
         Member member = memberRepository.findById(memberId).orElse(null);
-        System.out.println(member);
         if(member != null) {
             MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
                     .role(member.getMemberRole()).build();

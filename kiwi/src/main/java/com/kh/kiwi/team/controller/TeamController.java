@@ -50,6 +50,15 @@ public class TeamController {
     }
 
     /*
+     * Home.js
+     * 소속된 팀의 멤버 상태 조회
+     * */
+    @GetMapping("/{teamno}/member/{memberId}/status")
+    public ResponseDto<?> getStatus(@PathVariable String teamno, @PathVariable String memberId) {
+        return teamService.getStatus(teamno,memberId);
+    }
+
+    /*
      * Header.js
      * 팀 탈퇴 요청
      * */

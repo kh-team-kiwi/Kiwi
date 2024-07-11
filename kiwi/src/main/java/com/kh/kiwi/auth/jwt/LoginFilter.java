@@ -1,15 +1,13 @@
 package com.kh.kiwi.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.kiwi.auth.dto.CustomOAuth2User;
-import com.kh.kiwi.auth.dto.CustomUserDetails;
+import com.kh.kiwi.auth.service.CustomUserDetails;
 import com.kh.kiwi.auth.entity.RefreshToken;
 import com.kh.kiwi.auth.repository.RefreshRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

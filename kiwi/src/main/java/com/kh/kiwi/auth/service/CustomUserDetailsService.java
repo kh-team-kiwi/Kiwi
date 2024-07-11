@@ -1,6 +1,5 @@
-package com.kh.kiwi.auth.dto;
+package com.kh.kiwi.auth.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +17,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(">> CustomUserDetailsService <<");
         //DB에서 조회
         Member member = memberRepository.findByMemberId(username);
 
         if (member != null) {
-
             //UserDetails에 담아서 return하면 AutneticationManager가 검증 함
             return new CustomUserDetails(member);
         }

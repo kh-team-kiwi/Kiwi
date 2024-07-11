@@ -4,6 +4,7 @@ import {getSessionItem} from "../../jwt/storage";
 import axiosHandler from "../../jwt/axiosHandler";
 import {parsePath, useParams} from "react-router-dom";
 import ErrorImageHandler from "../common/ErrorImageHandler";
+import {toast} from "react-toastify";
 
 const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
 
@@ -39,21 +40,23 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
                     ...member,
                     status: 'BLOCKED'
                 }));
-            } else {
+            } else  if (role === 'joined') {
                 updatedList = selectedList.map(member => ({
                     ...member,
                     status: 'JOINED'
                 }));
+            } else {
+                return ;
             }
 
-            const res = await axiosHandler.post("/api/team/"+teamno,updatedList);
+            const res = await axiosHandler.put("/api/team/"+teamno,updatedList);
             if (res.data.result) {
                 window.location.reload();
             } else {
-                alert("오류가 발생했습니다.");
+                toast.error("오류가 발생했습니다.");
             }
         } catch (error) {
-            alert("오류가 발생했습니다.");
+            toast.error("오류가 발생했습니다.");
         }
     };
 
@@ -70,7 +73,7 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
                             <div className='manage-modal-title'>Manage Selected Users - {selectedList.length}</div>
                             <div className='modal-manage-role-box'>
                                 <div className='modal-manage-tag-content'>
-                                    <select className='modal-manage-dropdown'value={role} onChange={selectRoleHandle}>
+                                    <select className='modal-manage-dropdown' value={role} onChange={selectRoleHandle}>
                                         <option value='default' hidden disabled>적용할 관리를 선택해주세요.</option>
                                         <option value='admin'>관리자로 지정</option>
                                         <option value='member'>멤버로 지정</option>
@@ -90,17 +93,12 @@ const ManageMember = ({setIsModalOpen, isModalOpen, checkedMembers}) => {
                                                 ))}
                                     </div>
                                     <div>
-                                        </div>
-
-
-
+                                    </div>
                             </div>
                             <div className='modal-manage-bottom'>
                             <button className='manage-cancel-btn' onClick={closeModal}>Cancel</button>
                             <button className='manage-apply-btn' onClick={handleRole}>Apply</button>
-
                             </div>
-
                         </div>
                     </div>
                 )}
