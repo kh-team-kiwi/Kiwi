@@ -13,9 +13,10 @@ import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import PlusIcon from '../../images/svg/shapes/PlusIcon';
 
 import { toast } from 'react-toastify';
-
+import { useTranslation } from 'react-i18next';
 
 const Member = () => {
+    const { t } = useTranslation();
     const { teamno } = useParams();
     const { role } = useContext(TeamContext);
 
@@ -62,7 +63,7 @@ const Member = () => {
                 toast.error(response.data.message);
             }
         } catch (e) {
-            toast.error("서버와 통신에서 오류가 발생했습니다.")
+            toast.error(t('error-occurred'))
         }
     }
 
@@ -280,7 +281,7 @@ const Member = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            toast.error('Failed to block member.');
+            toast.error(t('error-occurred'));
         }
     };
     
@@ -290,12 +291,12 @@ const Member = () => {
             const res = await axiosHandler.put(`/api/team/${teamno}`, [updatedMember]);
             if (res.data.result) {
                 fetchTeamData(); 
-                toast.success('Role was successfully changed.');
+                toast.success(t('change-success'));
             } else {
-                alert(`Failed to change role to ${newRole}.`);
+                toast.error(t('error-occurred'));
             }
         } catch (error) {
-            alert(`An error occurred while changing role to ${newRole}.`);
+            toast.error(t('error-occurred'));
         }
     };
 
@@ -304,10 +305,10 @@ const Member = () => {
             <div className='teamsettings-user-table-header'>
                 <div className='teamsettings-user-table-header-top'>
                     <div className='teamsettings-user-header-left'>
-                        <div className='teamsettings-user-invite-button' onClick={openInviteModal}> <PlusIcon className='teamsettings-user-plus-icon' /> Invite </div>
+                        <div className='teamsettings-user-invite-button' onClick={openInviteModal}> <PlusIcon className='teamsettings-user-plus-icon' /> {t('invite')} </div>
 
                         <div className='teamsettings-user-title'>
-                            {displayMemberStatus === 'joined' ? 'Joined Users' : 'Blocked Users'}
+                            {displayMemberStatus === 'joined' ? t('joined-users') : t('blocked-users')}
                             &nbsp;
                             - 
                             &nbsp;
@@ -315,9 +316,9 @@ const Member = () => {
                         </div>
                             {checkedMembers.length > 0 && (
                                 <div className='teamsettings-user-selected-container'>
-                                    <div>{checkedMembers.length} users selected</div>
+                                    <div>{checkedMembers.length} {t('users')} {t('selected')}</div>
 
-                                    <div className='teamsettings-user-manage-button' type='button' onClick={openManageModal}>Manage</div>
+                                    <div className='teamsettings-user-manage-button' type='button' onClick={openManageModal}>{t('manage')}</div>
                                 </div>
                             )}
 
@@ -329,20 +330,20 @@ const Member = () => {
                             <path
                                 d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z"/>
                         </svg>
-                        <span className='teamsettings-user-role-hover-popup-title'>Filter Roles</span>
+                        <span className='teamsettings-user-role-hover-popup-title'>{t('filter-roles')}</span>
 
                         {isRolePopupOpen && (
                             <ul className='teamsettings-user-role-hover-popup'>
                                 <li className='teamsettings-user-role-hover-popup-item'>
-                                    <span>Member</span>
+                                    <span>{t('member')}</span>
                                     <input checked={memberCheck} type='checkbox' name='MEMBER' onChange={displayRoleHandle}/>
                                 </li>
                                 <li className='teamsettings-user-role-hover-popup-item'>
-                                    <span>Admin</span>
+                                    <span>{t('admin')}</span>
                                     <input checked={adminCheck} type='checkbox' name='ADMIN' onChange={displayRoleHandle}/>
                                 </li>
                                 <li className='teamsettings-user-role-hover-popup-item'>
-                                    <span>Owner</span>
+                                    <span>{t('owner')}</span>
                                     <input checked={ownerCheck} type='checkbox' name='OWNER' onChange={displayRoleHandle}/>
                                 </li>
                             </ul>
@@ -352,15 +353,15 @@ const Member = () => {
                         <div className='teamsettings-user-blocked-toggle' 
                             onClick={() => setDisplayMemberStatus(displayMemberStatus === 'joined' ? 'blocked' : 'joined')}
                         >
-                            {displayMemberStatus === 'joined' ? 'Blocked Users' : 'Joined Users'}
+                            {displayMemberStatus === 'joined' ? t('blocked-users') : t('joined-users')}
                         </div>
                         {isSearchInput && (
-                            <span className='search-results-count'>{filteredItemCount} results</span>
+                            <span className='search-results-count'>{filteredItemCount} {t('results')}</span>
                         )}
                         <div>
                             <div className='teamsettings-user-search-wrapper'>
                             <SearchIcon className="teamsettings-user-search-icon" />
-                            <input value={isSearchInput} className="teamsettings-user-search-input"  type='text' placeholder='Search Users' onChange={searchInputHandler}/>
+                            <input value={isSearchInput} className="teamsettings-user-search-input"  type='text' placeholder={t('search-users')} onChange={searchInputHandler}/>
 
                             {isSearchInput && <button onClick={clearSearch} className='teamsettings-user-clear-search-button'> <ExitIcon /> </button>}
                             </div>
@@ -374,13 +375,13 @@ const Member = () => {
                 <div className='teamsettings-user-table-column-names'>
                     <input id='allCheckBox' onChange={allCheckHandler} type='checkbox'/>
                     <div className='teamsettings-user-username-column'  onClick={() => handleSort('memberNickname')} style={{cursor: 'pointer'}}>
-                        Username {(sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                        {t('username')} {(sortConfig.direction === 'ascending' ? '↑' : '↓')}
                     </div>
                     <div className='teamsettings-page-size-dropdown-wrapper'>
                         <select id='displayCount' className='teamsettings-page-size-dropdown' value={displayCount} onChange={selectCountHandle}>
-                            <option value={10}>10 Users </option>
-                            <option value={20}>20 Users</option>
-                            <option value={50}>50 Users</option>
+                            <option value={10}>10 {t('users')} </option>
+                            <option value={20}>20 {t('users')}</option>
+                            <option value={50}>50 {t('users')}</option>
                         </select>
                     </div>
 
@@ -423,17 +424,17 @@ const Member = () => {
                                                         value={member.role}
                                                         onChange={(e) => handleRoleChange(member, e.target.value)}
                                                     >
-                                                        <option value='MEMBER'>MEMBER</option>
-                                                        <option value='ADMIN'>ADMIN</option>
+                                                        <option value='MEMBER'>{t('member')}</option>
+                                                        <option value='ADMIN'>{t('admin')}</option>
                                                     </select>
                                                 )
                                             )}
                                         </div>
                                         <div className='teamsettings-user-list-item-options'>
                                             {role === 'OWNER' ? (
-                                                !(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => handleMemberStatus(member,"BLOCKED")}>Kick</div>)
+                                                !(member.role === 'OWNER') && (<div className='teamsettings-user-kick-button' onClick={() => handleMemberStatus(member,"BLOCKED")}>{t('kick')}</div>)
                                             ) : (
-                                                role === 'ADMIN' && member.role === 'MEMBER' && (<div className='teamsettings-user-kick-button' onClick={() => handleMemberStatus(member,"BLOCKED")}>Kick</div>)
+                                                role === 'ADMIN' && member.role === 'MEMBER' && (<div className='teamsettings-user-kick-button' onClick={() => handleMemberStatus(member,"BLOCKED")}>{t('kick')}</div>)
                                             )}
                                         </div>
 

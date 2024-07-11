@@ -8,17 +8,15 @@ import { getSessionItem } from "../../jwt/storage";
 import { toast } from 'react-toastify';
 import TeamSettingsIcon from '../../images/svg/buttons/TeamSettingsIcon';
 import ManageRolesIcon from '../../images/svg/buttons/ManageRolesIcon';
+import { useTranslation } from 'react-i18next';
 
 const SideMenuBar = ({ key }) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
     const { teamno } = useParams();
     const { role } = useContext(TeamContext);
     const [selectedItem, setSelectedItem] = useState('user');
-
-    // useEffect(() => {
-    //
-    // }, [role]);
 
     useEffect(() => {
         if (location.pathname.includes('settings/user')) {
@@ -36,7 +34,7 @@ const SideMenuBar = ({ key }) => {
 
     const handleOnClick = (item) => {
         if (item === 'team' && role === 'ADMIN') {
-            toast.error("Only owners have access to this page");
+            toast.error(t('only-owners-error'));
             return;
         }
         setSelectedItem(item);
@@ -44,11 +42,14 @@ const SideMenuBar = ({ key }) => {
     }
 
     const handleLeaveTeam = async () => {
-        if(role==="OWNER") return toast.error("Team owners can't leave.");
+        if(role==="OWNER") {
+            toast.error(t('owner-cannot-leave'));
+            return;
+        }
         const memberId = getSessionItem("profile").username;
 
         try {
-            const res = await axiosHandler.delete("/api/team/"+teamno+"/member/"+memberId);
+            const res = await axiosHandler.delete(`/api/team/${teamno}/member/${memberId}`);
             if (res.data.result) {
                 toast.success(res.data.message);
                 navigate('/home', { replace: true });
@@ -57,7 +58,7 @@ const SideMenuBar = ({ key }) => {
             }
         } catch (e) {
             console.error("handleLeaveTeam failed: ", e);
-            toast.error('Failed to leave team.');
+            toast.error(t('leave-team-failed'));
         }
     }
 
@@ -65,18 +66,18 @@ const SideMenuBar = ({ key }) => {
         <div className='teamsettings-sidebar' key={key}>
             <div className='teamsettings-sidebar-header'>
                 <SettingsIcon className='teamsettings-sidebar-settings-icon' />
-                <div className='teamsettings-sidebar-title'> General Settings </div>
+                <div className='teamsettings-sidebar-title'>{t('general-settings')}</div>
             </div>
             <div className={`teamsettings-sidebar-item ${selectedItem === 'user' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('user')}>
                 <ManageRolesIcon className='teamsettings-sidebar-roles-icon'/>
-                <div>User Settings</div>
+                <div>{t('user-settings')}</div>
             </div>
             <div className={`teamsettings-sidebar-item ${selectedItem === 'team' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('team')}>
                 <TeamSettingsIcon className='teamsettings-sidebar-icon' />
-                <div>Team Settings</div>
+                <div>{t('team-settings')}</div>
             </div>
             <div className='teamsettings-sidebar-bottom'>
-                <div className='teamsettings-sidebar-leave-team-button' onClick={handleLeaveTeam}>Leave Team</div>
+                <div className='teamsettings-sidebar-leave-team-button' onClick={handleLeaveTeam}>{t('leave-team')}</div>
             </div>
         </div>
     );

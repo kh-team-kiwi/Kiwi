@@ -9,12 +9,14 @@ import ErrorImageHandler from "../common/ErrorImageHandler";
 import { toast } from 'react-toastify';
 import ErrorImage from '../../images/default-image.png';
 import ClearIcon from "../../images/svg/buttons/ExitIcon";
+import { useTranslation } from 'react-i18next';
 
 const Loading = () => {
     return <div></div>;
 };
 
 const Team = () => {
+    const { t } = useTranslation();
     const location = useLocation();
     const [name, setName] = useState('');
     const [profile, setProfile] = useState();
@@ -30,7 +32,6 @@ const Team = () => {
     const [isOwnerBtn, setIsOwnerBtn] = useState(true);
     const [loading, setLoading] = useState(true);
 
-
     const currentUserId = getSessionItem('profile').username;
 
     const handleProfilePictureChange = async (e) => {
@@ -45,7 +46,7 @@ const Team = () => {
     };
 
     const handleTeamName = async () => {
-        if (name.length === 0) return alert("최소 1글자 이상 입력해야합니다.");
+        if (name.length === 0) return toast.error(t('title-empty-error'));
         try {
             const res = await axiosHandler.put('/api/team/'+teamno+'/teamname/'+name);
             if(res.data.result){
@@ -54,7 +55,7 @@ const Team = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            toast.error(e.data.message);
+            toast.error(t('error-occurred'));
         }
     };
 
@@ -68,12 +69,12 @@ const Team = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            toast.error(e.data.message);
+            toast.error(t('error-occurred'));
         }
     };
 
     const handleTeamProfile = async (newProfile, newFile) => {
-        if (newProfile === undefined) return toast.error('등록된 이미지가 없습니다.');
+        if (newProfile === undefined) return toast.error(t('no-image-error'));
         const formData = new FormData();
         formData.append('profile', newFile);
         formData.append('team', teamno);
@@ -83,12 +84,12 @@ const Team = () => {
             const res = await axiosHandler.post('/api/team/upload/profile', formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } });
             if (res.data.result) {
-                toast.success("팀 프로필이 변경되었습니다.");
+                toast.success(t('profile-updated'));
             } else {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            toast.error(e.data.message);
+            toast.error(t('error-occurred'));
         }
     };
 
@@ -101,10 +102,10 @@ const Team = () => {
                 navigate(`/team/${teamno}/settings/user`);
 
             } else {
-                toast.error('An error occurred');
+                toast.error(t('error-occurred'));
             }
         } catch (e) {
-            toast.error("An error occurred");
+            toast.error(t('error-occurred'));
         }
     };
 
@@ -116,7 +117,7 @@ const Team = () => {
 
     useEffect(() => {
         if (loading === false && role !== 'OWNER') {
-            toast.error('권한이 없습니다.');
+            toast.error(t('no-permission-error'));
             navigate('/team/' + teamno + '/settings');
         }
     }, [loading, role]);
@@ -144,7 +145,7 @@ const Team = () => {
                 toast.error(res.data.message);
             }
         } catch (e) {
-            toast.error(e.data.message);
+            toast.error(t('error-occurred'));
         }
     };
 
@@ -192,13 +193,13 @@ const Team = () => {
             <div className="team-settings-options">
                 <div className="team-settings-change-name-container">
                     <div className="team-settings-change-name">
-                        Change team name
+                        {t('change-team-name')}
                     </div>
                     <div>
-                        <input type="text" placeholder="New team name" value={name} onChange={(e) => setName(e.target.value)} className="team-settings-input" />
+                        <input type="text" placeholder={t('new-team-name')} value={name} onChange={(e) => setName(e.target.value)} className="team-settings-input" />
 
                         <div className='team-settings-button-wrapper'>
-                        <button onClick={() => handleTeamName()} className="team-settings-change-name-button">Change name</button>
+                        <button onClick={() => handleTeamName()} className="team-settings-change-name-button">{t('change-name')}</button>
 
                         </div>
                     </div>
@@ -206,13 +207,13 @@ const Team = () => {
 
                 <div className="team-settings-change-owner-container">
                     <div className="team-settings-change-owner">
-                        Change team ownership
+                        {t('change-team-ownership')}
                     </div>
                     <div className='team-settings-change-owner-warning'>
-                        Make sure you transfer ownership to someone you trust. You will be demoted to admin role.
+                        {t('change-team-ownership-description')}
                     </div>
                     <div className="team-settings-input-container">
-                        <input type="text" value={ownerInput} onChange={handleOwnerInput} className="team-settings-input" placeholder="Search users by email" />
+                        <input type="text" value={ownerInput} onChange={handleOwnerInput} className="team-settings-input" placeholder={t('search-users-by-email')} />
                         {ownerInput && (
                             <button onClick={handleClearSearch} className="team-settings-clear-button">
                                 <ClearIcon />
@@ -239,7 +240,7 @@ const Team = () => {
                             <div className="team-settings-search-name">
                                 <div className='team-settings-selected-name-container'>
                                     <span className='team-settings-selected-name'>{searchSelect.memberNickname}</span>                                 
-                                    <span className="team-settings-selected-tag">Selected</span>
+                                    <span className="team-settings-selected-tag">{t('selected')}</span>
                                 </div>
 
                                 <span>{searchSelect.memberId}</span>
@@ -258,32 +259,32 @@ const Team = () => {
                     <div className='team-settings-bottom'>
                     <input
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder={t('enter-your-password')}
                             value={changeOwnerPassword}
                             onChange={(e) => setChangeOwnerPassword(e.target.value)}
                             className="team-settings-password-input"
                         />
-                        <button type="button" onClick={handleRole} className="team-settings-change-owner-button" disabled={isOwnerBtn}>Change ownership</button>
+                        <button type="button" onClick={handleRole} className="team-settings-change-owner-button" disabled={isOwnerBtn}>{t('change-ownership')}</button>
                     </div>
                 </div>
 
                 <div className="team-settings-delete-container">
                     <div className="team-settings-delete">
-                        Delete team
+                        {t('delete-team')}
                     </div>
                     <div className='team-settings-delete-warning'>
-                        Warning: Deleting this team is permanent and cannot be undone.
+                        {t('delete-team-warning')}
                     </div>
 
                     <div className='team-settings-bottom'>
                             <input
                                 type="password"
-                                placeholder="Enter your password"
+                                placeholder={t('enter-your-password')}
                                 value={deletePassword}
                                 onChange={(e) => setDeletePassword(e.target.value)}
                                 className="team-settings-password-input"
                             />
-                        <button onClick={handleTeamDelete} className="team-settings-delete-button">Delete team</button>
+                        <button onClick={handleTeamDelete} className="team-settings-delete-button">{t('delete-team')}</button>
                     </div>
                 </div>
             </div>

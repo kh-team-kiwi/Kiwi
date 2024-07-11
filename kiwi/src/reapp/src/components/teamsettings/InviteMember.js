@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
-import '../../styles/components/teamsettings/InviteMember.css'
-import {getSessionItem} from "../../jwt/storage";
+import React, { useState } from 'react';
+import '../../styles/components/teamsettings/InviteMember.css';
+import { getSessionItem } from "../../jwt/storage";
 import axiosHandler from "../../jwt/axiosHandler";
 import ErrorImageHandler from "../common/ErrorImageHandler";
-import {useParams} from "react-router-dom";
-import {toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useTranslation } from 'react-i18next';
 
-const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
-
-    const {teamno} = useParams();
+const InviteMember = ({ setIsModalOpen, isModalOpen, joinedMembers }) => {
+    const { t } = useTranslation();
+    const { teamno } = useParams();
     const [memberEmail, setMemberEmail] = useState('');
     const [inviteList, setInviteList] = useState([]);
 
@@ -17,17 +18,15 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
     };
 
     const handleInvite = async () => {
-        try{
-            const res = await axiosHandler.post("/api/team/invite",{teamName:teamno, invitedMembers:inviteList});
+        try {
+            const res = await axiosHandler.post("/api/team/invite", { teamName: teamno, invitedMembers: inviteList });
             if (res.data.result) {
-
                 window.location.reload();
-
             } else {
-                toast.error("오류가 발생했습니다.");
+                toast.error(t('error-occurred'));
             }
         } catch (error) {
-            toast.error("오류가 발생했습니다.");
+            toast.error(t('error-occurred'));
         }
     };
 
@@ -35,38 +34,38 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
         event.preventDefault();
 
         let check = validateInput(memberEmail);
-        if(check!==true){
+        if (check !== true) {
             toast.error(check);
             return;
         }
 
-        if(inviteList.some(member=>member.username === memberEmail)){
-            toast.error("이미 포함된 팀원입니다.");
+        if (inviteList.some(member => member.username === memberEmail)) {
+            toast.error(t("already-invited-error"));
             setMemberEmail('');
             return;
         }
 
-        if(joinedMembers.some(member => member.memberId === memberEmail)){
-            toast.error("이미 참여 중인 팀원입니다.");
+        if (joinedMembers.some(member => member.memberId === memberEmail)) {
+            toast.error(t("already-joined-error"));
             setMemberEmail('');
             return;
         }
 
-        try{
-            const res = await axiosHandler.get("/api/auth/member/"+memberEmail);
+        try {
+            const res = await axiosHandler.get("/api/auth/member/" + memberEmail);
             if (res.data.result) {
                 const data = res.data.data;
                 setInviteList(prev => ([
                     ...prev, data,
                 ]));
                 setMemberEmail('');
-            } else if(res.status === 200 && !res.data.result) {
+            } else if (res.status === 200 && !res.data.result) {
                 toast.error(res.data.message);
             } else {
-                toast.error("오류가 발생했습니다.");
+                toast.error(t('error-occurred'));
             }
         } catch (error) {
-            toast.error("오류가 발생했습니다.");
+            toast.error(t('error-occurred'));
         }
     }
 
@@ -77,14 +76,14 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
         const noSpacesPattern = /^\S+$/;
 
         if (emptyPattern.test(input)) {
-            return "값을 입력해주세요.";
+            return t('empty-error');
         } else if (whitespacePattern.test(input)) {
-            return "공백을 입력할 수 없습니다.";
+            return t("no-whitespace-error");
         } else if (!noSpacesPattern.test(input)) {
-            return "공백이 포함될 수 없습니다.";
-        } /*else if (!emailPattern.test(input)) {
-      return "이메일을 정확히 입력해주세요.";
-    }*/ else {
+            return t("no-whitespace-error");
+        } else if (!emailPattern.test(input)) {
+            return t("valid-email");
+        } else {
             return true;
         }
     }
@@ -98,17 +97,16 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
             {isModalOpen && (
                 <div className="teamsettings-invite-modal">
                     <div className="modal-content">
-                        <div className='invite-modal-title'>Invite Users to the Team!</div>
+                        <div className='invite-modal-title'>{t('invite-members')}</div>
                         <div className='invite-member-middle'>
-                        <input
-                            type="text"
-                            value={memberEmail}
-                            onChange={(e) => setMemberEmail(e.target.value)}
-                            placeholder="멤버 이메일 입력"
-                            className="invite-modal-input"
-                        />
-                        <button className='invite-add-btn' onClick={handleMemberTagBtn}>Add</button>
-
+                            <input
+                                type="text"
+                                value={memberEmail}
+                                onChange={(e) => setMemberEmail(e.target.value)}
+                                placeholder={t('search-users-by-email')}
+                                className="invite-modal-input"
+                            />
+                            <button className='invite-add-btn' onClick={handleMemberTagBtn}>{t('add')}</button>
                         </div>
 
                         {inviteList.length > 0 && (
@@ -120,7 +118,7 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
                                         <div className='create-team-member-info'>
                                             <div className='create-team-member-name-wrapper'>
                                                 <div className='create-team-member-name'>{member.name}</div>
-                                                <div className='create-team-invite-pending'> Invited</div>
+                                                <div className='create-team-invite-pending'>{t('invited')}</div>
                                             </div>
                                             <div className='create-team-member-email'>{member.username}</div>
                                         </div>
@@ -137,9 +135,8 @@ const InviteMember = ( {setIsModalOpen, isModalOpen, joinedMembers }) => {
                             </div>
                         )}
                         <div className='invite-member-bottom'>
-                        <button className='invite-cancel-btn' onClick={closeModal}>Cancel</button>
-                        <button className='invite-invite-btn' onClick={handleInvite}>Invite</button>
-
+                            <button className='invite-cancel-btn' onClick={closeModal}>{t('cancel')}</button>
+                            <button className='invite-invite-btn' onClick={handleInvite}>{t('invite')}</button>
                         </div>
                     </div>
                 </div>
