@@ -16,6 +16,10 @@ const SideMenuBar = ({ key }) => {
     const { role } = useContext(TeamContext);
     const [selectedItem, setSelectedItem] = useState('user');
 
+    // useEffect(() => {
+    //
+    // }, [role]);
+
     useEffect(() => {
         if (location.pathname.includes('settings/user')) {
             setSelectedItem('user');
@@ -40,12 +44,11 @@ const SideMenuBar = ({ key }) => {
     }
 
     const handleLeaveTeam = async () => {
-        const dto = {
-            memberId: getSessionItem("profile").username,
-            team: teamno
-        }
+        if(role==="OWNER") return toast.error("Team owners can't leave.");
+        const memberId = getSessionItem("profile").username;
+
         try {
-            const res = await axiosHandler.post("/api/team/leaveTeam", dto);
+            const res = await axiosHandler.delete("/api/team/"+teamno+"/member/"+memberId);
             if (res.data.result) {
                 toast.success(res.data.message);
                 navigate('/home', { replace: true });
