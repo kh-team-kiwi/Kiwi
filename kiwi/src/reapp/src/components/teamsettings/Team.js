@@ -11,7 +11,7 @@ import ErrorImage from '../../images/default-image.png';
 import ClearIcon from "../../images/svg/buttons/ExitIcon";
 
 const Loading = () => {
-    return <div>Loading...</div>;
+    return <div></div>;
 };
 
 const Team = () => {
@@ -23,7 +23,13 @@ const Team = () => {
     const [changeOwnerPassword, setChangeOwnerPassword] = useState('');
     const navigate = useNavigate();
     const { teamno } = useParams();
-    const { role, teamProfile } = useContext(TeamContext);
+    const { role, setRole, teamProfile } = useContext(TeamContext);
+    const [ownerInput, setOwnerInput] = useState('');
+    const [searchList, setSearchList] = useState([]);
+    const [searchSelect, setSearchSelect] = useState('');
+    const [isOwnerBtn, setIsOwnerBtn] = useState(true);
+    const [loading, setLoading] = useState(true);
+
 
     const currentUserId = getSessionItem('profile').username;
 
@@ -43,7 +49,6 @@ const Team = () => {
         try {
             const res = await axiosHandler.put('/api/team/'+teamno+'/teamname/'+name);
             if(res.data.result){
-                alert("팀 이름이 변경되었습니다.")
                 window.location.reload();
             }else {
                 toast.error(res.data.message);
@@ -58,7 +63,6 @@ const Team = () => {
             const memberId = getSessionItem('profile').username;
             const res = await axiosHandler.post('/api/team/'+teamno+'/member/'+memberId+'/deleteTeam',{password:deletePassword});
             if(res.data.result){
-                alert("삭제되었습니다.")
                 navigate('/home',{replace:true});
             }else {
                 toast.error(res.data.message);
@@ -92,20 +96,17 @@ const Team = () => {
         try {
             const res = await axiosHandler.put('/api/team/change/owner', { teamno: teamno, newOwner: searchSelect.memberId, oldOwner: currentUserId, password: changeOwnerPassword });
             if (res.data.result) {
-                toast.success("팀 소유권이 변경되었습니다.");
+                setRole('ADMIN');
+
+                navigate(`/team/${teamno}/settings/user`);
+
             } else {
-                toast.error(res.data.message);
+                toast.error('An error occurred');
             }
         } catch (e) {
-            toast.error(e.data.message);
+            toast.error("An error occurred");
         }
     };
-
-    const [ownerInput, setOwnerInput] = useState('');
-    const [searchList, setSearchList] = useState([]);
-    const [searchSelect, setSearchSelect] = useState('');
-    const [isOwnerBtn, setIsOwnerBtn] = useState(true);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (role !== null) {

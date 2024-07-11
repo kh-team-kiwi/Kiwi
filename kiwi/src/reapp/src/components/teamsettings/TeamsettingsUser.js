@@ -177,10 +177,9 @@ const Member = () => {
     }
 
     const selectCountHandle = (e) => {
-        setDisplayCount(e.target.value);
+        setDisplayCount(parseInt(e.target.value, 10));
         setCurrentPage(1);
-    }
-
+    };
     const pagingHandler = (event, pageType) => {
         event.preventDefault();
         let newPage = currentPage;
@@ -290,7 +289,7 @@ const Member = () => {
             const updatedMember = { ...member, role: newRole };
             const res = await axiosHandler.put(`/api/team/${teamno}`, [updatedMember]);
             if (res.data.result) {
-                fetchTeamData(); // Refresh the data after updating the role
+                fetchTeamData(); 
                 toast.success('Role was successfully changed.');
             } else {
                 alert(`Failed to change role to ${newRole}.`);
@@ -374,9 +373,17 @@ const Member = () => {
             <div className='teamsettings-user-table-wrapper'>
                 <div className='teamsettings-user-table-column-names'>
                     <input id='allCheckBox' onChange={allCheckHandler} type='checkbox'/>
-                    <span className='teamsettings-user-username-column'  onClick={() => handleSort('memberNickname')} style={{cursor: 'pointer'}}>
+                    <div className='teamsettings-user-username-column'  onClick={() => handleSort('memberNickname')} style={{cursor: 'pointer'}}>
                         Username {(sortConfig.direction === 'ascending' ? '↑' : '↓')}
-                    </span>
+                    </div>
+                    <div className='teamsettings-page-size-dropdown-wrapper'>
+                        <select id='displayCount' className='teamsettings-page-size-dropdown' value={displayCount} onChange={selectCountHandle}>
+                            <option value={10}>10 Users </option>
+                            <option value={20}>20 Users</option>
+                            <option value={50}>50 Users</option>
+                        </select>
+                    </div>
+
 
                 </div>
                 <div className='teamsettings-user-list'>

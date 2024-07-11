@@ -6,7 +6,7 @@ const TeamSelector = ({ onTeamSelect }) => {
     const [selectedTeam, setSelectedTeam] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/team')
+        axios.get('/api/team')
             .then(response => {
                 setTeams(response.data);
             })

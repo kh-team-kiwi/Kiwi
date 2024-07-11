@@ -44,7 +44,7 @@ const Drive = () => {
     const fetchDrives = async () => {
         setLoading(true);
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
+            const response = await axiosHandler.get(`/api/drive/list/${teamno}/${username}`);
             setDrives(response.data);
             if (response.data.length > 0) {
                 handleViewDrive(response.data[0].driveCode, response.data[0].driveName);

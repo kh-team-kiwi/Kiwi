@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import '../../styles/components/teamsettings/TeamsettingsSidebar.css';
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import SettingsIcon from '../../images/svg/buttons/SettingsIcon';
-
 import { TeamContext } from "../../context/TeamContext";
 import axiosHandler from "../../jwt/axiosHandler";
 import { getSessionItem } from "../../jwt/storage";
@@ -10,7 +9,7 @@ import { toast } from 'react-toastify';
 import TeamSettingsIcon from '../../images/svg/buttons/TeamSettingsIcon';
 import ManageRolesIcon from '../../images/svg/buttons/ManageRolesIcon';
 
-const SideMenuBar = () => {
+const SideMenuBar = ({ key }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { teamno } = useParams();
@@ -26,13 +25,16 @@ const SideMenuBar = () => {
     }, [location.pathname]);
 
     useEffect(() => {
-        // Navigate to user settings by default when the page loads
         if (location.pathname === `/team/${teamno}/settings`) {
             navigate(`/team/${teamno}/settings/user`);
         }
     }, [teamno, location.pathname, navigate]);
 
     const handleOnClick = (item) => {
+        if (item === 'team' && role === 'ADMIN') {
+            toast.error("Only owners have access to this page");
+            return;
+        }
         setSelectedItem(item);
         navigate(`/team/${teamno}/settings/${item}`);
     }
@@ -57,12 +59,12 @@ const SideMenuBar = () => {
     }
 
     return (
-        <div className='teamsettings-sidebar'>
+        <div className='teamsettings-sidebar' key={key}>
             <div className='teamsettings-sidebar-header'>
                 <SettingsIcon className='teamsettings-sidebar-settings-icon' />
                 <div className='teamsettings-sidebar-title'> General Settings </div>
             </div>
-            <div className={`teamsettings-sidebar-item ${selectedItem === 'user' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('user')}>  
+            <div className={`teamsettings-sidebar-item ${selectedItem === 'user' ? 'selected' : 'unselected'}`} onClick={() => handleOnClick('user')}>
                 <ManageRolesIcon className='teamsettings-sidebar-roles-icon'/>
                 <div>User Settings</div>
             </div>

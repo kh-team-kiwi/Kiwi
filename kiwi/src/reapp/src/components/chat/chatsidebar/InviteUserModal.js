@@ -27,11 +27,11 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
     const fetchMembers = async () => {
         try {
             // Fetch all team members
-            const allMembersResponse = await axiosHandler.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            const allMembersResponse = await axiosHandler.get(`/api/chat/user/members?team=${team}`);
             const allMembers = allMembersResponse.data;
 
             // Fetch current chat members
-            const chatMembersResponse = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            const chatMembersResponse = await axiosHandler.get(`/api/chat/user/${chatNum}`);
             const chatMembers = chatMembersResponse.data;
 
             // Exclude members who are already in the chat
