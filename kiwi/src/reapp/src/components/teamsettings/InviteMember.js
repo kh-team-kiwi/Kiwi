@@ -18,6 +18,10 @@ const InviteMember = ({ setIsModalOpen, isModalOpen, joinedMembers }) => {
     };
 
     const handleInvite = async () => {
+        if (inviteList.length === 0) {
+            toast.error(t('no-user-error'));
+            return;
+        }
         try {
             const res = await axiosHandler.post("/api/team/invite", { teamName: teamno, invitedMembers: inviteList });
             if (res.data.result) {
@@ -136,7 +140,7 @@ const InviteMember = ({ setIsModalOpen, isModalOpen, joinedMembers }) => {
                         )}
                         <div className='invite-member-bottom'>
                             <button className='invite-cancel-btn' onClick={closeModal}>{t('cancel')}</button>
-                            <button className='invite-invite-btn' onClick={handleInvite}>{t('invite')}</button>
+                            <button className='invite-invite-btn' onClick={handleInvite} disabled={inviteList.length === 0}>{t('invite')}</button>
                         </div>
                     </div>
                 </div>
