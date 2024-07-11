@@ -104,6 +104,20 @@
     "password-requirements": "パスワードの要件",
     "password-length-requirement": "8から16文字の間",
     "password-special-char-requirement": "特殊文字を含む (!@#$%^)",
-    "password-same": "パスワードが一致する"
+    "password-same": "パスワードが一致する",
+    "create-new-team": "新しいチームを作成",
+    "team-name": "チーム名",
+    "choose-team-name": "チーム名を選択",
+    "invite-members": "メンバーを招待",
+    "search-members-by-email": "メールでメンバーを検索",
+    "invite": "招待",
+    "invited": "招待済み",
+    "empty-error": "入力がありません。値を入力してください。",
+    "no-whitespace-error": "空白は許可されていません。正しい値を入力してください。",
+    "cant-invite-self-error": "自分自身を招待することはできません。他のメンバーを招待してください。",
+    "no-user-error": "そのユーザーは存在しません。",
+    "already-invited-error": "このメンバーは既に招待されています。"
+
+
   }
   

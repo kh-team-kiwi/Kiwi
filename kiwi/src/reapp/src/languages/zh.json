@@ -104,6 +104,20 @@
     "password-requirements": "密码要求",
     "password-length-requirement": "8到16个字符之间",
     "password-special-char-requirement": "包含特殊字符 (!@#$%^)",
-    "password-same": "密码匹配"
+    "password-same": "密码匹配",
+    "create-new-team": "创建新团队",
+    "team-name": "团队名称",
+    "choose-team-name": "选择团队名称",
+    "invite-members": "邀请成员",
+    "search-members-by-email": "通过电子邮件搜索成员",
+    "invite": "邀请",
+    "invited": "已邀请",
+    "empty-error": "未提供输入。请输入一个值。",
+  "no-whitespace-error": "不允许使用空白字符。请输入有效的值。",
+  "cant-invite-self-error": "您不能邀请自己。请邀请其他成员。",
+  "no-user-error": "该用户不存在。",
+  "already-invited-error": "您已经邀请了该成员。"
+
+
   }
   

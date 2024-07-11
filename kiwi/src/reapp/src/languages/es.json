@@ -104,6 +104,21 @@
     "password-requirements": "Requisitos de la contraseña",
     "password-length-requirement": "Entre 8 y 16 caracteres",
     "password-special-char-requirement": "Incluye un carácter especial (!@#$%^)",
-    "password-same": "Las contraseñas coinciden"
+    "password-same": "Las contraseñas coinciden",
+    "create-new-team": "Crear un nuevo equipo",
+    "team-name": "Nombre del equipo",
+    "choose-team-name": "Elige el nombre de tu equipo",
+    "invite-members": "Invitar a miembros",
+    "search-members-by-email": "Buscar miembros por correo electrónico",
+    "invite": "Invitar",
+    "invited": "Invitado",
+    "empty-error": "No se ha proporcionado ninguna entrada. Por favor, ingrese un valor.",
+    "no-whitespace-error": "No se permiten espacios en blanco. Por favor, ingrese un valor válido.",
+    "cant-invite-self-error": "No puedes invitarte a ti mismo. Por favor, invita a otro miembro.",
+    "no-user-error": "Ese usuario no existe.",
+    "already-invited-error": "Ya has invitado a este miembro."
+
+
+  
   }
   

@@ -34,7 +34,7 @@ import {toast} from "react-toastify";
 const Home = () => {
     const [isImageLoaded, setImageLoaded] = useState(false); 
     const [isPopupOpen, setPopupOpen] = useState(false);
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [userDropdown, setUserDropdown] = useState(false);
     const [welcomeStyle, setWelcomeStyle] = useState({ marginTop: '180px' });
     const [teamListStyle, setTeamListStyle] = useState({ marginTop: '15px' });
@@ -197,20 +197,14 @@ const Home = () => {
                 {userDropdown && (
                     <>
                         <div className='home-user-dropdown'>
-                            {/*<div>*/}
-                            {/*    <NotificationIcon className='home-user-dropdown-icon' />*/}
-                            {/*    {t('notifications')}*/}
-                            {/*</div>*/}
+
                             <div className='home-user-dropdown-settings' onClick={openAccountSettings}>
                                 <SettingsIcon className='home-user-dropdown-icon' />
                                 {t('account-settings')}
                             </div>
                         </div>
                         <div className='home-user-dropdown-bottom'>
-                            {/*<div className='home-help' onClick={openPopup}>*/}
-                            {/*    <HelpIcon className='home-user-dropdown-icon' />*/}
-                            {/*    {t('help')}*/}
-                            {/*</div>*/}
+
                             <div className='home-logout' onClick={logoutBtn}>
                                 <LogoutIcon className='home-user-dropdown-icon' />
                                 {t('logout')}
@@ -221,7 +215,7 @@ const Home = () => {
             </div>
             <div className='home-welcome-container'>
                 <div className='welcome-text' style={welcomeStyle}>
-                    {t('welcome-back')}, {user?.name}
+                    {t('welcome-back')}, {user?.name}{i18n.language === 'ko' && '님'}
                 </div>
             </div>
             <div className='team-list-container' style={teamListStyle}>
@@ -247,9 +241,7 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div className='home-team-buttons'>
-                                    {/*<button className='home-team-settings' onClick={() => handleTeamsettings(team.team)}>*/}
-                                    {/*    <SettingsIcon className="home-settings-icon" />*/}
-                                    {/*</button>*/}
+
                                     <button className='home-team-launch' onClick={()=>checkTeamMemberStatus(team.team)}>
                                         {t('launch')}
                                     </button>

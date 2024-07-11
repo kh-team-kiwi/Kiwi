@@ -151,7 +151,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
   return (
     <div className="account-settings-overlay">
       <div className="account-settings-modal">
-        <div className="account-settings-title">Account Settings</div>
+        <div className="account-settings-title">{t('account-settings')}</div>
         <div className="account-settings-profile-container">
           <div className="account-settings-profile-picture-container">
             {profilePicture ? (

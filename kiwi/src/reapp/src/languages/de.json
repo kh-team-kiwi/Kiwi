@@ -104,8 +104,21 @@
     "password-requirements": "Passwort-Anforderungen",
     "password-length-requirement": "Zwischen 8 und 16 Zeichen",
     "password-special-char-requirement": "Sonderzeichen enthalten (!@#$%^)",
-    "password-same": "Passwörter stimmen überein"
-    
+    "password-same": "Passwörter stimmen überein",
+    "create-new-team": "Neues Team erstellen",
+    "team-name": "Teamname",
+    "choose-team-name": "Wählen Sie den Namen Ihres Teams",
+    "invite-members": "Mitglieder einladen",
+    "search-members-by-email": "Mitglieder per E-Mail suchen",
+    "invite": "Einladen",
+    "invited": "Eingeladen",
+    "empty-error": "Keine Eingabe vorhanden. Bitte geben Sie einen Wert ein.",
+    "no-whitespace-error": "Leerzeichen sind nicht erlaubt. Bitte geben Sie einen gültigen Wert ein.",
+    "cant-invite-self-error": "Sie können sich nicht selbst einladen. Bitte laden Sie ein anderes Mitglied ein.",
+    "no-user-error": "Dieser Benutzer existiert nicht.",
+    "already-invited-error": "Sie haben dieses Mitglied bereits eingeladen."
+
+
     
   }
   

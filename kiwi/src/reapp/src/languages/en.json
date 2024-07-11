@@ -104,6 +104,21 @@
   "password-requirements": "Password requirements",
   "password-length-requirement": "Between 8 and 16 characters",
   "password-special-char-requirement": "Includes a special character (!@#$%^)",
-  "password-same": "Passwords match"
+  "password-same": "Passwords match",
+  "create-new-team": "Create a New Team",
+  "team-name": "Team Name",
+  "choose-team-name": "Choose your team's name",
+  "invite-members": "Invite Members",
+  "search-members-by-email": "Search members by email",
+  "invite": "Invite",
+  "invited": "Invited",
+  "change-password": "Change Password",
+  "delete-account": "Delete Account",
+  "empty-error": "No input provided. Please enter a value.",
+  "no-whitespace-error": "Whitespace is not permitted. Please enter a valid input.",
+  "cant-invite-self-error": "You cannot invite yourself. Please invite another member.",
+  "no-user-error": "That user doesn't exist.",
+  "already-invited-error": "You have already invited this member"
+
 
 }

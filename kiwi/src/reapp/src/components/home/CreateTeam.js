@@ -3,11 +3,14 @@ import '../../styles/components/home/CreateTeam.css';
 import axiosHandler from "../../jwt/axiosHandler";
 import {getSessionItem} from "../../jwt/storage";
 import ErrorImageHandler from "../common/ErrorImageHandler";
+import { useTranslation } from 'react-i18next';
 
 import { toast } from 'react-toastify';
+import i18next from 'i18next';
 
 
 const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     teamName: '',
@@ -18,11 +21,6 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     const { name, value } = e.target;
     if (name === 'invitedMembers') {
       setInputMember(e.target.value);
-      // const membersList = value.split(',').map(member => member.trim());
-      // setFormData({
-      //   ...formData,
-      //   [name]: membersList,
-      // });
     } else {
       setFormData({
         ...formData,
@@ -51,11 +49,11 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     const noSpacesPattern = /^\S+$/;
 
     if (emptyPattern.test(input)) {
-      return "값을 입력해주세요.";
+      return t('empty-error');
     } else if (whitespacePattern.test(input)) {
-      return "공백을 입력할 수 없습니다.";
+      return t('no-whitespace-error');
     } else if (!noSpacesPattern.test(input)) {
-      return "공백이 포함될 수 없습니다.";
+      return t('no-whitespace-error');
     } else {
       return true;
     }
@@ -66,7 +64,6 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     toggleTeamView();
   };
 
-  /* 작성 김성식 : 초대멤버코드 */
 
   const [member, setMember] = useState({
     username: '',
@@ -76,53 +73,6 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
   });
 
   const[inputMember, setInputMember] = useState('');
-
-  // const handleMemberTag = async (event) => {
-  //   if(event.key === "Enter"){
-  //     event.preventDefault();
-  //
-  //     let check = validateInput(inputMember);
-  //
-  //     if(check!==true){
-  //       toast.error(check);
-  //       return;
-  //     }
-  //
-  //     if(formData.invitedMembers.some(member=>member.username === inputMember)){
-  //       toast.error("이미 초대된 회원입니다.");
-  //       setInputMember('');
-  //       return;
-  //     }
-  //
-  //     if(getSessionItem("profile").username===inputMember){
-  //       toast.error("팀 생성자는 자동으로 추가 됩니다.");
-  //       setInputMember('');
-  //       return;
-  //     }
-  //
-  //     try{
-  //       const res = await axiosHandler.post("/api/auth/member",{memberId:event.target.value});
-  //
-  //       if (res.status === 200 && res.data.result) {
-  //
-  //         const data = res.data.data;
-  //         setFormData(prev => ({
-  //           ...prev,
-  //           invitedMembers: [...prev.invitedMembers, data],
-  //         }));
-  //
-  //         setInputMember('');
-  //       } else if(res.status === 200 && !res.data.result) {
-  //         toast.success(res.data.message);
-  //       } else {
-  //         toast.error("오류가 발생했습니다.");
-  //       }
-  //     } catch (e) {
-  //
-  //     }
-  //
-  //   }
-  // };
 
   const handleMemberTagBtn = async (event) => {
     event.preventDefault();
@@ -134,12 +84,12 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     }
 
     if(formData.invitedMembers.some(member=>member.username === inputMember)){
-      toast.error("이미 초대된 회원입니다.");
+      toast.error(t('already-invited-error'));
       setInputMember('');
       return;
     }
     if(getSessionItem("profile").username===inputMember){
-      toast.error("팀 생성자는 자동으로 추가 됩니다.");
+      toast.error(t('cant-invite-self-error'));
       setInputMember('');
       return;
     }
@@ -152,9 +102,9 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
       }));
       setInputMember('');
     } else if(res.status === 200 && !res.data.result) {
-      toast.error(res.data.message);
+      toast.error(t('no-user-error'));
     } else {
-      toast.error("오류가 발생했습니다.");
+      toast.error(t('error-occurred'));
     }
   }
 
@@ -178,25 +128,21 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
     const noSpacesPattern = /^\S+$/;
 
     if (emptyPattern.test(input)) {
-      return "값을 입력해주세요.";
+      return t('empty-error');
     } else if (whitespacePattern.test(input)) {
-      return "공백을 입력할 수 없습니다.";
+      return t('no-whitespace-error');
     } else if (!noSpacesPattern.test(input)) {
-      return "공백이 포함될 수 없습니다.";
-    } /*else if (!emailPattern.test(input)) {
-      return "이메일을 정확히 입력해주세요.";
-    }*/ else {
+      return t('no-whitespace-error');
+    }  else {
       return true;
     }
   }
-
-  /* 작성 김성식 : 초대멤버 코드 */
 
   return (
     <>
     <div className='create-team-title-container'>
       <div className='create-team-title'>
-        Create a New Team
+      {t('create-new-team')}
       </div> 
     </div>
         
@@ -205,14 +151,14 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
         <div className='create-team-top'>
           <div>
             <div className='create-team-name-title'>
-              Team Name
+            {t('team-name')}
             </div>
             <div className='create-team-name-container' >
               <input
                 className="create-team-name-input"
                 name="teamName"
                 value={formData.teamName}
-                placeholder="Choose your team's name"
+                placeholder={t('choose-team-name')}
                 onKeyDown={preventEnterSubmit}
                 onChange={handleChange}
               />
@@ -221,14 +167,14 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
           </div>
           <div>
             <div className='create-team-invite-members-title'>
-                Invite Members
+            {t('invite-members')}
             </div>
             <div className='create-team-invite-members-wrapper'>
               <div className='create-team-invite-members-container' >
                 <input
                   className="create-team-invite-members-input"
                   name="invitedMembers"
-                  placeholder='Search members by email'
+                  placeholder={t('invite-members')}
                   value={inputMember}
                   onKeyDown={preventEnterSubmit}
                   onChange={handleChange}
@@ -236,7 +182,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
               </div>
 
               <button onClick={handleMemberTagBtn} className='create-team-invite-button'>
-                Invite
+              {t('invite')}
               </button>
 
             </div>
@@ -252,7 +198,7 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
                             <div className='create-team-member-info'>
                               <div className='create-team-member-name-wrapper' >
                                 <div className='create-team-member-name'>{member.name}</div>
-                                <div className='create-team-invite-pending' > Invited</div>
+                                <div className='create-team-invite-pending' > {t('invited')}</div>
                               </div>
 
 
@@ -278,11 +224,11 @@ const CreateTeam = ({ onCreateTeam, toggleTeamView }) => {
             className='create-team-cancel-button'
             onClick={handleCancel}
           >
-            Cancel
+            {t('cancel')}
           </button>
 
           <button type="submit" className='create-team-create-button'>
-            Create Team
+          {t('create-team')}
           </button>
         </div>
       </form>
