@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import '../../styles/components/chat/ChatSearchBar.css';
 import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
+import axios from "axios";
 
 const ChatSearchBar = ({ chatNum, onMessageClick }) => {
     const [searchTerm, setSearchTerm] = useState('');
