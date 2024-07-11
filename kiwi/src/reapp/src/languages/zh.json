@@ -130,7 +130,14 @@
   "delete-account-warning": "警告：删除您的帐户是永久性的，无法撤消。",
   "confirm-password-long": "确认您的新密码",
     "change-password": "更改密码",
-  "delete-account": "删除账户"
+  "delete-account": "删除账户",
+  "all-events": "所有活动",
+  "finished-events": "已完成的活动",
+  "title-empty-error": "标题不能为空。",
+  "event-add-success": "活动已成功添加！",
+  "go-home": "回到首页",
+  "event-filter": "活动筛选器"
+
 
 
   }

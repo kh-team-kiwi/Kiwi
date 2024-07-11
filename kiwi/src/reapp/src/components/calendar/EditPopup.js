@@ -47,7 +47,7 @@ const EditPopup = ({ event, isOpen, onClose, setEvents }) => {
     e.preventDefault();
 
     if (!title.trim()) {
-      toast.error("Title cannot be empty");
+      toast.error(t('title-empty-error'));
       return;
     }
 

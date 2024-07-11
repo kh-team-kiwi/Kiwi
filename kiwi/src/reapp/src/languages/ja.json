@@ -130,7 +130,13 @@
     "delete-account-warning": "警告: アカウントの削除は永久に行われ、元に戻すことはできません。",
     "confirm-password-long": "新しいパスワードを確認してください",
       "change-password": "パスワードを変更する",
-  "delete-account": "アカウントを削除する"
+  "delete-account": "アカウントを削除する",
+  "all-events": "すべてのイベント",
+  "finished-events": "完了したイベント",
+  "title-empty-error": "タイトルは空にできません。",
+  "event-add-success": "イベントが正常に追加されました！",
+  "go-home": "ホームに戻る",
+  "event-filter": "イベントフィルター"
 
 
   }

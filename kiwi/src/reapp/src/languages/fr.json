@@ -130,7 +130,14 @@
     "delete-account-warning": "Avertissement : la suppression de votre compte est permanente et ne peut pas être annulée.",
     "confirm-password-long": "Confirmez votre nouveau mot de passe",
       "change-password": "Changer le mot de passe",
-  "delete-account": "Supprimer le compte"
+  "delete-account": "Supprimer le compte",
+  "all-events": "Tous les événements",
+  "finished-events": "Événements terminés",
+  "title-empty-error": "Le titre ne peut pas être vide.",
+  "event-add-success": "Événement ajouté avec succès !",
+  "go-home": "Aller à la maison",
+  "event-filter": "Filtre d'événement"
+
 
 
 

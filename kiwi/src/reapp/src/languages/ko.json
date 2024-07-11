@@ -130,7 +130,14 @@
   "delete-account-warning": "경고: 계정 삭제는 영구적이며 되돌릴 수 없습니다.",
   "confirm-password-long": "새 비밀번호를 확인하세요",
   "change-password": "비밀번호 변경",
-  "delete-account": "계정 삭제"
+  "delete-account": "계정 삭제",
+  "all-events": "모든 이벤트",
+  "finished-events": "완료된 이벤트",
+  "title-empty-error": "제목을 입력해 주세요.",
+  "event-add-success": "이벤트가 성공적으로 추가되었습니다!",
+  "go-home": "홈으로 가기",
+  "event-filter": "이벤트 필터"
+
 
 
 

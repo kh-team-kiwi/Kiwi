@@ -130,7 +130,14 @@
     "delete-account-warning": "Advertencia: Eliminar su cuenta es permanente y no se puede deshacer.",
     "confirm-password-long": "Confirme su nueva contraseña",
       "change-password": "Cambiar la contraseña",
-  "delete-account": "Eliminar cuenta"
+  "delete-account": "Eliminar cuenta",
+  "all-events": "Todos los eventos",
+  "finished-events": "Eventos terminados",
+  "title-empty-error": "El título no puede estar vacío.",
+  "event-add-success": "¡Evento agregado con éxito!",
+  "go-home": "Ir a casa",
+  "event-filter": "Filtro de eventos"
+
 
 
   

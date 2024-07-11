@@ -130,7 +130,14 @@
   "current-password-long": "Enter your current password",
   "new-password":"New Password",
   "delete-account-warning":"Warning: Deleting your account is permanent and cannot be undone.",
-  "confirm-password-long": "Confirm your new password"
+  "confirm-password-long": "Confirm your new password",
+  "event-filter": "Event Filter",
+  "all-events": "All Events",
+  "finished-events": "Finished Events",
+  "title-empty-error": "Title cannot be empty.",
+  "event-add-success": "Event added successfully!",
+  "go-home": "Go to Home"
+
 
 
 }

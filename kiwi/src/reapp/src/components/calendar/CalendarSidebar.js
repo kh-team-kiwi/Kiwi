@@ -243,7 +243,7 @@ const CalendarSidebar = ({ events, selectedCalendar }) => {
         >
           <FilterIcon className='calendar-sidebar-filter-icon' />
           <div>
-            Event Filter
+            {t('event-filter')}
           </div>
           <div className={`filter-arrow ${filtersVisible ? 'expanded' : 'collapsed'}`}><ThinUpArrow className='calendar-sidebar-arrow'/></div>
         </div>
@@ -252,21 +252,21 @@ const CalendarSidebar = ({ events, selectedCalendar }) => {
             className={`filter-button ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
           >
-            All events
+            {t('all-events')}
             {filter === 'all' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
           </button>
           <button
             className={`filter-button ${filter === 'upcoming' ? 'active' : ''}`}
             onClick={() => setFilter('upcoming')}
           >
-            Upcoming events
+            {t('upcoming-events')}
             {filter === 'upcoming' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
           </button>
           <button
             className={`filter-button ${filter === 'finished' ? 'active' : ''}`}
             onClick={() => setFilter('finished')}
           >
-            Finished events
+            {t('finished-events')}
             {filter === 'finished' && <SelectedIcon className='calendar-sidebar-selected-icon' />}
           </button>
         </div>

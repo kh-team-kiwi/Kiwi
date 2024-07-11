@@ -140,11 +140,11 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
 
   const handleAddEvent = () => {
     if (!newEvent.title.trim()) {
-      toast.error("Please enter a title");
+      toast.error(t('title-empty-error'));
 
       return;
     }
-    addSchedule(); // database save
+    addSchedule(); 
     closePopup();
   };
 
@@ -158,12 +158,12 @@ const SchedulePopup = ({ onClose, addEvent, calendars = [], setEvents }) => {
           [data.calendar]: [...prevEvents[data.calendar], data]
         }));
 
-        toast.success("Event added successfully!");
+        toast.success(t('event-add-success'));
       } else {
-        toast.error('An error occurred.');
+        toast.error(t('error-occurred'));
       }
     } catch (error) {
-      toast.error('An error occurred.');
+      toast.error(t('error-occurred'));
     }
   }
 

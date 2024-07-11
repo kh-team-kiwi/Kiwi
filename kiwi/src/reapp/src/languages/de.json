@@ -130,9 +130,13 @@
     "delete-account-warning": "Warnung: Das Löschen Ihres Kontos ist dauerhaft und kann nicht rückgängig gemacht werden.",
     "confirm-password-long": "Bestätigen Sie Ihr neues Passwort",
     "change-password": "Passwort ändern",
-    "delete-account": "Konto löschen"
-
-
+    "delete-account": "Konto löschen",
+    "all-events": "Alle Veranstaltungen",
+    "finished-events": "Abgeschlossene Veranstaltungen",
+    "title-empty-error": "Der Titel darf nicht leer sein.",
+    "event-add-success": "Veranstaltung erfolgreich hinzugefügt!",
+    "go-home": "Nach Hause gehen",
+    "event-filter": "Ereignisfilter"
     
   }
   
