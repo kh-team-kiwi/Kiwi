@@ -22,6 +22,7 @@
     width: 100%;
     border-bottom: 1px solid var(--light-gray);
     padding-bottom: 5px;
+    align-items: center;
 }
 .teamsettings-user-table-header-top {
     display: flex;
@@ -485,3 +486,28 @@
 
 }
 
+.teamsettings-page-size-dropdown-wrapper {
+    display: inline-block;
+    margin-left: 10px;
+    margin-left: auto;
+}
+
+.teamsettings-page-size-dropdown {
+    font-size: 17px;
+    outline: none;
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 2px;
+    border: 1px solid var(--light-gray);
+    color: var(--lighter-text-color);
+}
+
+.teamsettings-page-size-dropdown label {
+    margin-right: 5px;
+}
+
+.teamsettings-page-size-dropdown select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
