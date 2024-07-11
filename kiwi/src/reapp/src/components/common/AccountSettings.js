@@ -64,14 +64,14 @@ const AccountSettings = ({ isOpen, onClose }) => {
       const res = await axiosHandler.post('/api/auth/update/account', formData,
         { headers: { 'Content-Type': 'multipart/form-data' } });
       if (res.data.result) {
-        toast.success('Changes have been saved!');
+        toast.success(t('change-success'));
         setSessionItem('profile', res.data.data);
         window.location.reload();
       } else {
-        toast.error(res.data.message);
+        toast.error(t('error-occurred'));
       }
     } catch (e) {
-      toast.error('An error has occurred.');
+      toast.error(t('error-occurred'));
 
     }
   };
@@ -98,11 +98,11 @@ const AccountSettings = ({ isOpen, onClose }) => {
 
   const updatePassword = async () => {
     if (!passwordCheck.isValid) {
-      toast.error("Invalid password. Ensure it meets all requirements.");
+      toast.error(t('invalid-password-error'));
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match.");
+      toast.error(t('password-mismatch-error'));
       return;
     }
 
@@ -116,9 +116,9 @@ const AccountSettings = ({ isOpen, onClose }) => {
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
-        toast.success("Your password has been updated");
+        toast.success(t('password-updated'));
       } else {
-        toast.error(res.data.message);
+        toast.error(t('invalid-password-error'));
       }
     } catch (e) {
       toast.error('An error has occurred.');

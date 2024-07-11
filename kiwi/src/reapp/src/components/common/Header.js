@@ -226,6 +226,7 @@ const Header = () => {
 
   const handleTeamClick = (team) => {
     setTeamDropdown(false);
+    setMemberSettingsDropdown(false);
     setSelectedTeam(team);
     navigate(`/team/${team.team}`);
   };
