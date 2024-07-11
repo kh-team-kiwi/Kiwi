@@ -171,7 +171,9 @@
     "set-member": "Als Mitglied festlegen",
     "block": "Blockieren",
     "unblock": "Entblocken",
-    "results": "Ergebnisse"
+    "results": "Ergebnisse",
+    "only-owners-error": "Nur Eigentümer können auf die Teameinstellungen zugreifen."
+
 
     
   }

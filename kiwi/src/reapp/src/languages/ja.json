@@ -171,7 +171,9 @@
   "set-member": "メンバーに設定",
   "block": "ブロック",
   "unblock": "ブロック解除",
-  "results": "結果"
+  "results": "結果",
+  "only-owners-error": "チーム設定にアクセスできるのは所有者のみです。"
+
 
 
 

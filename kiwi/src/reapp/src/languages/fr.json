@@ -171,7 +171,9 @@
   "set-member": "Définir comme membre",
   "block": "Bloquer",
   "unblock": "Débloquer",
-  "results": "Résultats"
+  "results": "Résultats",
+  "only-owners-error": "Seuls les propriétaires peuvent accéder aux paramètres de l'équipe."
+
 
 
 

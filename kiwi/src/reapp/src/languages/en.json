@@ -171,7 +171,8 @@
 "set-member": "Set Member",
 "block": "Block",
 "unclock": "Unblock",
-"results": "Results"
+"results": "Results",
+"only-owners-error": "Only owners can access team settings."
 
 
 

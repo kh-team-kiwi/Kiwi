@@ -171,7 +171,9 @@
   "set-member": "设为成员",
   "block": "屏蔽",
   "unblock": "解除屏蔽",
-  "results": "结果"
+  "results": "结果",
+  "only-owners-error": "只有所有者可以访问团队设置。"
+
 
 
 

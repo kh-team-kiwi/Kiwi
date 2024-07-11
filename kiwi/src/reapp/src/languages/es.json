@@ -171,7 +171,9 @@
   "set-member": "Establecer como miembro",
   "block": "Bloquear",
   "unblock": "Desbloquear",
-  "results": "Resultados"
+  "results": "Resultados",
+  "only-owners-error": "Solo los propietarios pueden acceder a la configuración del equipo."
+
 
 
 
