@@ -36,7 +36,7 @@ public class ChatUserService {
 
     public List<Member> getUsersInTeam(String team) {
         logger.debug("Fetching users in team: {}", team);
-        List<Group> groupMembers = groupRepository.findByTeam(team);
+        List<Group> groupMembers = groupRepository.findAllByTeamAndStatus(team,"JOINED");
         List<String> memberIds = groupMembers.stream()
                 .map(Group::getMemberId)
                 .collect(Collectors.toList());

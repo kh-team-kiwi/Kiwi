@@ -12,7 +12,7 @@ const ChatUsers = ({ chatNum }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+                const response = await axiosHandler.get(`/api/chat/user/${chatNum}`);
                 setUsers(response.data);
                 setMemberCount(response.data.length);
             } catch (error) {

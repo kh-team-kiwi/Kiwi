@@ -432,7 +432,7 @@ const renderSettingsIcon = () => {
         </div> */}
 
         <div className='header-user-profile-button' onClick={handleDropdownClick} ref={userProfileRef}>
-          <img className='header-user-profile-container' src={getSessionItem("profile").filepath || defaultImage} alt={''} onError={ErrorImageHandler}></img>
+          <img className='header-user-profile-container' src={getSessionItem("profile").filepath || ''} alt={''} onError={ErrorImageHandler}></img>
           <div className='header-user-profile-name'>
           {getSessionItem('profile').name}
           </div>

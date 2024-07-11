@@ -20,7 +20,7 @@ const ChatSearchBar = ({ chatNum, onMessageClick }) => {
 
     const fetchMessages = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
+            const response = await axios.get(`/api/chat/message/messages/${chatNum}`);
             const filteredMessages = response.data.filter(msg =>
                 msg.chatContent.toLowerCase().includes(searchTerm.toLowerCase())
             );
