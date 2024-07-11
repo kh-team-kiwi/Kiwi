@@ -44,7 +44,7 @@ const DriveList = ({ onView, refresh }) => {
 
     const fetchDrives = async () => {
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/drive/list/${teamno}/${username}`);
+            const response = await axiosHandler.get(`/api/drive/list/${teamno}/${username}`);
             setDrives(response.data);
             if (response.data.length > 0) {
                 handleViewDrive(response.data[0].driveCode, response.data[0].driveName);
@@ -56,7 +56,7 @@ const DriveList = ({ onView, refresh }) => {
 
     const handleUpdate = async (driveCode, newName) => {
         try {
-            await axiosHandler.put(`http://localhost:8080/api/drive/${driveCode}`, { driveName: newName });
+            await axiosHandler.put(`/api/drive/${driveCode}`, { driveName: newName });
             fetchDrives();
         } catch (error) {
             console.error('Failed to update drive', error);
@@ -92,7 +92,7 @@ const DriveList = ({ onView, refresh }) => {
     const confirmDeleteDrive = async () => {
         if (driveToDelete) {
             try {
-                await axiosHandler.delete(`http://localhost:8080/api/drive/${driveToDelete.driveCode}`);
+                await axiosHandler.delete(`/api/drive/${driveToDelete.driveCode}`);
                 setShowDeletePopup(false);
                 setDriveToDelete(null);
                 fetchDrives();

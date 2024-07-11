@@ -23,7 +23,7 @@ const DriveFolderPopup = ({ onClose, onCloseDropdown, driveCode, fetchFiles, par
 
         try {
             const adjustedParentPath = parentPath && !parentPath.endsWith('/') ? `${parentPath}/` : parentPath;
-            await axiosHandler.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
+            await axiosHandler.post(`/api/drive/${driveCode}/folders/create`, {
                 folderName,
                 parentPath: adjustedParentPath || "",
                 teamNumber: teamno

@@ -31,7 +31,7 @@ const FileUploadWithDropzone = ({ driveCode, fetchFiles, parentPath }) => {
         formData.append('teamNumber', teamno);
 
         try {
-            await axios.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
+            await axios.post(`/api/drive/${driveCode}/files/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

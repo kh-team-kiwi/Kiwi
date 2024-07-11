@@ -56,7 +56,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         console.log(`Fetching items for path: ${fullPath}`);
         setLoading(true);
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files`, {
+            const response = await axiosHandler.get(`/api/drive/${teamno}/${driveCode}/files`, {
                 params: { parentPath: path }
             });
             console.log('Fetched items:', response.data);
@@ -74,8 +74,8 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         console.log(`Deleting item at path: ${fullPath}`);
         try {
             const url = isFolder
-                ? `http://localhost:8080/api/drive/${teamno}/${driveCode}/folders/${itemCode}`
-                : `http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}`;
+                ? `/api/drive/${teamno}/${driveCode}/folders/${itemCode}`
+                : `/api/drive/${teamno}/${driveCode}/files/${itemCode}`;
             await axiosHandler.delete(url, { params: { parentPath: fullPath } });
             fetchItems(parentPath);
         } catch (error) {
@@ -91,7 +91,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
         console.log(`Updating file name at path: ${fullPath}`);
         try {
-            await axiosHandler.put(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}`, JSON.stringify(newFileName), {
+            await axiosHandler.put(`/api/drive/${teamno}/${driveCode}/files/${itemCode}`, JSON.stringify(newFileName), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -114,7 +114,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
         console.log(`Updating folder name at path: ${fullPath}`);
         try {
-            await axiosHandler.put(`http://localhost:8080/api/drive/${teamno}/${driveCode}/folders/${itemCode}`, JSON.stringify(newFolderName), {
+            await axiosHandler.put(`/api/drive/${teamno}/${driveCode}/folders/${itemCode}`, JSON.stringify(newFolderName), {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -143,7 +143,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
         console.log(`Downloading file from path: ${fullPath}`);
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/drive/${teamno}/${driveCode}/files/${itemCode}/download`, {
+            const response = await axiosHandler.get(`/api/drive/${teamno}/${driveCode}/files/${itemCode}/download`, {
                 responseType: 'blob',
                 params: { parentPath: fullPath }
             });
@@ -173,7 +173,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         formData.append('teamNumber', teamno);
 
         try {
-            await axiosHandler.post(`http://localhost:8080/api/drive/${driveCode}/files/upload`, formData, {
+            await axiosHandler.post(`/api/drive/${driveCode}/files/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -190,7 +190,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const confirmDeleteDrive = async () => {
         try {
-            await axiosHandler.delete(`http://localhost:8080/api/drive/${driveCode}`);
+            await axiosHandler.delete(`/api/drive/${driveCode}`);
             setShowDeletePopup(false);
             onDeleteDrive(driveCode);
         } catch (error) {

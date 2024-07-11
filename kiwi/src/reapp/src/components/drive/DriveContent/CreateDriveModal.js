@@ -35,7 +35,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
 
     const fetchMembers = async () => {
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            const response = await axiosHandler.get(`/api/chat/user/members?team=${team}`);
             const fetchedMembers = response.data
                 .filter(member => member.memberId !== profile.username)
                 .map(member => ({
@@ -86,7 +86,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
         };
 
         try {
-            const response = await axiosHandler.post('http://localhost:8080/api/drive/create', driveData);
+            const response = await axiosHandler.post('/api/drive/create', driveData);
             onSave(response.data);
             toast.success("Drive created successfully!");
 

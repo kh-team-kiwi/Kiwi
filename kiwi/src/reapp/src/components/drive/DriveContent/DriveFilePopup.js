@@ -11,7 +11,7 @@ const DrivePopup = ({ onClose, driveCode, fetchFiles, parentPath }) => {
         e.preventDefault();
         try {
             const adjustedParentPath = parentPath && !parentPath.endsWith('/') ? `${parentPath}/` : parentPath;
-            await axios.post(`http://localhost:8080/api/drive/${driveCode}/folders/create`, {
+            await axios.post(`/api/drive/${driveCode}/folders/create`, {
                 folderName,
                 parentPath: adjustedParentPath || driveCode + '/'
             }, {

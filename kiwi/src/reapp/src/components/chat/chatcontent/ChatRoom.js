@@ -65,7 +65,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
         fetchMessages();
 
-        const socket = new SockJS(' /ws');
+        const socket = new SockJS('/ws');
         const client = Stomp.over(socket);
 
         client.connect({}, (frame) => {
@@ -208,7 +208,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                     formData.append('chatNum', chatNum);
                     formData.append('messageNum', `${chatNum}-${Date.now()}`);
 
-                    const response = await axiosHandler.post(' /api/chat/message/upload', formData, {
+                    const response = await axiosHandler.post('/api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     });
 

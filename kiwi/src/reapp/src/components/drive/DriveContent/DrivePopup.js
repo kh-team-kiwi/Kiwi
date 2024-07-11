@@ -11,7 +11,7 @@ const DrivePopup = ({ onClose, onDriveCreated }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/drive/create', { driveName, team });
+            const response = await axios.post('/api/drive/create', { driveName, team });
             setMessage(JSON.stringify(response.data)); // 객체를 문자열로 변환
             if (onDriveCreated) {
                 onDriveCreated(); // 드라이브 생성 후 갱신
