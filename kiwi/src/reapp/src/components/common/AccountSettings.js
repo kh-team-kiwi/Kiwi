@@ -11,7 +11,6 @@ import { useParams } from "react-router-dom";
 
 import { toast } from 'react-toastify';
 
-
 const AccountSettings = ({ isOpen, onClose }) => {
   const [name, setName] = useState(getSessionItem('profile').name);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -32,6 +31,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
 
   const [file, setFile] = useState();
   const { teamno } = useParams();
+  const [deletePassword, setDeletePassword] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
@@ -121,7 +121,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
         toast.error(t('invalid-password-error'));
       }
     } catch (e) {
-      toast.error('An error has occurred.');
+      toast.error(t('invalid-password-error'));
 
     }
   };
@@ -129,7 +129,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
   const deleteAccount = async () => {
     try {
       const memberId = getSessionItem('profile').username;
-      const password = currentPassword;
+      const password = deletePassword;
       const res = await axiosHandler.delete('/api/auth/member/'+memberId, { password });
       if (res.data.result) {
         setSessionItem('profile', res.data.data);
@@ -139,10 +139,10 @@ const AccountSettings = ({ isOpen, onClose }) => {
         removeSessionItem("events");
         window.location.replace("/");
       } else {
-        toast.error(res.data.message);
+        toast.error(t('invalid-password-error'));
       }
     } catch (e) {
-      toast.error('An error has occurred.');
+      toast.error(t('invalid-password-error'));
     }
   };
 
@@ -193,45 +193,45 @@ const AccountSettings = ({ isOpen, onClose }) => {
           <div className={`account-settings-change-password-container ${isPasswordSectionExpanded ? 'expanded' : ''}`}>
             <div className="account-settings-change-password" onClick={() => setIsPasswordSectionExpanded(!isPasswordSectionExpanded)}>
               <div>
-                Change password
+              {t('change-password')}
               </div>
               <ThinUpArrow className={`account-settings-arrow ${isPasswordSectionExpanded ? 'down' : ''}`} />
             </div>
             {isPasswordSectionExpanded && (
               <div className="account-settings-password-inputs">
                 <div className='account-settings-password-text'>
-                  Type in your current password
+                {t('current-password-long')}
                 </div>
                 <input
                   type="password"
-                  placeholder="Current Password"
+                  placeholder={t('current-password')}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   className="account-settings-input"
                 />
                 <div className='account-settings-password-text'>
-                  Choose your new password
+                  {t('choose-password')}
                 </div>
                 <input
                   type="password"
-                  placeholder="New Password"
+                  placeholder={t('new-password')}
                   value={newPassword}
                   onChange={handlePasswordChange}
                   className="account-settings-input"
                 />
                 <div className='account-settings-password-text'>
-                  Confirm your new password
+                  {t('confirm-password-long')}
                 </div>
                 <input
                   type="password"
-                  placeholder="Confirm Password"
+                  placeholder={t('confirm-password')}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="account-settings-input"
                 />
                 <button className="account-settings-change-password-button"
                   onClick={updatePassword}>
-                  Change password
+                  {t('change-password')}
                 </button>
               </div>
             )}
@@ -239,24 +239,24 @@ const AccountSettings = ({ isOpen, onClose }) => {
           <div className={`account-settings-delete-account-container ${isDeleteSectionExpanded ? 'expanded' : ''}`}>
             <div className="account-settings-delete-account"
               onClick={() => setIsDeleteSectionExpanded(!isDeleteSectionExpanded)}>
-              Delete Account
+              {t('delete-account')}
               <ThinUpArrow className={`account-settings-arrow ${isDeleteSectionExpanded ? 'down' : ''}`} />
             </div>
 
             {isDeleteSectionExpanded && (
               <div className="account-settings-delete-inputs">
                 <div className='account-settings-delete-warning'>
-                  Warning: Deleting your account is permanent and cannot be undone.
+                {t('delete-account-warning')}
                 </div>
                 <input
                   type="password"
-                  placeholder="Password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder= {t('password')}
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
                   className="account-settings-input"
                 />
                 <button className="account-settings-delete-button" onClick={deleteAccount}>
-                  Delete
+                {t('delete-account')}
                 </button>
               </div>
             )}
@@ -264,7 +264,7 @@ const AccountSettings = ({ isOpen, onClose }) => {
         </div>
         <div className="account-settings-bottom-container">
           <button type="button" className="account-settings-cancel-button" onClick={onClose}>{t('cancel')}</button>
-          <button type="button" className="account-settings-save-button" onClick={handleSave}>Save</button>
+          <button type="button" className="account-settings-save-button" onClick={handleSave}>{t('save')}</button>
         </div>
       </div>
     </div>

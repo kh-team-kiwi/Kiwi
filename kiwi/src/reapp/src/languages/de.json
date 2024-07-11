@@ -116,7 +116,21 @@
     "no-whitespace-error": "Leerzeichen sind nicht erlaubt. Bitte geben Sie einen gültigen Wert ein.",
     "cant-invite-self-error": "Sie können sich nicht selbst einladen. Bitte laden Sie ein anderes Mitglied ein.",
     "no-user-error": "Dieser Benutzer existiert nicht.",
-    "already-invited-error": "Sie haben dieses Mitglied bereits eingeladen."
+    "already-invited-error": "Sie haben dieses Mitglied bereits eingeladen.",
+    "change-success": "Änderungen wurden gespeichert!",
+    "invalid-password-error": "Ungültiges Passwort.",
+    "password-mismatch-error": "Passwörter stimmen nicht überein.",
+    "password-updated": "Ihr Passwort wurde aktualisiert!",
+    "error-occurred": "Ein Fehler ist aufgetreten.",
+    "type-password": "Geben Sie Ihr aktuelles Passwort ein",
+    "choose-password": "Wählen Sie Ihr neues Passwort",
+    "current-password": "Aktuelles Passwort",
+    "current-password-long": "Geben Sie Ihr aktuelles Passwort ein",
+    "new-password": "Neues Passwort",
+    "delete-account-warning": "Warnung: Das Löschen Ihres Kontos ist dauerhaft und kann nicht rückgängig gemacht werden.",
+    "confirm-password-long": "Bestätigen Sie Ihr neues Passwort",
+    "change-password": "Passwort ändern",
+    "delete-account": "Konto löschen"
 
 
     

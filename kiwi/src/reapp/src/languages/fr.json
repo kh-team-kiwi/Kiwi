@@ -116,7 +116,21 @@
     "no-whitespace-error": "Les espaces ne sont pas autorisés. Veuillez entrer une valeur valide.",
     "cant-invite-self-error": "Vous ne pouvez pas vous inviter vous-même. Veuillez inviter un autre membre.",
     "no-user-error": "Cet utilisateur n'existe pas.",
-    "already-invited-error": "Vous avez déjà invité ce membre."
+    "already-invited-error": "Vous avez déjà invité ce membre.",
+    "change-success": "Les modifications ont été enregistrées !",
+    "invalid-password-error": "Mot de passe invalide.",
+    "password-mismatch-error": "Les mots de passe ne correspondent pas.",
+    "password-updated": "Votre mot de passe a été mis à jour !",
+    "error-occurred": "Une erreur s'est produite.",
+    "type-password": "Saisissez votre mot de passe actuel",
+    "choose-password": "Choisissez votre nouveau mot de passe",
+    "current-password": "Mot de passe actuel",
+    "current-password-long": "Entrez votre mot de passe actuel",
+    "new-password": "Nouveau mot de passe",
+    "delete-account-warning": "Avertissement : la suppression de votre compte est permanente et ne peut pas être annulée.",
+    "confirm-password-long": "Confirmez votre nouveau mot de passe",
+      "change-password": "Changer le mot de passe",
+  "delete-account": "Supprimer le compte"
 
 
 

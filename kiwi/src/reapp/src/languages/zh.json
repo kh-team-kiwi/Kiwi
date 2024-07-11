@@ -116,7 +116,21 @@
   "no-whitespace-error": "不允许使用空白字符。请输入有效的值。",
   "cant-invite-self-error": "您不能邀请自己。请邀请其他成员。",
   "no-user-error": "该用户不存在。",
-  "already-invited-error": "您已经邀请了该成员。"
+  "already-invited-error": "您已经邀请了该成员。",
+  "change-success": "更改已保存！",
+  "invalid-password-error": "密码无效。",
+  "password-mismatch-error": "密码不匹配。",
+  "password-updated": "您的密码已更新！",
+  "error-occurred": "发生错误。",
+  "type-password": "输入您当前的密码",
+  "choose-password": "选择您的新密码",
+  "current-password": "当前密码",
+  "current-password-long": "输入您当前的密码",
+  "new-password": "新密码",
+  "delete-account-warning": "警告：删除您的帐户是永久性的，无法撤消。",
+  "confirm-password-long": "确认您的新密码",
+    "change-password": "更改密码",
+  "delete-account": "删除账户"
 
 
   }

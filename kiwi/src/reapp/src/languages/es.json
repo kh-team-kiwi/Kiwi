@@ -116,7 +116,21 @@
     "no-whitespace-error": "No se permiten espacios en blanco. Por favor, ingrese un valor válido.",
     "cant-invite-self-error": "No puedes invitarte a ti mismo. Por favor, invita a otro miembro.",
     "no-user-error": "Ese usuario no existe.",
-    "already-invited-error": "Ya has invitado a este miembro."
+    "already-invited-error": "Ya has invitado a este miembro.",
+    "change-success": "¡Los cambios han sido guardados!",
+    "invalid-password-error": "Contraseña inválida.",
+    "password-mismatch-error": "Las contraseñas no coinciden.",
+    "password-updated": "¡Tu contraseña ha sido actualizada!",
+    "error-occurred": "Ha ocurrido un error.",
+    "type-password": "Ingrese su contraseña actual",
+    "choose-password": "Elija su nueva contraseña",
+    "current-password": "Contraseña actual",
+    "current-password-long": "Ingrese su contraseña actual",
+    "new-password": "Nueva contraseña",
+    "delete-account-warning": "Advertencia: Eliminar su cuenta es permanente y no se puede deshacer.",
+    "confirm-password-long": "Confirme su nueva contraseña",
+      "change-password": "Cambiar la contraseña",
+  "delete-account": "Eliminar cuenta"
 
 
   

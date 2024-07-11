@@ -116,7 +116,21 @@
     "no-whitespace-error": "空白は許可されていません。正しい値を入力してください。",
     "cant-invite-self-error": "自分自身を招待することはできません。他のメンバーを招待してください。",
     "no-user-error": "そのユーザーは存在しません。",
-    "already-invited-error": "このメンバーは既に招待されています。"
+    "already-invited-error": "このメンバーは既に招待されています。",
+    "change-success": "変更が保存されました！",
+    "invalid-password-error": "無効なパスワードです。",
+    "password-mismatch-error": "パスワードが一致しません。",
+    "password-updated": "パスワードが更新されました！",
+    "error-occurred": "エラーが発生しました。",
+    "type-password": "現在のパスワードを入力してください",
+    "choose-password": "新しいパスワードを選択してください",
+    "current-password": "現在のパスワード",
+    "current-password-long": "現在のパスワードを入力してください",
+    "new-password": "新しいパスワード",
+    "delete-account-warning": "警告: アカウントの削除は永久に行われ、元に戻すことはできません。",
+    "confirm-password-long": "新しいパスワードを確認してください",
+      "change-password": "パスワードを変更する",
+  "delete-account": "アカウントを削除する"
 
 
   }

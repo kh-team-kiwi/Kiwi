@@ -118,7 +118,19 @@
   "no-whitespace-error": "Whitespace is not permitted. Please enter a valid input.",
   "cant-invite-self-error": "You cannot invite yourself. Please invite another member.",
   "no-user-error": "That user doesn't exist.",
-  "already-invited-error": "You have already invited this member"
+  "already-invited-error": "You have already invited this member",
+  "change-success": "Changes have been saved!",
+  "invalid-password-error": "Invalid password.",
+  "password-mismatch-error": "Passwords do not match.",
+  "password-updated": "Your password has been updated!",
+  "error-occurred": "An error has occurred",
+  "type-password": "type in your current password",
+  "choose-password": "Choose your new password",
+  "current-password": "Current Password",
+  "current-password-long": "Enter your current password",
+  "new-password":"New Password",
+  "delete-account-warning":"Warning: Deleting your account is permanent and cannot be undone.",
+  "confirm-password-long": "Confirm your new password"
 
 
 }
