@@ -112,6 +112,28 @@ const Header = () => {
   };
 
   useEffect(() => {
+    const fetchRole = async () => {
+      const memberId = getSessionItem("profile").username;
+      try {
+        const res = await axiosHandler.get(`/api/team/${teamno}/member/${memberId}`);
+        if(res.status===200){
+          joinTeam(res.data);
+        } else {
+          if(res.data) toast.error(res.data.message);
+        }
+      } catch (e) {
+        toast.error(e.data.message);
+      }
+    };
+  
+    if (selectedTeam.team) {
+      fetchRole();
+    }
+  }, [selectedTeam, teamno]);
+
+  
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -202,11 +224,10 @@ const Header = () => {
     }
   }, [isDarkMode]);
 
-  const handleTeamClick = async (team) => {
+  const handleTeamClick = (team) => {
     setTeamDropdown(false);
     setSelectedTeam(team);
     navigate(`/team/${team.team}`);
-    await fetchData();
   };
 
   const handleOutsideClick = (event) => {
