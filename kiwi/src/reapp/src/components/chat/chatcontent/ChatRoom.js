@@ -42,7 +42,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
         const fetchMessages = async () => {
             try {
-                const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/messages/${chatNum}`);
+                const response = await axiosHandler.get(` /api/chat/message/messages/${chatNum}`);
                 const messagesWithUnreadCounts = await Promise.all(response.data.map(async (msg) => {
                     const unreadCount = await fetchUnreadCount(chatNum, msg.messageNum);
                     return { ...msg, unreadCount };
@@ -50,7 +50,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                 setMessages(messagesWithUnreadCounts);
                 markMessagesAsRead(messagesWithUnreadCounts);
 
-                const firstUnreadResponse = await axiosHandler.get(`http://localhost:8080/api/chat/message/firstUnread/${chatNum}/${profile.username}`);
+                const firstUnreadResponse = await axiosHandler.get(` /api/chat/message/firstUnread/${chatNum}/${profile.username}`);
                 if (firstUnreadResponse.status === 200 && firstUnreadResponse.data) {
                     const firstUnreadMessage = firstUnreadResponse.data;
                     firstUnreadMessageRef.current = firstUnreadMessage.messageNum;
@@ -65,7 +65,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
         fetchMessages();
 
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS(' /ws');
         const client = Stomp.over(socket);
 
         client.connect({}, (frame) => {
@@ -127,7 +127,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
 
     const fetchUnreadCount = async (chatNum, messageNum) => {
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/chat/message/unreadCount/${chatNum}/${messageNum}`);
+            const response = await axiosHandler.get(` /api/chat/message/unreadCount/${chatNum}/${messageNum}`);
             return response.data;
         } catch (error) {
             console.error('읽지 않은 메시지 수 가져오기 오류:', error);
@@ -155,7 +155,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
         }
 
         try {
-            const response = await axiosHandler.post('http://localhost:8080/api/chat/message/read', {
+            const response = await axiosHandler.post(' /api/chat/message/read', {
                 messageNum: message.messageNum,
                 memberId: memberId
             });
@@ -208,7 +208,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                     formData.append('chatNum', chatNum);
                     formData.append('messageNum', `${chatNum}-${Date.now()}`);
 
-                    const response = await axiosHandler.post('http://localhost:8080/api/chat/message/upload', formData, {
+                    const response = await axiosHandler.post(' /api/chat/message/upload', formData, {
                         headers: { 'Content-Type': 'multipart/form-data' }
                     });
 
@@ -265,7 +265,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
     const handleDownload = (event, filePath, fileName) => {
         event.preventDefault();
         axiosHandler({
-            url: `http://localhost:8080/api/chat/message/download?fileKey=${filePath}`,
+            url: ` /api/chat/message/download?fileKey=${filePath}`,
             method: 'GET',
             responseType: 'blob',
         }).then((response) => {
@@ -299,7 +299,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
     const handleDeleteConfirm = async () => {
         if (selectedMessage) {
             try {
-                await axiosHandler.delete(`http://localhost:8080/api/chat/message/delete/${selectedMessage.messageNum}`, {
+                await axiosHandler.delete(` /api/chat/message/delete/${selectedMessage.messageNum}`, {
                     data: { username: profile.username }
                 });
                 setMessages(prevMessages => prevMessages.filter(msg => msg.messageNum !== selectedMessage.messageNum));
@@ -403,7 +403,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                                         <a href="#" onClick={(e) => handleDownload(e, file.filePath, file.originalFileName)}>
                                             {isImage(file.originalFileName) ? (
                                                 <div className="chat-room-image-container">
-                                                    <img src={`http://localhost:8080/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
+                                                    <img src={`/api/chat/message/download?fileKey=${file.filePath}`} alt="Uploaded" className="chat-room-uploaded-image" />
                                                     <div className="chat-room-download-icon">↓</div>
                                                 </div>
                                             ) : (

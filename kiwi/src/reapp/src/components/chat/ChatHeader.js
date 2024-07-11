@@ -29,7 +29,7 @@ const ChatHeader = ({ chatName, team, chatNum, onInvite, onLeaveChat, memberCoun
 
     const fetchMemberCount = async () => {
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/${chatNum}`);
+            const response = await axiosHandler.get(`/api/chat/user/${chatNum}`);
             setMemberCount(response.data.length);
         } catch (error) {
             console.error('Error fetching member count:', error);

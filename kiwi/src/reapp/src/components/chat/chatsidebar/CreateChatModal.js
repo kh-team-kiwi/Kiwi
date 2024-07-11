@@ -35,7 +35,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
     const fetchMembers = async () => {
         try {
-            const response = await axiosHandler.get(`http://localhost:8080/api/chat/user/members?team=${team}`);
+            const response = await axiosHandler.get(`/api/chat/user/members?team=${team}`);
             const fetchedMembers = response.data
                 .filter(member => member.memberId !== profile.username)
                 .map(member => ({

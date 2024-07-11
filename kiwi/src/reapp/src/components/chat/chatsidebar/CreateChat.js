@@ -12,10 +12,10 @@ const CreateChat = ({ selectedTeam }) => {
 
         // 관리자 멤버가 존재하는지 확인하고, 존재하지 않으면 새로 생성
         try {
-            await axios.get(`http://localhost:8080/api/member/${adminMember.memberId}`);
+            await axios.get(`/api/member/${adminMember.memberId}`);
         } catch (error) {
             if (error.response && error.response.status === 404) {
-                await axios.post('http://localhost:8080/api/member', adminMember);
+                await axios.post('/api/member', adminMember);
             } else {
                 console.error('Error checking admin member:', error);
                 return;
@@ -25,7 +25,7 @@ const CreateChat = ({ selectedTeam }) => {
         // 새로운 채팅방 생성
         const newChat = { chatName, chatOpen: true, chatAdminMember: adminMember, team: selectedTeam };
 
-        axios.post('http://localhost:8080/api/chat', newChat)
+        axios.post('/api/chat', newChat)
             .then(response => {
                 console.log('Chat created successfully:', response.data);
                 setChatName('');
