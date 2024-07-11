@@ -129,7 +129,7 @@ public class TeamService {
         try{
             List<Group> groups = groupRepository.findByTeamWithMember(teamno);
 
-            return ResponseDto.setSuccessData("The team member lookup was successful.",
+            return ResponseDto.setSuccessData("Successfully fetched team members",
                     groups.stream()
                             .map(group -> TeamMemberDto.builder()
                                     .memberId(group.getMemberId())
@@ -143,7 +143,7 @@ public class TeamService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a datebase error.");
+            return ResponseDto.setFailed("Database connection failed");
         }
     }
 
@@ -184,20 +184,20 @@ public class TeamService {
         try {
             Optional<Team> searchTeam = teamRepository.findById(teamno);
             if (searchTeam.isEmpty()) {
-                return ResponseDto.setFailed("A team number that doesn't exist.");
+                return ResponseDto.setFailed("This team number doesn't exist");
             }
             if (searchTeam.get().getTeamAdminMemberId().equals(memberId)) {
-                return ResponseDto.setFailed("Team owners can't leave.");
+                return ResponseDto.setFailed("Team owners cannot leave the team");
             }
             Optional<Group> member = groupRepository.findById(GroupId.builder().team(teamno).memberId(memberId).build());
             member.get().setStatus("DELETED");
             groupRepository.save(member.get());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a database error.");
+            return ResponseDto.setFailed("Database connection failed");
         }
 
-        return ResponseDto.setSuccess("You've successfully exited the team.");
+        return ResponseDto.setSuccess("You've successfully left the team.");
     }
 
     public String getRole(String teamno, String memberId) {
@@ -217,16 +217,16 @@ public class TeamService {
         try{
             Optional<Team> searchTeam = teamRepository.findById(team);
             if (searchTeam.isEmpty()) {
-                return ResponseDto.setFailed("Renaming a team failed. The team doesn't exist.");
+                return ResponseDto.setFailed("Updating team name failed");
             } else {
                 ;
                 searchTeam.get().setTeamName(teamName);
                 teamRepository.save(searchTeam.get());
-                return ResponseDto.setSuccess("You changed the team name.");
+                return ResponseDto.setSuccess("You've successfully changed the team name.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("The team name change failed due to a database error.");
+            return ResponseDto.setFailed("Database connection failed");
         }
     }
 
@@ -238,13 +238,13 @@ public class TeamService {
             if(teamRepository.existsByTeamAndTeamAdminMemberId(team,memberId)) {
                 groupRepository.deleteAllByTeam(team);
                 teamRepository.deleteById(team);
-                return ResponseDto.setSuccess("Successfully deleted.");
+                return ResponseDto.setSuccess("Successfully deleted team.");
             } else {
-                return ResponseDto.setFailed("The delete failed because the conditions didn't match.");
+                return ResponseDto.setFailed("Deletion failed");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Deleting a team failed due to a database error.");
+            return ResponseDto.setFailed("database connection failed");
         }
 
 
@@ -258,7 +258,7 @@ public class TeamService {
         try{
             Optional<Team> searchTeam = teamRepository.findById(team);
             if (searchTeam.isEmpty()) {
-                return ResponseDto.setFailed("I can't look up my team.");
+                return ResponseDto.setFailed("failed to search team");
             }
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -273,10 +273,10 @@ public class TeamService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("The save failed because an error occurred.");
+            return ResponseDto.setFailed("Saving profile failed");
         }
 
-        return ResponseDto.setSuccess("You have successfully saved your profile.");
+        return ResponseDto.setSuccess("You have successfully saved your profile");
     }
 
     @Transactional
@@ -293,10 +293,10 @@ public class TeamService {
                         .build();
                 groupRepository.save(invite);
             });
-            return ResponseDto.setSuccess("The invitation was successful.");
+            return ResponseDto.setSuccess("Invitation successfully sent");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a database error.");
+            return ResponseDto.setFailed("database connection failed");
         }
     }
 
@@ -313,17 +313,17 @@ public class TeamService {
                         .build();
                 groupRepository.save(update);
             });
-            return ResponseDto.setSuccess("Reflected.");
+            return ResponseDto.setSuccess("Successfully updated role");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a database error.");
+            return ResponseDto.setFailed("database connection failed");
         }
     }
 
     public ResponseDto<?> searchMember(String teamno, String searchKey) {
         try{
             List<Group> groups = groupRepository.findByTeamWithMember(teamno);
-            if(groups==null||groups.isEmpty()) return ResponseDto.setSuccess("No people were found.");
+            if(groups==null||groups.isEmpty()) return ResponseDto.setSuccess("No groups were found.");
             List<TeamMemberDto> filteredGroups = groups.stream().filter(group -> group.getMemberId().contains(searchKey))
                     .map(group -> TeamMemberDto.builder()
                             .memberId(group.getMemberId())
@@ -334,11 +334,11 @@ public class TeamService {
                             .memberNickname(group.getMember().getMemberNickname())
                             .build()).toList();
             if(filteredGroups.size()>5) filteredGroups.subList(0,5);
-            return ResponseDto.setSuccessData("It was viewed.",filteredGroups);
+            return ResponseDto.setSuccessData("Viewed.",filteredGroups);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a database error.");
+            return ResponseDto.setFailed("database connection failed");
         }
     }
 
@@ -350,11 +350,11 @@ public class TeamService {
             
             
             Optional<Team> searchTeam = teamRepository.findById(teamno);
-            if(searchTeam.isEmpty()) return ResponseDto.setFailed("can't look up team number");
+            if(searchTeam.isEmpty()) return ResponseDto.setFailed("Invalid team number");
 
             Optional<Group> predecessor = groupRepository.findById(GroupId.builder().team(teamno).memberId(oldOwner).build());
             Optional<Group> successor = groupRepository.findById(GroupId.builder().team(teamno).memberId(newOwner).build());
-            if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("The member does not exist.");
+            if(predecessor.isEmpty()||successor.isEmpty()) return ResponseDto.setFailed("This member does not exist.");
 
             searchTeam.get().setTeamAdminMemberId(newOwner);
             successor.get().setRole("OWNER");
@@ -364,11 +364,11 @@ public class TeamService {
             groupRepository.save(successor.get());
             groupRepository.save(predecessor.get());
 
-            return ResponseDto.setSuccess("Changed.");
+            return ResponseDto.setSuccess("Ownership has been changed successfully");
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a database error.");
+            return ResponseDto.setFailed("Database connection failed");
         }
 
     }
@@ -379,10 +379,10 @@ public class TeamService {
             if(search.isEmpty()) return ResponseDto.setFailed("Unable to look up members.");
             search.get().setStatus(status);
             groupRepository.save(search.get());
-            return ResponseDto.setSuccess("Changed.");
+            return ResponseDto.setSuccess("Role has been changed successfully");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("Failed with a database error.");
+            return ResponseDto.setFailed("Database connection failed");
         }
     }
 }

@@ -37,10 +37,10 @@ public class AuthService {
         try {
             // 존재하는 경우 : true / 존재하지 않는 경우 : false
             if(memberRepository.existsById(dto.getMemberId())) {
-                return ResponseDto.setFailed("This is a duplicate Email.");
+                return ResponseDto.setFailed("This email has already registered.");
             }
         } catch (Exception e) {
-            return ResponseDto.setFailed("The database connection failed.");
+            return ResponseDto.setFailed("Database connection failed.");
         }
 
         // password 중복 확인
@@ -64,10 +64,10 @@ public class AuthService {
         try {
             memberRepository.save(member);
         } catch (Exception e) {
-            return ResponseDto.setFailed("The database connection failed.");
+            return ResponseDto.setFailed("Database connection failed.");
         }
 
-        return ResponseDto.setSuccess("You have successfully signed up.");
+        return ResponseDto.setSuccess("Signed up successfully.");
     }
 
     public ResponseDto<?> profile(String memberId){
@@ -75,18 +75,18 @@ public class AuthService {
         if(member != null) {
             MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
                     .role(member.getMemberRole()).build();
-           return ResponseDto.setSuccessData("The profile image.", memberDto);
+           return ResponseDto.setSuccessData("This user exists", memberDto);
         }
-        return  ResponseDto.setFailed("No applicable profile information exists.");
+        return  ResponseDto.setFailed("This user does not exist");
     }
 
 
     public ResponseDto<?> duplicate(String memberId){
         Member member = memberRepository.findById(memberId).orElse(null);
         if(member == null) {
-            return ResponseDto.setSuccess("The email that can be generated.");
+            return ResponseDto.setSuccess("This user exists");
         }
-        return  ResponseDto.setFailed("The email cannot be created.");
+        return  ResponseDto.setFailed("This user does not exist");
     }
 
     public ResponseDto<?> existMember(String memberId){
@@ -94,9 +94,9 @@ public class AuthService {
         if(member != null) {
             MemberDto memberDto = MemberDto.builder().name(member.getMemberNickname()).username(member.getMemberId()).filepath(member.getMemberFilepath())
                     .role(member.getMemberRole()).build();
-            return ResponseDto.setSuccessData("The email that can be invited.",memberDto);
+            return ResponseDto.setSuccessData("This user exists",memberDto);
         }
-        return  ResponseDto.setFailed("The email is uninviteable.");
+        return  ResponseDto.setFailed("This user does not exist");
     }
 
     public ResponseDto<?> updateAccount(@RequestParam("profile") MultipartFile[] files,
@@ -108,7 +108,7 @@ public class AuthService {
         try{
             Optional<Member> searchMember = memberRepository.findById(memberId);
             if (searchMember.isEmpty()) {
-                return ResponseDto.setFailed("I can't look up a member.");
+                return ResponseDto.setFailed("No members could be found");
             }
 
             if(files != null && files.length > 0) {
@@ -128,7 +128,7 @@ public class AuthService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("The save failed because an error occurred.");
+            return ResponseDto.setFailed("Save failed due to an error");
         }
 
         return ResponseDto.setSuccessData("You have successfully saved your profile.",reuslt);
@@ -137,7 +137,7 @@ public class AuthService {
     public ResponseDto<?> updatePassword(String memberId,String currentPw,String newPw){
         try{
             Member searchMember = memberRepository.findByMemberId(memberId);
-            if(searchMember==null) return ResponseDto.setFailed("The member doesn't exist.");
+            if(searchMember==null) return ResponseDto.setFailed("Member doesn't exist.");
             if(bCryptPasswordEncoder.matches(currentPw,searchMember.getPassword())) {
                 searchMember.setMemberPw(bCryptPasswordEncoder.encode(newPw));
                 memberRepository.save(searchMember);
@@ -146,24 +146,24 @@ public class AuthService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("The save failed because an error occurred.");
+            return ResponseDto.setFailed("Save failed due to an error");
         }
 
-        return ResponseDto.setSuccess("You've changed your password.");
+        return ResponseDto.setSuccess("Password changed successfully");
     }
 
     public ResponseDto<?> deleteAccount(String memberId, String password){
         try{
             Member searchMember = memberRepository.findByMemberId(memberId);
-            if(searchMember==null) return ResponseDto.setFailed("The member doesn't exist.");
-            if(teamRepository.existsByTeamAdminMemberId(memberId)) return ResponseDto.setFailed("Team owners can't be deleted.");
+            if(searchMember==null) return ResponseDto.setFailed("This user doesn't exist.");
+            if(teamRepository.existsByTeamAdminMemberId(memberId)) return ResponseDto.setFailed("Accounts of team owners cannot be deleted");
             if(bCryptPasswordEncoder.matches(password,searchMember.getPassword())){
                 memberRepository.deleteById(memberId);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.setFailed("The delete failed because an error occurred.");
+            return ResponseDto.setFailed("Delete failed due to an error");
         }
-        return ResponseDto.setSuccess("You deleted your account.");
+        return ResponseDto.setSuccess("You have successfully deleted your account");
     }
 }
