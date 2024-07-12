@@ -66,7 +66,7 @@ const Team = () => {
             if(res.data.result){
                 navigate('/home',{replace:true});
             }else {
-                toast.error(res.data.message);
+                toast.error(t('invalid-password-error'));
             }
         } catch (e) {
             toast.error(t('error-occurred'));
@@ -102,7 +102,7 @@ const Team = () => {
                 navigate(`/team/${teamno}/settings/user`);
 
             } else {
-                toast.error(t('error-occurred'));
+                toast.error(t('invalid-password-error'));
             }
         } catch (e) {
             toast.error(t('error-occurred'));

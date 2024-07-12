@@ -274,7 +274,13 @@ const Member = () => {
         try {
             const res = await axiosHandler.put("/api/team/" + teamno + "/member/" + member.memberId + "/status/" + status);
             if (res.data.result) {
-                toast.success(res.data.message);
+                if (status === 'BLOCKED') {
+                    toast.success('User has been successfully kicked')
+                } else {
+                    toast.success(res.data.message);
+
+
+                }
                 fetchTeamData();
             } else {
                 toast.error(res.data.message);

@@ -172,7 +172,9 @@
   "block": "ブロック",
   "unblock": "ブロック解除",
   "results": "結果",
-  "only-owners-error": "チーム設定にアクセスできるのは所有者のみです。"
+  "only-owners-error": "チーム設定にアクセスできるのは所有者のみです。",
+  "profile-updated": "チームのプロフィール写真が正常に更新されました。"
+
 
 
 

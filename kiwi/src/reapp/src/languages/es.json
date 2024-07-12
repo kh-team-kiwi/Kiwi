@@ -172,7 +172,9 @@
   "block": "Bloquear",
   "unblock": "Desbloquear",
   "results": "Resultados",
-  "only-owners-error": "Solo los propietarios pueden acceder a la configuración del equipo."
+  "only-owners-error": "Solo los propietarios pueden acceder a la configuración del equipo.",
+  "profile-updated": "La photo de profil de l'équipe a été mise à jour avec succès."
+
 
 
 

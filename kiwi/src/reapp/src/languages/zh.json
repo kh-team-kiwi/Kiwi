@@ -172,7 +172,9 @@
   "block": "屏蔽",
   "unblock": "解除屏蔽",
   "results": "结果",
-  "only-owners-error": "只有所有者可以访问团队设置。"
+  "only-owners-error": "只有所有者可以访问团队设置。",
+  "profile-updated": "团队的个人资料图片已成功更新。"
+
 
 
 

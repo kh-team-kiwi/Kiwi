@@ -172,7 +172,8 @@
 "block": "Block",
 "unclock": "Unblock",
 "results": "Results",
-"only-owners-error": "Only owners can access team settings."
+"only-owners-error": "Only owners can access team settings.",
+"profile-updated": "The team's profile picture has been successfully updated."
 
 
 

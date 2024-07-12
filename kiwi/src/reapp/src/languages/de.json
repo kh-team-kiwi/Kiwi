@@ -172,7 +172,10 @@
     "block": "Blockieren",
     "unblock": "Entblocken",
     "results": "Ergebnisse",
-    "only-owners-error": "Nur Eigentümer können auf die Teameinstellungen zugreifen."
+    "only-owners-error": "Nur Eigentümer können auf die Teameinstellungen zugreifen.",
+    "profile-updated": "Das Profilbild des Teams wurde erfolgreich aktualisiert."
+
+
 
 
     

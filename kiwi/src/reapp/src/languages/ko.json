@@ -172,7 +172,9 @@
   "block": "차단",
   "unblock": "차단 해제",
   "results": "결과",
-  "only-owners-error": "팀 설정에 접근할 수 있는 사람은 소유자뿐입니다."
+  "only-owners-error": "팀 설정에 접근할 수 있는 사람은 소유자뿐입니다.",
+  "profile-updated": "팀의 프로필 사진이 성공적으로 업데이트되었습니다."
+
 
 
 

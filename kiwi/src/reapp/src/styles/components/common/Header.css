@@ -603,7 +603,7 @@
 }
 
 .header-toggle-language-option.language-selected {
-    background-color: var(--light-green) !important; 
+    background-color: var(--light-blue-darkmode) !important; 
     color: var(--dark-brown); 
 }
 
