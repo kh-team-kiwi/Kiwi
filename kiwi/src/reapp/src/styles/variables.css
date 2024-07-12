@@ -35,6 +35,8 @@
 
   --light-gray: lightgray;
   --light-gray2: rgb(245, 241, 241);
+  --light-gray6: rgb(245, 241, 241);
+
   --month-tile-offset: rgb(248, 248, 248);
   --month-tile-today: rgb(235, 232, 232);
 
@@ -90,8 +92,7 @@
   --blocked-users: rgb(117, 116, 116);
   --blocked-users-hover: rgb(99, 98, 98);
 
-
-  --white: #55575f;
+  --light-gray6: rgb(116, 116, 116);  --white: #55575f;
   --white-hover: #46474d;
   --white2: #405b74;
   --light-gray: rgb(116, 116, 116);

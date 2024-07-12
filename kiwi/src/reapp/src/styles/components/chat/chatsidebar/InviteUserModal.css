@@ -30,7 +30,7 @@
 }
 
 .invite-user-modal-content {
-    background: #fff;
+    background: var(--white);
     padding: 15px;
     border-radius: 15px;
     width: 400px;
@@ -49,21 +49,29 @@
 .invite-user-searchBox input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--light-gray);
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 16px;
     outline: none;
-    background-color: #f9f9f9;
+    background-color: var(--field-background);
+    color: var(--lighter-text-color);
 }
+
+.invite-user-searchBox input::placeholder { 
+    color: var(--lighter-text-color);
+
+}
+
+
 
 .invite-user-container {
     width: 100%;
 }
 
 .invite-user-member-list {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
+    background: var(--field-background);
+    border: 1px solid var(--light-gray);
     border-radius: 10px;
     padding: 10px;
     max-height: 300px;
@@ -82,11 +90,11 @@
 }
 
 .invite-user-member-item:hover {
-    background-color: #e6f3fd;
+    background-color: var(--light-blue-darkmode);
 }
 
 .invite-user-member-item.selected {
-    background-color: #cce7ff;
+    background-color:var(--light-blue-darkmode);
 }
 
 .invite-user-profile-pic {
@@ -167,4 +175,5 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
+    color: var(--lighter-text-color);
 }
