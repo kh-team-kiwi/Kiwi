@@ -62,6 +62,8 @@
   --blocked-users-hover: rgb(219, 216, 216);
 
   --sidebar-selected: #dbe7f3;
+  --light-green-darkmode: #e9f7e3;
+
 
   --background-tab: #f1f1f1;
 
@@ -91,6 +93,8 @@
   --field-background: #8f8e8e;
   --blocked-users: rgb(117, 116, 116);
   --blocked-users-hover: rgb(99, 98, 98);
+  --darker-white-hover: rgb(105, 104, 104);
+
 
   --light-gray6: rgb(116, 116, 116);  --white: #55575f;
   --white-hover: #46474d;
@@ -132,6 +136,8 @@
 
   --light-blue-darkmode: #798686;
   --settings-gray-filed: #2f2f33;
+
+  --light-green-darkmode: #61685e;
 
 
   .img-enable-darkmode {

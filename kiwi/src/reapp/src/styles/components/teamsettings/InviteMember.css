@@ -30,7 +30,7 @@
 }
 
 .teamsettings-invite-modal .modal-content {
-    background-color: #fefefe;
+    background-color: var(--white);
     padding: 15px;
     width: 50%;
     max-width: 350px;
@@ -51,6 +51,7 @@
     border-radius: 5px;
     color: var(--lighter-text-color);
     font-size: 16px;
+    background-color: var(--field-background);
     
 }
 
@@ -63,7 +64,7 @@
     height: 40px;
     font-size: 20px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: none;
     background-color: var(--green);
     color: white;
     cursor: pointer;
@@ -77,9 +78,9 @@
     background-color: var(--green-hover);
 }
 .invite-cancel-btn {
-    color: var(--dark-brown);
-    background-color: white;
-    border: 2px solid gray;
+    color: var(--lighter-text-color);
+    background-color: var(--white);
+    border: 2px solid var(--lighter-text-color);
     box-shadow: none;
     transition: 0.2s;
     height: 40px;
@@ -122,6 +123,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: var(--lighter-text-color);
 }
 
 .invite-member-bottom {

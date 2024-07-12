@@ -544,8 +544,8 @@
 }
 
 .header-profile-dropdown-option-container {
-    border-top: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 1px solid var(--light-gray);
 
     margin-left: 5px;
     margin-right: 5px;
@@ -627,7 +627,7 @@
 
 
 .header-language-option-container {
-    border-top: 1px solid lightgray;
+    border-top: 1px solid var(--light-gray);
 }
 
 .header-language-top {
@@ -764,4 +764,12 @@
 
 .header-user-icon {
     fill: var(--gray);
+}
+
+.header-svg-fill {
+    fill: var(--lighter-text-color)
+}
+
+.header-bold {
+    font-weight: 600;
 }
