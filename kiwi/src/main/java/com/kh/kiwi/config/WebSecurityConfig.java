@@ -79,7 +79,6 @@ public class WebSecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil,refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
-        // JWTFilter 추가
         http
                 .addFilterAfter(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
@@ -111,7 +110,8 @@ public class WebSecurityConfig {
                 .sessionManagement((session)-> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/api/auth/signup","/api/auth/duplicate","/api/auth/reissue","/api/transfer/download","/api/chat/message/messages/**","/app/**","/ws/**","/api/chat/message/download", "/api/members/**", "/documents/**").permitAll()
+                        .requestMatchers("/api/auth/signup","/api/auth/duplicate","/api/auth/reissue","/api/transfer/download").permitAll()
+                        .requestMatchers("/ws/**","/api/chat/message/download").permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/admin")).hasRole("JADMIN")
                         .anyRequest().authenticated());
         return http.build();

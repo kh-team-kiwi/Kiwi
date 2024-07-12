@@ -2,7 +2,6 @@ package com.kh.kiwi.auth.service;
 
 import com.kh.kiwi.auth.dto.*;
 import com.kh.kiwi.auth.entity.Member;
-import com.kh.kiwi.auth.entity.UserEntity;
 import com.kh.kiwi.auth.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -35,9 +34,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         else if (registrationId.equals("google")) {
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
         }
-        else if (registrationId.equals("kakao")) {
-            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
-        }
+//        else if (registrationId.equals("kakao")) {
+//            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+//        }
         else {
 
             return null;

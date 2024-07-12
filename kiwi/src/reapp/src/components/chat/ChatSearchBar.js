@@ -4,7 +4,7 @@ import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
-
+import axiosHandler from "../../jwt/axiosHandler";
 
 const ChatSearchBar = ({ chatNum, onMessageClick }) => {
     const { t } = useTranslation();
@@ -24,7 +24,7 @@ const ChatSearchBar = ({ chatNum, onMessageClick }) => {
 
     const fetchMessages = async () => {
         try {
-            const response = await axios.get(`/api/chat/message/messages/${chatNum}`);
+            const response = await axiosHandler.get(`/api/chat/message/messages/${chatNum}`);
             const filteredMessages = response.data.filter(msg =>
                 msg.chatContent.toLowerCase().includes(searchTerm.toLowerCase())
             );

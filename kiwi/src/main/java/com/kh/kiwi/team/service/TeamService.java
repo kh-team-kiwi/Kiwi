@@ -1,6 +1,5 @@
 package com.kh.kiwi.team.service;
 
-import com.kh.kiwi.aram.service.NotificationService;
 import com.kh.kiwi.auth.dto.MemberDto;
 import com.kh.kiwi.auth.entity.Member;
 import com.kh.kiwi.auth.repository.MemberRepository;
@@ -47,7 +46,6 @@ public class TeamService {
     private final CompanyRepository companyRepository;
     private final MemberRepository memberRepository;
     private final MemberDetailsRepository memberDetailsRepository;
-    private final NotificationService notificationService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
