@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getSessionItem } from "../jwt/storage";
+import { useTranslation } from 'react-i18next';
 
 import DriveSidebar from '../components/drive/DriveSidebar';
 import '../styles/pages/Page.css';
@@ -17,6 +18,7 @@ import ToastNotification from '../components/common/ToastNotification';
 
 const Drive = () => {
     const { teamno } = useParams();
+    const { t } = useTranslation();
     const [drives, setDrives] = useState([]);
     const [selectedDrive, setSelectedDrive] = useState(null);
     const [selectedDriveName, setSelectedDriveName] = useState('');
@@ -110,7 +112,7 @@ const Drive = () => {
     if (loading) {
         return (
             <div className="loading-screen">
-                <div className="loading-spinner">Loading...</div>
+                <div className="loading-spinner">{t('loading')}</div>
             </div>
         );
     }
@@ -143,17 +145,17 @@ const Drive = () => {
                                 <div className='drive-no-files-container'>
                                     <img src={EmptyDriveIcon} className='img-enable-darkmode drive-empty-icon'/>
                                     <div className="drive-empty-title">
-                                        No Drives to show
+                                        {t('no-drives')}
                                     </div>
                                     <div className="drive-empty-description">
-                                        Click on the button below to create a new drive 
+                                        {t('no-drives-description')}
                                     </div>
                                     <button 
                                         className="drive-empty-create-button" 
                                         onClick={handleOpenCreateDriveModal}
                                     >
                                         <PlusIcon className='drive-empty-plus-icon'/>
-                                        <div>Create Drive</div>
+                                        <div>{t('create-drive')}</div>
                                     </button>
                                 </div>
                                 {showCreateDriveModal && (

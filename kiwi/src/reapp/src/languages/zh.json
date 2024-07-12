@@ -194,7 +194,33 @@
   "leave": "离开",
   "leave-chat-warning": "确定要离开此聊天吗？",
   "delete-message": "删除消息",
-  "delete": "删除"
+  "delete": "删除",
+  "please-select-user": "请选择要邀请的成员",
+  "no-drives": "没有可显示的驱动器",
+  "no-drives-description": "点击下面的按钮创建一个新驱动器",
+  "create-shared-drive": "创建共享驱动器",
+  "drive-name-error": "请输入驱动器名称",
+  "drive-created-successfully": "驱动器创建成功",
+  "new": "新的",
+  "search-files": "搜索文件",
+  "file-name": "文件名",
+  "upload-time": "上传时间",
+  "drag-and-drop": "将文件拖放到此处",
+  "drag-and-drop-description": "此文件夹的内容将显示在此处",
+  "upload-file": "上传文件",
+  "create-folder": "创建文件夹",
+  "download": "下载",
+  "edit": "编辑",
+  "search-drive": "搜索驱动器",
+  "create-drive": "创建驱动器",
+  "shared-drive": "共享驱动器",
+  "new-folder-name": "文件夹名称",
+  "drive-name": "驱动器名称",
+  "folder-name-error": "请输入文件夹名称",
+    "will-be-deleted": "将被删除",
+  "cannot-be-undone": "此操作无法撤销",
+  "confirm": "确认"
+
 
 
 

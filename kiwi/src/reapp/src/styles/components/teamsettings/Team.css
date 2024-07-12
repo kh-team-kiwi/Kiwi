@@ -100,7 +100,7 @@
 .team-settings-delete-container {
     padding: 20px;
     border-radius: 15px;
-    background-color: rgb(239, 241, 238);
+    background-color: var(--light-green-darkmode);
     
 }
 
@@ -116,21 +116,31 @@
 .team-settings-input {
     width: 100%;
     padding: 10px;
-    border: 1px solid lightgray;
+    border: 1px solid var(--light-gray);
     border-radius: 10px;
     outline: none;
     font-size: 16px;
     box-sizing: border-box;
+    background-color: var(--field-background);
+}
+
+.team-settings-input::placeholder {
+    color: var(--lighter-text-color);
 }
 
 .team-settings-password-input {
     width: 300px;
     padding: 10px;
-    border: 1px solid lightgray;
+    border: 1px solid var(--light-gray);
     border-radius: 10px;
     outline: none;
     font-size: 16px;
     box-sizing: border-box;
+    background-color: var(--field-background);
+}
+
+.team-settings-password-input::placeholder {
+    color: var(--lighter-text-color);
 }
 
 .team-settings-change-name-button,

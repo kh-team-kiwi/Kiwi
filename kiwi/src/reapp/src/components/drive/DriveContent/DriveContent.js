@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import FileUploadWithDropzone from './FileUploadWithDropzone';
 import DriveFolderPopup from "./DriveFolderPopup";
 import DriveDeletePopup from './DriveDeletePopup';
@@ -22,7 +23,8 @@ import SearchIcon from '../../../images/svg/buttons/SearchIcon';
 
 const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, breadcrumbs = [], onDeleteDrive }) => {
     const { teamno } = useParams();
-    const [items, setItems] = useState([]); // 초기 상태를 빈 배열로 설정
+    const { t } = useTranslation();
+    const [items, setItems] = useState([]);
     const [editFileCode, setEditFileCode] = useState(null);
     const [editFolderCode, setEditFolderCode] = useState(null);
     const [newFileName, setNewFileName] = useState('');
@@ -34,7 +36,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     const [sortConfig, setSortConfig] = useState({ key: 'fileName', direction: 'ascending' });
     const [newDropdownVisible, setNewDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [errorMessage, setErrorMessage] = useState(''); // 경고 메시지 상태 추가
+    const [errorMessage, setErrorMessage] = useState('');
 
     const toggleDropdown = () => {
         setNewDropdownVisible(!newDropdownVisible);
@@ -45,7 +47,6 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
     }, [teamno, driveCode, parentPath, breadcrumbs]);
 
     useEffect(() => {
-        // 이름 변경 상태에서 벗어나면 경고 메시지 초기화
         if (!editFileCode && !editFolderCode) {
             setErrorMessage('');
         }
@@ -53,17 +54,15 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const fetchItems = async (path) => {
         const fullPath = path ? `${teamno}/drive/${path}` : `${teamno}/drive/${driveCode}`;
-        console.log(`Fetching items for path: ${fullPath}`);
         setLoading(true);
         try {
             const response = await axiosHandler.get(`/api/drive/${teamno}/${driveCode}/files`, {
                 params: { parentPath: path }
             });
-            console.log('Fetched items:', response.data);
-            setItems(Array.isArray(response.data) ? response.data : []); // API 응답이 배열인지 확인
+            setItems(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Failed to fetch items', error);
-            setItems([]); // 에러 발생 시 빈 배열로 설정
+            setItems([]);
         } finally {
             setLoading(false);
         }
@@ -71,7 +70,6 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const handleDelete = async (itemCode, isFolder) => {
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
-        console.log(`Deleting item at path: ${fullPath}`);
         try {
             const url = isFolder
                 ? `/api/drive/${teamno}/${driveCode}/folders/${itemCode}`
@@ -85,11 +83,10 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const handleUpdateFileName = async (itemCode) => {
         if (newFileName.trim() === '') {
-            setErrorMessage('파일 이름은 공백일 수 없습니다.'); // 경고 메시지 설정
+            setErrorMessage(t('no-whitespace'));
             return;
         }
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
-        console.log(`Updating file name at path: ${fullPath}`);
         try {
             await axiosHandler.put(`/api/drive/${teamno}/${driveCode}/files/${itemCode}`, JSON.stringify(newFileName), {
                 headers: {
@@ -99,7 +96,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
             });
             setEditFileCode(null);
             setNewFileName('');
-            setErrorMessage(''); // 경고 메시지 초기화
+            setErrorMessage('');
             fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to update item name', error);
@@ -108,11 +105,10 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const handleUpdateFolderName = async (itemCode) => {
         if (newFolderName.trim() === '') {
-            setErrorMessage('폴더 이름은 공백일 수 없습니다.'); // 경고 메시지 설정
+            setErrorMessage(t('no-whitespace'));
             return;
         }
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
-        console.log(`Updating folder name at path: ${fullPath}`);
         try {
             await axiosHandler.put(`/api/drive/${teamno}/${driveCode}/folders/${itemCode}`, JSON.stringify(newFolderName), {
                 headers: {
@@ -122,7 +118,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
             });
             setEditFolderCode(null);
             setNewFolderName('');
-            setErrorMessage(''); // 경고 메시지 초기화
+            setErrorMessage('');
             fetchItems(parentPath);
         } catch (error) {
             console.error('Failed to update folder name', error);
@@ -141,7 +137,6 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
 
     const handleDownload = async (itemCode, itemName) => {
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
-        console.log(`Downloading file from path: ${fullPath}`);
         try {
             const response = await axiosHandler.get(`/api/drive/${teamno}/${driveCode}/files/${itemCode}/download`, {
                 responseType: 'blob',
@@ -165,7 +160,6 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
         if (!file) return;
 
         const fullPath = parentPath || `${teamno}/drive/${driveCode}`;
-        console.log(`Uploading file to path: ${fullPath}`);
 
         const formData = new FormData();
         formData.append('files', file);
@@ -258,11 +252,21 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
             <div className='drive-content-header'>
                 <div className='drive-content-header-left'>
                     <div className='drive-content-new-dropdown'>
-                        <div onClick={toggleDropdown} className='drive-content-new-dropdown-button'> <PlusIcon className='drive-content-plus-icon' /> New</div>
+                        <div onClick={toggleDropdown} className='drive-content-new-dropdown-button'>
+                            <PlusIcon className='drive-content-plus-icon' /> {t('new')}
+                        </div>
                         {newDropdownVisible && (
                             <div className='drive-content-new-dropdown-menu'>
-                                <div onClick={() => fileInputRef.current.click()} className='drive-content-new-dropdown-item'> <UploadFileIcon className='drive-content-upload-file-icon' /> Upload File</div>
-                                <DriveFolderPopup driveCode={driveCode} fetchFiles={() => fetchItems(parentPath)} parentPath={parentPath} teamNumber={teamno} className='drive-content-new-dropdown-item' />
+                                <div onClick={() => fileInputRef.current.click()} className='drive-content-new-dropdown-item'>
+                                    <UploadFileIcon className='drive-content-upload-file-icon' /> {t('upload-file')}
+                                </div>
+                                <DriveFolderPopup
+                                    driveCode={driveCode}
+                                    fetchFiles={() => fetchItems(parentPath)}
+                                    parentPath={parentPath}
+                                    teamNumber={teamno}
+                                    className='drive-content-new-dropdown-item'
+                                />
                             </div>
                         )}
                     </div>
@@ -282,7 +286,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                 </div>
                 <div className='drive-content-header-right'>
                     {searchQuery && (
-                        <span className='search-results-count'>{filteredItems.length} results</span>
+                        <span className='search-results-count'>{filteredItems.length} {t('results')}</span>
                     )}
                     <div className='drive-content-search-wrapper'>
                         <SearchIcon className="drive-content-search-icon" />
@@ -290,7 +294,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                             type="text"
                             value={searchQuery}
                             onChange={handleSearchChange}
-                            placeholder="Search files"
+                            placeholder={t('search-files')}
                             className='drive-content-search-input'
                         />
                         {searchQuery && <button onClick={clearSearch} className='drive-clear-search-button'> <ExitIcon /> </button>}
@@ -326,20 +330,20 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                 <div className='list-view'>
                     <div className='drive-content-list-header'>
                         <span className='column-header' onClick={() => handleSort('fileName')} style={{cursor: 'pointer'}}>
-                            File Name {sortConfig.key === 'fileName' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                            {t('file-name')} {sortConfig.key === 'fileName' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
                         </span>
                         <span className='column-header' onClick={() => handleSort('uploadTime')} style={{cursor: 'pointer'}}>
-                            Upload Time {sortConfig.key === 'uploadTime' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+                            {t('upload-time')} {sortConfig.key === 'uploadTime' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
                         </span>
                     </div>
                     {filteredItems.length === 0 ? (
                         <div className='img-enable-darkmode drive-content-no-files-container'>
                             <img src={EmptyFileIcon} className='drive-content-empty-icon'/>
                             <div className='drive-content-empty-title'>
-                                Drag and Drop files here
+                                {t('drag-and-drop')}
                             </div>
                             <div className='drive-content-empty-description'>
-                                The contents of this folder will be displayed here
+                                {t('drag-and-drop-description')}
                             </div>
                         </div>
                     ) : (
@@ -429,10 +433,10 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                         <div className='img-enable-darkmode drive-content-no-files-container'>
                             <img src={EmptyFileIcon} className='drive-content-empty-icon'/>
                             <div className='drive-content-empty-title'>
-                                Drag and Drop files here
+                                {t('drag-and-drop')}
                             </div>
                             <div className='drive-content-empty-description'>
-                                The contents of this folder will be displayed here
+                                {t('drag-and-drop-description')}
                             </div>
                         </div>
                     ) : (
@@ -483,9 +487,9 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                                         <div className='drive-grid-options'>
                                             <button className='drive-options-button' onClick={(e) => toggleOptionsMenu(e, item.fileCode)}>⋮</button>
                                             <div className='options-menu' id={`options-menu-${item.fileCode}`}>
-                                                <button className='drive-grid-options-dropdown' onClick={(e) => { e.stopPropagation(); handleDownload(item.fileCode, item.fileName); }}> <DownloadIcon className='drive-content-icon'/> Download</button>
-                                                <button onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, item.folder); }}> <EditIcon className='drive-content-icon'/> Edit</button>
-                                                <button onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}> <DeleteIcon className='drive-content-delete-icon'/> Delete</button>
+                                                <button className='drive-grid-options-dropdown' onClick={(e) => { e.stopPropagation(); handleDownload(item.fileCode, item.fileName); }}> <DownloadIcon className='drive-content-icon'/> {t('download')}</button>
+                                                <button onClick={(e) => { e.stopPropagation(); handleEdit(item.fileCode, item.fileName, item.folder); }}> <EditIcon className='drive-content-icon'/> {t('edit')}</button>
+                                                <button onClick={(e) => { e.stopPropagation(); handleDelete(item.fileCode, item.folder); }}> <DeleteIcon className='drive-content-delete-icon'/> {t('delete')}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -495,7 +499,7 @@ const DriveContent = ({ driveCode, driveName, parentPath, onViewFolder, onBack, 
                     )}
                 </div>
             )}
-            {errorMessage && <div className="error-message">{errorMessage}</div>} {/* 경고 메시지 표시 */}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
             {showDeletePopup && (
                 <DriveDeletePopup
                     itemName={driveName}

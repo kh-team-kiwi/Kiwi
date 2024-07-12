@@ -194,7 +194,33 @@
     "leave": "Verlassen",
     "leave-chat-warning": "Möchten Sie diesen Chat wirklich verlassen?",
     "delete-message": "Nachricht löschen",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "please-select-user": "Bitte wählen Sie ein Mitglied zum Einladen aus",
+    "no-drives": "Keine Laufwerke zum Anzeigen",
+    "no-drives-description": "Klicken Sie unten auf die Schaltfläche, um ein neues Laufwerk zu erstellen",
+    "create-shared-drive": "Gemeinsames Laufwerk erstellen",
+    "drive-name-error": "Bitte geben Sie einen Laufwerksnamen ein",
+    "drive-created-successfully": "Laufwerk erfolgreich erstellt",
+    "new": "Neu",
+    "search-files": "Dateien suchen",
+    "file-name": "Dateiname",
+    "upload-time": "Upload-Zeit",
+    "drag-and-drop": "Dateien hierher ziehen und ablegen",
+    "drag-and-drop-description": "Der Inhalt dieses Ordners wird hier angezeigt",
+    "upload-file": "Datei hochladen",
+    "create-folder": "Ordner erstellen",
+    "download": "Herunterladen",
+    "edit": "Bearbeiten",
+    "search-drive": "Laufwerk durchsuchen",
+    "create-drive": "Laufwerk erstellen",
+    "shared-drive": "Gemeinsamer Antrieb",
+    "new-folder-name": "Ordnername",
+    "drive-name": "Laufwerksname",
+    "folder-name-error": "Bitte geben Sie einen Ordnernamen ein",
+      "will-be-deleted": "Wird gelöscht",
+  "cannot-be-undone": "Diese Aktion kann nicht rückgängig gemacht werden",
+  "confirm": "Bestätigen"
+
 
 
 

@@ -194,7 +194,33 @@
   "leave": "離れる",
   "leave-chat-warning": "このチャットを離れますか？",
   "delete-message": "メッセージを削除",
-  "delete": "削除"
+  "delete": "削除",
+  "please-select-user": "招待するメンバーを選択してください",
+  "no-drives": "表示するドライブがありません",
+  "no-drives-description": "新しいドライブを作成するには、下のボタンをクリックしてください",
+  "create-shared-drive": "共有ドライブを作成",
+  "drive-name-error": "ドライブ名を入力してください",
+  "drive-created-successfully": "ドライブが正常に作成されました",
+  "new": "新しい",
+  "search-files": "ファイルを検索",
+  "file-name": "ファイル名",
+  "upload-time": "アップロード時間",
+  "drag-and-drop": "ここにファイルをドラッグアンドドロップしてください",
+  "drag-and-drop-description": "このフォルダーの内容がここに表示されます",
+  "upload-file": "ファイルをアップロード",
+  "create-folder": "フォルダーを作成",
+  "download": "ダウンロード",
+  "edit": "編集",
+  "search-drive": "ドライブを検索",
+  "create-drive": "ドライブを作成",
+  "shared-drive": "共有ドライブ",
+  "new-folder-name": "フォルダー名",
+  "drive-name": "ドライブ名",
+  "folder-name-error": "フォルダー名を入力してください",
+    "will-be-deleted": "削除されます",
+  "cannot-be-undone": "この操作は元に戻せません",
+  "confirm": "確認"
+
 
 
 

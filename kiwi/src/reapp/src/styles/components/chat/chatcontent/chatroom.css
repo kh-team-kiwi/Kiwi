@@ -1,7 +1,7 @@
 .chat-room-container {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 60px); 
+    height: calc(100% - 50px); 
     justify-content: space-between;
 }
 
@@ -50,13 +50,14 @@
 }
 
 .chat-room-message-file-container {
-    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .chat-room-message-time {
     font-size: 14px;
     padding-left: 10px;
     padding-top: 3px;
+    color: var(--lighter-text-color);
 }
 
 .chat-room-uploaded-image {
@@ -121,8 +122,8 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    background: #f1f1f1;
-    border-top: 1px solid #ccc;
+    background: var(--light-gray6);
+    border-top: 1px solid var(--light-gray);
 }
 
 
@@ -137,9 +138,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 5px;
-    background: #e9e9e9;
+    background: var(--field-background);
     border-radius: 5px;
     margin-bottom: 5px;
+    font-weight: 600;
+    margin-left: 5px;
 }
 
 .chat-room-file-preview span {
@@ -190,11 +193,12 @@
 
 .chat-room-input-container {
     display: flex;
-    background: white;
+    background: var(--white);
     height: 45px;
     align-items: center;
     padding-left: 10px;
     border-radius: 10px;
+
 
 }
 
@@ -205,6 +209,9 @@
     font-size: 18px;
     border: none;
     margin-left: 5px;
+}
+.chat-room-input-container input::placeholder {
+    color: var(--lighter-text-color);
 }
 
 .chat-room-paperclip-icon {
@@ -228,6 +235,7 @@
 .chat-room-send-icon {
     width: 22px;
     height: 22px;
+    fill: var(--lighter-text-color);
 }
 
 .chat-room-send-button {
@@ -243,6 +251,7 @@
 .chat-room-message-name {
     font-size: 18px;
     font-weight: 600;
+    color: var(--lighter-text-color);
 }
 
 .chat-room-unread-count {

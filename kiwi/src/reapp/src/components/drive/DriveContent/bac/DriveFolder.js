@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-
 const DriveFolder = ({ driveCode, fetchFiles, parentPath }) => {
+    const { t } = useTranslation();
     const [folderName, setFolderName] = useState('');
 
     const handleFolderNameChange = (e) => {
@@ -24,7 +24,7 @@ const DriveFolder = ({ driveCode, fetchFiles, parentPath }) => {
                 },
             });
             setFolderName('');
-            fetchFiles(); // 폴더 생성 후 파일 목록 갱신
+            fetchFiles();
         } catch (error) {
             console.error('Failed to create folder', error);
         }
@@ -36,9 +36,9 @@ const DriveFolder = ({ driveCode, fetchFiles, parentPath }) => {
                 type="text"
                 value={folderName}
                 onChange={handleFolderNameChange}
-                placeholder="New Folder Name"
+                placeholder={t('new-folder-name')}
             />
-            <button type="submit">Create Folder</button>
+            <button type="submit">{t('create-folder')}</button>
         </form>
     );
 };

@@ -194,7 +194,33 @@
   "leave": "Salir",
   "leave-chat-warning": "¿Está seguro de que desea salir de este chat?",
   "delete-message": "Eliminar mensaje",
-  "delete": "Eliminar"
+  "delete": "Eliminar",
+  "please-select-user": "Seleccione un miembro para invitar",
+  "no-drives": "No hay unidades para mostrar",
+  "no-drives-description": "Haga clic en el botón de abajo para crear una nueva unidad",
+  "create-shared-drive": "Crear unidad compartida",
+  "drive-name-error": "Por favor, introduzca un nombre de unidad",
+  "drive-created-successfully": "Unidad creada con éxito",
+  "new": "Nuevo",
+  "search-files": "Buscar archivos",
+  "file-name": "Nombre del archivo",
+  "upload-time": "Hora de subida",
+  "drag-and-drop": "Arrastra y suelta archivos aquí",
+  "drag-and-drop-description": "El contenido de esta carpeta se mostrará aquí",
+  "upload-file": "Subir archivo",
+  "create-folder": "Crear carpeta",
+  "download": "Descargar",
+  "edit": "Editar",
+  "search-drive": "Buscar en la unidad",
+  "create-drive": "Crear unidad",
+  "shared-drive": "Unidad compartida",
+  "new-folder-name": "Nombre de la carpeta",
+  "drive-name": "Nombre de la unidad",
+  "folder-name-error": "Por favor ingrese un nombre de carpeta",
+    "will-be-deleted": "Será eliminado",
+  "cannot-be-undone": "Esta acción no se puede deshacer",
+  "confirm": "Confirmar"
+
 
 
 

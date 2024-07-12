@@ -381,6 +381,7 @@
     height: 38px;
     border-radius: 10px;
     padding-left: 10px;
+
 }
 
 .teamsettings-user-role-hover-popup-wrapper:hover {
@@ -404,7 +405,7 @@
 .teamsettings-user-role-hover-popup {
     display: flex;
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     list-style: none;
@@ -414,6 +415,7 @@
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
+
 
     flex-direction: column;
 }

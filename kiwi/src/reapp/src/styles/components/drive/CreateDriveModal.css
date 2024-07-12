@@ -142,7 +142,7 @@
 
 
 .create-drive-selected {
-    background: #e6f3fd;
+    background: var(--light-blue-darkmode);
 }
 
 .create-drive-modal-bottom {
@@ -190,11 +190,14 @@
 .create-drive-profile-name {
     font-size: 18px;
     font-weight: 600;
+    color: var(--lighter-text-color);
 }
 
 .create-drive-profile-email {
     font-size: 16px;
     margin-top: 5px;
+    color: var(--lighter-text-color);
+
 }
 
 .create-drive-create-button {
