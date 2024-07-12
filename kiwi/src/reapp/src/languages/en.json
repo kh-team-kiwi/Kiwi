@@ -173,7 +173,31 @@
 "unclock": "Unblock",
 "results": "Results",
 "only-owners-error": "Only owners can access team settings.",
-"profile-updated": "The team's profile picture has been successfully updated."
+"profile-updated": "The team's profile picture has been successfully updated.",
+"no-chats-to-show": "No chats to show",
+"no-chats-to-show-description": "Click the button below to create a new chat room",
+"create-chat": "Create Chat",
+
+"create-chat-room": "Create Chat Room",
+"chat-room-name": "Chat room name",
+"joined-members": "Joined Members",
+"no-members-to-invite": "No members to invite",
+"you": "You",
+"chat-name-error": "Please enter a chat name",
+"send-message": "Send a message",
+"group-chats": "Group Chats",
+"search-chat": "Search chat",
+
+"search-name-or-email": "Search name or email",
+"unread-messages": "Unread Messages",
+"joined": "Joined",
+"chat-created-success": "Chat was successfully created",
+"select-chat-room": "Select a chat room to see the members.",
+"leave": "Leave",
+"leave-chat-warning": "Are you sure you want to leave this chat?",
+"delete-message": "Delete message",
+"delete": "Delete"
+
 
 
 

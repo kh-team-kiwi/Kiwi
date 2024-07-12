@@ -4,11 +4,11 @@ import { getSessionItem } from "../../../jwt/storage";
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
-
 import { toast } from 'react-toastify';
-
+import { useTranslation } from 'react-i18next'; 
 
 const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
+    const { t } = useTranslation(); 
     const [profile, setProfile] = useState(null);
     const [chatName, setChatName] = useState('');
     const [members, setMembers] = useState([]);
@@ -74,7 +74,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
 
     const handleSave = async () => {
         if (!profile || !chatName.trim()) {
-            toast.error('Please enter a chat name')
+            toast.error(t('chat-name-error'));
             console.error('Invalid profile or chat name');
             return;
         }
@@ -89,7 +89,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
         };
 
         onSave(chatData);
-        toast.success('Chat created successfully!')
+        toast.success(t('chat-created-success')); 
 
         onClose();
     };
@@ -105,14 +105,14 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
     return (
         <div className="create-chat-modal-overlay">
             <div className="create-chat-modal-content">
-                <div className='create-chat-header'>Create Chat Room</div>
+                <div className='create-chat-header'>{t('create-chat-room')}</div>
                 <div className="create-chat-form-group">
                     <div className='create-chat-chat-name-container'>
                         <input
                             type="text"
                             value={chatName}
                             onChange={handleChatNameChange}
-                            placeholder="Chat Room Name"
+                            placeholder={t('chat-room-name')}
                             className='create-chat-chat-name'
                         />
                     </div>
@@ -122,13 +122,13 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                         className={`create-chat-tab ${activeTab === 'invite' ? 'active' : ''}`}
                         onClick={() => setActiveTab('invite')}
                     >
-                        Invite Members
+                        {t('invite-members')}
                     </div>
                     <div
                         className={`create-chat-tab ${activeTab === 'joined' ? 'active' : ''}`}
                         onClick={() => setActiveTab('joined')}
                     >
-                        Joined Members
+                        {t('joined-members')}
                     </div>
                 </div>
                 <div className="create-chat-container">
@@ -138,7 +138,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                 type="text"
                                 value={searchQuery}
                                 onChange={handleSearchChange}
-                                placeholder="Search members by email"
+                                placeholder={t('search-members-by-email')}
                                 className="create-chat-search-input"
                             />
                             <div className="create-chat-member-list">
@@ -152,7 +152,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                             <img className='create-chat-profile-image' src={member.filepath} alt={''} onError={ErrorImageHandler}></img>
                                             <div className='create-chat-profile-info'>
                                                 <div className='create-chat-profile-name'>
-                                                    {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) && <span className="create-chat-joined-tag">Joined</span>}
+                                                    {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) && <span className="create-chat-joined-tag">{t('joined')}</span>}
                                                 </div>
                                                 <div className='create-chat-profile-email'>
                                                     {member.email} 
@@ -161,7 +161,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="no-members-message">No members to invite</div>
+                                    <div className="no-members-message">{t('no-members-to-invite')}</div>
                                 )}
                             </div>
                         </div>
@@ -174,7 +174,7 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                                         <img className='create-chat-profile-image' src={joinedMember.id === profile?.username ? profile.filepath : joinedMember.filepath} alt={''} onError={ErrorImageHandler} />
                                         <div className='create-chat-profile-info'>
                                             <div className='create-chat-profile-name'>
-                                                {joinedMember.name} {joinedMember.id === profile?.username && <span className="create-chat-you-tag">You</span>}
+                                                {joinedMember.name} {joinedMember.id === profile?.username && <span className="create-chat-you-tag">{t('you')}</span>}
                                             </div>
                                             <div className='create-chat-profile-email'>
                                                 {joinedMember.email} 
@@ -192,8 +192,8 @@ const CreateChatModal = ({ onSave, onClose, team, showCreateChatModal }) => {
                     )}
                 </div>
                 <div className="create-chat-modal-bottom">
-                    <button className="create-chat-cancel-button" onClick={onClose}>Cancel</button>
-                    <button className="create-chat-create-button" onClick={handleSave} >Create</button>
+                    <button className="create-chat-cancel-button" onClick={onClose}>{t('cancel')}</button>
+                    <button className="create-chat-create-button" onClick={handleSave}>{t('create')}</button>
                 </div>
             </div>
         </div>

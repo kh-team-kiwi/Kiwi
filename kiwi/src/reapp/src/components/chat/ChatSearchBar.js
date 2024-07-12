@@ -3,8 +3,12 @@ import '../../styles/components/chat/ChatSearchBar.css';
 import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import ExitIcon from '../../images/svg/buttons/ExitIcon';
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
+
 
 const ChatSearchBar = ({ chatNum, onMessageClick }) => {
+    const { t } = useTranslation();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
@@ -53,7 +57,7 @@ const ChatSearchBar = ({ chatNum, onMessageClick }) => {
         const minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
+        hours = hours ? hours : 12; 
         const minutesStr = minutes < 10 ? '0' + minutes : minutes;
         return `${hours}:${minutesStr} ${ampm}`;
     };
@@ -73,7 +77,7 @@ const ChatSearchBar = ({ chatNum, onMessageClick }) => {
                     type="text"
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    placeholder="메시지 검색"
+                    placeholder={t('search-messages')}
                     className="chat-searchbar-input"
                 />
                 {searchTerm && (
@@ -85,7 +89,7 @@ const ChatSearchBar = ({ chatNum, onMessageClick }) => {
             {showResults && (
                 <div className="chat-searchbar-results">
                     <div className="chat-searchbar-results-count">
-                        {searchResults.length}개의 결과가 검색되었습니다.
+                        {searchResults.length} {t('results')}
                     </div>
                     {searchResults.map((msg, index) => (
                         <div key={index} className="chat-searchbar-result" onClick={() => handleResultClick(msg.messageNum)}>

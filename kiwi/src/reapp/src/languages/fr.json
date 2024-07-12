@@ -172,7 +172,28 @@
   "block": "Bloquer",
   "unblock": "Débloquer",
   "results": "Résultats",
-  "only-owners-error": "Seuls les propriétaires peuvent accéder aux paramètres de l'équipe."
+  "only-owners-error": "Seuls les propriétaires peuvent accéder aux paramètres de l'équipe.",
+  "no-chats-to-show": "Aucun chat à afficher",
+  "no-chats-to-show-description": "Cliquez sur le bouton ci-dessous pour créer une nouvelle salle de chat",
+  "create-chat": "Créer un chat",
+  "create-chat-room": "Créer une salle de chat",
+  "chat-room-name": "Nom de la salle de chat",
+  "joined-members": "Membres rejoints",
+  "no-members-to-invite": "Aucun membre à inviter",
+  "you": "Vous",
+  "chat-name-error": "Veuillez entrer un nom de chat",
+  "send-message": "Envoyer un message",
+  "group-chats": "Chats de groupe",
+  "search-chat": "Rechercher un chat",
+  "search-name-or-email": "Rechercher un nom ou un email",
+  "unread-messages": "Messages non lus",
+  "joined": "Rejoint",
+  "chat-created-success": "Le chat a été créé avec succès",
+  "select-chat-room": "Sélectionnez une salle de chat pour voir les membres.",
+  "leave": "Quitter",
+  "leave-chat-warning": "Êtes-vous sûr de vouloir quitter ce chat ?",
+  "delete-message": "Supprimer le message",
+  "delete": "Supprimer"
 
 
 

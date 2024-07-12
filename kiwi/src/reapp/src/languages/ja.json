@@ -173,7 +173,28 @@
   "unblock": "ブロック解除",
   "results": "結果",
   "only-owners-error": "チーム設定にアクセスできるのは所有者のみです。",
-  "profile-updated": "チームのプロフィール写真が正常に更新されました。"
+  "profile-updated": "チームのプロフィール写真が正常に更新されました。",
+  "no-chats-to-show": "表示するチャットがありません",
+  "no-chats-to-show-description": "下のボタンをクリックして新しいチャットルームを作成してください",
+  "create-chat": "チャット作成",
+  "create-chat-room": "チャットルームを作成",
+  "chat-room-name": "チャットルーム名",
+  "joined-members": "参加メンバー",
+  "no-members-to-invite": "招待するメンバーがいません",
+  "you": "あなた",
+  "chat-name-error": "チャット名を入力してください",
+  "send-message": "メッセージを送る",
+  "group-chats": "グループチャット",
+  "search-chat": "チャットを検索",
+  "search-name-or-email": "名前またはメールを検索",
+  "unread-messages": "未読メッセージ",
+  "joined": "参加済み",
+  "chat-created-success": "チャットが正常に作成されました",
+  "select-chat-room": "メンバーを見るにはチャットルームを選択してください。",
+  "leave": "離れる",
+  "leave-chat-warning": "このチャットを離れますか？",
+  "delete-message": "メッセージを削除",
+  "delete": "削除"
 
 
 

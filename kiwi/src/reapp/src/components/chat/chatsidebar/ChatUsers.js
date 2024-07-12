@@ -3,11 +3,14 @@ import '../../../styles/components/chat/chatsidebar/ChatUsers.css';
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 import axiosHandler from "../../../jwt/axiosHandler";
 import SharedIcon from '../../../images/svg/buttons/SharedIcon';
+import { useTranslation } from 'react-i18next';
 
 
 const ChatUsers = ({ chatNum }) => {
     const [users, setUsers] = useState([]);
     const [memberCount, setMemberCount] = useState(0);
+    const { t } = useTranslation();
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -40,7 +43,7 @@ const ChatUsers = ({ chatNum }) => {
         <div className="chat-users-container">
             <div className='chat-users-header'>
                 <SharedIcon className='chat-users-icon'/>
-                <div>Members - {memberCount}</div>
+                <div>{t('members')} - {memberCount}</div>
             </div>
             <ul className="chat-users-list">
                 {users.map((user) => (

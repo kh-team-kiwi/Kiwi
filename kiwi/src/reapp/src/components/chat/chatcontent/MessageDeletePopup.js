@@ -1,18 +1,22 @@
 import React from 'react';
 import '../../../styles/components/chat/chatcontent/MessageDeletePopup.css';
+import { useTranslation } from 'react-i18next'; 
 
 const MessageDeletePopup = ({ messageContent, onDeleteConfirm, onCancel }) => {
+    const { t } = useTranslation(); 
+
     return (
         <div className="popup-container">
             <div className="popup-content">
-                <div className="popup-title">메시지 삭제</div>
+                <div className="message-delete-popup-title">{t('delete-message')}</div>
                 <div className="popup-message">
-                    {messageContent} 메시지를 삭제하시겠습니까?<br/>
-
+                    <div className='message-delete-content'>
+                        {messageContent}
+                    </div>
                 </div>
                 <div className="popup-actions">
-                    <button className="confirm-button" onClick={onDeleteConfirm}>확인</button>
-                    <button className="cancel-button" onClick={onCancel}>취소</button>
+                    <button className="cancel-button" onClick={onCancel}>{t('cancel')}</button>
+                    <button className="confirm-button" onClick={onDeleteConfirm}>{t('delete')}</button>
                 </div>
             </div>
         </div>

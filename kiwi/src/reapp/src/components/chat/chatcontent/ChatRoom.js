@@ -13,7 +13,12 @@ import ReplyIcon from '../../../images/svg/buttons/ReplyIcon';
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 
+import { useTranslation } from 'react-i18next';
+
+
 const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
+    const { t } = useTranslation();
+
     const [profile, setProfile] = useState(null);
     const { teamno } = useParams();
     const [message, setMessage] = useState('');
@@ -56,7 +61,6 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                     firstUnreadMessageRef.current = firstUnreadMessage.messageNum;
                 }
 
-                // 초기 로드 시 애니메이션 없이 맨 아래로 스크롤
                 scrollToBottom();
             } catch (error) {
                 console.error('메시지 가져오기 오류:', error);
@@ -104,7 +108,6 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
     }, [chatNum, profile]);
 
     useEffect(() => {
-        // 채팅방이 변경될 때마다 상태 초기화
         setMessage('');
         setFiles([]);
         setReplyingTo(null);
@@ -242,7 +245,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
         const minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
-        hours = hours ? hours : 12; // '0'은 '12'로 변경
+        hours = hours ? hours : 12; 
         const minutesStr = minutes < 10 ? '0' + minutes : minutes;
         return `${hours}:${minutesStr} ${ampm}`;
     };
@@ -341,7 +344,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
         clearTimeout(scrollTimeout.current);
         scrollTimeout.current = setTimeout(() => {
             setIsUserScrolling(false);
-        }, 1000); // 사용자가 스크롤을 멈춘 후 1초 후에 자동 스크롤 재활성화
+        }, 1000); 
     };
 
     useEffect(() => {
@@ -362,7 +365,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                                 <div className='chat-room-unread-line'>
                                 </div>
                                 <div className='chat-room-unread-text'>
-                                    Unread Messages
+                                    {t('unread-messages')}
 
                                 </div>
                                 <div className='chat-room-unread-line'>
@@ -461,7 +464,7 @@ const ChatRoom = ({ chatNum, messages, setMessages, scrollToMessage }) => {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="메시지 보내기"
+                        placeholder={t('send-message')}
                         className="chat-room-message-input"
                     />
                     <div onClick={sendMessage} className="chat-room-send-button">

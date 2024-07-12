@@ -173,7 +173,28 @@
   "unblock": "Desbloquear",
   "results": "Resultados",
   "only-owners-error": "Solo los propietarios pueden acceder a la configuración del equipo.",
-  "profile-updated": "La photo de profil de l'équipe a été mise à jour avec succès."
+  "profile-updated": "La photo de profil de l'équipe a été mise à jour avec succès.",
+  "no-chats-to-show": "No hay chats para mostrar",
+  "no-chats-to-show-description": "Haz clic en el botón de abajo para crear una nueva sala de chat",
+  "create-chat": "Crear chat",
+  "create-chat-room": "Crear sala de chat",
+  "chat-room-name": "Nombre de la sala de chat",
+  "joined-members": "Miembros unidos",
+  "no-members-to-invite": "No hay miembros para invitar",
+  "you": "Tú",
+  "chat-name-error": "Por favor, introduce un nombre de chat",
+  "send-message": "Enviar mensaje",
+  "group-chats": "Chats de grupo",
+  "search-chat": "Buscar chat",
+  "search-name-or-email": "Buscar nombre o correo electrónico",
+  "unread-messages": "Mensajes no leídos",
+  "joined": "Unido",
+  "chat-created-success": "El chat se creó con éxito",
+  "select-chat-room": "Seleccione una sala de chat para ver los miembros.",
+  "leave": "Salir",
+  "leave-chat-warning": "¿Está seguro de que desea salir de este chat?",
+  "delete-message": "Eliminar mensaje",
+  "delete": "Eliminar"
 
 
 

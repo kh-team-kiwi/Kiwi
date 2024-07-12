@@ -173,7 +173,28 @@
   "unblock": "차단 해제",
   "results": "결과",
   "only-owners-error": "팀 설정에 접근할 수 있는 사람은 소유자뿐입니다.",
-  "profile-updated": "팀의 프로필 사진이 성공적으로 업데이트되었습니다."
+  "profile-updated": "팀의 프로필 사진이 성공적으로 업데이트되었습니다.",
+  "no-chats-to-show": "표시할 채팅이 없습니다",
+  "no-chats-to-show-description": "아래 버튼을 클릭하여 새 채팅방을 만드세요",
+  "create-chat": "채팅 생성",
+  "create-chat-room": "채팅방 생성",
+  "chat-room-name": "채팅방 이름",
+  "joined-members": "참여 멤버",
+  "no-members-to-invite": "초대할 멤버가 없습니다",
+  "you": "당신",
+  "chat-name-error": "채팅 이름을 입력하세요",
+  "send-message": "메시지 보내기",
+  "group-chats": "그룹 채팅",
+  "search-chat": "채팅 검색",
+  "search-name-or-email": "이름 또는 이메일 검색",
+  "unread-messages": "읽지 않은 메시지",
+  "joined": "참여됨",
+  "chat-created-success": "채팅이 성공적으로 생성되었습니다",
+  "select-chat-room": "멤버를 보려면 채팅방을 선택하세요.",
+  "leave": "나가기",
+  "leave-chat-warning": "이 채팅방을 나가시겠습니까?",
+  "delete-message": "메시지 삭제",
+  "delete": "삭제"
 
 
 

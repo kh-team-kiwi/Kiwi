@@ -3,11 +3,11 @@ import '../../../styles/components/chat/chatsidebar/InviteUserModal.css';
 import { getSessionItem } from "../../../jwt/storage";
 import axiosHandler from "../../../jwt/axiosHandler";
 import ErrorImageHandler from "../../common/ErrorImageHandler";
-
 import { toast } from 'react-toastify';
-
+import { useTranslation } from 'react-i18next'; 
 
 const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite }) => {
+    const { t } = useTranslation(); 
     const [profile, setProfile] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [members, setMembers] = useState([]);
@@ -26,15 +26,12 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
 
     const fetchMembers = async () => {
         try {
-            // Fetch all team members
             const allMembersResponse = await axiosHandler.get(`/api/chat/user/members?team=${team}`);
             const allMembers = allMembersResponse.data;
 
-            // Fetch current chat members
             const chatMembersResponse = await axiosHandler.get(`/api/chat/user/${chatNum}`);
             const chatMembers = chatMembersResponse.data;
 
-            // Exclude members who are already in the chat
             const chatMemberIds = chatMembers.map(member => member.memberId);
             const filteredMembers = allMembers.filter(member => !chatMemberIds.includes(member.memberId) && member.memberId !== profile.username)
                 .map(member => ({
@@ -42,7 +39,7 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                     name: member.memberNickname,
                     email: member.memberId,
                     role: member.memberRole,
-                    profilePic: member.memberFilepath // Assuming memberFilepath is the profile picture URL
+                    profilePic: member.memberFilepath 
                 }));
             
             setMembers(filteredMembers);
@@ -64,7 +61,7 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
             onInvite(selectedMember);
             onClose();
         } else {
-            toast.error('Please select a user to invite')
+            toast.error(t('please-select-user')); 
         }
     };
 
@@ -79,18 +76,18 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
     return (
         <div className="invite-user-modal-overlay">
             <div className="invite-user-modal-content">
-                <div className="invite-user-modal-title">Invite Users</div>
+                <div className="invite-user-modal-title">{t('invite-members')}</div>
                 <div className="invite-user-searchBox">
                     <input
                         type="text"
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        placeholder="Search name or email"
+                        placeholder={t('search-name-or-email')}
                     />
                 </div>
                 <div className="invite-user-container">
                     {members.length === 0 ? (
-                        <div className="invite-user-no-members">No users to invite</div>
+                        <div className="invite-user-no-members">{t('no-members-to-invite')}</div>
                     ) : (
                         <div className="invite-user-member-list">
                             {members
@@ -124,8 +121,8 @@ const InviteUserModal = ({ onClose, team, chatNum, showInviteUserModal, onInvite
                         </div>
                     )}
                     <div className="invite-user-modal-actions">
-                        <button className="invite-user-cancel-button" onClick={onClose}>Cancel</button>
-                        <button className="invite-user-invite-button" onClick={handleInvite}>Invite</button>
+                        <button className="invite-user-cancel-button" onClick={onClose}>{t('cancel')}</button>
+                        <button className="invite-user-invite-button" onClick={handleInvite}>{t('invite')}</button>
                     </div>
                 </div>
             </div>

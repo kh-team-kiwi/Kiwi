@@ -6,10 +6,13 @@ import '../../../styles/components/chat/chatsidebar/ChatList.css';
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import SearchIcon from '../../../images/svg/buttons/SearchIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
+import { useTranslation } from 'react-i18next';
 
 import ChatIcon from '../../../images/svg/buttons/ChatIcon';
 
 const ChatList = ({ onChatSelect, team, refreshChatList }) => {
+    const { t } = useTranslation();
+
     const [chats, setChats] = useState([]);
     const [profile, setProfile] = useState(null);
     const [username, setUsername] = useState('');
@@ -80,7 +83,7 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
                     type="text"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    placeholder="Search Chat"
+                    placeholder={t('search-chat')}
                     className="chat-list-search-input"
                 />
                 {searchQuery && (
@@ -92,7 +95,7 @@ const ChatList = ({ onChatSelect, team, refreshChatList }) => {
             <div className='chat-list-header'>
                 <ChatIcon className='chat-list-chat-icon'/>
                 <div>
-                    Group Chats - {filteredChats.length}
+                    {t('group-chats')} - {filteredChats.length}
                 </div>
             </div>
             <ul className="chat-list-ul">

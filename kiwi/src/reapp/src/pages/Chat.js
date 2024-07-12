@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; 
 import { getSessionItem } from "../jwt/storage";
 import ChatSidebar from '../components/chat/ChatSidebar';
 import ChatMemberList from '../components/chat/ChatMemberList';
@@ -14,6 +15,7 @@ import PlusIcon from '../images/svg/shapes/PlusIcon';
 
 const Chat = () => {
     const { teamno } = useParams();
+    const { t } = useTranslation(); 
     const [selectedChatNum, setSelectedChatNum] = useState(null);
     const [selectedChatName, setSelectedChatName] = useState("");
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
@@ -23,7 +25,7 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [chats, setChats] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [scrollToMessage, setScrollToMessage] = useState(null); // 추가된 상태
+    const [scrollToMessage, setScrollToMessage] = useState(null);
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -129,7 +131,7 @@ const Chat = () => {
     if (loading) {
         return (
             <div className="loading-screen">
-                <div className="loading-spinner">Loading...</div>
+                <div className="loading-spinner">{t('loading')}</div>
             </div>
         );
     }
@@ -156,7 +158,7 @@ const Chat = () => {
                                 />
                             )}
                             {!selectedChatNum && (
-                                <button type="button" className="document-button" onClick={handleCreateChat}>Create Chat Room</button>
+                                <button type="button" className="document-button" onClick={handleCreateChat}>{t('create-chat-room')}</button>
                             )}
 
                             <ChatRoom chatNum={selectedChatNum} messages={messages} setMessages={setMessages} scrollToMessage={scrollToMessage} />
@@ -166,17 +168,17 @@ const Chat = () => {
                             <div className='chat-no-chats-container'>
                                 <img src={EmptyChatIcon} className='img-enable-darkmode chat-empty-icon'/>
                                 <div className="chat-empty-title">
-                                    No Chats to show
+                                    {t('no-chats-to-show')}
                                 </div>
                                 <div className="chat-empty-description">
-                                    Click on the button below to create a new chat room
+                                    {t('no-chats-to-show-description')}
                                 </div>
                                 <button 
                                     className="chat-empty-create-button" 
                                     onClick={handleCreateChat}
                                 >
                                     <PlusIcon className='chat-empty-plus-icon'/>
-                                    <div>Create Chat</div>
+                                    <div>{t('create-chat')}</div>
                                 </button>
                             </div>
                         </div>
