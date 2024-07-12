@@ -196,7 +196,33 @@
 "leave": "Leave",
 "leave-chat-warning": "Are you sure you want to leave this chat?",
 "delete-message": "Delete message",
-"delete": "Delete"
+"delete": "Delete",
+"please-select-user": "Please select a member to invite",
+"no-drives": "No drives to show",
+"no-drives-description": "Click the button below to create a new drive",
+
+"create-shared-drive": "Create shared drive",
+"drive-name-error" :"Please enter a drive name",
+"drive-created-successfully" : "Drive created successfully",
+"new" : "New",
+"search-files": "Search Files",
+"file-name" : "File Name",
+"upload-time" : "Upload Time",
+"drag-and-drop": "Drag and Drop files here",
+"drag-and-drop-description": "The contents of this folder will be displayed here",
+"upload-file": "Upload File",
+"create-folder": "Create Folder",
+"download": "Download",
+"edit": "Edit",
+"search-drive": "Search Drive",
+"create-drive": "Create Drive",
+"shared-drive" : "Shared Drive",
+"new-folder-name": "Folder Name",
+"drive-name" : "Drive Name",
+"folder-name-error": "Please enter a folder name",
+"will-be-deleted" : "WIll be deleted",
+"cannot-be-undone": "This action cannot be undone",
+"confirm": "Confirm"
 
 
 

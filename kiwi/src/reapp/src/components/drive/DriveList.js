@@ -13,8 +13,10 @@ import SharedIcon from '../../images/svg/buttons/SharedIcon';
 import DriveIcon from '../../images/svg/buttons/DriveIcon';
 import SearchIcon from '../../images/svg/buttons/SearchIcon';
 import axiosHandler from "../../jwt/axiosHandler";
+import { useTranslation } from 'react-i18next';
 
 const DriveList = ({ onView, refresh }) => {
+    const { t } = useTranslation();
     const { teamno } = useParams();
     const [drives, setDrives] = useState([]);
     const [editDriveCode, setEditDriveCode] = useState(null);
@@ -26,7 +28,7 @@ const DriveList = ({ onView, refresh }) => {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedDrive, setSelectedDrive] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [errorMessage, setErrorMessage] = useState(''); // 경고 메시지 상태 추가
+    const [errorMessage, setErrorMessage] = useState(''); 
 
     useEffect(() => {
         const storedProfile = getSessionItem("profile");
@@ -73,10 +75,10 @@ const DriveList = ({ onView, refresh }) => {
     const handleEditSubmit = (e, driveCode) => {
         e.preventDefault();
         if (newName.trim() === '') {
-            setErrorMessage('드라이브 이름은 공백일 수 없습니다.'); // 경고 메시지 설정
+            setErrorMessage(t('drive-name-error'));
             return;
         }
-        setErrorMessage(''); // 경고 메시지 초기화
+        setErrorMessage('');
         handleUpdate(driveCode, newName);
         setEditDriveCode(null);
         setNewName('');
@@ -145,7 +147,7 @@ const DriveList = ({ onView, refresh }) => {
                     type="text"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    placeholder="Search Drive"
+                    placeholder={t('search-drive')}
                     className="chat-list-search-input"
                 />
                 {searchQuery && (
@@ -157,7 +159,7 @@ const DriveList = ({ onView, refresh }) => {
             <div className='drive-list-shared-header'>
                 <SharedIcon className='drive-list-shared-icon' />
                 <div>
-                    Shared Drive - {filteredDrives.length}
+                    {t('shared-drive')} - {filteredDrives.length}
                 </div>
             </div>
             <ul>
@@ -181,7 +183,7 @@ const DriveList = ({ onView, refresh }) => {
                                 <div className='drive-list-exit-button' onClick={(e) => { e.stopPropagation(); setEditDriveCode(null); }}>
                                     <ExitIcon />
                                 </div>
-                                {errorMessage && <div className="error-message">{errorMessage}</div>} {/* 경고 메시지 표시 */}
+                                {errorMessage && <div className="error-message">{errorMessage}</div>}
                             </form>
                         ) : (
                             <div className={`drive-list-item ${selectedDrive === drive.driveCode ? 'selected-drive' : ''}`}>
@@ -189,8 +191,6 @@ const DriveList = ({ onView, refresh }) => {
                                     <DriveIcon className='drive-list-drive-icon'/>
                                     <div>
                                         {highlightText(drive.driveName, searchQuery)}
-
-
                                     </div>
                                 </div>
                                 <div className='drive-list-options-container' onClick={(e) => toggleDropdown(e, drive.driveCode)}>
@@ -200,11 +200,11 @@ const DriveList = ({ onView, refresh }) => {
                                     <div className="drive-list-options">
                                         <button onClick={(e) => handleEdit(e, drive.driveCode, drive.driveName)}>
                                             <EditIcon className='drive-list-edit-icon' />
-                                            <div className='drive-list-edit'>Edit</div>
+                                            <div className='drive-list-edit'>{t('edit')}</div>
                                         </button>
                                         <button onClick={(e) => handleDeleteDrive(e, drive)}>
                                             <DeleteIcon className='drive-list-delete-icon' />
-                                            <div className='drive-list-delete-text'>Delete</div>
+                                            <div className='drive-list-delete-text'>{t('delete')}</div>
                                         </button>
                                     </div>
                                 )}

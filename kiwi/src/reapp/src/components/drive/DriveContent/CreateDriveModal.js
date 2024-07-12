@@ -4,13 +4,12 @@ import { getSessionItem } from "../../../jwt/storage";
 import ErrorImageHandler from "../../common/ErrorImageHandler";
 import ExitIcon from '../../../images/svg/buttons/ExitIcon';
 import axiosHandler from "../../../jwt/axiosHandler";
+import { useTranslation } from 'react-i18next';
 
 import { toast } from 'react-toastify';
 
-
-
-
 const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
+    const { t } = useTranslation();
     const [profile, setProfile] = useState(null);
     const [driveName, setDriveName] = useState('');
     const [members, setMembers] = useState([]);
@@ -73,7 +72,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
 
     const handleSave = async () => {
         if (!profile || !driveName.trim()) {
-            toast.error("Please enter a drive name");
+            toast.error(t('drive-name-error'));
             return;
         }
 
@@ -88,7 +87,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
         try {
             const response = await axiosHandler.post('/api/drive/create', driveData);
             onSave(response.data);
-            toast.success("Drive created successfully!");
+            toast.success(t('drive-created-successfully'));
 
             onClose();
         } catch (error) {
@@ -107,14 +106,14 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
     return (
         <div className="create-drive-modal-overlay">
             <div className="create-drive-modal-content">
-                <div className='create-drive-header'>Create Shared Drive</div>
+                <div className='create-drive-header'>{t('create-shared-drive')}</div>
                 <div className="create-drive-form-group">
                     <div className='create-drive-drive-name-container'>
                         <input
                             type="text"
                             value={driveName}
                             onChange={handleDriveNameChange}
-                            placeholder="Drive Name"
+                            placeholder={t('drive-name')}
                             className='create-drive-drive-name'
                         />
                     </div>
@@ -124,13 +123,13 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                         className={`create-drive-tab ${activeTab === 'invite' ? 'active' : ''}`}
                         onClick={() => setActiveTab('invite')}
                     >
-                        Invite Members
+                        {t('invite-members')}
                     </div>
                     <div
                         className={`create-drive-tab ${activeTab === 'joined' ? 'active' : ''}`}
                         onClick={() => setActiveTab('joined')}
                     >
-                        Joined Members
+                        {t('joined-members')}
                     </div>
                 </div>
                 <div className="create-drive-container">
@@ -140,7 +139,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                                 type="text"
                                 value={searchQuery}
                                 onChange={handleSearchChange}
-                                placeholder="Search members by email"
+                                placeholder={t('search-members-by-email')}
                                 className="create-drive-search-input"
                             />
                             <div className="create-drive-member-list">
@@ -154,7 +153,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                                             <img className='create-drive-profile-image' src='' alt={''} onError={ErrorImageHandler}></img>
                                             <div className='create-drive-profile-info'>
                                                 <div className='create-drive-profile-name'>
-                                                    {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) && <span className="create-drive-joined-tag">Joined</span>}
+                                                    {member.name} {joinedMembers.some(joinedMember => joinedMember.id === member.id) && <span className="create-drive-joined-tag">{t('joined')}</span>}
                                                 </div>
                                                 <div className='create-drive-profile-email'>
                                                     {member.email}
@@ -163,7 +162,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="no-members-message">No members to invite</div>
+                                    <div className="no-members-message">{t('no-members-to-invite')}</div>
                                 )}
                             </div>
                         </div>
@@ -176,7 +175,7 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                                         <img className='create-drive-profile-image' src='' alt={''} onError={ErrorImageHandler}></img>
                                         <div className='create-drive-profile-info'>
                                             <div className='create-drive-profile-name'>
-                                                {joinedMember.name} {joinedMember.id === profile.username && <span className="create-drive-you-tag">You</span>}
+                                                {joinedMember.name} {joinedMember.id === profile.username && <span className="create-drive-you-tag">{t('you')}</span>}
                                             </div>
                                             <div className='create-drive-profile-email'>
                                                 {joinedMember.email}
@@ -194,12 +193,11 @@ const CreateDriveModal = ({ onSave, onClose, team, showCreateDriveModal }) => {
                     )}
                 </div>
                 <div className="create-drive-modal-bottom">
-                    <button className="create-drive-cancel-button" onClick={onClose}>Cancel</button>
-                    <button className="create-drive-create-button" onClick={handleSave}>Create</button>
+                    <button className="create-drive-cancel-button" onClick={onClose}>{t('cancel')}</button>
+                    <button className="create-drive-create-button" onClick={handleSave}>{t('create')}</button>
                 </div>
             </div>
         </div>
-        
     );
 };
 

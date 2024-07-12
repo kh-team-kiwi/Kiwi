@@ -193,7 +193,33 @@
   "leave": "Quitter",
   "leave-chat-warning": "Êtes-vous sûr de vouloir quitter ce chat ?",
   "delete-message": "Supprimer le message",
-  "delete": "Supprimer"
+  "delete": "Supprimer",
+  "please-select-user": "Veuillez sélectionner un membre à inviter",
+  "no-drives": "Aucun lecteur à afficher",
+  "no-drives-description": "Cliquez sur le bouton ci-dessous pour créer un nouveau lecteur",
+  "create-shared-drive": "Créer un lecteur partagé",
+  "drive-name-error": "Veuillez entrer un nom de lecteur",
+  "drive-created-successfully": "Lecteur créé avec succès",
+  "new": "Nouveau",
+  "search-files": "Rechercher des fichiers",
+  "file-name": "Nom du fichier",
+  "upload-time": "Temps de téléchargement",
+  "drag-and-drop": "Glissez et déposez les fichiers ici",
+  "drag-and-drop-description": "Le contenu de ce dossier sera affiché ici",
+  "upload-file": "Téléverser un fichier",
+  "create-folder": "Créer un dossier",
+  "download": "Télécharger",
+  "edit": "Éditer",
+  "search-drive": "Rechercher dans le lecteur",
+  "create-drive": "Créer un lecteur",
+  "shared-drive": "Disque partagé",
+  "new-folder-name": "Nom du dossier",
+  "drive-name": "Nom du disque",
+  "folder-name-error": "Veuillez entrer un nom de dossier",
+    "will-be-deleted": "Sera supprimé",
+  "cannot-be-undone": "Cette action ne peut pas être annulée",
+  "confirm": "Confirmer"
+
 
 
 
