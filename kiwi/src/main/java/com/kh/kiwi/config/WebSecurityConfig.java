@@ -111,7 +111,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers("/api/auth/signup","/api/auth/duplicate","/api/auth/reissue","/api/transfer/download").permitAll()
-                        .requestMatchers("/ws/**","/api/chat/message/download").permitAll()
+                        .requestMatchers("/ws/**","/api/chat/message/download", "/api/members/**", "/documents/**").permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/admin")).hasRole("JADMIN")
                         .anyRequest().authenticated());
         return http.build();

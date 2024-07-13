@@ -57,7 +57,7 @@ const NewDocument = ({ onDocumentSubmit }) => {
                 .catch((error) => {
                     console.error("Failed to fetch user data:", error);
                     toast.error("인사 정보에 등록해야합니다. 인사 담당자에게 문의하세요.");
-                    window.location.href = "/";
+                    window.location.href = "/documents/all-documents";
                 });
         }
     }, []);
