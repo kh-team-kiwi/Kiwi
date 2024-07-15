@@ -47,7 +47,7 @@ const DocumentDetails = ({ document, onClose }) => {
         }
 
         try {
-            await axios.post(`http://localhost:8080/documents/${document.docNum}/approve`, {
+            await axios.post(`/documents/${document.docNum}/approve`, {
                 employeeNo: selectedApprover.employeeNo,
                 docConf: approvalAction,
             });
@@ -84,7 +84,7 @@ const DocumentDetails = ({ document, onClose }) => {
     useEffect(() => {
         const fetchDocumentDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/documents/details/${document.docNum}`);
+                const response = await axios.get(`/documents/details/${document.docNum}`);
                 const details = response.data;
 
                 setDocDetails(details);
@@ -122,7 +122,7 @@ const DocumentDetails = ({ document, onClose }) => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:8080/documents/${document.docNum}/comments`, {
+            const response = await axios.post(`/documents/${document.docNum}/comments`, {
                 content: newComment,
                 employeeNo: employeeNo,
                 employeeName: author.name
@@ -156,7 +156,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
     const handleUpdateComment = async () => {
         try {
-            const response = await axios.put(`http://localhost:8080/documents/comments/${editingComment.id}`, {
+            const response = await axios.put(`/documents/comments/${editingComment.id}`, {
                 id: editingComment.id,
                 content: editedComment,
                 employeeNo: editingComment.employeeNo,
@@ -179,7 +179,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
     const handleDeleteComment = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/documents/comments/${id}`);
+            await axios.delete(`/documents/comments/${id}`);
             setComments(comments.filter(comment => comment.id !== id));
         } catch (error) {
             setError('댓글 삭제에 실패하였습니다.');
@@ -196,7 +196,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
     const handleUpdateDoc = async () => {
         try {
-            const response = await axios.put(`http://localhost:8080/documents/${document.docNum}`, {
+            const response = await axios.put(`/documents/${document.docNum}`, {
                 docTitle: editedDocDetails.docTitle,
                 docContents: editedDocDetails.docContents,
             }, {
@@ -218,7 +218,7 @@ const DocumentDetails = ({ document, onClose }) => {
 
     const handleDeleteDoc = async () => {
         try {
-            await axios.delete(`http://localhost:8080/documents/${document.docNum}`);
+            await axios.delete(`/documents/${document.docNum}`);
             window.location.reload();
         } catch (error) {
             setError('문서 삭제에 실패하였습니다.');
@@ -393,7 +393,7 @@ const DocumentDetails = ({ document, onClose }) => {
                     {attachments.length > 0 ? (
                         attachments.map((file, index) => (
                             <li key={index}>
-                                <a href={`http://localhost:8080/files/${file.id}`} download={file.name}>{file.name}</a>
+                                <a href={`/files/${file.id}`} download={file.name}>{file.name}</a>
                             </li>
                         ))
                     ) : (

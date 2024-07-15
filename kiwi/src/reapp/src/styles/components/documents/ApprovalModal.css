@@ -64,7 +64,13 @@
 }
 
 #cancelButton {
-    background-color: #6c757d;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .confirmButton:hover, .cancelButton:hover {
