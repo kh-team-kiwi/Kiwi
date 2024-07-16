@@ -22,14 +22,16 @@
 </div>
 
 
-## Table of Contents
+## 목차
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#key-features">Key features</a></li>
-        <li><a href="#team-members">Team Members</a></li>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="mem-intro">팀원 소개</a></li>
+        <li><a href="#dev-env">개발 환경</a></li>
+        <li><a href="#schedule">프로젝트 일정</a></li>
+        <li><a href="#erd">ERD</a></li>
+        <li><a href="#screen">화면설계서</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -39,27 +41,22 @@
   </ol>
 
 
-
+<a id="mem-intro"></a>
 ## 팀원 소개
-
 <a>![team-members1](https://github.com/user-attachments/assets/01407905-33fa-4e1b-882b-88c5d6c70c5e)</a><a>![team-members3](https://github.com/user-attachments/assets/559ef2a2-d850-4335-8520-d980f2e85993)</a><a>![team-members2](https://github.com/user-attachments/assets/ae06dcaf-86cd-4019-bf2e-53aa6421ab40)</a><a>![team-members4](https://github.com/user-attachments/assets/b3b15e42-2fd3-4afc-906a-a0e8d7abaeea)</a>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+<a id="dev-env"></a>
 ## 개발 환경
-
 ![개발환경](https://github.com/user-attachments/assets/0a3ea66c-34cc-4e6f-98e3-6818ce2e7660)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+<a id="schedule"></a>
 ## 프로젝트 일정
-
 ![프로젝트 일정](https://github.com/user-attachments/assets/0e138053-e605-49da-91f1-6e2861c96a97)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">목차로</a>)</p>
 
+<a id="erd"></a>
 ## ERD
-
 ![ERD전체](https://github.com/user-attachments/assets/f27cf15c-a953-46b7-8b02-cbbe97b6aa63)
 ![사용자ERD](https://github.com/user-attachments/assets/ba771fd7-effe-44f2-9b11-ce270869d667)
 ![팀ERD](https://github.com/user-attachments/assets/b7295fc0-75c8-47eb-b9d4-b93286ca734e)
@@ -67,11 +64,10 @@
 ![파일서버ERD](https://github.com/user-attachments/assets/ddaadcef-0d06-4846-a6e7-637fd7f9af17)
 ![전자결제ERD](https://github.com/user-attachments/assets/7af0f32c-7cee-4ffb-9ce3-33d0e4a429da)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>****
+<p align="right">(<a href="#readme-top">목차로</a>)</p>****
 
-
+<a id="screen"></a>
 ### 화면설계서
-
 ![2팀-최종발표(포트폴리오)-042](https://github.com/user-attachments/assets/a9d1c38a-9cc4-4bad-89db-c1032ed85e0b)
 ![2팀-최종발표(포트폴리오)-043](https://github.com/user-attachments/assets/c3721778-1d8b-4e85-9c5f-5bb54f9690a7)
 ![2팀-최종발표(포트폴리오)-044](https://github.com/user-attachments/assets/128b5178-4bc2-411a-8129-bab5fc14609c)
