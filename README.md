@@ -39,12 +39,12 @@
 
 <a id="erd"></a>
 ## ERD
-![ERD전체](https://github.com/user-attachments/assets/f27cf15c-a953-46b7-8b02-cbbe97b6aa63)
-![사용자ERD](https://github.com/user-attachments/assets/ba771fd7-effe-44f2-9b11-ce270869d667)
-![팀ERD](https://github.com/user-attachments/assets/b7295fc0-75c8-47eb-b9d4-b93286ca734e)
-![채팅ERD](https://github.com/user-attachments/assets/a7dd50ce-b51d-4b6d-a073-e857f36b61b2)
-![파일서버ERD](https://github.com/user-attachments/assets/ddaadcef-0d06-4846-a6e7-637fd7f9af17)
-![전자결제ERD](https://github.com/user-attachments/assets/7af0f32c-7cee-4ffb-9ce3-33d0e4a429da)
+![kiwi](https://github.com/user-attachments/assets/bf2e4f46-84ea-4a8d-b5f1-076580836001)
+![teamERD](https://github.com/user-attachments/assets/51e5cfb9-c506-460b-9d32-ae0923eb3885)
+![memberERD](https://github.com/user-attachments/assets/8307333d-1484-4b8b-9952-1858db574ed3)
+![채](https://github.com/user-attachments/assets/b65718d5-cff4-4432-ae52-f6f561998591)
+![드](https://github.com/user-attachments/assets/b6e75211-08b5-4cfc-a86d-4d4df358fa6c)
+![전자](https://github.com/user-attachments/assets/729834d8-e8d2-417a-95fc-8b3c68853e6b)
 
 <p align="right">(<a href="#readme-top">목차로</a>)</p>
 
