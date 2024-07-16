@@ -11,7 +11,6 @@
   <p align="center">
     KH final project
     <br />
-    <a href=""><strong>Demo</strong></a>
     <br />
     <br />
     <!-- <a href="">View Demo</a>
@@ -42,10 +41,7 @@
 
 
 ## 팀원 소개
-<a>![team-members1](https://github.com/user-attachments/assets/2777d442-260a-4768-bad0-33028e4c0dc0)</a>
-<a>![team-members2](https://github.com/user-attachments/assets/4cb6fcde-55f7-42d3-aab6-e5aad609a6fb)</a>
-<a>![team-members3](https://github.com/user-attachments/assets/2eae58b2-3acf-492b-9e91-2a5d616d84c5)</a>
-<a>![team-members4](https://github.com/user-attachments/assets/b41ad3e0-11c3-4638-9dd3-198fd3803077)</a>
+<a>![team-members1](https://github.com/user-attachments/assets/2777d442-260a-4768-bad0-33028e4c0dc0)</a><a>![team-members2](https://github.com/user-attachments/assets/4cb6fcde-55f7-42d3-aab6-e5aad609a6fb)</a><a>![team-members3](https://github.com/user-attachments/assets/2eae58b2-3acf-492b-9e91-2a5d616d84c5)</a><a>![team-members4](https://github.com/user-attachments/assets/b41ad3e0-11c3-4638-9dd3-198fd3803077)</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
