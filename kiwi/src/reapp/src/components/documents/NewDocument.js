@@ -5,7 +5,6 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import '../../styles/components/documents/NewDocument.css';
 import axiosHandler from "../../jwt/axiosHandler";
-
 import { toast } from 'react-toastify';
 
 

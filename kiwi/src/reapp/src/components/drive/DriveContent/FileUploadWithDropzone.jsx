@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
+import axiosHandler from "../../../jwt/axiosHandler";
 import '../../../styles/components/drive/FileUploadWithDropzone.css';
 import { useParams } from "react-router-dom";
 
@@ -12,7 +12,6 @@ const FileUploadWithDropzone = ({ driveCode, fetchFiles, parentPath }) => {
     const onDrop = async (acceptedFiles) => {
         setIsDragging(false);
 
-        // const folderDetected = acceptedFiles.some(file => file.path && file.path.includes('/'));
         const folderDetected = acceptedFiles.some(file =>
             (file.webkitRelativePath && file.webkitRelativePath.includes('/')) ||
             (file.size === 0)
@@ -31,7 +30,7 @@ const FileUploadWithDropzone = ({ driveCode, fetchFiles, parentPath }) => {
         formData.append('teamNumber', teamno);
 
         try {
-            await axios.post(`/api/drive/${driveCode}/files/upload`, formData, {
+            await axiosHandler.post(`/api/drive/${driveCode}/files/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

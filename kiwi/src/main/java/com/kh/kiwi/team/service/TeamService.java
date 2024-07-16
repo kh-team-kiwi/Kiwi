@@ -52,7 +52,7 @@ public class TeamService {
     @Value("${aws.s3.bucket}")
     private String bucketName;
     private final S3Client s3Client;
-    private final String preFilePath = "http://localhost:8080/api/transfer/download?fileKey=";
+    private final String preFilePath = "/api/transfer/download?fileKey=";
 
     @Transactional
     public ResponseTeamDto createTeam(String memberId, TeamCreateRequest tcdto) {
