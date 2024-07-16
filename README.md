@@ -14,7 +14,6 @@
     <br />
     <br />
   </p>
-  ![mainpoint](https://github.com/user-attachments/assets/bade04da-afa5-430f-b21d-b3912232be84)
 </div>
 
 ## 목차
