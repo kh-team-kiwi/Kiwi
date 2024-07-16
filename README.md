@@ -6,21 +6,16 @@
 <div align="center">
     <img src="README/kiwi-word.png" alt="Logo" height="80">
 
-  <h3 align="center">Kiwi Groupware</h3>
+  <h3 align="center">Groupware</h3>
 
   <p align="center">
     KH final project
     <br />
     <br />
     <br />
-    <!-- <a href="">View Demo</a>
-    ·
-    <a href="">Report Bug</a>
-    ·
-    <a href="">Request Feature</a> -->
   </p>
+  ![mainpoint](https://github.com/user-attachments/assets/bade04da-afa5-430f-b21d-b3912232be84)
 </div>
-
 
 ## 목차
 ### <a href="#mem-intro">팀원 소개</a></li>
