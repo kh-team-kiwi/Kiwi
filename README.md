@@ -24,7 +24,6 @@
 
 ## 목차
   <ol>
-    <li>
       <ul>
         <li><a href="mem-intro">팀원 소개</a></li>
         <li><a href="#dev-env">개발 환경</a></li>
