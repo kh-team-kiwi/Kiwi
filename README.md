@@ -41,7 +41,8 @@
 
 
 ## 팀원 소개
-<a>![team-members1](https://github.com/user-attachments/assets/2777d442-260a-4768-bad0-33028e4c0dc0)</a><a>![team-members2](https://github.com/user-attachments/assets/4cb6fcde-55f7-42d3-aab6-e5aad609a6fb)</a><a>![team-members3](https://github.com/user-attachments/assets/2eae58b2-3acf-492b-9e91-2a5d616d84c5)</a><a>![team-members4](https://github.com/user-attachments/assets/b41ad3e0-11c3-4638-9dd3-198fd3803077)</a>
+
+<a>![team-members1](https://github.com/user-attachments/assets/01407905-33fa-4e1b-882b-88c5d6c70c5e)</a><a>![team-members3](https://github.com/user-attachments/assets/559ef2a2-d850-4335-8520-d980f2e85993)</a><a>![team-members2](https://github.com/user-attachments/assets/ae06dcaf-86cd-4019-bf2e-53aa6421ab40)</a><a>![team-members4](https://github.com/user-attachments/assets/b3b15e42-2fd3-4afc-906a-a0e8d7abaeea)</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
