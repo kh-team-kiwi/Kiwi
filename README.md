@@ -25,7 +25,6 @@
 ## 목차
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="mem-intro">팀원 소개</a></li>
         <li><a href="#dev-env">개발 환경</a></li>
@@ -33,17 +32,12 @@
         <li><a href="#erd">ERD</a></li>
         <li><a href="#screen">화면설계서</a></li>
       </ul>
-    </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#erd">ERD</a></li>
-    <li><a href="#history">History</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 
 
 
 ## 팀원 소개
-<a href="mem1">![team-members1](https://github.com/user-attachments/assets/01407905-33fa-4e1b-882b-88c5d6c70c5e)</a><a href="mem2">![team-members3](https://github.com/user-attachments/assets/559ef2a2-d850-4335-8520-d980f2e85993)</a><a href="mem3">![team-members2](https://github.com/user-attachments/assets/ae06dcaf-86cd-4019-bf2e-53aa6421ab40)</a><a href="mem4">![team-members4](https://github.com/user-attachments/assets/b3b15e42-2fd3-4afc-906a-a0e8d7abaeea)</a>
+<a href="#mem1">![team-members1](https://github.com/user-attachments/assets/01407905-33fa-4e1b-882b-88c5d6c70c5e)</a><a href="#mem2">![team-members3](https://github.com/user-attachments/assets/559ef2a2-d850-4335-8520-d980f2e85993)</a><a href="#mem3">![team-members2](https://github.com/user-attachments/assets/ae06dcaf-86cd-4019-bf2e-53aa6421ab40)</a><a href="#mem4">![team-members4](https://github.com/user-attachments/assets/b3b15e42-2fd3-4afc-906a-a0e8d7abaeea)</a>
 
 <a id="dev-env"></a>
 ## 개발 환경
