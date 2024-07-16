@@ -39,16 +39,26 @@
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 
+## ERD
 
-## About The Project
-
-Test
+![ERD전체](https://github.com/user-attachments/assets/f27cf15c-a953-46b7-8b02-cbbe97b6aa63)
+![사용자ERD](https://github.com/user-attachments/assets/ba771fd7-effe-44f2-9b11-ce270869d667)
+![팀ERD](https://github.com/user-attachments/assets/b7295fc0-75c8-47eb-b9d4-b93286ca734e)
+![채팅ERD](https://github.com/user-attachments/assets/a7dd50ce-b51d-4b6d-a073-e857f36b61b2)
+![파일서버ERD](https://github.com/user-attachments/assets/ddaadcef-0d06-4846-a6e7-637fd7f9af17)
+![전자결제ERD](https://github.com/user-attachments/assets/7af0f32c-7cee-4ffb-9ce3-33d0e4a429da)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Key features
+## 개발 환경
 
-Test
+![개발환경](https://github.com/user-attachments/assets/0a3ea66c-34cc-4e6f-98e3-6818ce2e7660)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 프로젝트 일정
+
+![프로젝트 일정](https://github.com/user-attachments/assets/0e138053-e605-49da-91f1-6e2861c96a97)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
